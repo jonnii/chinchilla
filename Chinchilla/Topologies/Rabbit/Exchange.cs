@@ -28,6 +28,16 @@ namespace Chinchilla.Topologies.Rabbit
         public override void Visit(ITopologyVisitor visitor)
         {
             visitor.Visit(this);
+
+            foreach (var binding in Bindings)
+            {
+                binding.Visit(visitor);
+            }
+        }
+
+        public override string ToString()
+        {
+            return string.Format("[Exchange Name: {0}]", Name);
         }
     }
 }

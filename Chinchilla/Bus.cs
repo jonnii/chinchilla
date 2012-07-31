@@ -17,6 +17,8 @@ namespace Chinchilla
             var queue = Topology.DefineQueue();
             var exchange = Topology.DefineExchange(typeof(T).Name, ExchangeType.Fanout);
 
+            queue.BindTo(exchange);
+
             return Subscribe(queue, exchange, onMessage);
         }
 

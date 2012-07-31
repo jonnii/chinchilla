@@ -18,12 +18,12 @@ namespace Chinchilla.Topologies.Rabbit
 
         public void Visit(IExchange exchange)
         {
-            throw new System.NotImplementedException();
+            textWriter.WriteLine(exchange);
         }
 
         public void Visit(IBinding binding)
         {
-            throw new System.NotImplementedException();
+            textWriter.WriteLine(binding);
         }
     }
 }

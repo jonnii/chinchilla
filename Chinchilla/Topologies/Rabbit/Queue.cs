@@ -38,7 +38,7 @@ namespace Chinchilla.Topologies.Rabbit
 
             foreach (var binding in Bindings)
             {
-                visitor.Visit(binding);
+                binding.Visit(visitor);
             }
         }
 

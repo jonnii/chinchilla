@@ -26,5 +26,10 @@ namespace Chinchilla.Topologies.Rabbit
             Exchange.Visit(visitor);
             visitor.Visit(this);
         }
+
+        public override string ToString()
+        {
+            return string.Format("[Binding Bindable: {0}, Exchange: {1}]", Bindable, Exchange);
+        }
     }
 }
