@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla", "Chinchilla\Chinchilla.csproj", "{BF887B21-2A5A-4B52-8254-0B3CB908634B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla.Specifications", "Chinchilla.Specifications\Chinchilla.Specifications.csproj", "{08063055-7359-4B3E-B8B3-BCB7141D3D60}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla.Integration", "Chinchilla.Integration\Chinchilla.Integration.csproj", "{6CE4680B-EDE9-4D98-B751-98C0DF9DB01A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla.Console", "Chinchilla.Console\Chinchilla.Console.csproj", "{2A29708B-CCDD-4097-9C34-3B13582FF137}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{08063055-7359-4B3E-B8B3-BCB7141D3D60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08063055-7359-4B3E-B8B3-BCB7141D3D60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08063055-7359-4B3E-B8B3-BCB7141D3D60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08063055-7359-4B3E-B8B3-BCB7141D3D60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A29708B-CCDD-4097-9C34-3B13582FF137}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A29708B-CCDD-4097-9C34-3B13582FF137}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A29708B-CCDD-4097-9C34-3B13582FF137}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A29708B-CCDD-4097-9C34-3B13582FF137}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CE4680B-EDE9-4D98-B751-98C0DF9DB01A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CE4680B-EDE9-4D98-B751-98C0DF9DB01A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CE4680B-EDE9-4D98-B751-98C0DF9DB01A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CE4680B-EDE9-4D98-B751-98C0DF9DB01A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF887B21-2A5A-4B52-8254-0B3CB908634B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF887B21-2A5A-4B52-8254-0B3CB908634B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF887B21-2A5A-4B52-8254-0B3CB908634B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF887B21-2A5A-4B52-8254-0B3CB908634B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
