@@ -55,6 +55,7 @@
     <Compile Include="Features\PublishFeature.cs" />
     <Compile Include="Features\SubscribeFeature.cs" />
     <Compile Include="Features\WithApi.cs" />
+    <Compile Include="Features\WithLogging.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

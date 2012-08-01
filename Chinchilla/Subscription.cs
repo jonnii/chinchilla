@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
+using Chinchilla.Logging;
 using Chinchilla.Topologies.Rabbit;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -9,6 +11,8 @@ namespace Chinchilla
 {
     public class Subscription<T> : ISubscription
     {
+        private readonly ILogger logger = Logger.Create<Subscription<T>>();
+
         private readonly IModel model;
 
         private readonly IMessageSerializer messageSerializer;
@@ -36,8 +40,9 @@ namespace Chinchilla
         {
             var queue = topology.DefineQueue(typeof(T).Name);
             var exchange = topology.DefineExchange(typeof(T).Name, ExchangeType.Fanout);
-
             queue.BindTo(exchange);
+
+            logger.Debug("Creating topology");
 
             topology.Visit(topologyBuilder);
 
@@ -52,14 +57,23 @@ namespace Chinchilla
                 consumer.ConsumerTag,   // consumerTag
                 consumer);              // consumer
 
+            logger.Debug("Starting listener thread");
+
             var start = new Thread(() =>
             {
                 while (true)
                 {
-                    var item = (BasicDeliverEventArgs)consumer.Queue.Dequeue();
+                    BasicDeliverEventArgs item;
+                    try
+                    {
+                        item = (BasicDeliverEventArgs)consumer.Queue.Dequeue();
+                    }
+                    catch (EndOfStreamException)
+                    {
+                        break;
+                    }
 
                     var message = messageSerializer.Deserialize<T>(item.Body);
-
                     messageHandler.Handle(message);
 
                     model.BasicAck(item.DeliveryTag, false);
@@ -71,7 +85,14 @@ namespace Chinchilla
 
         public void Dispose()
         {
+            logger.DebugFormat("Disposing {0}", this);
+
             model.Dispose();
+        }
+
+        public override string ToString()
+        {
+            return "[Subscription]";
         }
     }
 }

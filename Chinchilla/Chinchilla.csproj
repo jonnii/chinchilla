@@ -38,6 +38,9 @@
     <Reference Include="RabbitMQ.Client">
       <HintPath>..\packages\RabbitMQ.Client.2.8.4\lib\net30\RabbitMQ.Client.dll</HintPath>
     </Reference>
+    <Reference Include="SpeakEasy">
+      <HintPath>..\packages\SpeakEasy.0.1.7\lib\net40\SpeakEasy.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
@@ -57,6 +60,11 @@
     <Compile Include="IPublishChannel.cs" />
     <Compile Include="IPublisher.cs" />
     <Compile Include="ISubscriptionFactory.cs" />
+    <Compile Include="Logging\ClassLogger.cs" />
+    <Compile Include="Logging\ConsoleLogger.cs" />
+    <Compile Include="Logging\ILogger.cs" />
+    <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Logging\NullLogger.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="MessageProperties.cs" />
     <Compile Include="PublishChannel.cs" />

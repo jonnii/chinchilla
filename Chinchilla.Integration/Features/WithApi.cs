@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace Chinchilla.Integration.Features
 {
-    public class WithApi
+    public class WithApi : WithLogging
     {
         public readonly VirtualHost IntegrationVHost = new VirtualHost("integration");
 
