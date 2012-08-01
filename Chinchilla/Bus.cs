@@ -29,11 +29,19 @@ namespace Chinchilla
 
         public void Publish<T>(T message)
         {
-            throw new NotImplementedException();
+            var exchange = Topology.DefineExchange(typeof(T).Name, ExchangeType.Fanout);
+
+            Publish(exchange, message);
+        }
+
+        private void Publish<T>(IExchange exchange, T message)
+        {
+
         }
 
         public void Dispose()
         {
+
         }
     }
 }

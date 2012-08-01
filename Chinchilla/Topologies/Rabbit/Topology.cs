@@ -6,6 +6,8 @@ namespace Chinchilla.Topologies.Rabbit
     {
         private readonly List<Queue> queues = new List<Queue>();
 
+        private readonly List<Exchange> exchanges = new List<Exchange>();
+
         public IQueue DefineQueue()
         {
             var queue = new Queue();
@@ -13,13 +15,27 @@ namespace Chinchilla.Topologies.Rabbit
             return queue;
         }
 
+        public IQueue DefineQueue(string name)
+        {
+            var queue = new Queue(name);
+            queues.Add(queue);
+            return queue;
+        }
+
         public IExchange DefineExchange(string name, ExchangeType exchangeType)
         {
-            return new Exchange(name, exchangeType);
+            var exchange = new Exchange(name, exchangeType);
+            exchanges.Add(exchange);
+            return exchange;
         }
 
         public void Visit(ITopologyVisitor visitor)
         {
+            foreach (var exchange in exchanges)
+            {
+                exchange.Visit(visitor);
+            }
+
             foreach (var queue in queues)
             {
                 queue.Visit(visitor);

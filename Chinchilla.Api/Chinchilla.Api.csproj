@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{08063055-7359-4B3E-B8B3-BCB7141D3D60}</ProjectGuid>
+    <ProjectGuid>{E53D95D3-DB21-4DF6-85DB-557C99E11F67}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Chinchilla.Specifications</RootNamespace>
-    <AssemblyName>Chinchilla.Specifications</AssemblyName>
+    <RootNamespace>Chinchilla.Api</RootNamespace>
+    <AssemblyName>Chinchilla.Api</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -32,20 +32,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Machine.Fakes">
-      <HintPath>..\packages\Machine.Fakes.0.5.1\lib\net40\Machine.Fakes.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.7\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Machine.Fakes.Adapters.Moq">
-      <HintPath>..\packages\Machine.Fakes.Moq.0.5.1\lib\net40\Machine.Fakes.Adapters.Moq.dll</HintPath>
-    </Reference>
-    <Reference Include="Machine.Specifications">
-      <HintPath>..\packages\Machine.Specifications.0.5.8\lib\net40\Machine.Specifications.dll</HintPath>
-    </Reference>
-    <Reference Include="Machine.Specifications.Clr4">
-      <HintPath>..\packages\Machine.Specifications.0.5.8\lib\net40\Machine.Specifications.Clr4.dll</HintPath>
-    </Reference>
-    <Reference Include="Moq">
-      <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
+    <Reference Include="SpeakEasy">
+      <HintPath>..\packages\SpeakEasy.0.1.7\lib\net40\SpeakEasy.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -56,24 +47,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BusSpecification.cs" />
-    <Compile Include="ConnectionStringSpecification.cs" />
+    <Compile Include="Exchange.cs" />
+    <Compile Include="IRabbitAdmin.cs" />
+    <Compile Include="Permissions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Topologies\Rabbit\BindingSpecification.cs" />
-    <Compile Include="Topologies\Rabbit\ExchangeSpecification.cs" />
-    <Compile Include="Topologies\Rabbit\QueueSpecification.cs" />
-    <Compile Include="Topologies\Rabbit\TopologySpecification.cs" />
+    <Compile Include="Queue.cs" />
+    <Compile Include="RabbitAdmin.cs" />
+    <Compile Include="RabbitContractResolver.cs" />
+    <Compile Include="User.cs" />
+    <Compile Include="VirtualHost.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Chinchilla\Chinchilla.csproj">
-      <Project>{BF887B21-2A5A-4B52-8254-0B3CB908634B}</Project>
-      <Name>Chinchilla</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -17,8 +17,6 @@ namespace Chinchilla.Topologies.Rabbit
             IsAutoDelete = false;
         }
 
-        public string Name { get; set; }
-
         public Durability Durability { get; set; }
 
         public bool IsAutoDelete { get; set; }

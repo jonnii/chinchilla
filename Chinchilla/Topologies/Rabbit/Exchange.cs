@@ -5,12 +5,10 @@ namespace Chinchilla.Topologies.Rabbit
         public Exchange(string name, ExchangeType exchangeType)
         {
             Name = name;
-            ExchangeType = exchangeType;
+            Type = exchangeType;
         }
 
-        public string Name { get; set; }
-
-        public ExchangeType ExchangeType { get; set; }
+        public ExchangeType Type { get; set; }
 
         public Durability Durability { get; set; }
 
@@ -33,6 +31,11 @@ namespace Chinchilla.Topologies.Rabbit
             {
                 binding.Visit(visitor);
             }
+        }
+
+        public override string ToString()
+        {
+            return string.Format("[Exchange Name: {0}]", Name);
         }
 
         public override string ToString()

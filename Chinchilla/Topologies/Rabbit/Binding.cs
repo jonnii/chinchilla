@@ -2,7 +2,7 @@ namespace Chinchilla.Topologies.Rabbit
 {
     public class Binding : IBinding
     {
-        public Binding(IBindable bindable, Exchange exchange)
+        public Binding(IBindable bindable, IExchange exchange)
             : this(bindable, exchange, new string[0])
         {
 
@@ -24,6 +24,7 @@ namespace Chinchilla.Topologies.Rabbit
         public void Visit(ITopologyVisitor visitor)
         {
             Exchange.Visit(visitor);
+
             visitor.Visit(this);
         }
 

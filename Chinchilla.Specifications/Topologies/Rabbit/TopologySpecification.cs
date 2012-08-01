@@ -42,6 +42,9 @@ namespace Chinchilla.Specifications.Topologies.Rabbit
             It should_visit_each_queue = () =>
                 visitor.WasToldTo(v => v.Visit(Param.IsAny<IQueue>())).Twice();
 
+            It should_visit_each_exchange = () =>
+                visitor.WasToldTo(v => v.Visit(Param.IsAny<IExchange>())).Twice();
+
             static ITopologyVisitor visitor;
         }
 
@@ -51,6 +54,8 @@ namespace Chinchilla.Specifications.Topologies.Rabbit
             {
                 Subject.DefineQueue();
                 Subject.DefineQueue();
+                Subject.DefineExchange("exchange1", ExchangeType.Direct);
+                Subject.DefineExchange("exchange2", ExchangeType.Direct);
             };
         }
     }

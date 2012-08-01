@@ -4,6 +4,8 @@ namespace Chinchilla.Topologies.Rabbit
     {
         IQueue DefineQueue();
 
+        IQueue DefineQueue(string name);
+
         IExchange DefineExchange(string name, ExchangeType exchangeType);
 
         void Visit(ITopologyVisitor visitor);
