@@ -23,7 +23,10 @@ namespace Chinchilla
             var connection = connectionFactory.Create(new Uri(connectionString));
             var messageSerializer = new JsonMessageSerializer();
 
-            return new Bus(connection, messageSerializer);
+            return new Bus(
+                connection,
+                messageSerializer,
+                new SubscriptionFactory(messageSerializer));
         }
     }
 }

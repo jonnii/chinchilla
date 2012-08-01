@@ -1,4 +1,5 @@
-﻿using Chinchilla.Specifications.Messages;
+﻿using System;
+using Chinchilla.Specifications.Messages;
 using Machine.Fakes;
 using Machine.Specifications;
 using RabbitMQ.Client;
@@ -37,6 +38,30 @@ namespace Chinchilla.Specifications
 
             It should_create_new_model = () =>
                 The<IConnection>().WasToldTo(c => c.CreateModel());
+        }
+
+        [Subject(typeof(Bus))]
+        public class when_subscribing : with_bus
+        {
+            Establish establish = () =>
+            {
+                subscription = An<ISubscription>();
+                The<ISubscriptionFactory>().WhenToldTo(
+                    s => s.Create(
+                        Param.IsAny<IModel>(),
+                        Param.IsAny<Action<TestMessage>>())).Return(subscription);
+            };
+
+            Because of = () =>
+                Subject.Subscribe<TestMessage>(_ => { });
+
+            It should_create_new_model = () =>
+                The<IConnection>().WasToldTo(c => c.CreateModel());
+
+            It should_start_subscription = () =>
+                subscription.WasToldTo(s => s.Start());
+
+            static ISubscription subscription;
         }
 
         public class with_bus : WithSubject<Bus>

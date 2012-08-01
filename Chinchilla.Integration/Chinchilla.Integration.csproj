@@ -53,6 +53,7 @@
     <Compile Include="Features\CreateBusFeature.cs" />
     <Compile Include="Features\Messages\HelloWorldMessage.cs" />
     <Compile Include="Features\PublishFeature.cs" />
+    <Compile Include="Features\SubscribeFeature.cs" />
     <Compile Include="Features\WithApi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

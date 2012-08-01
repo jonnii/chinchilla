@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Chinchilla.Integration.Features.Messages;
 using NUnit.Framework;
 
 namespace Chinchilla.Integration.Features

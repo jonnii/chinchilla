@@ -1,7 +1,6 @@
 using System;
 using Chinchilla.Topologies.Rabbit;
 using RabbitMQ.Client;
-using ExchangeType = Chinchilla.Topologies.Rabbit.ExchangeType;
 
 namespace Chinchilla
 {
@@ -11,12 +10,16 @@ namespace Chinchilla
 
         private readonly IMessageSerializer messageSerializer;
 
+        private readonly ISubscriptionFactory subscriptionFactory;
+
         public Bus(
             IConnection connection,
-            IMessageSerializer messageSerializer)
+            IMessageSerializer messageSerializer,
+            ISubscriptionFactory subscriptionFactory)
         {
             this.connection = connection;
             this.messageSerializer = messageSerializer;
+            this.subscriptionFactory = subscriptionFactory;
 
             Topology = new Topology();
         }
@@ -25,12 +28,12 @@ namespace Chinchilla
 
         public ISubscription Subscribe<T>(Action<T> onMessage)
         {
-            var queue = Topology.DefineQueue();
-            var exchange = Topology.DefineExchange(typeof(T).Name, ExchangeType.Fanout);
+            var model = connection.CreateModel();
+            var subscription = subscriptionFactory.Create(model, onMessage);
 
-            queue.BindTo(exchange);
+            subscription.Start();
 
-            return Subscribe(queue, exchange, onMessage);
+            return subscription;
         }
 
         public IPublishChannel CreatePublishChannel()
@@ -38,11 +41,6 @@ namespace Chinchilla
             return new PublishChannel(
                 connection.CreateModel(),
                 messageSerializer);
-        }
-
-        private ISubscription Subscribe<T>(IQueue queue, IExchange exchange, Action<T> onMessage)
-        {
-            return new SubscriptionHandle(queue);
         }
 
         public void Publish<T>(T message)

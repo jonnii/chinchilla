@@ -1,4 +1,3 @@
-using System.Text;
 using Chinchilla.Topologies.Rabbit;
 using RabbitMQ.Client;
 using ExchangeType = Chinchilla.Topologies.Rabbit.ExchangeType;

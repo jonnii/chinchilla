@@ -1,4 +1,7 @@
-namespace Chinchilla.Integration.Features
+namespace Chinchilla.Integration.Features.Messages
 {
-    public class HelloWorldMessage { }
+    public class HelloWorldMessage
+    {
+        public string Message { get; set; }
+    }
 }

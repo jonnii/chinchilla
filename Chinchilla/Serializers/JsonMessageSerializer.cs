@@ -9,5 +9,10 @@ namespace Chinchilla.Serializers
         {
             return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
         }
+
+        public IMessage<T> Deserialize<T>(byte[] message)
+        {
+            return JsonConvert.DeserializeObject<Message<T>>(Encoding.UTF8.GetString(message));
+        }
     }
 }

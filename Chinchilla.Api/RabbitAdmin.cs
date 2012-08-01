@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using SpeakEasy;
 using SpeakEasy.Authenticators;
@@ -75,6 +76,16 @@ namespace Chinchilla.Api
                 permissions,
                 "permissions/:vhost/:user", new { vhost = virtualHost.Name, user = user.Name })
             .Is(HttpStatusCode.NoContent);
+        }
+
+        public bool Exists(VirtualHost virtualHost, Queue queue)
+        {
+            return Queues(virtualHost).Any(q => q.Name == queue.Name);
+        }
+
+        public bool Exists(VirtualHost virtualHost, Exchange exchange)
+        {
+            return Exchanges(virtualHost).Any(e => e.Name == exchange.Name);
         }
     }
 }

@@ -15,5 +15,9 @@ namespace Chinchilla.Api
         bool Delete(VirtualHost virtualHost);
 
         bool Create(VirtualHost virtualHost, User user, Permissions permissions);
+
+        bool Exists(VirtualHost virtualHost, Queue queue);
+
+        bool Exists(VirtualHost virtualHost, Exchange exchange);
     }
 }
