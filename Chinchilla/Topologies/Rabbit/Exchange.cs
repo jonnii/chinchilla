@@ -37,10 +37,5 @@ namespace Chinchilla.Topologies.Rabbit
         {
             return string.Format("[Exchange Name: {0}]", Name);
         }
-
-        public override string ToString()
-        {
-            return string.Format("[Exchange Name: {0}]", Name);
-        }
     }
 }
