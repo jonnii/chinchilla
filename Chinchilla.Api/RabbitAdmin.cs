@@ -49,6 +49,16 @@ namespace Chinchilla.Api
             }
         }
 
+        public IEnumerable<Exchange> Exchanges(VirtualHost virtualHost)
+        {
+            return Client.Get("exchanges/:vhost", new { vhost = virtualHost.Name }).OnOk().As<List<Exchange>>();
+        }
+
+        public IEnumerable<Queue> Queues(VirtualHost virtualHost)
+        {
+            return Client.Get("queues/:vhost", new { vhost = virtualHost.Name }).OnOk().As<List<Queue>>();
+        }
+
         public bool Create(VirtualHost virtualHost)
         {
             return Client.Put("vhosts/:name", new { name = virtualHost.Name }).Is(HttpStatusCode.NoContent);

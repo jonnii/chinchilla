@@ -5,12 +5,10 @@ namespace Chinchilla.Topologies.Rabbit
         public Exchange(string name, ExchangeType exchangeType)
         {
             Name = name;
-            ExchangeType = exchangeType;
+            Type = exchangeType;
         }
 
-        public string Name { get; set; }
-
-        public ExchangeType ExchangeType { get; set; }
+        public ExchangeType Type { get; set; }
 
         public Durability Durability { get; set; }
 
@@ -28,6 +26,11 @@ namespace Chinchilla.Topologies.Rabbit
         public override void Visit(ITopologyVisitor visitor)
         {
             visitor.Visit(this);
+        }
+
+        public override string ToString()
+        {
+            return string.Format("[Exchange Name: {0}]", Name);
         }
     }
 }

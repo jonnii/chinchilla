@@ -47,9 +47,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exchange.cs" />
     <Compile Include="IRabbitAdmin.cs" />
     <Compile Include="Permissions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queue.cs" />
     <Compile Include="RabbitAdmin.cs" />
     <Compile Include="RabbitContractResolver.cs" />
     <Compile Include="User.cs" />

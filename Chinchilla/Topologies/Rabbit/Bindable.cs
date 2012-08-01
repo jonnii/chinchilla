@@ -7,6 +7,13 @@ namespace Chinchilla.Topologies.Rabbit
     {
         private readonly List<IBinding> bindings = new List<IBinding>();
 
+        public string Name { get; set; }
+
+        public bool HasName
+        {
+            get { return !string.IsNullOrEmpty(Name); }
+        }
+
         public IEnumerable<IBinding> Bindings
         {
             get { return bindings; }
