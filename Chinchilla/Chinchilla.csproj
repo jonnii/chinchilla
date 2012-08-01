@@ -42,12 +42,15 @@
   <ItemGroup>
     <Compile Include="Bus.cs" />
     <Compile Include="Connection.cs" />
-    <Compile Include="ConnectionFactoryAdapter.cs" />
+    <Compile Include="DefaultConnectionFactory.cs" />
     <Compile Include="ConnectionString.cs" />
     <Compile Include="Depot.cs" />
     <Compile Include="Guard.cs" />
     <Compile Include="IConnectionFactory.cs" />
     <Compile Include="IMessage.cs" />
+    <Compile Include="IPublishChannel.cs" />
+    <Compile Include="IPublisher.cs" />
+    <Compile Include="PublishChannel.cs" />
     <Compile Include="Topologies\Rabbit\Bindable.cs" />
     <Compile Include="Topologies\Rabbit\Binding.cs" />
     <Compile Include="Topologies\Rabbit\Durability.cs" />

@@ -3,17 +3,17 @@ using RabbitMQ.Client;
 
 namespace Chinchilla
 {
-    public class ConnectionFactoryAdapter : IConnectionFactory
+    public class DefaultConnectionFactory : IConnectionFactory
     {
         private readonly ConnectionFactory connectionFactory;
 
-        public ConnectionFactoryAdapter()
+        public DefaultConnectionFactory()
             : this(new ConnectionFactory())
         {
 
         }
 
-        public ConnectionFactoryAdapter(ConnectionFactory connectionFactory)
+        public DefaultConnectionFactory(ConnectionFactory connectionFactory)
         {
             this.connectionFactory = connectionFactory;
         }

@@ -1,12 +1,18 @@
 using System;
 using Chinchilla.Topologies.Rabbit;
+using RabbitMQ.Client;
+using ExchangeType = Chinchilla.Topologies.Rabbit.ExchangeType;
 
 namespace Chinchilla
 {
     public class Bus : IBus
     {
-        public Bus()
+        private readonly IConnection connection;
+
+        public Bus(IConnection connection)
         {
+            this.connection = connection;
+
             Topology = new Topology();
         }
 
@@ -22,6 +28,11 @@ namespace Chinchilla
             return Subscribe(queue, exchange, onMessage);
         }
 
+        public IPublishChannel CreatePublishChannel()
+        {
+            return new PublishChannel(connection.CreateModel());
+        }
+
         private ISubscription Subscribe<T>(IQueue queue, IExchange exchange, Action<T> onMessage)
         {
             return new SubscriptionHandle(queue);
@@ -29,14 +40,8 @@ namespace Chinchilla
 
         public void Publish<T>(T message)
         {
-            var exchange = Topology.DefineExchange(typeof(T).Name, ExchangeType.Fanout);
-
-            Publish(exchange, message);
-        }
-
-        private void Publish<T>(IExchange exchange, T message)
-        {
-
+            var publisher = CreatePublishChannel();
+            publisher.Publish(message);
         }
 
         public void Dispose()

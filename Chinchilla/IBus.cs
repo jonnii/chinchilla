@@ -3,12 +3,12 @@ using Chinchilla.Topologies.Rabbit;
 
 namespace Chinchilla
 {
-    public interface IBus : IDisposable
+    public interface IBus : IPublisher, IDisposable
     {
         ITopology Topology { get; }
 
-        ISubscription Subscribe<T>(Action<T> onMessage);
+        IPublishChannel CreatePublishChannel();
 
-        void Publish<T>(T message);
+        ISubscription Subscribe<T>(Action<T> onMessage);
     }
 }

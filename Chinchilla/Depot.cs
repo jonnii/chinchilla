@@ -2,16 +2,26 @@
 
 namespace Chinchilla
 {
-    public class Depot : IDisposable
+    public class Depot
     {
-        public static IBus Connect(string server)
+        public const string AmqpProtocol = "amqp://";
+
+        public static IBus Connect(string connectionString)
         {
-            return new Bus();
+            var connectionFactory = new DefaultConnectionFactory();
+            return Connect(connectionString, connectionFactory);
         }
 
-        public void Dispose()
+        public static IBus Connect(string connectionString, IConnectionFactory connectionFactory)
         {
+            if (!connectionString.StartsWith(AmqpProtocol))
+            {
+                connectionString = string.Concat(AmqpProtocol, connectionString);
+            }
 
+            var connection = connectionFactory.Create(new Uri(connectionString));
+
+            return new Bus(connection);
         }
     }
 }

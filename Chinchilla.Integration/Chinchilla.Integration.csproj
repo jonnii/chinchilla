@@ -51,6 +51,9 @@
     <Compile Include="Features\Api\RabbitAdminFeature.cs" />
     <Compile Include="Features\ConnectionFeature.cs" />
     <Compile Include="Features\CreateBusFeature.cs" />
+    <Compile Include="Features\Messages\HelloWorldMessage.cs" />
+    <Compile Include="Features\PublishFeature.cs" />
+    <Compile Include="Features\WithApi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
