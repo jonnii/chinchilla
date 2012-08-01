@@ -9,15 +9,20 @@ namespace Chinchilla
     {
         private readonly IModel model;
 
+        private readonly IMessageSerializer serializer;
+
         private readonly Topology topology;
 
         private readonly TopologyBuilder topologyBuilder;
 
         private bool disposed;
 
-        public PublishChannel(IModel model)
+        public PublishChannel(
+            IModel model,
+            IMessageSerializer serializer)
         {
             this.model = model;
+            this.serializer = serializer;
 
             topology = new Topology();
             topologyBuilder = new TopologyBuilder(model);
@@ -32,11 +37,14 @@ namespace Chinchilla
 
             var defaultProperties = model.CreateBasicProperties();
 
+            var serializedMessage = serializer.Serialize(
+                Message.Create(message));
+
             model.BasicPublish(
                 exchange.Name,
                 "#",
                 defaultProperties,
-                Encoding.Default.GetBytes("Body"));
+                serializedMessage);
 
             ++PublishedMessages;
         }

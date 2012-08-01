@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.7\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="RabbitMQ.Client">
       <HintPath>..\packages\RabbitMQ.Client.2.8.4\lib\net30\RabbitMQ.Client.dll</HintPath>
     </Reference>
@@ -48,9 +51,13 @@
     <Compile Include="Guard.cs" />
     <Compile Include="IConnectionFactory.cs" />
     <Compile Include="IMessage.cs" />
+    <Compile Include="IMessageSerializer.cs" />
     <Compile Include="IPublishChannel.cs" />
     <Compile Include="IPublisher.cs" />
+    <Compile Include="Message.cs" />
+    <Compile Include="MessageProperties.cs" />
     <Compile Include="PublishChannel.cs" />
+    <Compile Include="Serializers\JsonMessageSerializer.cs" />
     <Compile Include="Topologies\Rabbit\Bindable.cs" />
     <Compile Include="Topologies\Rabbit\Binding.cs" />
     <Compile Include="Topologies\Rabbit\Durability.cs" />

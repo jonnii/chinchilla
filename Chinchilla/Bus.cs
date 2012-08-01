@@ -9,9 +9,14 @@ namespace Chinchilla
     {
         private readonly IConnection connection;
 
-        public Bus(IConnection connection)
+        private readonly IMessageSerializer messageSerializer;
+
+        public Bus(
+            IConnection connection,
+            IMessageSerializer messageSerializer)
         {
             this.connection = connection;
+            this.messageSerializer = messageSerializer;
 
             Topology = new Topology();
         }
@@ -30,7 +35,9 @@ namespace Chinchilla
 
         public IPublishChannel CreatePublishChannel()
         {
-            return new PublishChannel(connection.CreateModel());
+            return new PublishChannel(
+                connection.CreateModel(),
+                messageSerializer);
         }
 
         private ISubscription Subscribe<T>(IQueue queue, IExchange exchange, Action<T> onMessage)

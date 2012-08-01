@@ -1,4 +1,5 @@
 ﻿using System;
+using Chinchilla.Serializers;
 
 namespace Chinchilla
 {
@@ -20,8 +21,9 @@ namespace Chinchilla
             }
 
             var connection = connectionFactory.Create(new Uri(connectionString));
+            var messageSerializer = new JsonMessageSerializer();
 
-            return new Bus(connection);
+            return new Bus(connection, messageSerializer);
         }
     }
 }
