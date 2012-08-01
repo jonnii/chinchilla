@@ -11,6 +11,8 @@
     <AssemblyName>Chinchilla.Integration</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -46,6 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Features\Api\RabbitAdminFeature.cs" />
+    <Compile Include="Features\ConnectionFeature.cs" />
     <Compile Include="Features\CreateBusFeature.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -53,12 +57,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Chinchilla.Api\Chinchilla.Api.csproj">
+      <Project>{E53D95D3-DB21-4DF6-85DB-557C99E11F67}</Project>
+      <Name>Chinchilla.Api</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Chinchilla\Chinchilla.csproj">
       <Project>{BF887B21-2A5A-4B52-8254-0B3CB908634B}</Project>
       <Name>Chinchilla</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

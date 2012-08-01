@@ -9,20 +9,25 @@ namespace Chinchilla.Console
         {
             using (var bus = Depot.Connect("localhost"))
             {
-                var handler = new Action<HelloWorldMessage>(System.Console.WriteLine);
+                bus.Publish(new HelloWorldMessage { Message = "Good morning" });
 
-                using (bus.Subscribe(handler))
-                {
-                    var topology = bus.Topology;
+                //var handler = new Action<HelloWorldMessage>(System.Console.WriteLine);
 
-                    topology.Visit(new TopologyWriter(System.Console.Out));
+                //using (bus.Subscribe(handler))
+                //{
+                //    var topology = bus.Topology;
+
+                //    topology.Visit(new TopologyWriter(System.Console.Out));
 
                     System.Console.WriteLine("Waiting for you!");
                     System.Console.ReadLine();
-                }
+                //}
             }
         }
     }
 
-    public class HelloWorldMessage { }
+    public class HelloWorldMessage
+    {
+        public string Message { get; set; }
+    }
 }
