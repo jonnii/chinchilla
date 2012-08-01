@@ -59,6 +59,7 @@
     <Compile Include="IMessageSerializer.cs" />
     <Compile Include="IPublishChannel.cs" />
     <Compile Include="IPublisher.cs" />
+    <Compile Include="ISubscriptionConfiguration.cs" />
     <Compile Include="ISubscriptionFactory.cs" />
     <Compile Include="Logging\ClassLogger.cs" />
     <Compile Include="Logging\ConsoleLogger.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="PublishChannel.cs" />
     <Compile Include="Serializers\JsonMessageSerializer.cs" />
     <Compile Include="Subscription.cs" />
+    <Compile Include="SubscriptionConfiguration.cs" />
     <Compile Include="SubscriptionFactory.cs" />
     <Compile Include="Topologies\Rabbit\Bindable.cs" />
     <Compile Include="Topologies\Rabbit\Binding.cs" />

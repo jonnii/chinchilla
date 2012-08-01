@@ -15,9 +15,12 @@ namespace Chinchilla
             this.messageSerializer = messageSerializer;
         }
 
-        public ISubscription Create<TMessage>(IModel model, Action<TMessage> handler)
+        public ISubscription Create<TMessage>(
+            IModel model,
+            Action<TMessage> handler,
+            ISubscriptionConfiguration subscriptionConfiguration)
         {
-            logger.Debug("Creating new handler subscription");
+            logger.DebugFormat("Creating new handler subscription with configuration: {0}", subscriptionConfiguration);
 
             var actionHandler = new ActionMessageHandler<TMessage>(handler);
 

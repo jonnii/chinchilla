@@ -49,7 +49,8 @@ namespace Chinchilla.Specifications
                 The<ISubscriptionFactory>().WhenToldTo(
                     s => s.Create(
                         Param.IsAny<IModel>(),
-                        Param.IsAny<Action<TestMessage>>())).Return(subscription);
+                        Param.IsAny<Action<TestMessage>>(),
+                        Param.IsAny<ISubscriptionConfiguration>())).Return(subscription);
             };
 
             Because of = () =>

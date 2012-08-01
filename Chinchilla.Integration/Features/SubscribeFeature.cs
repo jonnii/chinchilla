@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using Chinchilla.Api;
 using Chinchilla.Integration.Features.Messages;
 using NUnit.Framework;
@@ -26,16 +27,34 @@ namespace Chinchilla.Integration.Features
         {
             using (var bus = Depot.Connect("localhost/integration"))
             {
-                HelloWorldMessage received = null;
-                using (bus.Subscribe((HelloWorldMessage hwm) => { received = hwm; }))
+                HelloWorldMessage lastReceived = null;
+                var numReceived = 0;
+                using (bus.Subscribe((HelloWorldMessage hwm) => { lastReceived = hwm; ++numReceived; }))
                 {
-                    bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
+                    for (var i = 0; i < 100; ++i)
+                    {
+                        bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
+                    }
 
                     Thread.Sleep(1000);
                 }
 
-                Assert.That(received, Is.Not.Null);
-                Assert.That(received.Message, Is.EqualTo("subscribe!"));
+                Assert.That(lastReceived, Is.Not.Null);
+                Assert.That(lastReceived.Message, Is.EqualTo("subscribe!"));
+                Assert.That(numReceived, Is.EqualTo(100));
+            }
+        }
+
+        [Test]
+        public void ShouldCreateSubscriberWithMaxConsumers()
+        {
+            using (var bus = Depot.Connect("localhost/integration"))
+            {
+                var handler = new Action<HelloWorldMessage>(hwm => { });
+                using (bus.Subscribe(handler, o => o.MaxConsumers(2)))
+                {
+
+                }
             }
         }
     }

@@ -10,5 +10,7 @@ namespace Chinchilla
         IPublishChannel CreatePublishChannel();
 
         ISubscription Subscribe<T>(Action<T> onMessage);
+
+        ISubscription Subscribe<T>(Action<T> onMessage, Action<ISubscriptionConfiguration> configurator);
     }
 }

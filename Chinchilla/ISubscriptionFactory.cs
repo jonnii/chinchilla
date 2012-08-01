@@ -5,6 +5,6 @@ namespace Chinchilla
 {
     public interface ISubscriptionFactory
     {
-        ISubscription Create<TMessage>(IModel model, Action<TMessage> handler);
+        ISubscription Create<TMessage>(IModel model, Action<TMessage> handler, ISubscriptionConfiguration subscriptionConfiguration);
     }
 }
