@@ -25,7 +25,7 @@ namespace Chinchilla.Integration.Features
                 using (var publisher = bus.CreatePublishChannel())
                 {
                     publisher.Publish(new HelloWorldMessage());
-                    Assert.That(publisher.PublishedMessages, Is.EqualTo(1));
+                    Assert.That(publisher.NumPublishedMessages, Is.EqualTo(1));
                 }
             }
 
@@ -44,7 +44,7 @@ namespace Chinchilla.Integration.Features
                         publisher.Publish(new HelloWorldMessage());
                     }
 
-                    Assert.That(publisher.PublishedMessages, Is.EqualTo(100));
+                    Assert.That(publisher.NumPublishedMessages, Is.EqualTo(100));
                 }
             }
         }

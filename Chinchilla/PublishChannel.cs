@@ -28,7 +28,7 @@ namespace Chinchilla
             topologyBuilder = new TopologyBuilder(model);
         }
 
-        public long PublishedMessages { get; private set; }
+        public long NumPublishedMessages { get; private set; }
 
         public void Publish<T>(T message)
         {
@@ -46,7 +46,7 @@ namespace Chinchilla
                 defaultProperties,
                 serializedMessage);
 
-            ++PublishedMessages;
+            ++NumPublishedMessages;
         }
 
         public void Dispose()

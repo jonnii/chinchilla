@@ -4,6 +4,6 @@ namespace Chinchilla
 {
     public interface IPublishChannel : IPublisher, IDisposable
     {
-        long PublishedMessages { get; }
+        long NumPublishedMessages { get; }
     }
 }
