@@ -10,14 +10,14 @@ namespace Chinchilla
         }
 
         public void ConsumerStrategy<TStrategy>(params Action<TStrategy>[] configuration)
-            where TStrategy : IConsumerStrategy
+            where TStrategy : IDeliveryStrategy
         {
 
         }
 
-        public IConsumerStrategy BuildConsumerStrategy(IDeliveryHandler deliveryHandler)
+        public IDeliveryStrategy BuildConsumerStrategy(IDeliveryHandler deliveryHandler)
         {
-            return new ImmediateConsumerStrategy(deliveryHandler);
+            return new ImmediateDeliveryStrategy(deliveryHandler);
         }
 
         public override string ToString()

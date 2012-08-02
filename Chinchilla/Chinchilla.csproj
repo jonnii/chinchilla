@@ -55,13 +55,13 @@
     <Compile Include="Depot.cs" />
     <Compile Include="Guard.cs" />
     <Compile Include="IConnectionFactory.cs" />
-    <Compile Include="IConsumerStrategy.cs" />
+    <Compile Include="IDeliveryStrategy.cs" />
     <Compile Include="IDelivery.cs" />
     <Compile Include="IDeliveryListener.cs" />
     <Compile Include="IMessage.cs" />
     <Compile Include="IDeliveryHandler.cs" />
     <Compile Include="IMessageSerializer.cs" />
-    <Compile Include="ImmediateConsumerStrategy.cs" />
+    <Compile Include="ImmediateDeliveryStrategy.cs" />
     <Compile Include="IPublishChannel.cs" />
     <Compile Include="IPublisher.cs" />
     <Compile Include="ISubscriptionConfiguration.cs" />
@@ -78,7 +78,7 @@
     <Compile Include="Subscription.cs" />
     <Compile Include="SubscriptionConfiguration.cs" />
     <Compile Include="SubscriptionFactory.cs" />
-    <Compile Include="TaskConsumerStrategy.cs" />
+    <Compile Include="TaskDeliveryStrategy.cs" />
     <Compile Include="Topologies\Rabbit\Bindable.cs" />
     <Compile Include="Topologies\Rabbit\Binding.cs" />
     <Compile Include="Topologies\Rabbit\Durability.cs" />
@@ -98,7 +98,7 @@
     <Compile Include="Topologies\Rabbit\IExchange.cs" />
     <Compile Include="Topologies\Rabbit\TopologyWriter.cs" />
     <Compile Include="UriConnectionString.cs" />
-    <Compile Include="WorkerPoolConsumerStrategy.cs" />
+    <Compile Include="WorkerPoolDeliveryStrategy.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

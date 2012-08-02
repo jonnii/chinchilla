@@ -15,7 +15,7 @@ namespace Chinchilla
 
         private readonly IModel model;
 
-        private readonly IConsumerStrategy consumerStrategy;
+        private readonly IDeliveryStrategy deliveryStrategy;
 
         private readonly Topology topology;
 
@@ -23,10 +23,10 @@ namespace Chinchilla
 
         public Subscription(
             IModel model,
-            IConsumerStrategy consumerStrategy)
+            IDeliveryStrategy deliveryStrategy)
         {
             this.model = model;
-            this.consumerStrategy = consumerStrategy;
+            this.deliveryStrategy = deliveryStrategy;
 
             topology = new Topology();
             topologyBuilder = new TopologyBuilder(model);
@@ -73,7 +73,7 @@ namespace Chinchilla
 
                     var delivery = new Delivery(this, item.DeliveryTag, item.Body);
 
-                    consumerStrategy.Deliver(delivery);
+                    deliveryStrategy.Deliver(delivery);
                 }
             });
 

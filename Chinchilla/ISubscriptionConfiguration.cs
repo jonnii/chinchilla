@@ -5,8 +5,8 @@ namespace Chinchilla
     public interface ISubscriptionConfiguration
     {
         void ConsumerStrategy<TStrategy>(params Action<TStrategy>[] configuration)
-            where TStrategy : IConsumerStrategy;
+            where TStrategy : IDeliveryStrategy;
 
-        IConsumerStrategy BuildConsumerStrategy(IDeliveryHandler deliveryHandler);
+        IDeliveryStrategy BuildConsumerStrategy(IDeliveryHandler deliveryHandler);
     }
 }

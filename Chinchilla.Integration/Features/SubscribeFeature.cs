@@ -51,7 +51,7 @@ namespace Chinchilla.Integration.Features
             using (var bus = Depot.Connect("localhost/integration"))
             {
                 var handler = new Action<HelloWorldMessage>(hwm => { });
-                using (bus.Subscribe(handler, o => o.ConsumerStrategy<TaskConsumerStrategy>()))
+                using (bus.Subscribe(handler, o => o.ConsumerStrategy<TaskDeliveryStrategy>()))
                 {
 
                 }
