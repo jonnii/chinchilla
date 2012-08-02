@@ -22,12 +22,15 @@ namespace Chinchilla
         {
             logger.DebugFormat("Creating new handler subscription with configuration: {0}", subscriptionConfiguration);
 
-            var actionHandler = new ActionMessageHandler<TMessage>(handler);
+            var deliveryHandler = new ActionDeliveryHandler<TMessage>(
+                messageSerializer,
+                handler);
+
+            var consumerStrategy = subscriptionConfiguration.BuildConsumerStrategy(deliveryHandler);
 
             return new Subscription<TMessage>(
                 model,
-                messageSerializer,
-                actionHandler);
+                consumerStrategy);
         }
     }
 }

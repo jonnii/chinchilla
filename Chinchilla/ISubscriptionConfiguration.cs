@@ -1,7 +1,12 @@
+using System;
+
 namespace Chinchilla
 {
     public interface ISubscriptionConfiguration
     {
-        ISubscriptionConfiguration MaxConsumers(int i);
+        void ConsumerStrategy<TStrategy>(params Action<TStrategy>[] configuration)
+            where TStrategy : IConsumerStrategy;
+
+        IConsumerStrategy BuildConsumerStrategy(IDeliveryHandler deliveryHandler);
     }
 }

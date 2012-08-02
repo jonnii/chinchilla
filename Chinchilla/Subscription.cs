@@ -9,15 +9,13 @@ using ExchangeType = Chinchilla.Topologies.Rabbit.ExchangeType;
 
 namespace Chinchilla
 {
-    public class Subscription<T> : ISubscription
+    public class Subscription<T> : ISubscription, IDeliveryListener
     {
         private readonly ILogger logger = Logger.Create<Subscription<T>>();
 
         private readonly IModel model;
 
-        private readonly IMessageSerializer messageSerializer;
-
-        private readonly IMessageHandler<T> messageHandler;
+        private readonly IConsumerStrategy consumerStrategy;
 
         private readonly Topology topology;
 
@@ -25,12 +23,10 @@ namespace Chinchilla
 
         public Subscription(
             IModel model,
-            IMessageSerializer messageSerializer,
-            IMessageHandler<T> messageHandler)
+            IConsumerStrategy consumerStrategy)
         {
             this.model = model;
-            this.messageSerializer = messageSerializer;
-            this.messageHandler = messageHandler;
+            this.consumerStrategy = consumerStrategy;
 
             topology = new Topology();
             topologyBuilder = new TopologyBuilder(model);
@@ -45,6 +41,8 @@ namespace Chinchilla
             logger.Debug("Creating topology");
 
             topology.Visit(topologyBuilder);
+
+            model.BasicQos(0, 0, false);
 
             var consumer = new QueueingBasicConsumer(model)
             {
@@ -73,14 +71,18 @@ namespace Chinchilla
                         break;
                     }
 
-                    var message = messageSerializer.Deserialize<T>(item.Body);
-                    messageHandler.Handle(message);
+                    var delivery = new Delivery(this, item.DeliveryTag, item.Body);
 
-                    model.BasicAck(item.DeliveryTag, false);
+                    consumerStrategy.Deliver(delivery);
                 }
             });
 
             start.Start();
+        }
+
+        public void OnAccept(IDelivery delivery)
+        {
+            model.BasicAck(delivery.Tag, false);
         }
 
         public void Dispose()

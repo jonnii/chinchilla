@@ -46,12 +46,12 @@ namespace Chinchilla.Integration.Features
         }
 
         [Test]
-        public void ShouldCreateSubscriberWithMaxConsumers()
+        public void ShouldCreateSubscriberWithTaskStrategy()
         {
             using (var bus = Depot.Connect("localhost/integration"))
             {
                 var handler = new Action<HelloWorldMessage>(hwm => { });
-                using (bus.Subscribe(handler, o => o.MaxConsumers(2)))
+                using (bus.Subscribe(handler, o => o.ConsumerStrategy<TaskConsumerStrategy>()))
                 {
 
                 }

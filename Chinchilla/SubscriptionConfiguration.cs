@@ -1,3 +1,5 @@
+using System;
+
 namespace Chinchilla
 {
     public class SubscriptionConfiguration : ISubscriptionConfiguration
@@ -7,9 +9,15 @@ namespace Chinchilla
             get { return new SubscriptionConfiguration(); }
         }
 
-        public ISubscriptionConfiguration MaxConsumers(int maxConsumers)
+        public void ConsumerStrategy<TStrategy>(params Action<TStrategy>[] configuration)
+            where TStrategy : IConsumerStrategy
         {
-            return this;
+
+        }
+
+        public IConsumerStrategy BuildConsumerStrategy(IDeliveryHandler deliveryHandler)
+        {
+            return new ImmediateConsumerStrategy(deliveryHandler);
         }
 
         public override string ToString()
