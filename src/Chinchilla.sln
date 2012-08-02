@@ -1,12 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla", "Chinchilla\Chinchilla.csproj", "{BF887B21-2A5A-4B52-8254-0B3CB908634B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla.Specifications", "Chinchilla.Specifications\Chinchilla.Specifications.csproj", "{08063055-7359-4B3E-B8B3-BCB7141D3D60}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla.Integration", "Chinchilla.Integration\Chinchilla.Integration.csproj", "{6CE4680B-EDE9-4D98-B751-98C0DF9DB01A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla.Console", "Chinchilla.Console\Chinchilla.Console.csproj", "{2A29708B-CCDD-4097-9C34-3B13582FF137}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{2F58DC1A-8481-4B45-BB2B-9303B75B12FD}"
@@ -15,7 +9,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{2F58DC
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla", "Chinchilla\Chinchilla.csproj", "{BF887B21-2A5A-4B52-8254-0B3CB908634B}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla.Api", "Chinchilla.Api\Chinchilla.Api.csproj", "{E53D95D3-DB21-4DF6-85DB-557C99E11F67}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla.Specifications", "Chinchilla.Specifications\Chinchilla.Specifications.csproj", "{08063055-7359-4B3E-B8B3-BCB7141D3D60}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla.Integration", "Chinchilla.Integration\Chinchilla.Integration.csproj", "{6CE4680B-EDE9-4D98-B751-98C0DF9DB01A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
