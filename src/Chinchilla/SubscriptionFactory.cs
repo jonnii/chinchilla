@@ -15,18 +15,15 @@ namespace Chinchilla
             this.messageSerializer = messageSerializer;
         }
 
-        public ISubscription Create<TMessage>(
-            IModel model,
-            Action<TMessage> handler,
-            ISubscriptionConfiguration subscriptionConfiguration)
+        public ISubscription Create<TMessage>(IModel model, ISubscriptionConfiguration configuration, Action<TMessage> processor)
         {
-            logger.DebugFormat("Creating new handler subscription with configuration: {0}", subscriptionConfiguration);
+            logger.DebugFormat("Creating new handler subscription with configuration: {0}", configuration);
 
-            var deliveryHandler = new ActionDeliveryHandler<TMessage>(
+            var deliveryHandler = new ActionDeliveryProcessor<TMessage>(
                 messageSerializer,
-                handler);
+                processor);
 
-            var consumerStrategy = subscriptionConfiguration.BuildDeliveryStrategy(deliveryHandler);
+            var consumerStrategy = configuration.BuildDeliveryStrategy(deliveryHandler);
 
             return new Subscription<TMessage>(
                 model,

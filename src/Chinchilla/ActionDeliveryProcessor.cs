@@ -2,13 +2,19 @@ using System;
 
 namespace Chinchilla
 {
-    public class ActionDeliveryHandler<T> : IDeliveryHandler
+    /// <summary>
+    /// The action delivery processor takes a delivery and unwraps it as a
+    /// typed message. The body of this message is then handed to an action 
+    /// callback.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class ActionDeliveryProcessor<T> : IDeliveryProcessor
     {
         private readonly IMessageSerializer messageSerializer;
 
         private readonly Action<T> handler;
 
-        public ActionDeliveryHandler(
+        public ActionDeliveryProcessor(
             IMessageSerializer messageSerializer,
             Action<T> handler)
         {
@@ -16,7 +22,7 @@ namespace Chinchilla
             this.handler = handler;
         }
 
-        public void Handle(IDelivery delivery)
+        public void Process(IDelivery delivery)
         {
             var deserialized = messageSerializer.Deserialize<T>(delivery.Body);
             handler(deserialized.Body);

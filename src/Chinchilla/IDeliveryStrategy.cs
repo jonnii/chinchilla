@@ -4,7 +4,7 @@ namespace Chinchilla
 {
     public interface IDeliveryStrategy : IDisposable
     {
-        void ConnectTo(IDeliveryHandler handler);
+        void ConnectTo(IDeliveryProcessor processor);
 
         void Start();
 

@@ -2,7 +2,7 @@ namespace Chinchilla
 {
     public class TaskDeliveryStrategy : IDeliveryStrategy
     {
-        public void ConnectTo(IDeliveryHandler handler)
+        public void ConnectTo(IDeliveryProcessor processor)
         {
             throw new System.NotImplementedException();
         }

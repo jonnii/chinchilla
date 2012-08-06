@@ -48,7 +48,7 @@ namespace Chinchilla
             logger.DebugFormat("Subscribing to action callback of type {0}", typeof(T).Name);
 
             var model = connection.CreateModel();
-            var subscription = subscriptionFactory.Create(model, onMessage, subscriptionConfiguration);
+            var subscription = subscriptionFactory.Create(model, subscriptionConfiguration, onMessage);
 
             logger.DebugFormat("Starting subscription: {0}", subscription);
             subscription.Start();

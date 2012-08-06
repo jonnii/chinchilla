@@ -13,7 +13,7 @@ namespace Chinchilla
         private readonly BlockingCollection<IDelivery> deliveries = new BlockingCollection<IDelivery>(
             new ConcurrentQueue<IDelivery>());
 
-        private IDeliveryHandler connectedHandler;
+        private IDeliveryProcessor connectedProcessor;
 
         private Thread[] threads;
 
@@ -26,9 +26,9 @@ namespace Chinchilla
 
         public int NumWorkers { get; set; }
 
-        public void ConnectTo(IDeliveryHandler handler)
+        public void ConnectTo(IDeliveryProcessor processor)
         {
-            connectedHandler = handler;
+            connectedProcessor = processor;
         }
 
         public void Start()
@@ -68,7 +68,7 @@ namespace Chinchilla
 
         public void DeliverOne(IDelivery delivery)
         {
-            connectedHandler.Handle(delivery);
+            connectedProcessor.Process(delivery);
             delivery.Accept();
         }
 

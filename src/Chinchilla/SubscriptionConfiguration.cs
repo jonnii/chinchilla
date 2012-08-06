@@ -9,7 +9,7 @@ namespace Chinchilla
             get { return new SubscriptionConfiguration(); }
         }
 
-        private Func<IDeliveryHandler, IDeliveryStrategy> strategyBuilder = handler => new ImmediateDeliveryStrategy();
+        private Func<IDeliveryProcessor, IDeliveryStrategy> strategyBuilder = handler => new ImmediateDeliveryStrategy();
 
         public void DeliverUsing<TStrategy>(params Action<TStrategy>[] configurations)
             where TStrategy : IDeliveryStrategy, new()
@@ -25,10 +25,10 @@ namespace Chinchilla
             };
         }
 
-        public IDeliveryStrategy BuildDeliveryStrategy(IDeliveryHandler handler)
+        public IDeliveryStrategy BuildDeliveryStrategy(IDeliveryProcessor processor)
         {
-            var consumer = strategyBuilder(handler);
-            consumer.ConnectTo(handler);
+            var consumer = strategyBuilder(processor);
+            consumer.ConnectTo(processor);
             return consumer;
         }
 

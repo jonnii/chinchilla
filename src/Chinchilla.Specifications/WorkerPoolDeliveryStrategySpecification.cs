@@ -10,22 +10,22 @@ namespace Chinchilla.Specifications
         {
             Establish context = () =>
             {
-                handler = An<IDeliveryHandler>();
+                processor = An<IDeliveryProcessor>();
                 delivery = An<IDelivery>();
                 
-                Subject.ConnectTo(handler);
+                Subject.ConnectTo(processor);
             };
 
             Because of = () =>
                 Subject.DeliverOne(delivery);
 
             It should_send_delivery_to_handler = () =>
-                handler.WasToldTo(h => h.Handle(Param.IsAny<IDelivery>()));
+                processor.WasToldTo(h => h.Process(Param.IsAny<IDelivery>()));
 
             It should_accept_delivery = () =>
                 delivery.WasToldTo(d => d.Accept());
 
-            static IDeliveryHandler handler;
+            static IDeliveryProcessor processor;
 
             static IDelivery delivery;
         }

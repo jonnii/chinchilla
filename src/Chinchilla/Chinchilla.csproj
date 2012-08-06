@@ -46,7 +46,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionDeliveryHandler.cs" />
+    <Compile Include="ActionDeliveryProcessor.cs" />
     <Compile Include="Bus.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="DefaultConnectionFactory.cs" />
@@ -59,7 +59,7 @@
     <Compile Include="IDelivery.cs" />
     <Compile Include="IDeliveryListener.cs" />
     <Compile Include="IMessage.cs" />
-    <Compile Include="IDeliveryHandler.cs" />
+    <Compile Include="IDeliveryProcessor.cs" />
     <Compile Include="IMessageSerializer.cs" />
     <Compile Include="ImmediateDeliveryStrategy.cs" />
     <Compile Include="IPublishChannel.cs" />

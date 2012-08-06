@@ -7,7 +7,7 @@ namespace Chinchilla
     {
         ISubscription Create<TMessage>(
             IModel model,
-            Action<TMessage> handler,
-            ISubscriptionConfiguration subscriptionConfiguration);
+            ISubscriptionConfiguration configuration,
+            Action<TMessage> processor);
     }
 }

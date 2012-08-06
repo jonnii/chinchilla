@@ -2,11 +2,11 @@ namespace Chinchilla
 {
     public class ImmediateDeliveryStrategy : IDeliveryStrategy
     {
-        private IDeliveryHandler deliveryHandler;
+        private IDeliveryProcessor deliveryProcessor;
 
-        public void ConnectTo(IDeliveryHandler handler)
+        public void ConnectTo(IDeliveryProcessor processor)
         {
-            deliveryHandler = handler;
+            deliveryProcessor = processor;
         }
 
         public void Start()
@@ -15,7 +15,7 @@ namespace Chinchilla
 
         public void Deliver(IDelivery delivery)
         {
-            deliveryHandler.Handle(delivery);
+            deliveryProcessor.Process(delivery);
             delivery.Accept();
         }
 

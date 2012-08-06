@@ -9,7 +9,7 @@ namespace Chinchilla.Specifications
         public class when_building_default_consumer_strategy : WithSubject<SubscriptionConfiguration>
         {
             Because of = () =>
-                strategy = Subject.BuildDeliveryStrategy(An<IDeliveryHandler>());
+                strategy = Subject.BuildDeliveryStrategy(An<IDeliveryProcessor>());
 
             It should_build_immediate_strategy = () =>
                 strategy.ShouldBeOfType<ImmediateDeliveryStrategy>();
@@ -24,7 +24,7 @@ namespace Chinchilla.Specifications
                 Subject.DeliverUsing<WorkerPoolDeliveryStrategy>(t => t.NumWorkers = 5);
 
             Because of = () =>
-                strategy = Subject.BuildDeliveryStrategy(An<IDeliveryHandler>());
+                strategy = Subject.BuildDeliveryStrategy(An<IDeliveryProcessor>());
 
             It should_create_strategy_of_correct_type = () =>
                 strategy.ShouldBeOfType<WorkerPoolDeliveryStrategy>();
