@@ -46,15 +46,27 @@ namespace Chinchilla.Integration.Features
         }
 
         [Test]
-        public void ShouldCreateSubscriberWithTaskStrategy()
+        public void ShouldCreateSubscriberWithWorkerPoolStrategy()
         {
             using (var bus = Depot.Connect("localhost/integration"))
             {
-                var handler = new Action<HelloWorldMessage>(hwm => { });
-                using (bus.Subscribe(handler, o => o.ConsumerStrategy<TaskDeliveryStrategy>()))
+                HelloWorldMessage lastReceived = null;
+                var numReceived = 0;
+                var handler = new Action<HelloWorldMessage>(hwm => { lastReceived = hwm; ++numReceived; });
+                
+                using (bus.Subscribe(handler, o => o.DeliverUsing<WorkerPoolDeliveryStrategy>(s => s.NumWorkers = 5)))
                 {
+                    for (var i = 0; i < 100; ++i)
+                    {
+                        bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
+                    }
 
+                    Thread.Sleep(1000);
                 }
+
+                Assert.That(lastReceived, Is.Not.Null);
+                Assert.That(lastReceived.Message, Is.EqualTo("subscribe!"));
+                Assert.That(numReceived, Is.EqualTo(100));
             }
         }
     }

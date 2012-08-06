@@ -9,15 +9,27 @@ namespace Chinchilla
             get { return new SubscriptionConfiguration(); }
         }
 
-        public void ConsumerStrategy<TStrategy>(params Action<TStrategy>[] configuration)
-            where TStrategy : IDeliveryStrategy
-        {
+        private Func<IDeliveryHandler, IDeliveryStrategy> strategyBuilder = handler => new ImmediateDeliveryStrategy();
 
+        public void DeliverUsing<TStrategy>(params Action<TStrategy>[] configurations)
+            where TStrategy : IDeliveryStrategy, new()
+        {
+            strategyBuilder = handler =>
+            {
+                var strategy = new TStrategy();
+                foreach (var configuration in configurations)
+                {
+                    configuration(strategy);
+                }
+                return strategy;
+            };
         }
 
-        public IDeliveryStrategy BuildConsumerStrategy(IDeliveryHandler deliveryHandler)
+        public IDeliveryStrategy BuildDeliveryStrategy(IDeliveryHandler handler)
         {
-            return new ImmediateDeliveryStrategy(deliveryHandler);
+            var consumer = strategyBuilder(handler);
+            consumer.ConnectTo(handler);
+            return consumer;
         }
 
         public override string ToString()

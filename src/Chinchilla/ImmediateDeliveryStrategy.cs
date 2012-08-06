@@ -2,17 +2,26 @@ namespace Chinchilla
 {
     public class ImmediateDeliveryStrategy : IDeliveryStrategy
     {
-        private readonly IDeliveryHandler deliveryHandler;
+        private IDeliveryHandler deliveryHandler;
 
-        public ImmediateDeliveryStrategy(IDeliveryHandler deliveryHandler)
+        public void ConnectTo(IDeliveryHandler handler)
         {
-            this.deliveryHandler = deliveryHandler;
+            deliveryHandler = handler;
+        }
+
+        public void Start()
+        {
         }
 
         public void Deliver(IDelivery delivery)
         {
             deliveryHandler.Handle(delivery);
             delivery.Accept();
+        }
+
+        public void Dispose()
+        {
+
         }
     }
 }

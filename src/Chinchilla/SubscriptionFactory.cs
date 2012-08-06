@@ -26,7 +26,7 @@ namespace Chinchilla
                 messageSerializer,
                 handler);
 
-            var consumerStrategy = subscriptionConfiguration.BuildConsumerStrategy(deliveryHandler);
+            var consumerStrategy = subscriptionConfiguration.BuildDeliveryStrategy(deliveryHandler);
 
             return new Subscription<TMessage>(
                 model,

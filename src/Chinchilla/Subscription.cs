@@ -78,6 +78,7 @@ namespace Chinchilla
             });
 
             start.Start();
+            deliveryStrategy.Start();
         }
 
         public void OnAccept(IDelivery delivery)
@@ -89,6 +90,7 @@ namespace Chinchilla
         {
             logger.DebugFormat("Disposing {0}", this);
 
+            deliveryStrategy.Dispose();
             model.Dispose();
         }
 

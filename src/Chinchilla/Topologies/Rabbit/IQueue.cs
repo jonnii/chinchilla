@@ -8,8 +8,8 @@ namespace Chinchilla.Topologies.Rabbit
 
         bool IsAutoDelete { get; set; }
 
-        TimeSpan MessageTimeToLive { get; set; }
+        TimeSpan? MessageTimeToLive { get; set; }
 
-        TimeSpan QueueAutoExpire { get; set; }
+        TimeSpan? QueueAutoExpire { get; set; }
     }
 }

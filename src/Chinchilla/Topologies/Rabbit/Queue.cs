@@ -21,14 +21,9 @@ namespace Chinchilla.Topologies.Rabbit
 
         public bool IsAutoDelete { get; set; }
 
-        public TimeSpan MessageTimeToLive { get; set; }
+        public TimeSpan? MessageTimeToLive { get; set; }
 
-        public TimeSpan QueueAutoExpire { get; set; }
-
-        public bool HasName
-        {
-            get { return !string.IsNullOrEmpty(Name); }
-        }
+        public TimeSpan? QueueAutoExpire { get; set; }
 
         public override void Visit(ITopologyVisitor visitor)
         {

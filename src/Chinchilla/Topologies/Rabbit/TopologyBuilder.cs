@@ -33,12 +33,19 @@ namespace Chinchilla.Topologies.Rabbit
             {
                 if (queue.HasName)
                 {
+                    var args = new Dictionary<string, object>();
+
+                    if (queue.QueueAutoExpire.HasValue)
+                    {
+                        args.Add("x-expires", queue.QueueAutoExpire.Value.Milliseconds);
+                    }
+
                     model.QueueDeclare(
                         queue.Name,
                         true,   // durable
                         false,  // exclusive
                         false,  // auto-delete
-                        null);
+                        args);
                 }
                 else
                 {
