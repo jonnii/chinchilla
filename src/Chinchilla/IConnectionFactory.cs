@@ -11,6 +11,6 @@ namespace Chinchilla
         /// <summary>
         /// Creates a connection for a URI
         /// </summary>
-        IConnection Create(Uri uri);
+        IModelFactory Create(Uri uri);
     }
 }

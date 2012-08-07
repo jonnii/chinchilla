@@ -25,7 +25,7 @@ namespace Chinchilla.Specifications
                 publisher.ShouldNotBeNull();
 
             It should_create_new_model = () =>
-                The<IConnection>().WasToldTo(c => c.CreateModel());
+                The<IModelFactory>().WasToldTo(c => c.CreateModel());
 
             static IPublishChannel publisher;
         }
@@ -37,7 +37,7 @@ namespace Chinchilla.Specifications
                 Subject.Publish(new TestMessage());
 
             It should_create_new_model = () =>
-                The<IConnection>().WasToldTo(c => c.CreateModel());
+                The<IModelFactory>().WasToldTo(c => c.CreateModel());
         }
 
         [Subject(typeof(Bus))]
@@ -56,7 +56,7 @@ namespace Chinchilla.Specifications
                 Subject.Subscribe<TestMessage>(_ => { });
 
             It should_create_new_model = () =>
-                The<IConnection>().WasToldTo(c => c.CreateModel());
+                The<IModelFactory>().WasToldTo(c => c.CreateModel());
 
             It should_start_subscription = () =>
                 subscription.WasToldTo(s => s.Start());
@@ -67,7 +67,7 @@ namespace Chinchilla.Specifications
         public class with_bus : WithSubject<Bus>
         {
             Establish context = () =>
-                The<IConnection>().WhenToldTo(c => c.CreateModel()).Return(An<IModel>());
+                The<IModelFactory>().WhenToldTo(c => c.CreateModel()).Return(An<IModel>());
         }
     }
 }

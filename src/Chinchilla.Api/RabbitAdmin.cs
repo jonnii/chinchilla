@@ -50,6 +50,11 @@ namespace Chinchilla.Api
             }
         }
 
+        public IEnumerable<Connection> Connections()
+        {
+            return Client.Get("connections").OnOk().As<List<Connection>>();
+        }
+
         public IEnumerable<Exchange> Exchanges(VirtualHost virtualHost)
         {
             return Client.Get("exchanges/:vhost", new { vhost = virtualHost.Name }).OnOk().As<List<Exchange>>();
@@ -68,6 +73,11 @@ namespace Chinchilla.Api
         public bool Delete(VirtualHost virtualHost)
         {
             return Client.Delete("vhosts/:name", new { name = virtualHost.Name }).Is(HttpStatusCode.NoContent);
+        }
+
+        public bool Delete(Connection connection)
+        {
+            return Client.Delete("connections/:name", new { name = connection.Name }).Is(HttpStatusCode.NoContent);
         }
 
         public bool Create(VirtualHost virtualHost, User user, Permissions permissions)

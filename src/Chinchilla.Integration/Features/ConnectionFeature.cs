@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
+using Chinchilla.Integration.Features.Messages;
 using Chinchilla.Topologies.Rabbit;
 using NUnit.Framework;
 using RabbitMQ.Client;
@@ -94,6 +96,38 @@ namespace Chinchilla.Integration.Features
             var builder = new TopologyBuilder(model);
             topology.Visit(builder);
             topology.Visit(builder);
+        }
+
+        [Test, Explicit]
+        public void ShouldSurviveBeingDisconnected()
+        {
+            using (var bus = Depot.Connect("localhost/integration"))
+            {
+                var numReceived = 0;
+                var handler = new Action<HelloWorldMessage>(hwm =>
+                {
+                    ++numReceived;
+
+                    if (numReceived % 5 == 0)
+                    {
+                        Console.WriteLine("Disconnecting with a vengeance");
+                        var connections = admin.Connections();
+                        admin.Delete(connections.First());
+                    }
+                });
+
+                using (bus.Subscribe(handler))
+                {
+                    for (var i = 0; i < 100; ++i)
+                    {
+                        bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
+                    }
+
+                    Thread.Sleep(1000);
+                }
+
+                Assert.That(numReceived, Is.EqualTo(100));
+            }
         }
     }
 }

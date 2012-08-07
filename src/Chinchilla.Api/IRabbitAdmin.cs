@@ -6,6 +6,8 @@ namespace Chinchilla.Api
     {
         IEnumerable<VirtualHost> VirtualHosts { get; }
 
+        IEnumerable<Connection> Connections();
+
         IEnumerable<Exchange> Exchanges(VirtualHost virtualHost);
 
         IEnumerable<Queue> Queues(VirtualHost virtualHost);
@@ -13,6 +15,8 @@ namespace Chinchilla.Api
         bool Create(VirtualHost virtualHost);
 
         bool Delete(VirtualHost virtualHost);
+
+        bool Delete(Connection connection);
 
         bool Create(VirtualHost virtualHost, User user, Permissions permissions);
 

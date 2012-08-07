@@ -48,7 +48,6 @@
   <ItemGroup>
     <Compile Include="ActionDeliveryProcessor.cs" />
     <Compile Include="Bus.cs" />
-    <Compile Include="Connection.cs" />
     <Compile Include="DefaultConnectionFactory.cs" />
     <Compile Include="ConnectionString.cs" />
     <Compile Include="Delivery.cs" />
@@ -62,6 +61,7 @@
     <Compile Include="IDeliveryProcessor.cs" />
     <Compile Include="IMessageSerializer.cs" />
     <Compile Include="ImmediateDeliveryStrategy.cs" />
+    <Compile Include="IModelFactory.cs" />
     <Compile Include="IPublishChannel.cs" />
     <Compile Include="IPublisher.cs" />
     <Compile Include="ISubscriptionConfiguration.cs" />
@@ -73,6 +73,7 @@
     <Compile Include="Logging\NullLogger.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="MessageProperties.cs" />
+    <Compile Include="ModelFactory.cs" />
     <Compile Include="PublishChannel.cs" />
     <Compile Include="Serializers\JsonMessageSerializer.cs" />
     <Compile Include="Subscription.cs" />

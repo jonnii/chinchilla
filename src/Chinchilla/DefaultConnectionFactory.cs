@@ -21,12 +21,14 @@ namespace Chinchilla
             this.connectionFactory = connectionFactory;
         }
 
-        public IConnection Create(Uri uri)
+        public IModelFactory Create(Uri uri)
         {
             logger.InfoFormat("Creating connnection for {0}", uri);
 
             connectionFactory.Uri = uri.ToString();
-            return connectionFactory.CreateConnection();
+
+            var connection = connectionFactory.CreateConnection();
+            return new ModelFactory(connection);
         }
     }
 }

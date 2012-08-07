@@ -1,7 +1,6 @@
 using System;
 using Chinchilla.Logging;
 using Chinchilla.Topologies.Rabbit;
-using RabbitMQ.Client;
 
 namespace Chinchilla
 {
@@ -9,18 +8,18 @@ namespace Chinchilla
     {
         private readonly ILogger logger = Logger.Create<Bus>();
 
-        private readonly IConnection connection;
+        private readonly IModelFactory modelFactory;
 
         private readonly IMessageSerializer messageSerializer;
 
         private readonly ISubscriptionFactory subscriptionFactory;
 
         public Bus(
-            IConnection connection,
+            IModelFactory modelFactory,
             IMessageSerializer messageSerializer,
             ISubscriptionFactory subscriptionFactory)
         {
-            this.connection = connection;
+            this.modelFactory = modelFactory;
             this.messageSerializer = messageSerializer;
             this.subscriptionFactory = subscriptionFactory;
 
@@ -47,7 +46,7 @@ namespace Chinchilla
         {
             logger.DebugFormat("Subscribing to action callback of type {0}", typeof(T).Name);
 
-            var model = connection.CreateModel();
+            var model = modelFactory.CreateModel();
             var subscription = subscriptionFactory.Create(model, subscriptionConfiguration, onMessage);
 
             logger.DebugFormat("Starting subscription: {0}", subscription);
@@ -59,7 +58,7 @@ namespace Chinchilla
         public IPublishChannel CreatePublishChannel()
         {
             return new PublishChannel(
-                connection.CreateModel(),
+                modelFactory.CreateModel(),
                 messageSerializer);
         }
 
