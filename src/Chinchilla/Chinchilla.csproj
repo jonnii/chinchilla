@@ -53,6 +53,7 @@
     <Compile Include="Delivery.cs" />
     <Compile Include="DeliveryStrategy.cs" />
     <Compile Include="Depot.cs" />
+    <Compile Include="Extensions\EventExtensions.cs" />
     <Compile Include="Guard.cs" />
     <Compile Include="IConnectionFactory.cs" />
     <Compile Include="IDeliveryStrategy.cs" />

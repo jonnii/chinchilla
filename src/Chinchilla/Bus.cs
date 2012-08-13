@@ -64,13 +64,15 @@ namespace Chinchilla
 
         public void Publish<T>(T message)
         {
-            var publisher = CreatePublishChannel();
-            publisher.Publish(message);
+            using (var publisher = CreatePublishChannel())
+            {
+                publisher.Publish(message);
+            }
         }
 
         public void Dispose()
         {
-
+            //modelFactory.Dispose();
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using System;
-using Chinchilla.Topologies.Rabbit;
+﻿using System.Threading;
+using Chinchilla.Logging;
 
 namespace Chinchilla.Console
 {
@@ -7,22 +7,45 @@ namespace Chinchilla.Console
     {
         public static void Main(string[] args)
         {
-            using (var bus = Depot.Connect("localhost"))
+            var running = true;
+
+            Logger.Target = new ConsoleLogger();
+
+            var publisher = new Thread(() =>
             {
-                bus.Publish(new HelloWorldMessage { Message = "Good morning" });
+                using (var bus = Depot.Connect("localhost"))
+                {
+                    while (running)
+                    {
+                        bus.Publish(new HelloWorldMessage
+                        {
+                            Message = "Good morning"
+                        });
 
-                //var handler = new Action<HelloWorldMessage>(System.Console.WriteLine);
+                        Thread.Sleep(1000);
+                    }
+                }
+            });
+            publisher.Start();
 
-                //using (bus.Subscribe(handler))
-                //{
-                //    var topology = bus.Topology;
+            var consumer = new Thread(() =>
+            {
+                using (var bus = Depot.Connect("localhost"))
+                {
+                    bus.Subscribe<HelloWorldMessage>(m => System.Console.WriteLine(m.Message));
 
-                //    topology.Visit(new TopologyWriter(System.Console.Out));
+                    while (running)
+                    {
+                        Thread.Sleep(1000);
+                    }
+                }
+            });
+            consumer.Start();
 
-                    System.Console.WriteLine("Waiting for you!");
-                    System.Console.ReadLine();
-                //}
-            }
+            System.Console.WriteLine("Waiting for you!");
+            System.Console.ReadLine();
+
+            running = false;
         }
     }
 

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Concurrent;
+using Chinchilla.Extensions;
+using Chinchilla.Logging;
 using Chinchilla.Topologies.Rabbit;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -8,15 +10,21 @@ namespace Chinchilla
 {
     public class ModelReference : IModelReference
     {
-        private readonly IModel model;
+        private readonly ILogger logger = Logger.Create<ModelReference>();
 
         private readonly BlockingCollection<BasicDeliverEventArgs> deliverEventArgsQueue =
             new BlockingCollection<BasicDeliverEventArgs>();
+
+        private IModel model;
+
+        private Action initializeConsumer = () => { };
 
         public ModelReference(IModel model)
         {
             this.model = model;
         }
+
+        public event EventHandler<EventArgs> Disposed;
 
         public void Execute(Action<IModel> action)
         {
@@ -28,18 +36,31 @@ namespace Chinchilla
             return func(model);
         }
 
-        public BlockingCollection<BasicDeliverEventArgs> StartConsuming(IQueue queue)
+        public void Reconnect(IModel newModel)
         {
-            var consumer = new SharedBlockingCollectionBasicConsumer(model, deliverEventArgsQueue)
+            logger.DebugFormat("Changing model");
+
+            model = newModel;
+            initializeConsumer();
+        }
+
+        public BlockingCollection<BasicDeliverEventArgs> GetConsumerQueue(IQueue queue)
+        {
+            initializeConsumer = () =>
             {
-                ConsumerTag = Guid.NewGuid().ToString()
+                var consumer = new SharedBlockingCollectionBasicConsumer(model, deliverEventArgsQueue)
+                {
+                    ConsumerTag = Guid.NewGuid().ToString()
+                };
+
+                model.BasicConsume(
+                    queue.Name,             // queue
+                    false,                  // noAck 
+                    consumer.ConsumerTag,   // consumerTag
+                    consumer);              // consumer
             };
 
-            model.BasicConsume(
-                queue.Name,             // queue
-                false,                  // noAck 
-                consumer.ConsumerTag,   // consumerTag
-                consumer);              // consumer
+            initializeConsumer();
 
             return deliverEventArgsQueue;
         }
@@ -47,8 +68,14 @@ namespace Chinchilla
         public void Dispose()
         {
             deliverEventArgsQueue.CompleteAdding();
-            model.Close();
-            model.Dispose();
+
+            if (model != null)
+            {
+                model.Close();
+                model.Dispose();
+            }
+
+            Disposed.Raise(this);
         }
     }
 }

@@ -1,9 +1,11 @@
+using RabbitMQ.Client;
+
 namespace Chinchilla
 {
     public interface IModelFactory
     {
-        bool IsOpen { get; }
-
         IModelReference CreateModel();
+
+        void Reconnect(IConnection newConnection);
     }
 }

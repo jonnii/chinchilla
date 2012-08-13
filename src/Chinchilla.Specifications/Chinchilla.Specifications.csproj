@@ -65,6 +65,8 @@
     <Compile Include="ConnectionStringSpecification.cs" />
     <Compile Include="DepotSpecification.cs" />
     <Compile Include="Messages\TestMessage.cs" />
+    <Compile Include="ModelFactorySpecification.cs" />
+    <Compile Include="ModelReferenceSpecification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PublishChannelSpecification.cs" />
     <Compile Include="SubscriptionConfigurationSpecification.cs" />

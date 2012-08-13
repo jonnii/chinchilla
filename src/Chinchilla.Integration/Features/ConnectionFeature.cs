@@ -4,7 +4,6 @@ using System.Threading;
 using Chinchilla.Integration.Features.Messages;
 using Chinchilla.Topologies.Rabbit;
 using NUnit.Framework;
-using RabbitMQ.Client;
 using ExchangeType = Chinchilla.Topologies.Rabbit.ExchangeType;
 
 namespace Chinchilla.Integration.Features
@@ -12,17 +11,6 @@ namespace Chinchilla.Integration.Features
     [TestFixture]
     public class ConnectionFeature : WithApi
     {
-        [Test]
-        public void ShouldConnectWithUri()
-        {
-            var factory = new ConnectionFactory();
-            var adapter = new DefaultConnectionFactory(factory);
-
-            var connection = adapter.Create(new Uri("amqp://localhost"));
-
-            Assert.That(connection.IsOpen);
-        }
-
         [Test]
         public void ShouldVisitTopologyWithQueueBoundToExchange()
         {
@@ -98,7 +86,7 @@ namespace Chinchilla.Integration.Features
             topology.Visit(builder);
         }
 
-        [Test, Explicit]
+        [Test]
         public void ShouldSurviveBeingDisconnected()
         {
             using (var bus = Depot.Connect("localhost/integration"))
@@ -108,7 +96,7 @@ namespace Chinchilla.Integration.Features
                 {
                     ++numReceived;
 
-                    if (numReceived % 5 == 0)
+                    if (numReceived == 50)
                     {
                         Console.WriteLine("Disconnecting with a vengeance");
                         var connections = admin.Connections();
@@ -116,17 +104,20 @@ namespace Chinchilla.Integration.Features
                     }
                 });
 
-                using (bus.Subscribe(handler))
-                {
-                    for (var i = 0; i < 100; ++i)
-                    {
-                        bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
-                    }
+                using (bus.Subscribe((HelloWorldMessage m) => { })) { }
 
+                for (var i = 0; i < 100; ++i)
+                {
+                    bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
+                }
+
+                var subscription = bus.Subscribe(handler);
+                using (subscription)
+                {
                     Thread.Sleep(1000);
                 }
 
-                Assert.That(numReceived, Is.EqualTo(100));
+                Assert.That(numReceived, Is.GreaterThanOrEqualTo(100));
             }
         }
     }

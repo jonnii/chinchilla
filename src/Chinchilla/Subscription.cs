@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Threading;
 using Chinchilla.Logging;
 using Chinchilla.Topologies.Rabbit;
@@ -18,6 +19,12 @@ namespace Chinchilla
         private readonly Topology topology;
 
         private readonly TopologyBuilder topologyBuilder;
+
+        private BlockingCollection<BasicDeliverEventArgs> consumerQueue;
+
+        private Thread subscriptionThread;
+
+        private bool disposed;
 
         public Subscription(
             IModelReference modelReference,
@@ -42,13 +49,13 @@ namespace Chinchilla
 
             modelReference.Execute(m => m.BasicQos(0, 0, false));
 
-            var consumerQueue = modelReference.StartConsuming(queue);
+            logger.Debug("Creating Consumer");
+            consumerQueue = modelReference.GetConsumerQueue(queue);
 
             logger.Debug("Starting listener thread");
-
-            var start = new Thread(() =>
+            subscriptionThread = new Thread(() =>
             {
-                while (true)
+                while (!disposed)
                 {
                     BasicDeliverEventArgs item;
                     try
@@ -63,21 +70,25 @@ namespace Chinchilla
                     var delivery = new Delivery(this, item.DeliveryTag, item.Body);
                     deliveryStrategy.Deliver(delivery);
                 }
+
+                logger.DebugFormat("Subscription thread terminated for: {0}", this);
             });
 
-            start.Start();
+            subscriptionThread.Start();
             deliveryStrategy.Start();
         }
 
         public void OnAccept(IDelivery delivery)
         {
-            modelReference.Execute(m => m.BasicAck(delivery.Tag, false));
+            modelReference.Execute(
+                m => m.BasicAck(delivery.Tag, false));
         }
 
         public void Dispose()
         {
             logger.DebugFormat("Disposing {0}", this);
 
+            disposed = true;
             deliveryStrategy.Dispose();
             modelReference.Dispose();
         }
