@@ -1,12 +1,11 @@
 using System;
-using RabbitMQ.Client;
 
 namespace Chinchilla
 {
     public interface ISubscriptionFactory
     {
         ISubscription Create<TMessage>(
-            IModel model,
+            IModelReference modelReference,
             ISubscriptionConfiguration configuration,
             Action<TMessage> processor);
     }

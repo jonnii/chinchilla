@@ -51,6 +51,7 @@
     <Compile Include="DefaultConnectionFactory.cs" />
     <Compile Include="ConnectionString.cs" />
     <Compile Include="Delivery.cs" />
+    <Compile Include="DeliveryStrategy.cs" />
     <Compile Include="Depot.cs" />
     <Compile Include="Guard.cs" />
     <Compile Include="IConnectionFactory.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="IMessageSerializer.cs" />
     <Compile Include="ImmediateDeliveryStrategy.cs" />
     <Compile Include="IModelFactory.cs" />
+    <Compile Include="IModelReference.cs" />
     <Compile Include="IPublishChannel.cs" />
     <Compile Include="IPublisher.cs" />
     <Compile Include="ISubscriptionConfiguration.cs" />
@@ -74,8 +76,10 @@
     <Compile Include="Message.cs" />
     <Compile Include="MessageProperties.cs" />
     <Compile Include="ModelFactory.cs" />
+    <Compile Include="ModelReference.cs" />
     <Compile Include="PublishChannel.cs" />
     <Compile Include="Serializers\JsonMessageSerializer.cs" />
+    <Compile Include="SharedBlockingCollectionBasicConsumer.cs" />
     <Compile Include="Subscription.cs" />
     <Compile Include="SubscriptionConfiguration.cs" />
     <Compile Include="SubscriptionFactory.cs" />

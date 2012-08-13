@@ -16,9 +16,9 @@ namespace Chinchilla
             get { return connection.IsOpen; }
         }
 
-        public IModel CreateModel()
+        public IModelReference CreateModel()
         {
-            return connection.CreateModel();
+            return new ModelReference(connection.CreateModel());
         }
     }
 }

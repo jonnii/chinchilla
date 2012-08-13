@@ -1,25 +1,20 @@
 namespace Chinchilla
 {
-    public class TaskDeliveryStrategy : IDeliveryStrategy
+    public class TaskDeliveryStrategy : DeliveryStrategy
     {
-        public void ConnectTo(IDeliveryProcessor processor)
+        public override void Start()
         {
             throw new System.NotImplementedException();
         }
 
-        public void Start()
+        public override void Deliver(IDelivery delivery)
         {
             throw new System.NotImplementedException();
         }
 
-        public void Deliver(IDelivery delivery)
+        public override void Dispose()
         {
-
-        }
-
-        public void Dispose()
-        {
-
+            throw new System.NotImplementedException();
         }
     }
 }

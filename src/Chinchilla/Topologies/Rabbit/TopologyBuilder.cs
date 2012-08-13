@@ -1,16 +1,15 @@
 using System;
 using System.Collections.Generic;
-using RabbitMQ.Client;
 
 namespace Chinchilla.Topologies.Rabbit
 {
     public class TopologyBuilder : ITopologyVisitor
     {
-        private readonly IModel model;
+        private readonly IModelReference model;
 
         private readonly List<object> visited = new List<object>();
 
-        public TopologyBuilder(IModel model)
+        public TopologyBuilder(IModelReference model)
         {
             this.model = Guard.NotNull(model, "model");
         }
@@ -40,16 +39,17 @@ namespace Chinchilla.Topologies.Rabbit
                         args.Add("x-expires", queue.QueueAutoExpire.Value.Milliseconds);
                     }
 
-                    model.QueueDeclare(
-                        queue.Name,
-                        true,   // durable
-                        false,  // exclusive
-                        false,  // auto-delete
-                        args);
+                    model.Execute(m =>
+                        m.QueueDeclare(
+                            queue.Name,
+                            true,   // durable
+                            false,  // exclusive
+                            false,  // auto-delete
+                            args));
                 }
                 else
                 {
-                    var declared = model.QueueDeclare();
+                    var declared = model.Execute(m => m.QueueDeclare());
                     queue.Name = declared.QueueName;
                 }
             });
@@ -67,10 +67,11 @@ namespace Chinchilla.Topologies.Rabbit
                     throw new ArgumentException("exchange needs a name");
                 }
 
-                model.ExchangeDeclare(
-                    exchangeName,
-                    exchangeType.ToString().ToLower(),
-                    true);  // durable
+                model.Execute(
+                    m => m.ExchangeDeclare(
+                        exchangeName,
+                        exchangeType.ToString().ToLower(),
+                        true));  // durable
             });
         }
 
@@ -78,9 +79,10 @@ namespace Chinchilla.Topologies.Rabbit
         {
             VisitOnce(binding, () =>
             {
-                model.QueueBind(
-                    binding.Bindable.Name,
-                    binding.Exchange.Name, "#");
+                model.Execute(
+                    m => m.QueueBind(
+                        binding.Bindable.Name,
+                        binding.Exchange.Name, "#"));
 
                 visited.Add(binding);
             });

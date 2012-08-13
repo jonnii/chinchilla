@@ -2,7 +2,6 @@
 using Chinchilla.Specifications.Messages;
 using Machine.Fakes;
 using Machine.Specifications;
-using RabbitMQ.Client;
 
 namespace Chinchilla.Specifications
 {
@@ -48,7 +47,7 @@ namespace Chinchilla.Specifications
                 subscription = An<ISubscription>();
                 The<ISubscriptionFactory>().WhenToldTo(
                     s => s.Create(
-                        Param.IsAny<IModel>(),
+                        Param.IsAny<IModelReference>(),
                         Param.IsAny<ISubscriptionConfiguration>(), Param.IsAny<Action<TestMessage>>())).Return(subscription);
             };
 
@@ -67,7 +66,7 @@ namespace Chinchilla.Specifications
         public class with_bus : WithSubject<Bus>
         {
             Establish context = () =>
-                The<IModelFactory>().WhenToldTo(c => c.CreateModel()).Return(An<IModel>());
+                The<IModelFactory>().WhenToldTo(c => c.CreateModel()).Return(An<IModelReference>());
         }
     }
 }

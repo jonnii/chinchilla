@@ -1,7 +1,6 @@
 ﻿using Chinchilla.Specifications.Messages;
 using Machine.Fakes;
 using Machine.Specifications;
-using RabbitMQ.Client;
 
 namespace Chinchilla.Specifications
 {
@@ -13,11 +12,8 @@ namespace Chinchilla.Specifications
             Because of = () =>
                 Subject.Dispose();
 
-            It should_abort_model = () =>
-                The<IModel>().WasToldTo(m => m.Abort());
-
             It should_dispose_model = () =>
-                The<IModel>().WasToldTo(m => m.Dispose());
+                The<IModelReference>().WasToldTo(m => m.Dispose());
         }
 
         [Subject(typeof(PublishChannel))]
@@ -29,11 +25,8 @@ namespace Chinchilla.Specifications
                 Subject.Dispose();
             };
 
-            It should_abort_model = () =>
-                The<IModel>().WasToldTo(m => m.Abort()).OnlyOnce();
-
             It should_dispose_model = () =>
-                The<IModel>().WasToldTo(m => m.Dispose()).OnlyOnce();
+                The<IModelReference>().WasToldTo(m => m.Dispose()).OnlyOnce();
         }
 
         [Subject(typeof(PublishChannel))]

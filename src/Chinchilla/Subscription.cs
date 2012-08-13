@@ -1,9 +1,7 @@
 ﻿using System;
-using System.IO;
 using System.Threading;
 using Chinchilla.Logging;
 using Chinchilla.Topologies.Rabbit;
-using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using ExchangeType = Chinchilla.Topologies.Rabbit.ExchangeType;
 
@@ -13,7 +11,7 @@ namespace Chinchilla
     {
         private readonly ILogger logger = Logger.Create<Subscription<T>>();
 
-        private readonly IModel model;
+        private readonly IModelReference modelReference;
 
         private readonly IDeliveryStrategy deliveryStrategy;
 
@@ -22,14 +20,14 @@ namespace Chinchilla
         private readonly TopologyBuilder topologyBuilder;
 
         public Subscription(
-            IModel model,
+            IModelReference modelReference,
             IDeliveryStrategy deliveryStrategy)
         {
-            this.model = model;
+            this.modelReference = modelReference;
             this.deliveryStrategy = deliveryStrategy;
 
             topology = new Topology();
-            topologyBuilder = new TopologyBuilder(model);
+            topologyBuilder = new TopologyBuilder(modelReference);
         }
 
         public void Start()
@@ -42,18 +40,9 @@ namespace Chinchilla
 
             topology.Visit(topologyBuilder);
 
-            model.BasicQos(0, 0, false);
+            modelReference.Execute(m => m.BasicQos(0, 0, false));
 
-            var consumer = new QueueingBasicConsumer(model)
-            {
-                ConsumerTag = Guid.NewGuid().ToString()
-            };
-
-            model.BasicConsume(
-                queue.Name,             // queue
-                false,                  // noAck 
-                consumer.ConsumerTag,   // consumerTag
-                consumer);              // consumer
+            var consumerQueue = modelReference.StartConsuming(queue);
 
             logger.Debug("Starting listener thread");
 
@@ -64,15 +53,14 @@ namespace Chinchilla
                     BasicDeliverEventArgs item;
                     try
                     {
-                        item = (BasicDeliverEventArgs)consumer.Queue.Dequeue();
+                        item = consumerQueue.Take();
                     }
-                    catch (EndOfStreamException)
+                    catch (InvalidOperationException)
                     {
                         break;
                     }
 
                     var delivery = new Delivery(this, item.DeliveryTag, item.Body);
-
                     deliveryStrategy.Deliver(delivery);
                 }
             });
@@ -83,7 +71,7 @@ namespace Chinchilla
 
         public void OnAccept(IDelivery delivery)
         {
-            model.BasicAck(delivery.Tag, false);
+            modelReference.Execute(m => m.BasicAck(delivery.Tag, false));
         }
 
         public void Dispose()
@@ -91,7 +79,7 @@ namespace Chinchilla
             logger.DebugFormat("Disposing {0}", this);
 
             deliveryStrategy.Dispose();
-            model.Dispose();
+            modelReference.Dispose();
         }
 
         public override string ToString()

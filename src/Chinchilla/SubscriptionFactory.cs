@@ -1,6 +1,5 @@
 using System;
 using Chinchilla.Logging;
-using RabbitMQ.Client;
 
 namespace Chinchilla
 {
@@ -15,7 +14,7 @@ namespace Chinchilla
             this.messageSerializer = messageSerializer;
         }
 
-        public ISubscription Create<TMessage>(IModel model, ISubscriptionConfiguration configuration, Action<TMessage> processor)
+        public ISubscription Create<TMessage>(IModelReference modelReference, ISubscriptionConfiguration configuration, Action<TMessage> processor)
         {
             logger.DebugFormat("Creating new handler subscription with configuration: {0}", configuration);
 
@@ -26,7 +25,7 @@ namespace Chinchilla
             var consumerStrategy = configuration.BuildDeliveryStrategy(deliveryHandler);
 
             return new Subscription<TMessage>(
-                model,
+                modelReference,
                 consumerStrategy);
         }
     }
