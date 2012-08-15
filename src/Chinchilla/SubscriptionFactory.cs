@@ -30,15 +30,15 @@ namespace Chinchilla
 
             var topologyBuilder = new TopologyBuilder(modelReference);
 
-            var subscriptionTopology = configuration.BuildTopology<TMessage>();
-            subscriptionTopology.Visit(topologyBuilder);
+            var topology = configuration.BuildTopology<TMessage>();
+            topology.Visit(topologyBuilder);
 
             var consumerStrategy = configuration.BuildDeliveryStrategy(deliveryHandler);
 
             return new Subscription<TMessage>(
                 modelReference,
                 consumerStrategy,
-                subscriptionTopology.Queue);
+                topology.Queue);
         }
 
         public void Dispose()

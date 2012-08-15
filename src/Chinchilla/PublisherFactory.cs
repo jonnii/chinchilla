@@ -15,16 +15,15 @@ namespace Chinchilla
             IModelReference modelReference,
             IPublisherConfiguration configuration)
         {
-            var topology = new Topology();
-            var topologyBuilder = new TopologyBuilder(modelReference);
+            var topology = configuration.BuildTopology<TMessage>();
 
-            var exchange = topology.DefineExchange(typeof(TMessage).Name, ExchangeType.Fanout);
-            topologyBuilder.Visit(exchange);
+            var topologyBuilder = new TopologyBuilder(modelReference);
+            topology.Visit(topologyBuilder);
 
             return new Publisher<TMessage>(
                 modelReference,
                 messageSerializer,
-                exchange);
+                topology.Exchange);
         }
     }
 }

@@ -13,5 +13,10 @@ namespace Chinchilla
         {
             return this;
         }
+
+        public IPublisherTopology BuildTopology<TMessage>()
+        {
+            return new DefaultPublisherTopology(typeof(TMessage).Name);
+        }
     }
 }
