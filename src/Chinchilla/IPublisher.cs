@@ -1,14 +1,26 @@
+using System;
+
 namespace Chinchilla
 {
     /// <summary>
-    /// A publisher is used to publish a message to an exchange.
+    /// A publish channel is used to publish messages to an exchange
     /// </summary>
-    public interface IPublisher
+    public interface IPublisher<in TMessage> : IDisposable
     {
+        /// <summary>
+        /// The number of published messages
+        /// </summary>
+        long NumPublishedMessages { get; }
+
+        /// <summary>
+        /// Starts the publisher
+        /// </summary>
+        void Start();
+
         /// <summary>
         /// Publishes a message
         /// </summary>
-        /// <typeparam name="T">The type of message to publish</typeparam>
-        void Publish<T>(T message);
+        /// <typeparam name="TMessage">The type of message to publish</typeparam>
+        void Publish(TMessage message);
     }
 }

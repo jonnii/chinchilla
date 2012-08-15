@@ -3,7 +3,7 @@ using ExchangeType = Chinchilla.Topologies.Rabbit.ExchangeType;
 
 namespace Chinchilla
 {
-    public class PublishChannel : IPublishChannel
+    public class Publisher<TMessage> : IPublisher<TMessage>
     {
         private readonly IModelReference modelReference;
 
@@ -15,7 +15,7 @@ namespace Chinchilla
 
         private bool disposed;
 
-        public PublishChannel(
+        public Publisher(
             IModelReference modelReference,
             IMessageSerializer serializer)
         {
@@ -30,7 +30,12 @@ namespace Chinchilla
 
         public long NumPublishedMessages { get; private set; }
 
-        public void Publish<TMessage>(TMessage message)
+        public void Start()
+        {
+            
+        }
+
+        public void Publish(TMessage message)
         {
             Exchange = topology.DefineExchange(typeof(TMessage).Name, ExchangeType.Fanout);
             topologyBuilder.Visit(Exchange);

@@ -3,7 +3,7 @@ using Chinchilla.Topologies;
 
 namespace Chinchilla
 {
-    public class SubscriptionConfiguration : ISubscriptionConfiguration, ISubscriptionConfigurator
+    public class SubscriptionConfiguration : ISubscriptionConfiguration, ISubscriptionBuilder
     {
         public static SubscriptionConfiguration Default
         {
@@ -12,7 +12,7 @@ namespace Chinchilla
 
         private Func<IDeliveryProcessor, IDeliveryStrategy> strategyBuilder = handler => new ImmediateDeliveryStrategy();
 
-        public ISubscriptionConfigurator DeliverUsing<TStrategy>(params Action<TStrategy>[] configurations)
+        public ISubscriptionBuilder DeliverUsing<TStrategy>(params Action<TStrategy>[] configurations)
             where TStrategy : IDeliveryStrategy, new()
         {
             strategyBuilder = handler =>

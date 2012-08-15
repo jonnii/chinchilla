@@ -2,13 +2,11 @@ using System;
 
 namespace Chinchilla
 {
-    public interface ISubscriptionFactory
+    public interface ISubscriptionFactory : IDisposable
     {
         ISubscription Create<TMessage>(
             IModelReference modelReference,
             ISubscriptionConfiguration configuration,
             Action<TMessage> processor);
-
-        void Dispose();
     }
 }

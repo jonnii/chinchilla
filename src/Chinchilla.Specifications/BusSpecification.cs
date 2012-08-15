@@ -17,26 +17,51 @@ namespace Chinchilla.Specifications
         [Subject(typeof(Bus))]
         public class when_creating_publisher : with_bus
         {
-            Because of = () =>
-                publisher = Subject.OpenPublishChannel();
+            Establish context = () =>
+            {
+                publisher = An<IPublisher<TestMessage>>();
 
-            It should_create_publisher = () =>
-                publisher.ShouldNotBeNull();
+                The<IPublisherFactory>().WhenToldTo(f => f.Create<TestMessage>(
+                    Param.IsAny<IModelReference>(),
+                    Param.IsAny<IPublisherConfiguration>())).Return(publisher);
+            };
+
+            Because of = () =>
+                Subject.CreatePublisher<TestMessage>();
 
             It should_create_new_model = () =>
                 The<IModelFactory>().WasToldTo(c => c.CreateModel());
 
-            static IPublishChannel publisher;
+            It should_create_publisher = () =>
+                The<IPublisherFactory>().WasToldTo(f => f.Create<TestMessage>(
+                    Param.IsAny<IModelReference>(),
+                    Param.IsAny<IPublisherConfiguration>()));
+
+            It should_start_publisher = () =>
+                publisher.WasToldTo(p => p.Start());
+
+            static IPublisher<TestMessage> publisher;
         }
 
         [Subject(typeof(Bus))]
         public class when_publishing : with_bus
         {
+            Establish context = () =>
+            {
+                publisher = An<IPublisher<TestMessage>>();
+
+                The<IPublisherFactory>().WhenToldTo(f => f.Create<TestMessage>(
+                    Param.IsAny<IModelReference>(),
+                    Param.IsAny<IPublisherConfiguration>())).Return(publisher);
+            };
+
             Because of = () =>
                 Subject.Publish(new TestMessage());
 
             It should_create_new_model = () =>
                 The<IModelFactory>().WasToldTo(c => c.CreateModel());
+
+            static IPublisher<TestMessage> publisher;
         }
 
         [Subject(typeof(Bus))]

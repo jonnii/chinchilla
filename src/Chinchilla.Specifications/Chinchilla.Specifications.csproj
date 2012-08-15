@@ -68,7 +68,7 @@
     <Compile Include="ModelFactorySpecification.cs" />
     <Compile Include="ModelReferenceSpecification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PublishChannelSpecification.cs" />
+    <Compile Include="PublisherSpecification.cs" />
     <Compile Include="SubscriptionConfigurationSpecification.cs" />
     <Compile Include="SubscriptionSpecification.cs" />
     <Compile Include="Topologies\Rabbit\BindingSpecification.cs" />

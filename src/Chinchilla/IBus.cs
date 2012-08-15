@@ -6,16 +6,20 @@ namespace Chinchilla
     /// An IBus is used to publish or subscribe to messages on a specific broker. It is
     /// responsible for managing the lifecycle of subscriptions and publish channels.
     /// </summary>
-    public interface IBus : IPublisher, IDisposable
+    public interface IBus : IDisposable
     {
         /// <summary>
         /// Opens a publish channel
         /// </summary>
-        IPublishChannel OpenPublishChannel();
+        IPublisher<TMessage> CreatePublisher<TMessage>();
 
-        ISubscription Subscribe<T>(Action<T> onMessage);
+        IPublisher<TMessage> CreatePublisher<TMessage>(Action<IPublisherBuilder> builder);
 
-        ISubscription Subscribe<T>(Action<T> onMessage, Action<ISubscriptionConfigurator> configurator);
+        void Publish<TMessage>(TMessage message);
+
+        ISubscription Subscribe<TMessage>(Action<TMessage> onMessage);
+
+        ISubscription Subscribe<TMessage>(Action<TMessage> onMessage, Action<ISubscriptionBuilder> builder);
 
         ISubscription Subscribe<TMessage>(IConsumer<TMessage> consumer);
     }

@@ -38,7 +38,7 @@ namespace Chinchilla.Sample.StockTicker.Client
             Console.WriteLine("RECEIVED: {0} = {1}", price.Ticker, price.Price);
         }
 
-        private void ConfigurePriceSubscription(ISubscriptionConfigurator subscriptionConfiguration)
+        private void ConfigurePriceSubscription(ISubscriptionBuilder subscriptionConfiguration)
         {
             
         }

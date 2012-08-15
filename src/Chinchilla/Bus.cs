@@ -10,17 +10,17 @@ namespace Chinchilla
 
         private readonly IModelFactory modelFactory;
 
-        private readonly IMessageSerializer messageSerializer;
+        private readonly IPublisherFactory publisherFactory;
 
         private readonly ISubscriptionFactory subscriptionFactory;
 
         public Bus(
             IModelFactory modelFactory,
-            IMessageSerializer messageSerializer,
+            IPublisherFactory publisherFactory,
             ISubscriptionFactory subscriptionFactory)
         {
             this.modelFactory = modelFactory;
-            this.messageSerializer = messageSerializer;
+            this.publisherFactory = publisherFactory;
             this.subscriptionFactory = subscriptionFactory;
 
             Topology = new Topology();
@@ -28,23 +28,28 @@ namespace Chinchilla
 
         public ITopology Topology { get; private set; }
 
-        public ISubscription Subscribe<T>(Action<T> onMessage)
+        public ISubscription Subscribe<TMessage>(Action<TMessage> onMessage)
         {
             return Subscribe(onMessage, SubscriptionConfiguration.Default);
         }
 
-        public ISubscription Subscribe<T>(Action<T> onMessage, Action<ISubscriptionConfigurator> configurator)
+        public ISubscription Subscribe<TMessage>(Action<TMessage> onMessage, Action<ISubscriptionBuilder> builder)
         {
             var configuration = SubscriptionConfiguration.Default;
 
-            configurator(configuration);
+            builder(configuration);
 
             return Subscribe(onMessage, configuration);
         }
 
-        private ISubscription Subscribe<T>(Action<T> onMessage, SubscriptionConfiguration subscriptionConfiguration)
+        public ISubscription Subscribe<TMessage>(IConsumer<TMessage> consumer)
         {
-            logger.DebugFormat("Subscribing to action callback of type {0}", typeof(T).Name);
+            return Subscribe<TMessage>(consumer.Consume);
+        }
+
+        private ISubscription Subscribe<TMessage>(Action<TMessage> onMessage, ISubscriptionConfiguration subscriptionConfiguration)
+        {
+            logger.DebugFormat("Subscribing to action callback of type {0}", typeof(TMessage).Name);
 
             var model = modelFactory.CreateModel();
             var subscription = subscriptionFactory.Create(model, subscriptionConfiguration, onMessage);
@@ -55,21 +60,34 @@ namespace Chinchilla
             return subscription;
         }
 
-        public ISubscription Subscribe<TMessage>(IConsumer<TMessage> consumer)
+        public IPublisher<TMessage> CreatePublisher<TMessage>()
         {
-            return Subscribe<TMessage>(consumer.Consume);
+            return CreatePublisher<TMessage>(PublisherConfiguration.Default);
         }
 
-        public IPublishChannel OpenPublishChannel()
+        public IPublisher<TMessage> CreatePublisher<TMessage>(Action<IPublisherBuilder> builder)
         {
-            return new PublishChannel(
-                modelFactory.CreateModel(),
-                messageSerializer);
+            var configuration = PublisherConfiguration.Default;
+
+            builder(configuration);
+
+            return CreatePublisher<TMessage>(configuration);
         }
 
-        public void Publish<T>(T message)
+        private IPublisher<TMessage> CreatePublisher<TMessage>(IPublisherConfiguration configuration)
         {
-            using (var publisher = OpenPublishChannel())
+            logger.DebugFormat("creating publisher for {0}", typeof(TMessage).Name);
+
+            var model = modelFactory.CreateModel();
+
+            var publisher = publisherFactory.Create<TMessage>(model, configuration);
+            publisher.Start();
+            return publisher;
+        }
+
+        public void Publish<TMessage>(TMessage message)
+        {
+            using (var publisher = CreatePublisher<TMessage>())
             {
                 publisher.Publish(message);
             }

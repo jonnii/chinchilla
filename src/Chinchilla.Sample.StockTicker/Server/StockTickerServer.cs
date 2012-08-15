@@ -20,7 +20,7 @@ namespace Chinchilla.Sample.StockTicker.Server
         {
             isRunning = true;
 
-            using (var publishChannel = bus.OpenPublishChannel())
+            using (var publishChannel = bus.CreatePublisher<PriceMessage>())
             {
                 connectMessageSubscription = bus.Subscribe(
                     new ConnectMessageConsumer(bus, publishChannel));

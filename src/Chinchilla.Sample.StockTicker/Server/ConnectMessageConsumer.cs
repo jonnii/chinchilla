@@ -7,12 +7,12 @@ namespace Chinchilla.Sample.StockTicker.Server
     {
         private readonly IBus bus;
 
-        private readonly IPublishChannel publishChannel;
+        private readonly IPublisher<PriceMessage> publisher;
 
-        public ConnectMessageConsumer(IBus bus, IPublishChannel publishChannel)
+        public ConnectMessageConsumer(IBus bus, IPublisher<PriceMessage> publisher)
         {
             this.bus = bus;
-            this.publishChannel = publishChannel;
+            this.publisher = publisher;
         }
 
         public void Consume(ConnectMessage message)

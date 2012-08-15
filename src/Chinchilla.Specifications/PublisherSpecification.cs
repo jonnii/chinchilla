@@ -4,10 +4,10 @@ using Machine.Specifications;
 
 namespace Chinchilla.Specifications
 {
-    public class PublishChannelSpecification
+    public class PublisherSpecification
     {
-        [Subject(typeof(PublishChannel))]
-        public class when_disposing : WithSubject<PublishChannel>
+        [Subject(typeof(Publisher<>))]
+        public class when_disposing : WithSubject<Publisher<TestMessage>>
         {
             Because of = () =>
                 Subject.Dispose();
@@ -16,8 +16,8 @@ namespace Chinchilla.Specifications
                 The<IModelReference>().WasToldTo(m => m.Dispose());
         }
 
-        [Subject(typeof(PublishChannel))]
-        public class when_disposing_multiple_times : WithSubject<PublishChannel>
+        [Subject(typeof(Publisher<>))]
+        public class when_disposing_multiple_times : WithSubject<Publisher<TestMessage>>
         {
             Because of = () =>
             {
@@ -29,8 +29,8 @@ namespace Chinchilla.Specifications
                 The<IModelReference>().WasToldTo(m => m.Dispose()).OnlyOnce();
         }
 
-        [Subject(typeof(PublishChannel))]
-        public class when_publishing : WithSubject<PublishChannel>
+        [Subject(typeof(Publisher<>))]
+        public class when_publishing : WithSubject<Publisher<TestMessage>>
         {
             Because of = () =>
                 Subject.Publish(new TestMessage());

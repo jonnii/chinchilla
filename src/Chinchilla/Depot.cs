@@ -25,7 +25,7 @@ namespace Chinchilla
 
             return new Bus(
                 connection,
-                messageSerializer,
+                new PublisherFactory(messageSerializer),
                 new SubscriptionFactory(messageSerializer));
         }
     }
