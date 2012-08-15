@@ -6,14 +6,12 @@ using Chinchilla.Logging;
 
 namespace Chinchilla
 {
-    public class WorkerPoolDeliveryStrategy : IDeliveryStrategy
+    public class WorkerPoolDeliveryStrategy : DeliveryStrategy
     {
         private readonly ILogger logger = Logger.Create<WorkerPoolDeliveryStrategy>();
 
         private readonly BlockingCollection<IDelivery> deliveries = new BlockingCollection<IDelivery>(
             new ConcurrentQueue<IDelivery>());
-
-        private IDeliveryProcessor connectedProcessor;
 
         private Thread[] threads;
 
@@ -26,12 +24,7 @@ namespace Chinchilla
 
         public int NumWorkers { get; set; }
 
-        public void ConnectTo(IDeliveryProcessor processor)
-        {
-            connectedProcessor = processor;
-        }
-
-        public void Start()
+        public override void Start()
         {
             logger.DebugFormat("Starting {0}", this);
 
@@ -42,7 +35,7 @@ namespace Chinchilla
             }
         }
 
-        public void Deliver(IDelivery delivery)
+        public override void Deliver(IDelivery delivery)
         {
             deliveries.Add(delivery);
         }
@@ -72,7 +65,7 @@ namespace Chinchilla
             delivery.Accept();
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             disposed = true;
             deliveries.CompleteAdding();

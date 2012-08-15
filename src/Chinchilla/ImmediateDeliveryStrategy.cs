@@ -1,27 +1,11 @@
 namespace Chinchilla
 {
-    public class ImmediateDeliveryStrategy : IDeliveryStrategy
+    public class ImmediateDeliveryStrategy : DeliveryStrategy
     {
-        private IDeliveryProcessor deliveryProcessor;
-
-        public void ConnectTo(IDeliveryProcessor processor)
+        public override void Deliver(IDelivery delivery)
         {
-            deliveryProcessor = processor;
-        }
-
-        public void Start()
-        {
-        }
-
-        public void Deliver(IDelivery delivery)
-        {
-            deliveryProcessor.Process(delivery);
+            connectedProcessor.Process(delivery);
             delivery.Accept();
-        }
-
-        public void Dispose()
-        {
-
         }
     }
 }

@@ -2,17 +2,17 @@ namespace Chinchilla
 {
     public abstract class DeliveryStrategy : IDeliveryStrategy
     {
-        private IDeliveryProcessor connectedProcessor;
+        protected IDeliveryProcessor connectedProcessor;
 
         public void ConnectTo(IDeliveryProcessor processor)
         {
             connectedProcessor = processor;
         }
 
-        public abstract void Start();
+        public virtual void Start() { }
 
         public abstract void Deliver(IDelivery delivery);
 
-        public abstract void Dispose();
+        public virtual void Dispose() { }
     }
 }
