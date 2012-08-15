@@ -40,7 +40,7 @@ namespace Chinchilla.Sample.StockTicker.Client
 
         private void ConfigurePriceSubscription(ISubscriptionBuilder subscriptionConfiguration)
         {
-            
+            //subscriptionConfiguration.
         }
     }
 }

@@ -6,6 +6,6 @@ namespace Chinchilla
     {
         IDeliveryStrategy BuildDeliveryStrategy(IDeliveryProcessor deliveryProcessor);
 
-        ISubscriptionTopology BuildTopology<TMessage>();
+        ISubscriptionTopology BuildTopology(string messageType);
     }
 }

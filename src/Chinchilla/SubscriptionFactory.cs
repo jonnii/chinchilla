@@ -30,7 +30,8 @@ namespace Chinchilla
 
             var topologyBuilder = new TopologyBuilder(modelReference);
 
-            var topology = configuration.BuildTopology<TMessage>();
+            var messageType = typeof(TMessage).Name;
+            var topology = configuration.BuildTopology(messageType);
             topology.Visit(topologyBuilder);
 
             var consumerStrategy = configuration.BuildDeliveryStrategy(deliveryHandler);

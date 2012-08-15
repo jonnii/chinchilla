@@ -1,9 +1,10 @@
+using System;
 using Chinchilla.Topologies;
 
 namespace Chinchilla
 {
     public interface IPublisherBuilder
     {
-        IPublisherBuilder SetTopology(IPublisherTopology publisherTopology);
+        IPublisherBuilder SetTopology(Func<string, IPublisherTopology> customTopology);
     }
 }

@@ -1,22 +1,26 @@
+using System;
 using Chinchilla.Topologies;
 
 namespace Chinchilla
 {
     public class PublisherConfiguration : IPublisherConfiguration, IPublisherBuilder
     {
-        public static PublisherConfiguration Default
+        private Func<string, IPublisherTopology> publisherTopology;
+
+        public PublisherConfiguration()
         {
-            get { return new PublisherConfiguration(); }
+            publisherTopology = messageType => new DefaultPublisherTopology(messageType);
         }
 
-        public IPublisherBuilder SetTopology(IPublisherTopology publisherTopology)
+        public IPublisherBuilder SetTopology(Func<string, IPublisherTopology> customTopology)
         {
+            publisherTopology = customTopology;
             return this;
         }
 
-        public IPublisherTopology BuildTopology<TMessage>()
+        public IPublisherTopology BuildTopology(string messageType)
         {
-            return new DefaultPublisherTopology(typeof(TMessage).Name);
+            return publisherTopology(messageType);
         }
     }
 }

@@ -5,11 +5,19 @@ namespace Chinchilla.Sample.StockTicker.Server
 {
     public class PricePublisherTopology : IPublisherTopology
     {
+        private readonly Topology topology;
+
+        public PricePublisherTopology(string exchangeName)
+        {
+            topology = new Topology();
+            Exchange = topology.DefineExchange(exchangeName, ExchangeType.Topic);
+        }
+
         public IExchange Exchange { get; private set; }
 
         public void Visit(ITopologyVisitor visitor)
         {
-            throw new System.NotImplementedException();
+            topology.Visit(visitor);
         }
     }
 }

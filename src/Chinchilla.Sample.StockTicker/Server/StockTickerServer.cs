@@ -44,7 +44,7 @@ namespace Chinchilla.Sample.StockTicker.Server
 
         private void ConfigurePricePublisher(IPublisherBuilder builder)
         {
-            builder.SetTopology(new PricePublisherTopology());
+            builder.SetTopology(messageType => new PricePublisherTopology(messageType));
         }
     }
 }

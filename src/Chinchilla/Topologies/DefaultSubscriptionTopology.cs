@@ -6,13 +6,13 @@ namespace Chinchilla.Topologies
     {
         private readonly Topology topology;
 
-        public DefaultSubscriptionTopology(string exchangeName)
+        public DefaultSubscriptionTopology(string messageType)
         {
             topology = new Topology();
 
-            var exchange = topology.DefineExchange(exchangeName, ExchangeType.Fanout);
+            var exchange = topology.DefineExchange(messageType, ExchangeType.Fanout);
 
-            Queue = topology.DefineQueue(exchangeName);
+            Queue = topology.DefineQueue(messageType);
             Queue.BindTo(exchange);
         }
 

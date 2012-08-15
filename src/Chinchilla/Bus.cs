@@ -30,12 +30,12 @@ namespace Chinchilla
 
         public ISubscription Subscribe<TMessage>(Action<TMessage> onMessage)
         {
-            return Subscribe(onMessage, SubscriptionConfiguration.Default);
+            return Subscribe(onMessage, new SubscriptionConfiguration());
         }
 
         public ISubscription Subscribe<TMessage>(Action<TMessage> onMessage, Action<ISubscriptionBuilder> builder)
         {
-            var configuration = SubscriptionConfiguration.Default;
+            var configuration = new SubscriptionConfiguration();
 
             builder(configuration);
 
@@ -62,12 +62,12 @@ namespace Chinchilla
 
         public IPublisher<TMessage> CreatePublisher<TMessage>()
         {
-            return CreatePublisher<TMessage>(PublisherConfiguration.Default);
+            return CreatePublisher<TMessage>(new PublisherConfiguration());
         }
 
         public IPublisher<TMessage> CreatePublisher<TMessage>(Action<IPublisherBuilder> builder)
         {
-            var configuration = PublisherConfiguration.Default;
+            var configuration = new PublisherConfiguration();
 
             builder(configuration);
 

@@ -1,10 +1,34 @@
-﻿using Machine.Fakes;
+﻿using Chinchilla.Topologies;
+using Chinchilla.Topologies.Rabbit;
+using Machine.Fakes;
 using Machine.Specifications;
 
 namespace Chinchilla.Specifications
 {
     public class SubscriptionConfigurationSpecification
     {
+        [Subject(typeof(SubscriptionConfiguration))]
+        public class in_general : WithSubject<SubscriptionConfiguration>
+        {
+            It should_build_default_topology = () =>
+                Subject.BuildTopology("messageType").ShouldBeOfType<DefaultSubscriptionTopology>();
+        }
+
+        [Subject(typeof(SubscriptionConfiguration))]
+        public class when_building_custom_topology : WithSubject<SubscriptionConfiguration>
+        {
+            Establish context = () =>
+                Subject.SetTopology(_ => new CustomTopology());
+
+            Because of = () =>
+                topology = Subject.BuildTopology("messageType");
+
+            It should_build_default_topology = () =>
+                topology.ShouldBeOfType<CustomTopology>();
+
+            static ISubscriptionTopology topology;
+        }
+
         [Subject(typeof(SubscriptionConfiguration))]
         public class when_building_default_consumer_strategy : WithSubject<SubscriptionConfiguration>
         {
@@ -35,14 +59,14 @@ namespace Chinchilla.Specifications
             static IDeliveryStrategy strategy;
         }
 
-        [Subject(typeof(SubscriptionConfiguration))]
-        public class When_Context
+        public class CustomTopology : ISubscriptionTopology
         {
-            Establish context = () => { };
+            public IQueue Queue { get; set; }
 
-            private Because of = () => { };
-
-            private It should_ = () => { };
+            public void Visit(ITopologyVisitor visitor)
+            {
+                throw new System.NotImplementedException();
+            }
         }
     }
 }

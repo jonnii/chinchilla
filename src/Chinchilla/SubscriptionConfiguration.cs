@@ -5,12 +5,9 @@ namespace Chinchilla
 {
     public class SubscriptionConfiguration : ISubscriptionConfiguration, ISubscriptionBuilder
     {
-        public static SubscriptionConfiguration Default
-        {
-            get { return new SubscriptionConfiguration(); }
-        }
-
         private Func<IDeliveryProcessor, IDeliveryStrategy> strategyBuilder = handler => new ImmediateDeliveryStrategy();
+
+        private Func<string, ISubscriptionTopology> topologyBuilder = messageType => new DefaultSubscriptionTopology(messageType);
 
         public ISubscriptionBuilder DeliverUsing<TStrategy>(params Action<TStrategy>[] configurations)
             where TStrategy : IDeliveryStrategy, new()
@@ -35,9 +32,14 @@ namespace Chinchilla
             return consumer;
         }
 
-        public ISubscriptionTopology BuildTopology<TMessage>()
+        public void SetTopology(Func<string, ISubscriptionTopology> customTopologyBuilder)
         {
-            return new DefaultSubscriptionTopology(typeof(TMessage).Name);
+            topologyBuilder = customTopologyBuilder;
+        }
+
+        public ISubscriptionTopology BuildTopology(string messageType)
+        {
+            return topologyBuilder(messageType);
         }
 
         public override string ToString()

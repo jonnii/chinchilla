@@ -15,7 +15,8 @@ namespace Chinchilla
             IModelReference modelReference,
             IPublisherConfiguration configuration)
         {
-            var topology = configuration.BuildTopology<TMessage>();
+            var messageType = typeof(TMessage).Name;
+            var topology = configuration.BuildTopology(messageType);
 
             var topologyBuilder = new TopologyBuilder(modelReference);
             topology.Visit(topologyBuilder);
