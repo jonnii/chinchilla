@@ -6,7 +6,11 @@ namespace Chinchilla.Topologies.Rabbit
 
         IQueue DefineQueue(string name);
 
-        IExchange DefineExchange(string name, ExchangeType exchangeType);
+        IExchange DefineExchange(
+            string name,
+            ExchangeType exchangeType,
+            Durability durablility = Durability.Durable,
+            bool isAutoDelete = false);
 
         void Visit(ITopologyVisitor visitor);
     }

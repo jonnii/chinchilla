@@ -71,7 +71,9 @@ namespace Chinchilla.Topologies.Rabbit
                     m => m.ExchangeDeclare(
                         exchangeName,
                         exchangeType.ToString().ToLower(),
-                        true));  // durable
+                        exchange.Durability == Durability.Durable,
+                        exchange.IsAutoDelete,
+                        new Dictionary<string, object>()));
             });
         }
 

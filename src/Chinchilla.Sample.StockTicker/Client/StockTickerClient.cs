@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Chinchilla.Sample.StockTicker.Messages;
 
 namespace Chinchilla.Sample.StockTicker.Client
@@ -21,9 +22,11 @@ namespace Chinchilla.Sample.StockTicker.Client
         {
             priceSubscription = bus.Subscribe<PriceMessage>(OnPrice, ConfigurePriceSubscription);
 
+            var binding = priceSubscription.Queue.Bindings.First();
+
             bus.Publish(new ConnectMessage(
                 id,
-                priceSubscription.Queue.Name,
+                binding.Exchange.Name,
                 new[] { "GOOG" }));
         }
 
@@ -40,7 +43,8 @@ namespace Chinchilla.Sample.StockTicker.Client
 
         private void ConfigurePriceSubscription(ISubscriptionBuilder subscriptionConfiguration)
         {
-            //subscriptionConfiguration.
+            subscriptionConfiguration.SetTopology(
+                messageType => new PriceSubscriberTopology(id));
         }
     }
 }

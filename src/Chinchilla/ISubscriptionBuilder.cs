@@ -1,4 +1,5 @@
 using System;
+using Chinchilla.Topologies;
 
 namespace Chinchilla
 {
@@ -11,5 +12,7 @@ namespace Chinchilla
         /// <param name="configurations">Any configuration for this strategy</param>
         ISubscriptionBuilder DeliverUsing<TStrategy>(params Action<TStrategy>[] configurations)
             where TStrategy : IDeliveryStrategy, new();
+
+        void SetTopology(Func<string, ISubscriptionTopology> customTopologyBuilder);
     }
 }

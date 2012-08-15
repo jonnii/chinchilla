@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Chinchilla.Topologies.Rabbit
@@ -22,9 +23,18 @@ namespace Chinchilla.Topologies.Rabbit
             return queue;
         }
 
-        public IExchange DefineExchange(string name, ExchangeType exchangeType)
+        public IExchange DefineExchange(
+            string name,
+            ExchangeType exchangeType,
+            Durability durablility = Durability.Durable,
+            bool isAutoDelete = false)
         {
-            var exchange = new Exchange(name, exchangeType);
+            var exchange = new Exchange(name, exchangeType)
+            {
+                IsAutoDelete = isAutoDelete,
+                Durability = durablility
+            };
+
             exchanges.Add(exchange);
             return exchange;
         }
