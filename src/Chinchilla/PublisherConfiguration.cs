@@ -1,3 +1,5 @@
+using Chinchilla.Topologies;
+
 namespace Chinchilla
 {
     public class PublisherConfiguration : IPublisherConfiguration, IPublisherBuilder
@@ -5,6 +7,11 @@ namespace Chinchilla
         public static PublisherConfiguration Default
         {
             get { return new PublisherConfiguration(); }
+        }
+
+        public IPublisherBuilder SetTopology(IPublisherTopology publisherTopology)
+        {
+            return this;
         }
     }
 }

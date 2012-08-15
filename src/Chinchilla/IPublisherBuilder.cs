@@ -1,4 +1,9 @@
+using Chinchilla.Topologies;
+
 namespace Chinchilla
 {
-    public interface IPublisherBuilder { }
+    public interface IPublisherBuilder
+    {
+        IPublisherBuilder SetTopology(IPublisherTopology publisherTopology);
+    }
 }

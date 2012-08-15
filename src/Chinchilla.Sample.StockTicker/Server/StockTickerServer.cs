@@ -20,7 +20,7 @@ namespace Chinchilla.Sample.StockTicker.Server
         {
             isRunning = true;
 
-            using (var publishChannel = bus.CreatePublisher<PriceMessage>())
+            using (var publishChannel = bus.CreatePublisher<PriceMessage>(ConfigurePricePublisher))
             {
                 connectMessageSubscription = bus.Subscribe(
                     new ConnectMessageConsumer(bus, publishChannel));
@@ -40,6 +40,11 @@ namespace Chinchilla.Sample.StockTicker.Server
             connectMessageSubscription.Dispose();
             bus.Dispose();
             isRunning = false;
+        }
+
+        private void ConfigurePricePublisher(IPublisherBuilder builder)
+        {
+            builder.SetTopology(new PricePublisherTopology());
         }
     }
 }

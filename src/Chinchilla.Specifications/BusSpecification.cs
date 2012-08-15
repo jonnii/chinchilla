@@ -17,15 +17,6 @@ namespace Chinchilla.Specifications
         [Subject(typeof(Bus))]
         public class when_creating_publisher : with_bus
         {
-            Establish context = () =>
-            {
-                publisher = An<IPublisher<TestMessage>>();
-
-                The<IPublisherFactory>().WhenToldTo(f => f.Create<TestMessage>(
-                    Param.IsAny<IModelReference>(),
-                    Param.IsAny<IPublisherConfiguration>())).Return(publisher);
-            };
-
             Because of = () =>
                 Subject.CreatePublisher<TestMessage>();
 
@@ -36,9 +27,6 @@ namespace Chinchilla.Specifications
                 The<IPublisherFactory>().WasToldTo(f => f.Create<TestMessage>(
                     Param.IsAny<IModelReference>(),
                     Param.IsAny<IPublisherConfiguration>()));
-
-            It should_start_publisher = () =>
-                publisher.WasToldTo(p => p.Start());
 
             static IPublisher<TestMessage> publisher;
         }
@@ -60,6 +48,9 @@ namespace Chinchilla.Specifications
 
             It should_create_new_model = () =>
                 The<IModelFactory>().WasToldTo(c => c.CreateModel());
+
+            It should_publish_the_message = () =>
+                publisher.WasToldTo(p => p.Publish(Param.IsAny<TestMessage>()));
 
             static IPublisher<TestMessage> publisher;
         }

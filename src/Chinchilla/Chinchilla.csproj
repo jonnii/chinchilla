@@ -92,6 +92,7 @@
     <Compile Include="SubscriptionFactory.cs" />
     <Compile Include="TaskDeliveryStrategy.cs" />
     <Compile Include="Topologies\DefaultSubscriptionTopology.cs" />
+    <Compile Include="Topologies\IPublisherTopology.cs" />
     <Compile Include="Topologies\ISubscriptionTopology.cs" />
     <Compile Include="Topologies\Rabbit\Bindable.cs" />
     <Compile Include="Topologies\Rabbit\Binding.cs" />

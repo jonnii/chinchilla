@@ -13,11 +13,6 @@ namespace Chinchilla
         long NumPublishedMessages { get; }
 
         /// <summary>
-        /// Starts the publisher
-        /// </summary>
-        void Start();
-
-        /// <summary>
         /// Publishes a message
         /// </summary>
         /// <typeparam name="TMessage">The type of message to publish</typeparam>

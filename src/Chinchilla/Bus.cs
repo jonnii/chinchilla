@@ -80,9 +80,7 @@ namespace Chinchilla
 
             var model = modelFactory.CreateModel();
 
-            var publisher = publisherFactory.Create<TMessage>(model, configuration);
-            publisher.Start();
-            return publisher;
+            return publisherFactory.Create<TMessage>(model, configuration);
         }
 
         public void Publish<TMessage>(TMessage message)

@@ -52,6 +52,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Client\StockTickerClient.cs" />
+    <Compile Include="Server\PricePublisherTopology.cs" />
     <Compile Include="StockTickerSample.cs" />
     <Compile Include="Server\StockTickerServer.cs" />
   </ItemGroup>

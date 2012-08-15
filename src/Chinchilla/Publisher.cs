@@ -1,5 +1,4 @@
 using Chinchilla.Topologies.Rabbit;
-using ExchangeType = Chinchilla.Topologies.Rabbit.ExchangeType;
 
 namespace Chinchilla
 {
@@ -9,37 +8,25 @@ namespace Chinchilla
 
         private readonly IMessageSerializer serializer;
 
-        private readonly Topology topology;
-
-        private readonly TopologyBuilder topologyBuilder;
-
         private bool disposed;
 
         public Publisher(
             IModelReference modelReference,
-            IMessageSerializer serializer)
+            IMessageSerializer serializer,
+            IExchange exchange)
         {
             this.modelReference = modelReference;
             this.serializer = serializer;
 
-            topology = new Topology();
-            topologyBuilder = new TopologyBuilder(modelReference);
+            Exchange = exchange;
         }
 
-        public IExchange Exchange { get; set; }
+        public IExchange Exchange { get; private set; }
 
         public long NumPublishedMessages { get; private set; }
 
-        public void Start()
-        {
-            
-        }
-
         public void Publish(TMessage message)
         {
-            Exchange = topology.DefineExchange(typeof(TMessage).Name, ExchangeType.Fanout);
-            topologyBuilder.Visit(Exchange);
-
             var defaultProperties = modelReference.Execute(m => m.CreateBasicProperties());
 
             var serializedMessage = serializer.Serialize(
