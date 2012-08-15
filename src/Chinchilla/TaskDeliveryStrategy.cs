@@ -1,20 +1,15 @@
+using System.Threading.Tasks;
+
 namespace Chinchilla
 {
     public class TaskDeliveryStrategy : DeliveryStrategy
     {
-        public override void Start()
-        {
-            throw new System.NotImplementedException();
-        }
-
         public override void Deliver(IDelivery delivery)
         {
-            throw new System.NotImplementedException();
-        }
+            var currentDelivery = delivery;
 
-        public override void Dispose()
-        {
-            throw new System.NotImplementedException();
+            Task.Factory.StartNew(() => connectedProcessor.Process(delivery))
+                .ContinueWith(_ => currentDelivery.Accept());
         }
     }
 }
