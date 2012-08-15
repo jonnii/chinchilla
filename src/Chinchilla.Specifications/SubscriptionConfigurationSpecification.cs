@@ -34,5 +34,15 @@ namespace Chinchilla.Specifications
 
             static IDeliveryStrategy strategy;
         }
+
+        [Subject(typeof(SubscriptionConfiguration))]
+        public class When_Context
+        {
+            Establish context = () => { };
+
+            private Because of = () => { };
+
+            private It should_ = () => { };
+        }
     }
 }

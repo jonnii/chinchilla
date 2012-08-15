@@ -8,10 +8,15 @@ namespace Chinchilla
     /// </summary>
     public interface IBus : IPublisher, IDisposable
     {
-        IPublishChannel CreatePublishChannel();
+        /// <summary>
+        /// Opens a publish channel
+        /// </summary>
+        IPublishChannel OpenPublishChannel();
 
         ISubscription Subscribe<T>(Action<T> onMessage);
 
-        ISubscription Subscribe<T>(Action<T> onMessage, Action<ISubscriptionConfiguration> configurator);
+        ISubscription Subscribe<T>(Action<T> onMessage, Action<ISubscriptionConfigurator> configurator);
+
+        ISubscription Subscribe<TMessage>(IConsumer<TMessage> consumer);
     }
 }

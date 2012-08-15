@@ -8,5 +8,7 @@ namespace Chinchilla
             IModelReference modelReference,
             ISubscriptionConfiguration configuration,
             Action<TMessage> processor);
+
+        void Dispose();
     }
 }

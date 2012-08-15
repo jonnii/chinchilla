@@ -26,12 +26,14 @@ namespace Chinchilla
             topologyBuilder = new TopologyBuilder(modelReference);
         }
 
+        public IExchange Exchange { get; set; }
+
         public long NumPublishedMessages { get; private set; }
 
-        public void Publish<T>(T message)
+        public void Publish<TMessage>(TMessage message)
         {
-            var exchange = topology.DefineExchange(typeof(T).Name, ExchangeType.Fanout);
-            topologyBuilder.Visit(exchange);
+            Exchange = topology.DefineExchange(typeof(TMessage).Name, ExchangeType.Fanout);
+            topologyBuilder.Visit(Exchange);
 
             var defaultProperties = modelReference.Execute(m => m.CreateBasicProperties());
 
@@ -40,7 +42,7 @@ namespace Chinchilla
 
             modelReference.Execute(
                 m => m.BasicPublish(
-                    exchange.Name,
+                    Exchange.Name,
                     "#",
                     defaultProperties,
                     serializedMessage));

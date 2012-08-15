@@ -23,7 +23,7 @@ namespace Chinchilla.Integration.Features
         {
             using (var bus = Depot.Connect("localhost/integration"))
             {
-                using (var publisher = bus.CreatePublishChannel())
+                using (var publisher = bus.OpenPublishChannel())
                 {
                     publisher.Publish(new HelloWorldMessage());
                     Assert.That(publisher.NumPublishedMessages, Is.EqualTo(1));
@@ -38,7 +38,7 @@ namespace Chinchilla.Integration.Features
         {
             using (var bus = Depot.Connect("localhost/integration"))
             {
-                using (var publisher = bus.CreatePublishChannel())
+                using (var publisher = bus.OpenPublishChannel())
                 {
                     for (var i = 0; i < 100; ++i)
                     {

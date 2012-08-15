@@ -6,7 +6,7 @@ namespace Chinchilla
     public interface IPublisher
     {
         /// <summary>
-        /// Publishes a message to an exchange
+        /// Publishes a message
         /// </summary>
         /// <typeparam name="T">The type of message to publish</typeparam>
         void Publish<T>(T message);

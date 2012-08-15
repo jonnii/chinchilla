@@ -1,5 +1,6 @@
 ﻿using Machine.Fakes;
 using Machine.Specifications;
+using RabbitMQ.Client;
 
 namespace Chinchilla.Specifications
 {
@@ -33,6 +34,16 @@ namespace Chinchilla.Specifications
                 Subject.IsTracking(reference).ShouldBeFalse();
 
             static IModelReference reference;
+        }
+
+        [Subject(typeof(ModelFactory))]
+        public class when_disposing : WithSubject<ModelFactory>
+        {
+            Because of = () =>
+                Subject.Dispose();
+
+            It should_dispose_connection = () =>
+                The<IConnection>().WasToldTo(c => c.Dispose());
         }
     }
 }

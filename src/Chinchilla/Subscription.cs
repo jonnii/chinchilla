@@ -4,7 +4,6 @@ using System.Threading;
 using Chinchilla.Logging;
 using Chinchilla.Topologies.Rabbit;
 using RabbitMQ.Client.Events;
-using ExchangeType = Chinchilla.Topologies.Rabbit.ExchangeType;
 
 namespace Chinchilla
 {
@@ -16,10 +15,6 @@ namespace Chinchilla
 
         private readonly IDeliveryStrategy deliveryStrategy;
 
-        private readonly Topology topology;
-
-        private readonly TopologyBuilder topologyBuilder;
-
         private BlockingCollection<BasicDeliverEventArgs> consumerQueue;
 
         private Thread subscriptionThread;
@@ -28,29 +23,25 @@ namespace Chinchilla
 
         public Subscription(
             IModelReference modelReference,
-            IDeliveryStrategy deliveryStrategy)
+            IDeliveryStrategy deliveryStrategy,
+            IQueue queue)
         {
             this.modelReference = modelReference;
             this.deliveryStrategy = deliveryStrategy;
 
-            topology = new Topology();
-            topologyBuilder = new TopologyBuilder(modelReference);
+            Queue = queue;
         }
+
+        public ulong NumAcceptedMessages { get; private set; }
+
+        public IQueue Queue { get; private set; }
 
         public void Start()
         {
-            var queue = topology.DefineQueue(typeof(T).Name);
-            var exchange = topology.DefineExchange(typeof(T).Name, ExchangeType.Fanout);
-            queue.BindTo(exchange);
-
-            logger.Debug("Creating topology");
-
-            topology.Visit(topologyBuilder);
-
             modelReference.Execute(m => m.BasicQos(0, 0, false));
 
             logger.Debug("Creating Consumer");
-            consumerQueue = modelReference.GetConsumerQueue(queue);
+            consumerQueue = modelReference.GetConsumerQueue(Queue);
 
             logger.Debug("Starting listener thread");
             subscriptionThread = new Thread(() =>
@@ -82,6 +73,8 @@ namespace Chinchilla
         {
             modelReference.Execute(
                 m => m.BasicAck(delivery.Tag, false));
+
+            ++NumAcceptedMessages;
         }
 
         public void Dispose()

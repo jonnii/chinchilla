@@ -33,7 +33,7 @@ namespace Chinchilla
             return Subscribe(onMessage, SubscriptionConfiguration.Default);
         }
 
-        public ISubscription Subscribe<T>(Action<T> onMessage, Action<ISubscriptionConfiguration> configurator)
+        public ISubscription Subscribe<T>(Action<T> onMessage, Action<ISubscriptionConfigurator> configurator)
         {
             var configuration = SubscriptionConfiguration.Default;
 
@@ -42,7 +42,7 @@ namespace Chinchilla
             return Subscribe(onMessage, configuration);
         }
 
-        public ISubscription Subscribe<T>(Action<T> onMessage, ISubscriptionConfiguration subscriptionConfiguration)
+        private ISubscription Subscribe<T>(Action<T> onMessage, SubscriptionConfiguration subscriptionConfiguration)
         {
             logger.DebugFormat("Subscribing to action callback of type {0}", typeof(T).Name);
 
@@ -55,7 +55,12 @@ namespace Chinchilla
             return subscription;
         }
 
-        public IPublishChannel CreatePublishChannel()
+        public ISubscription Subscribe<TMessage>(IConsumer<TMessage> consumer)
+        {
+            return Subscribe<TMessage>(consumer.Consume);
+        }
+
+        public IPublishChannel OpenPublishChannel()
         {
             return new PublishChannel(
                 modelFactory.CreateModel(),
@@ -64,7 +69,7 @@ namespace Chinchilla
 
         public void Publish<T>(T message)
         {
-            using (var publisher = CreatePublishChannel())
+            using (var publisher = OpenPublishChannel())
             {
                 publisher.Publish(message);
             }
@@ -72,7 +77,8 @@ namespace Chinchilla
 
         public void Dispose()
         {
-            //modelFactory.Dispose();
+            subscriptionFactory.Dispose();
+            modelFactory.Dispose();
         }
     }
 }

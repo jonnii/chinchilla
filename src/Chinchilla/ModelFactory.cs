@@ -66,5 +66,11 @@ namespace Chinchilla
             reference.Disposed -= Untrack;
             Untrack(reference);
         }
+
+        public void Dispose()
+        {
+            logger.Debug("Disposing model factory");
+            connection.Dispose();
+        }
     }
 }

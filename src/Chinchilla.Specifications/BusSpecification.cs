@@ -18,7 +18,7 @@ namespace Chinchilla.Specifications
         public class when_creating_publisher : with_bus
         {
             Because of = () =>
-                publisher = Subject.CreatePublishChannel();
+                publisher = Subject.OpenPublishChannel();
 
             It should_create_publisher = () =>
                 publisher.ShouldNotBeNull();
@@ -61,6 +61,19 @@ namespace Chinchilla.Specifications
                 subscription.WasToldTo(s => s.Start());
 
             static ISubscription subscription;
+        }
+
+        [Subject(typeof(Bus))]
+        public class when_disposing : with_bus
+        {
+            Because of = () =>
+                Subject.Dispose();
+
+            It should_dispose_of_subscription_factory = () =>
+                The<ISubscriptionFactory>().WasToldTo(f => f.Dispose());
+
+            It should_dispose_model_factory = () =>
+                The<IModelFactory>().WasToldTo(f => f.Dispose());
         }
 
         public class with_bus : WithSubject<Bus>

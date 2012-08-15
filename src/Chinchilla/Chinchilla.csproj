@@ -56,6 +56,7 @@
     <Compile Include="Extensions\EventExtensions.cs" />
     <Compile Include="Guard.cs" />
     <Compile Include="IConnectionFactory.cs" />
+    <Compile Include="IConsumer.cs" />
     <Compile Include="IDeliveryStrategy.cs" />
     <Compile Include="IDelivery.cs" />
     <Compile Include="IDeliveryListener.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="IPublishChannel.cs" />
     <Compile Include="IPublisher.cs" />
     <Compile Include="ISubscriptionConfiguration.cs" />
+    <Compile Include="ISubscriptionConfigurator.cs" />
     <Compile Include="ISubscriptionFactory.cs" />
     <Compile Include="Logging\ClassLogger.cs" />
     <Compile Include="Logging\ConsoleLogger.cs" />
@@ -85,6 +87,8 @@
     <Compile Include="SubscriptionConfiguration.cs" />
     <Compile Include="SubscriptionFactory.cs" />
     <Compile Include="TaskDeliveryStrategy.cs" />
+    <Compile Include="Topologies\DefaultSubscriptionTopology.cs" />
+    <Compile Include="Topologies\ISubscriptionTopology.cs" />
     <Compile Include="Topologies\Rabbit\Bindable.cs" />
     <Compile Include="Topologies\Rabbit\Binding.cs" />
     <Compile Include="Topologies\Rabbit\Durability.cs" />

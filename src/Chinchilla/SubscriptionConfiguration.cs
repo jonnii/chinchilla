@@ -1,17 +1,18 @@
 using System;
+using Chinchilla.Topologies;
 
 namespace Chinchilla
 {
-    public class SubscriptionConfiguration : ISubscriptionConfiguration
+    public class SubscriptionConfiguration : ISubscriptionConfiguration, ISubscriptionConfigurator
     {
-        public static ISubscriptionConfiguration Default
+        public static SubscriptionConfiguration Default
         {
             get { return new SubscriptionConfiguration(); }
         }
 
         private Func<IDeliveryProcessor, IDeliveryStrategy> strategyBuilder = handler => new ImmediateDeliveryStrategy();
 
-        public void DeliverUsing<TStrategy>(params Action<TStrategy>[] configurations)
+        public ISubscriptionConfigurator DeliverUsing<TStrategy>(params Action<TStrategy>[] configurations)
             where TStrategy : IDeliveryStrategy, new()
         {
             strategyBuilder = handler =>
@@ -23,6 +24,8 @@ namespace Chinchilla
                 }
                 return strategy;
             };
+
+            return this;
         }
 
         public IDeliveryStrategy BuildDeliveryStrategy(IDeliveryProcessor processor)
@@ -30,6 +33,11 @@ namespace Chinchilla
             var consumer = strategyBuilder(processor);
             consumer.ConnectTo(processor);
             return consumer;
+        }
+
+        public ISubscriptionTopology BuildTopology<TMessage>()
+        {
+            return new DefaultSubscriptionTopology(typeof(TMessage).Name);
         }
 
         public override string ToString()

@@ -1,8 +1,9 @@
+using System;
 using RabbitMQ.Client;
 
 namespace Chinchilla
 {
-    public interface IModelFactory
+    public interface IModelFactory : IDisposable
     {
         IModelReference CreateModel();
 

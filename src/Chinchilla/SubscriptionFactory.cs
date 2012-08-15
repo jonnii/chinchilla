@@ -1,5 +1,6 @@
 using System;
 using Chinchilla.Logging;
+using Chinchilla.Topologies.Rabbit;
 
 namespace Chinchilla
 {
@@ -14,7 +15,10 @@ namespace Chinchilla
             this.messageSerializer = messageSerializer;
         }
 
-        public ISubscription Create<TMessage>(IModelReference modelReference, ISubscriptionConfiguration configuration, Action<TMessage> processor)
+        public ISubscription Create<TMessage>(
+            IModelReference modelReference,
+            ISubscriptionConfiguration configuration,
+            Action<TMessage> processor)
         {
             logger.DebugFormat("Creating new handler subscription with configuration: {0}", configuration);
 
@@ -22,11 +26,23 @@ namespace Chinchilla
                 messageSerializer,
                 processor);
 
+            logger.Debug("Creating topology");
+
+            var topologyBuilder = new TopologyBuilder(modelReference);
+
+            var subscriptionTopology = configuration.BuildTopology<TMessage>();
+            subscriptionTopology.Visit(topologyBuilder);
+
             var consumerStrategy = configuration.BuildDeliveryStrategy(deliveryHandler);
 
             return new Subscription<TMessage>(
                 modelReference,
-                consumerStrategy);
+                consumerStrategy,
+                subscriptionTopology.Queue);
+        }
+
+        public void Dispose()
+        {
         }
     }
 }
