@@ -14,7 +14,7 @@ namespace Chinchilla.Sample.StockTicker.Client
             var clientExchangeName = string.Format("prices-{0}", clientId);
             var exchange = topology.DefineExchange(
                 clientExchangeName,
-                ExchangeType.Direct,
+                ExchangeType.Topic,
                 isAutoDelete: true,
                 durablility: Durability.Transient);
 

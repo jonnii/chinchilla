@@ -1,6 +1,6 @@
 ﻿namespace Chinchilla.Sample.StockTicker.Messages
 {
-    public class PriceMessage
+    public class PriceMessage : IHasRoutingKey
     {
         public PriceMessage() { }
 
@@ -13,5 +13,10 @@
         public string Ticker { get; set; }
 
         public int Price { get; set; }
+
+        public string RoutingKey
+        {
+            get { return "prices." + Ticker; }
+        }
     }
 }

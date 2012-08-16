@@ -19,12 +19,13 @@ namespace Chinchilla.Sample.StockTicker.Server
 
         public void Consume(ConnectMessage message)
         {
-            Console.WriteLine("Client Connected: {0} on {1}", message.ClientId, message.QueueName);
-
             var exchange = publisher.Exchange;
 
             var keys = message.Tickers.Select(
                 t => string.Format("prices.{0}", t)).ToArray();
+
+            var formattedKeys = string.Join(", ", keys);
+            Console.WriteLine("Client Connected: {0} on {1} for {2}", message.ClientId, message.QueueName, formattedKeys);
 
             bus.ModifyTopology(topology =>
                 topology.Visit(new Binding(
