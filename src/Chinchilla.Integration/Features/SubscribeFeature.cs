@@ -94,19 +94,5 @@ namespace Chinchilla.Integration.Features
                 Assert.That(numReceived, Is.EqualTo(100));
             }
         }
-
-        //[Test]
-        //public void ShouldSubscribeWithSpecificQueueName()
-        //{
-        //    using (var bus = Depot.Connect("localhost/integration"))
-        //    {
-        //        using (var subscription =
-        //            bus.Subscribe((HelloWorldMessage _) => { }, o =>
-        //                o.SubscribeOn("let_me_get_that")))
-        //        {
-        //            Assert.That(subscription.Queue.Name, Is.EqualTo("let_me_get_that"));
-        //        }
-        //    }
-        //}
     }
 }

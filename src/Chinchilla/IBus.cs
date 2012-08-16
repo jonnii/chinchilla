@@ -1,5 +1,4 @@
 ﻿using System;
-using Chinchilla.Topologies.Model;
 
 namespace Chinchilla
 {
@@ -23,7 +22,5 @@ namespace Chinchilla
         ISubscription Subscribe<TMessage>(Action<TMessage> onMessage, Action<ISubscriptionBuilder> builder);
 
         ISubscription Subscribe<TMessage>(IConsumer<TMessage> consumer);
-
-        void ModifyTopology(Action<TopologyBuilder> action);
     }
 }

@@ -9,14 +9,19 @@ namespace Chinchilla
     public interface IPublisher<in TMessage> : IDisposable
     {
         /// <summary>
-        /// The number of published messages
+        /// The model reference attached to this publisher
         /// </summary>
-        long NumPublishedMessages { get; }
+        IModelReference ModelReference { get; }
 
         /// <summary>
         /// The exchange that is published to
         /// </summary>
         IExchange Exchange { get; }
+
+        /// <summary>
+        /// The number of published messages
+        /// </summary>
+        long NumPublishedMessages { get; }
 
         /// <summary>
         /// Publishes a message

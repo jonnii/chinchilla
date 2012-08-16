@@ -4,8 +4,6 @@ namespace Chinchilla
 {
     public class Publisher<TMessage> : IPublisher<TMessage>
     {
-        private readonly IModelReference modelReference;
-
         private readonly IMessageSerializer serializer;
 
         private bool disposed;
@@ -15,10 +13,13 @@ namespace Chinchilla
             IMessageSerializer serializer,
             IExchange exchange)
         {
-            this.modelReference = Guard.NotNull(modelReference, "modelReference");
             this.serializer = Guard.NotNull(serializer, "serializer");
+
+            ModelReference = Guard.NotNull(modelReference, "modelReference");
             Exchange = Guard.NotNull(exchange, "exchange");
         }
+
+        public IModelReference ModelReference { get; private set; }
 
         public IExchange Exchange { get; private set; }
 
@@ -26,7 +27,7 @@ namespace Chinchilla
 
         public void Publish(TMessage message)
         {
-            var defaultProperties = modelReference.Execute(m => m.CreateBasicProperties());
+            var defaultProperties = ModelReference.Execute(m => m.CreateBasicProperties());
 
             var serializedMessage = serializer.Serialize(
                 Message.Create(message));
@@ -34,7 +35,7 @@ namespace Chinchilla
             var hasRoutingKey = message as IHasRoutingKey;
             var routingKey = hasRoutingKey != null ? hasRoutingKey.RoutingKey : "#";
 
-            modelReference.Execute(
+            ModelReference.Execute(
                 m => m.BasicPublish(
                     Exchange.Name,
                     routingKey,
@@ -51,7 +52,7 @@ namespace Chinchilla
                 return;
             }
 
-            modelReference.Dispose();
+            ModelReference.Dispose();
 
             disposed = true;
         }

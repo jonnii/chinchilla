@@ -1,6 +1,5 @@
 using System;
 using Chinchilla.Logging;
-using Chinchilla.Topologies.Model;
 
 namespace Chinchilla
 {
@@ -41,14 +40,6 @@ namespace Chinchilla
         public ISubscription Subscribe<TMessage>(IConsumer<TMessage> consumer)
         {
             return Subscribe<TMessage>(consumer.Consume);
-        }
-
-        public void ModifyTopology(Action<TopologyBuilder> action)
-        {
-            var model = modelFactory.CreateModel();
-            var builder = new TopologyBuilder(model);
-
-            action(builder);
         }
 
         private ISubscription Subscribe<TMessage>(Action<TMessage> onMessage, ISubscriptionConfiguration subscriptionConfiguration)
