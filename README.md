@@ -28,10 +28,12 @@ Show me the goods
 	bus.Subscribe(new HelloWorldMessageConsumer());
 
 	// subscribe and process messages with a number of workers
-	bus.Subscribe((HelloWorldMessage message) => {}, o => o.DeliverUsing<WorkerPoolDeliveryStrategy>(s => s.NumWorkers = 5)
+	bus.Subscribe((HelloWorldMessage message) => {}, 
+		o => o.DeliverUsing<WorkerPoolDeliveryStrategy>(s => s.NumWorkers = 5));
 
 	// subscribe and process messages on the task factory
-	bus.Subscribe((HelloWorldMessage message) => {}, o => o.DeliverUsing<TaskDeliveryStrategy>())
+	bus.Subscribe((HelloWorldMessage message) => {}, 
+		o => o.DeliverUsing<TaskDeliveryStrategy>());
 
 Samples?
 ========
