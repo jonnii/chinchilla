@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace Chinchilla.Topologies.Rabbit
+namespace Chinchilla.Topologies.Model
 {
     public class TopologyBuilder : ITopologyVisitor
     {
@@ -81,10 +82,32 @@ namespace Chinchilla.Topologies.Rabbit
         {
             VisitOnce(binding, () =>
             {
-                model.Execute(
-                    m => m.QueueBind(
-                        binding.Bindable.Name,
-                        binding.Exchange.Name, "#"));
+                model.Execute(m =>
+                {
+                    Action<string, string, string> bindFunction;
+                    if (binding.Bindable is IQueue)
+                    {
+                        bindFunction = m.QueueBind;
+                    }
+                    else
+                    {
+                        // Reverse from/to for binding exchanges, because the parameters of ExchangeBind
+                        // don't match QueueBind
+                        bindFunction = (from, to, keys) => m.ExchangeBind(to, from, keys);
+                    }
+
+                    if (binding.RoutingKeys.Any())
+                    {
+                        foreach (var key in binding.RoutingKeys)
+                        {
+                            bindFunction(binding.Bindable.Name, binding.Exchange.Name, key);
+                        }
+                    }
+                    else
+                    {
+                        bindFunction(binding.Bindable.Name, binding.Exchange.Name, "#");
+                    }
+                });
 
                 visited.Add(binding);
             });

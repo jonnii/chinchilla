@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Chinchilla.Topologies.Rabbit
+namespace Chinchilla.Topologies.Model
 {
     public abstract class Bindable : IBindable
     {

@@ -1,5 +1,5 @@
 using System;
-using Chinchilla.Topologies.Rabbit;
+using Chinchilla.Topologies.Model;
 
 namespace Chinchilla
 {

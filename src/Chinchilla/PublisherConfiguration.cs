@@ -9,7 +9,7 @@ namespace Chinchilla
 
         public PublisherConfiguration()
         {
-            publisherTopology = messageType => new DefaultPublisherTopology(messageType);
+            publisherTopology = messageType => new DefaultTopology(messageType);
         }
 
         public IPublisherBuilder SetTopology(Func<string, IPublisherTopology> customTopology)

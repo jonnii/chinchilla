@@ -1,6 +1,6 @@
 using System;
 
-namespace Chinchilla.Topologies.Rabbit
+namespace Chinchilla.Topologies.Model
 {
     public class Queue : Bindable, IQueue
     {

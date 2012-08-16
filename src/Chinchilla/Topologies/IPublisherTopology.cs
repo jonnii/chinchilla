@@ -1,4 +1,4 @@
-using Chinchilla.Topologies.Rabbit;
+using Chinchilla.Topologies.Model;
 
 namespace Chinchilla.Topologies
 {
@@ -7,12 +7,8 @@ namespace Chinchilla.Topologies
         /// <summary>
         /// The queue that will receive message, this will be subscribed to
         /// </summary>
-        IExchange Exchange { get; }
+        IExchange PublishExchange { get; }
 
-        /// <summary>
-        /// Visits this subscription topology with a topology visitor
-        /// </summary>
-        /// <param name="visitor"></param>
         void Visit(ITopologyVisitor visitor);
     }
 }

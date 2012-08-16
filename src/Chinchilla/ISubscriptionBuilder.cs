@@ -13,6 +13,6 @@ namespace Chinchilla
         ISubscriptionBuilder DeliverUsing<TStrategy>(params Action<TStrategy>[] configurations)
             where TStrategy : IDeliveryStrategy, new();
 
-        void SetTopology(Func<string, ISubscriptionTopology> customTopologyBuilder);
+        void SetTopology(Func<string, ISubscriberTopology> customTopologyBuilder);
     }
 }

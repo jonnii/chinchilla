@@ -8,13 +8,6 @@ namespace Chinchilla.Specifications
     public class BusSpecification
     {
         [Subject(typeof(Bus))]
-        public class in_general : with_bus
-        {
-            It should_have_topology = () =>
-                Subject.Topology.ShouldNotBeNull();
-        }
-
-        [Subject(typeof(Bus))]
         public class when_creating_publisher : with_bus
         {
             Because of = () =>

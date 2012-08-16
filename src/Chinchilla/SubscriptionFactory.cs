@@ -1,6 +1,6 @@
 using System;
 using Chinchilla.Logging;
-using Chinchilla.Topologies.Rabbit;
+using Chinchilla.Topologies.Model;
 
 namespace Chinchilla
 {
@@ -39,7 +39,7 @@ namespace Chinchilla
             return new Subscription<TMessage>(
                 modelReference,
                 consumerStrategy,
-                topology.Queue);
+                topology.SubscribeQueue);
         }
 
         public void Dispose()

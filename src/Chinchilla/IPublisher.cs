@@ -1,4 +1,5 @@
 using System;
+using Chinchilla.Topologies.Model;
 
 namespace Chinchilla
 {
@@ -11,6 +12,11 @@ namespace Chinchilla
         /// The number of published messages
         /// </summary>
         long NumPublishedMessages { get; }
+
+        /// <summary>
+        /// The exchange that is published to
+        /// </summary>
+        IExchange Exchange { get; }
 
         /// <summary>
         /// Publishes a message

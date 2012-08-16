@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Chinchilla.Topologies.Rabbit
+namespace Chinchilla.Topologies.Model
 {
     public class TopologyWriter : ITopologyVisitor
     {

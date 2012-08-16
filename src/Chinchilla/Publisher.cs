@@ -1,4 +1,4 @@
-using Chinchilla.Topologies.Rabbit;
+using Chinchilla.Topologies.Model;
 
 namespace Chinchilla
 {
@@ -15,10 +15,9 @@ namespace Chinchilla
             IMessageSerializer serializer,
             IExchange exchange)
         {
-            this.modelReference = modelReference;
-            this.serializer = serializer;
-
-            Exchange = exchange;
+            this.modelReference = Guard.NotNull(modelReference, "modelReference");
+            this.serializer = Guard.NotNull(serializer, "serializer");
+            Exchange = Guard.NotNull(exchange, "exchange");
         }
 
         public IExchange Exchange { get; private set; }
@@ -32,10 +31,13 @@ namespace Chinchilla
             var serializedMessage = serializer.Serialize(
                 Message.Create(message));
 
+            var hasRoutingKey = message as IHasRoutingKey;
+            var routingKey = hasRoutingKey != null ? hasRoutingKey.RoutingKey : "#";
+
             modelReference.Execute(
                 m => m.BasicPublish(
                     Exchange.Name,
-                    "#",
+                    routingKey,
                     defaultProperties,
                     serializedMessage));
 

@@ -1,5 +1,5 @@
 ﻿using Chinchilla.Topologies;
-using Chinchilla.Topologies.Rabbit;
+using Chinchilla.Topologies.Model;
 using Machine.Fakes;
 using Machine.Specifications;
 
@@ -11,7 +11,7 @@ namespace Chinchilla.Specifications
         public class in_general : WithSubject<SubscriptionConfiguration>
         {
             It should_build_default_topology = () =>
-                Subject.BuildTopology("messageType").ShouldBeOfType<DefaultSubscriptionTopology>();
+                Subject.BuildTopology("messageType").ShouldBeOfType<DefaultTopology>();
         }
 
         [Subject(typeof(SubscriptionConfiguration))]
@@ -26,7 +26,7 @@ namespace Chinchilla.Specifications
             It should_build_default_topology = () =>
                 topology.ShouldBeOfType<CustomTopology>();
 
-            static ISubscriptionTopology topology;
+            static ISubscriberTopology topology;
         }
 
         [Subject(typeof(SubscriptionConfiguration))]
@@ -59,9 +59,9 @@ namespace Chinchilla.Specifications
             static IDeliveryStrategy strategy;
         }
 
-        public class CustomTopology : ISubscriptionTopology
+        public class CustomTopology : ISubscriberTopology
         {
-            public IQueue Queue { get; set; }
+            public IQueue SubscribeQueue { get; set; }
 
             public void Visit(ITopologyVisitor visitor)
             {

@@ -53,6 +53,7 @@
     <Compile Include="Features\ConsumerFeature.cs" />
     <Compile Include="Features\Consumers\HelloWorldMessageConsumer.cs" />
     <Compile Include="Features\CreateBusFeature.cs" />
+    <Compile Include="Features\CustomTopologyFeature.cs" />
     <Compile Include="Features\Messages\HelloWorldMessage.cs" />
     <Compile Include="Features\PublishFeature.cs" />
     <Compile Include="Features\SubscribeFeature.cs" />

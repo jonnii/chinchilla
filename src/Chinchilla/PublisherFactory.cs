@@ -1,4 +1,4 @@
-using Chinchilla.Topologies.Rabbit;
+using Chinchilla.Topologies.Model;
 
 namespace Chinchilla
 {
@@ -24,7 +24,7 @@ namespace Chinchilla
             return new Publisher<TMessage>(
                 modelReference,
                 messageSerializer,
-                topology.Exchange);
+                topology.PublishExchange);
         }
     }
 }

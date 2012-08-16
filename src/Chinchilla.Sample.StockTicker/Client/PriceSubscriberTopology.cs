@@ -1,9 +1,9 @@
 using Chinchilla.Topologies;
-using Chinchilla.Topologies.Rabbit;
+using Chinchilla.Topologies.Model;
 
 namespace Chinchilla.Sample.StockTicker.Client
 {
-    public class PriceSubscriberTopology : ISubscriptionTopology
+    public class PriceSubscriberTopology : ISubscriberTopology
     {
         private readonly Topology topology;
 
@@ -18,11 +18,11 @@ namespace Chinchilla.Sample.StockTicker.Client
                 isAutoDelete: true,
                 durablility: Durability.Transient);
 
-            Queue = topology.DefineQueue();
-            Queue.BindTo(exchange);
+            SubscribeQueue = topology.DefineQueue();
+            SubscribeQueue.BindTo(exchange);
         }
 
-        public IQueue Queue { get; private set; }
+        public IQueue SubscribeQueue { get; private set; }
 
         public void Visit(ITopologyVisitor visitor)
         {

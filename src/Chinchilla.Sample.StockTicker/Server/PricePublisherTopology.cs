@@ -1,23 +1,17 @@
 using Chinchilla.Topologies;
-using Chinchilla.Topologies.Rabbit;
+using Chinchilla.Topologies.Model;
 
 namespace Chinchilla.Sample.StockTicker.Server
 {
-    public class PricePublisherTopology : IPublisherTopology
+    public class PricePublisherTopology : Topology, ISubscriberTopology, IPublisherTopology
     {
-        private readonly Topology topology;
-
         public PricePublisherTopology(string exchangeName)
         {
-            topology = new Topology();
-            Exchange = topology.DefineExchange(exchangeName, ExchangeType.Topic);
+            PublishExchange = DefineExchange(exchangeName, ExchangeType.Topic);
         }
 
-        public IExchange Exchange { get; private set; }
+        public IExchange PublishExchange { get; private set; }
 
-        public void Visit(ITopologyVisitor visitor)
-        {
-            topology.Visit(visitor);
-        }
+        public IQueue SubscribeQueue { get; private set; }
     }
 }

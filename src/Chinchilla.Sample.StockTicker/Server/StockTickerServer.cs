@@ -20,14 +20,15 @@ namespace Chinchilla.Sample.StockTicker.Server
         {
             isRunning = true;
 
-            using (var publishChannel = bus.CreatePublisher<PriceMessage>(ConfigurePricePublisher))
+            using (var publisher = bus.CreatePublisher<PriceMessage>(ConfigurePricePublisher))
             {
                 connectMessageSubscription = bus.Subscribe(
-                    new ConnectMessageConsumer(bus, publishChannel));
+                    new ConnectMessageConsumer(bus, publisher));
 
                 while (isRunning)
                 {
-                    publishChannel.Publish(new PriceMessage("GOOG", 300));
+                    publisher.Publish(new PriceMessage("GOOG", 300));
+                    publisher.Publish(new PriceMessage("AAPL", 300));
 
                     // publish updates
                     Thread.Sleep(1000);

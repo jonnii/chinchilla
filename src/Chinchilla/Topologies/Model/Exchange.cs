@@ -1,4 +1,4 @@
-namespace Chinchilla.Topologies.Rabbit
+namespace Chinchilla.Topologies.Model
 {
     public class Exchange : Bindable, IExchange
     {

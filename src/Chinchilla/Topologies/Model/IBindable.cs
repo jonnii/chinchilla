@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Chinchilla.Topologies.Rabbit
+namespace Chinchilla.Topologies.Model
 {
     public interface IBindable
     {

@@ -72,10 +72,10 @@
     <Compile Include="PublisherSpecification.cs" />
     <Compile Include="SubscriptionConfigurationSpecification.cs" />
     <Compile Include="SubscriptionSpecification.cs" />
-    <Compile Include="Topologies\Rabbit\BindingSpecification.cs" />
-    <Compile Include="Topologies\Rabbit\ExchangeSpecification.cs" />
-    <Compile Include="Topologies\Rabbit\QueueSpecification.cs" />
-    <Compile Include="Topologies\Rabbit\TopologySpecification.cs" />
+    <Compile Include="Topologies\Model\BindingSpecification.cs" />
+    <Compile Include="Topologies\Model\ExchangeSpecification.cs" />
+    <Compile Include="Topologies\Model\QueueSpecification.cs" />
+    <Compile Include="Topologies\Model\TopologySpecification.cs" />
     <Compile Include="WorkerPoolDeliveryStrategySpecification.cs" />
   </ItemGroup>
   <ItemGroup>

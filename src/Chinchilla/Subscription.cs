@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Threading;
 using Chinchilla.Logging;
-using Chinchilla.Topologies.Rabbit;
+using Chinchilla.Topologies.Model;
 using RabbitMQ.Client.Events;
 
 namespace Chinchilla

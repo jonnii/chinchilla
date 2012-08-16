@@ -1,13 +1,12 @@
-using System;
 using System.Collections.Generic;
 
-namespace Chinchilla.Topologies.Rabbit
+namespace Chinchilla.Topologies.Model
 {
     public class Topology : ITopology
     {
-        private readonly List<Queue> queues = new List<Queue>();
+        private readonly List<IQueue> queues = new List<IQueue>();
 
-        private readonly List<Exchange> exchanges = new List<Exchange>();
+        private readonly List<IExchange> exchanges = new List<IExchange>();
 
         public IQueue DefineQueue()
         {

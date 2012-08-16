@@ -1,5 +1,5 @@
 ﻿using Chinchilla.Topologies;
-using Chinchilla.Topologies.Rabbit;
+using Chinchilla.Topologies.Model;
 using Machine.Fakes;
 using Machine.Specifications;
 
@@ -11,7 +11,7 @@ namespace Chinchilla.Specifications
         public class in_general : WithSubject<PublisherConfiguration>
         {
             It should_build_default_topology = () =>
-                Subject.BuildTopology("messageType").ShouldBeOfType<DefaultPublisherTopology>();
+                Subject.BuildTopology("messageType").ShouldBeOfType<DefaultTopology>();
         }
 
         [Subject(typeof(PublisherConfiguration))]
@@ -31,7 +31,7 @@ namespace Chinchilla.Specifications
 
         public class CustomTopology : IPublisherTopology
         {
-            public IExchange Exchange { get; set; }
+            public IExchange PublishExchange { get; set; }
 
             public void Visit(ITopologyVisitor visitor)
             {

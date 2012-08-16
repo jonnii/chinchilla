@@ -1,8 +1,8 @@
-﻿using Chinchilla.Topologies.Rabbit;
+﻿using Chinchilla.Topologies.Model;
 using Machine.Fakes;
 using Machine.Specifications;
 
-namespace Chinchilla.Specifications.Topologies.Rabbit
+namespace Chinchilla.Specifications.Topologies.Model
 {
     public class BindingSpecification
     {
