@@ -23,7 +23,7 @@ namespace Chinchilla.Sample.StockTicker.Server
             using (var publisher = bus.CreatePublisher<PriceMessage>(ConfigurePricePublisher))
             {
                 connectMessageSubscription = bus.Subscribe(
-                    new ConnectMessageConsumer(bus, publisher));
+                    new ConnectMessageConsumer(publisher));
 
                 while (isRunning)
                 {

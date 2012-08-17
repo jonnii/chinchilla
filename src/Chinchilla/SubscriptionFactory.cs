@@ -23,26 +23,27 @@ namespace Chinchilla
         {
             logger.DebugFormat("Creating new handler subscription with configuration: {0}", configuration);
 
-            var deliveryProcessor = new ActionDeliveryProcessor<TMessage>(messageSerializer, processor);
-
-            var topologyBuilder = new TopologyBuilder(modelReference);
-
             var messageType = typeof(TMessage).Name;
             var endpoint = new Endpoint(configuration.QueueName ?? messageType, messageType);
 
             var topology = configuration.BuildTopology(endpoint);
+
+            var topologyBuilder = new TopologyBuilder(modelReference);
             topology.Visit(topologyBuilder);
 
+            var deliveryProcessor = new ActionDeliveryProcessor<TMessage>(messageSerializer, processor);
             var consumerStrategy = configuration.BuildDeliveryStrategy(deliveryProcessor);
 
             return Create(modelReference, consumerStrategy, topology);
         }
 
-        public ISubscription Create(IModelReference modelReference, IDeliveryStrategy deliveryStrategy, ISubscriberTopology topology)
+        public ISubscription Create(
+            IModelReference modelReference, 
+            IDeliveryStrategy deliveryStrategy, 
+            ISubscriberTopology topology)
         {
             var subscription = new Subscription(modelReference, deliveryStrategy, topology.SubscribeQueue);
             Track(subscription);
-
             return subscription;
         }
 

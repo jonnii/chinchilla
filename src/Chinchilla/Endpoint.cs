@@ -1,16 +1,16 @@
 ﻿namespace Chinchilla
 {
-    public class Endpoint
+    public class Endpoint : IEndpoint
     {
         public Endpoint(
             string endpointName,
             string messageType)
         {
-            EndpointName = endpointName;
+            Name = endpointName;
             MessageType = messageType;
         }
 
-        public string EndpointName { get; private set; }
+        public string Name { get; private set; }
 
         public string MessageType { get; private set; }
     }

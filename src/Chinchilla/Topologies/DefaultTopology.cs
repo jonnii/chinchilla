@@ -8,7 +8,7 @@ namespace Chinchilla.Topologies
         {
             PublishExchange = DefineExchange(endpoint.MessageType, ExchangeType.Topic);
 
-            SubscribeQueue = DefineQueue(endpoint.EndpointName);
+            SubscribeQueue = DefineQueue(endpoint.Name);
             SubscribeQueue.BindTo(PublishExchange);
         }
 
