@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Concurrent;
-using Chinchilla.Extensions;
 using Chinchilla.Logging;
 using Chinchilla.Topologies.Model;
 using RabbitMQ.Client;
@@ -8,7 +7,7 @@ using RabbitMQ.Client.Events;
 
 namespace Chinchilla
 {
-    public class ModelReference : IModelReference
+    public class ModelReference : Trackable, IModelReference
     {
         private readonly ILogger logger = Logger.Create<ModelReference>();
 
@@ -23,8 +22,6 @@ namespace Chinchilla
         {
             this.model = model;
         }
-
-        public event EventHandler<EventArgs> Disposed;
 
         public void Execute(Action<IModel> action)
         {
@@ -65,7 +62,7 @@ namespace Chinchilla
             return deliverEventArgsQueue;
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             deliverEventArgsQueue.CompleteAdding();
 
@@ -75,7 +72,7 @@ namespace Chinchilla
                 model.Dispose();
             }
 
-            Disposed.Raise(this);
+            base.Dispose();
         }
     }
 }

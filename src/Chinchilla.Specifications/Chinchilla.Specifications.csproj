@@ -75,6 +75,7 @@
     <Compile Include="PublisherSpecification.cs" />
     <Compile Include="Serializers\JsonMessageSerializerSpecification.cs" />
     <Compile Include="SubscriptionConfigurationSpecification.cs" />
+    <Compile Include="SubscriptionFactorySpecification.cs" />
     <Compile Include="SubscriptionSpecification.cs" />
     <Compile Include="Topologies\Model\BindingSpecification.cs" />
     <Compile Include="Topologies\Model\ExchangeSpecification.cs" />

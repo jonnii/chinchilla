@@ -7,9 +7,9 @@ using RabbitMQ.Client.Events;
 
 namespace Chinchilla
 {
-    public class Subscription<T> : ISubscription, IDeliveryListener
+    public class Subscription : Trackable, ISubscription, IDeliveryListener
     {
-        private readonly ILogger logger = Logger.Create<Subscription<T>>();
+        private readonly ILogger logger = Logger.Create<Subscription>();
 
         private readonly IModelReference modelReference;
 
@@ -77,13 +77,15 @@ namespace Chinchilla
             ++NumAcceptedMessages;
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             logger.DebugFormat("Disposing {0}", this);
 
             disposed = true;
             deliveryStrategy.Dispose();
             modelReference.Dispose();
+
+            base.Dispose();
         }
 
         public override string ToString()

@@ -10,22 +10,19 @@ namespace Chinchilla.Specifications
         public class when_creating_model : WithSubject<ModelFactory>
         {
             Because of = () =>
-                reference = Subject.CreateModel();
+                reference = (ModelReference)Subject.CreateModel();
 
             It should_be_tracking_reference = () =>
                 Subject.IsTracking(reference).ShouldBeTrue();
 
-            It should_have_num_references = () =>
-                Subject.NumReferences.ShouldEqual(1);
-
-            static IModelReference reference;
+            static ModelReference reference;
         }
 
         [Subject(typeof(ModelFactory))]
         public class when_disposing_of_model_reference : WithSubject<ModelFactory>
         {
             Establish context = () =>
-                reference = Subject.CreateModel();
+                reference = (ModelReference)Subject.CreateModel();
 
             Because of = () =>
                 reference.Dispose();
@@ -33,7 +30,7 @@ namespace Chinchilla.Specifications
             It should_untrack_reference = () =>
                 Subject.IsTracking(reference).ShouldBeFalse();
 
-            static IModelReference reference;
+            static ModelReference reference;
         }
 
         [Subject(typeof(ModelFactory))]

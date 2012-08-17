@@ -1,15 +1,11 @@
-using System;
-using System.Collections.Generic;
 using Chinchilla.Logging;
 using RabbitMQ.Client;
 
 namespace Chinchilla
 {
-    public class ModelFactory : IModelFactory
+    public class ModelFactory : TrackableFactory<ModelReference>, IModelFactory
     {
         private readonly ILogger logger = Logger.Create<ModelFactory>();
-
-        private readonly List<IModelReference> references = new List<IModelReference>();
 
         private IConnection connection;
 
@@ -23,17 +19,10 @@ namespace Chinchilla
             get { return connection.IsOpen; }
         }
 
-        public int NumReferences
-        {
-            get { return references.Count; }
-        }
-
         public IModelReference CreateModel()
         {
             var reference = new ModelReference(connection.CreateModel());
-            reference.Disposed += Untrack;
-
-            references.Add(reference);
+            Track(reference);
             return reference;
         }
 
@@ -43,34 +32,17 @@ namespace Chinchilla
 
             connection = newConnection;
 
-            foreach (var reference in references)
+            foreach (var reference in Tracked)
             {
                 reference.Reconnect(connection.CreateModel());
             }
         }
 
-        public bool IsTracking(IModelReference reference)
-        {
-            return references.Contains(reference);
-        }
-
-        public void Untrack(IModelReference modelReference)
-        {
-            references.Remove(modelReference);
-        }
-
-        private void Untrack(object sender, EventArgs eventArgs)
-        {
-            var reference = (IModelReference)sender;
-
-            reference.Disposed -= Untrack;
-            Untrack(reference);
-        }
-
-        public void Dispose()
+        public override void Dispose()
         {
             logger.Debug("Disposing model factory");
             connection.Dispose();
+            base.Dispose();
         }
     }
 }

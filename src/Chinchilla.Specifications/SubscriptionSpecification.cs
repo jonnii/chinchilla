@@ -1,13 +1,12 @@
-﻿using Chinchilla.Specifications.Messages;
-using Machine.Fakes;
+﻿using Machine.Fakes;
 using Machine.Specifications;
 
 namespace Chinchilla.Specifications
 {
     public class SubscriptionSpecification
     {
-        [Subject(typeof(Subscription<>))]
-        public class when_starting : WithSubject<Subscription<TestMessage>>
+        [Subject(typeof(Subscription))]
+        public class when_starting : WithSubject<Subscription>
         {
             Because of = () =>
                 Subject.Start();
@@ -16,8 +15,8 @@ namespace Chinchilla.Specifications
                 The<IDeliveryStrategy>().WasToldTo(d => d.Start());
         }
 
-        [Subject(typeof(Subscription<>))]
-        public class when_disposing : WithSubject<Subscription<TestMessage>>
+        [Subject(typeof(Subscription))]
+        public class when_disposing : WithSubject<Subscription>
         {
             Because of = () =>
                 Subject.Dispose();

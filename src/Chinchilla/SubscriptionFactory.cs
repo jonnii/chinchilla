@@ -1,10 +1,11 @@
 using System;
 using Chinchilla.Logging;
+using Chinchilla.Topologies;
 using Chinchilla.Topologies.Model;
 
 namespace Chinchilla
 {
-    public class SubscriptionFactory : ISubscriptionFactory
+    public class SubscriptionFactory : TrackableFactory<Subscription>, ISubscriptionFactory
     {
         private readonly ILogger logger = Logger.Create<SubscriptionFactory>();
 
@@ -22,11 +23,7 @@ namespace Chinchilla
         {
             logger.DebugFormat("Creating new handler subscription with configuration: {0}", configuration);
 
-            var deliveryHandler = new ActionDeliveryProcessor<TMessage>(
-                messageSerializer,
-                processor);
-
-            logger.Debug("Creating topology");
+            var deliveryProcessor = new ActionDeliveryProcessor<TMessage>(messageSerializer, processor);
 
             var topologyBuilder = new TopologyBuilder(modelReference);
 
@@ -34,16 +31,23 @@ namespace Chinchilla
             var topology = configuration.BuildTopology(messageType);
             topology.Visit(topologyBuilder);
 
-            var consumerStrategy = configuration.BuildDeliveryStrategy(deliveryHandler);
+            var consumerStrategy = configuration.BuildDeliveryStrategy(deliveryProcessor);
 
-            return new Subscription<TMessage>(
-                modelReference,
-                consumerStrategy,
-                topology.SubscribeQueue);
+            return Create(modelReference, consumerStrategy, topology);
         }
 
-        public void Dispose()
+        public ISubscription Create(IModelReference modelReference, IDeliveryStrategy deliveryStrategy, ISubscriberTopology topology)
         {
+            var subscription = new Subscription(modelReference, deliveryStrategy, topology.SubscribeQueue);
+            Track(subscription);
+
+            return subscription;
+        }
+
+        public override void Dispose()
+        {
+            logger.Debug("Disposing of subscription factory");
+            base.Dispose();
         }
     }
 }

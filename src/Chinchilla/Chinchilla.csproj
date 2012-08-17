@@ -117,6 +117,8 @@
     <Compile Include="Topologies\Model\IExchange.cs" />
     <Compile Include="Topologies\Model\TopologyWriter.cs" />
     <Compile Include="Topologies\SubscriptionTopology.cs" />
+    <Compile Include="Trackable.cs" />
+    <Compile Include="TrackableFactory.cs" />
     <Compile Include="UriConnectionString.cs" />
     <Compile Include="WorkerPoolDeliveryStrategy.cs" />
   </ItemGroup>
