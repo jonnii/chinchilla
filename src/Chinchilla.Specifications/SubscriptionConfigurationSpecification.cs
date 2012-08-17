@@ -1,5 +1,4 @@
 ﻿using Chinchilla.Topologies;
-using Chinchilla.Topologies.Model;
 using Machine.Fakes;
 using Machine.Specifications;
 
@@ -8,25 +7,33 @@ namespace Chinchilla.Specifications
     public class SubscriptionConfigurationSpecification
     {
         [Subject(typeof(SubscriptionConfiguration))]
-        public class in_general : WithSubject<SubscriptionConfiguration>
+        public class when_building_default_topology : WithSubject<SubscriptionConfiguration>
         {
-            It should_build_default_topology = () =>
-                Subject.BuildTopology(new Endpoint("endpointName", "messageType")).ShouldBeOfType<DefaultTopology>();
+            Because of = () =>
+                messageTopology = Subject.BuildTopology(new Endpoint("endpointName", "messageType"));
+
+            It should_build_topology = () =>
+                messageTopology.ShouldNotBeNull();
+
+            static IMessageTopology messageTopology;
         }
 
         [Subject(typeof(SubscriptionConfiguration))]
         public class when_building_custom_topology : WithSubject<SubscriptionConfiguration>
         {
             Establish context = () =>
-                Subject.SetTopology(_ => new CustomTopology());
+            {
+                builder = An<IMessageTopologyBuilder>();
+                Subject.SetTopology(builder);
+            };
 
             Because of = () =>
-                topology = Subject.BuildTopology(new Endpoint("endpointName", "messageType"));
+                Subject.BuildTopology(new Endpoint("endpointName", "messageType"));
 
             It should_build_default_topology = () =>
-                topology.ShouldBeOfType<CustomTopology>();
+                builder.WasToldTo(b => b.Build(Param.IsAny<IEndpoint>()));
 
-            static ISubscriberTopology topology;
+            static IMessageTopologyBuilder builder;
         }
 
         [Subject(typeof(SubscriptionConfiguration))]
@@ -57,16 +64,6 @@ namespace Chinchilla.Specifications
                 ((WorkerPoolDeliveryStrategy)strategy).NumWorkers.ShouldEqual(5);
 
             static IDeliveryStrategy strategy;
-        }
-
-        public class CustomTopology : ISubscriberTopology
-        {
-            public IQueue SubscribeQueue { get; set; }
-
-            public void Visit(ITopologyVisitor visitor)
-            {
-                throw new System.NotImplementedException();
-            }
         }
     }
 }

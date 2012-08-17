@@ -3,15 +3,13 @@ using Chinchilla.Topologies.Model;
 
 namespace Chinchilla.Sample.StockTicker.Server
 {
-    public class PricePublisherTopology : Topology, ISubscriberTopology, IPublisherTopology
+    public class PricePublisherTopology : IMessageTopologyBuilder
     {
-        public PricePublisherTopology(Endpoint endpoint)
+        public IMessageTopology Build(IEndpoint endpoint)
         {
-            PublishExchange = DefineExchange(endpoint.MessageType, ExchangeType.Topic);
+            var messageTopology = new MessageTopology();
+            messageTopology.PublishExchange = messageTopology.DefineExchange(endpoint.MessageType, ExchangeType.Topic);
+            return messageTopology;
         }
-
-        public IExchange PublishExchange { get; private set; }
-
-        public IQueue SubscribeQueue { get; private set; }
     }
 }

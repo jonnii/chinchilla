@@ -9,5 +9,7 @@ namespace Chinchilla
         /// The name of the endpoint
         /// </summary>
         string Name { get; }
+
+        string MessageType { get; }
     }
 }

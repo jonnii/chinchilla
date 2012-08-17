@@ -13,7 +13,7 @@ namespace Chinchilla.Specifications
 
             Because of = () =>
                 subscription = (Subscription)Subject.Create(
-                    An<IModelReference>(), An<IDeliveryStrategy>(), An<ISubscriberTopology>());
+                    An<IModelReference>(), An<IDeliveryStrategy>(), An<IMessageTopology>());
 
             It should_track_subscription = () =>
                 Subject.IsTracking(subscription).ShouldBeTrue();
@@ -26,7 +26,7 @@ namespace Chinchilla.Specifications
         {
             Establish context = () =>
                 subscription = (Subscription)Subject.Create(
-                    An<IModelReference>(), An<IDeliveryStrategy>(), An<ISubscriberTopology>());
+                    An<IModelReference>(), An<IDeliveryStrategy>(), An<IMessageTopology>());
 
             Because of = () =>
                 subscription.Dispose();

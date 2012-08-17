@@ -26,9 +26,9 @@ namespace Chinchilla
             var messageType = typeof(TMessage).Name;
             var endpoint = new Endpoint(configuration.QueueName ?? messageType, messageType);
 
-            var topology = configuration.BuildTopology(endpoint);
-
             var topologyBuilder = new TopologyBuilder(modelReference);
+
+            var topology = configuration.BuildTopology(endpoint);
             topology.Visit(topologyBuilder);
 
             var deliveryProcessor = new ActionDeliveryProcessor<TMessage>(messageSerializer, processor);
@@ -38,11 +38,11 @@ namespace Chinchilla
         }
 
         public ISubscription Create(
-            IModelReference modelReference, 
-            IDeliveryStrategy deliveryStrategy, 
-            ISubscriberTopology topology)
+            IModelReference modelReference,
+            IDeliveryStrategy deliveryStrategy,
+            IMessageTopology messageTopology)
         {
-            var subscription = new Subscription(modelReference, deliveryStrategy, topology.SubscribeQueue);
+            var subscription = new Subscription(modelReference, deliveryStrategy, messageTopology.SubscribeQueue);
             Track(subscription);
             return subscription;
         }
@@ -50,6 +50,7 @@ namespace Chinchilla
         public override void Dispose()
         {
             logger.Debug("Disposing of subscription factory");
+
             base.Dispose();
         }
     }

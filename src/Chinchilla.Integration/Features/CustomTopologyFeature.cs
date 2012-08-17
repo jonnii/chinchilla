@@ -20,11 +20,11 @@ namespace Chinchilla.Integration.Features
 
                 var onMessage = new Action<HelloWorldMessage>(hwm => { lastReceived = hwm; ++numReceived; });
                 var subscriptionBuilder = new Action<ISubscriptionBuilder>(b =>
-                    b.SetTopology(messageType => new CustomSubscribeTopology(messageType))
+                    b.SetTopology(new CustomSubscribeMessageTopology())
                 );
 
                 var publisherBuilder = new Action<IPublisherBuilder>(b =>
-                    b.SetTopology(messageType => new CustomSubscribeTopology(messageType))
+                    b.SetTopology(new CustomSubscribeMessageTopology())
                 );
 
                 using (bus.Subscribe(onMessage, subscriptionBuilder))
@@ -46,19 +46,19 @@ namespace Chinchilla.Integration.Features
             }
         }
 
-        public class CustomSubscribeTopology : Topology, ISubscriberTopology, IPublisherTopology
+        public class CustomSubscribeMessageTopology : IMessageTopologyBuilder
         {
-            public CustomSubscribeTopology(Endpoint endpoint)
+            public IMessageTopology Build(IEndpoint endpoint)
             {
-                PublishExchange = DefineExchange(endpoint.MessageType, ExchangeType.Topic);
+                var topology = new MessageTopology();
 
-                SubscribeQueue = DefineQueue(endpoint.MessageType);
-                SubscribeQueue.BindTo(PublishExchange, new[] { "messages.even" });
+                topology.PublishExchange = topology.DefineExchange(endpoint.MessageType, ExchangeType.Topic);
+
+                topology.SubscribeQueue = topology.DefineQueue(endpoint.MessageType);
+                topology.SubscribeQueue.BindTo(topology.PublishExchange, new[] { "messages.even" });
+
+                return topology;
             }
-
-            public IQueue SubscribeQueue { get; private set; }
-
-            public IExchange PublishExchange { get; private set; }
         }
     }
 }

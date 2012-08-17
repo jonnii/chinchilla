@@ -4,6 +4,6 @@ namespace Chinchilla
 {
     public interface IPublisherConfiguration
     {
-        IPublisherTopology BuildTopology(Endpoint endpoint);
+        IMessageTopology BuildTopology(IEndpoint endpoint);
     }
 }

@@ -43,8 +43,7 @@ namespace Chinchilla.Sample.StockTicker.Client
 
         private void ConfigurePriceSubscription(ISubscriptionBuilder subscriptionConfiguration)
         {
-            subscriptionConfiguration.SetTopology(
-                messageType => new PriceSubscriberTopology(id));
+            subscriptionConfiguration.SetTopology(new PriceSubscriberTopology(id));
         }
     }
 }

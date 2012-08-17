@@ -3,13 +3,18 @@ using Chinchilla.Topologies.Model;
 
 namespace Chinchilla.Sample.StockTicker.Client
 {
-    public class PriceSubscriberTopology : ISubscriberTopology
+    public class PriceSubscriberTopology : IMessageTopologyBuilder
     {
-        private readonly Topology topology;
+        private readonly string clientId;
 
         public PriceSubscriberTopology(string clientId)
         {
-            topology = new Topology();
+            this.clientId = clientId;
+        }
+
+        public IMessageTopology Build(IEndpoint endpoint)
+        {
+            var topology = new MessageTopology();
 
             var clientExchangeName = string.Format("prices-{0}", clientId);
             var exchange = topology.DefineExchange(
@@ -18,15 +23,10 @@ namespace Chinchilla.Sample.StockTicker.Client
                 isAutoDelete: true,
                 durablility: Durability.Transient);
 
-            SubscribeQueue = topology.DefineQueue();
-            SubscribeQueue.BindTo(exchange);
-        }
+            topology.SubscribeQueue = topology.DefineQueue();
+            topology.SubscribeQueue.BindTo(exchange);
 
-        public IQueue SubscribeQueue { get; private set; }
-
-        public void Visit(ITopologyVisitor visitor)
-        {
-            topology.Visit(visitor);
+            return topology;
         }
     }
 }

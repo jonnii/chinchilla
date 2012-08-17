@@ -5,22 +5,22 @@ namespace Chinchilla
 {
     public class PublisherConfiguration : IPublisherConfiguration, IPublisherBuilder
     {
-        private Func<Endpoint, IPublisherTopology> publisherTopology;
-
         public PublisherConfiguration()
         {
-            publisherTopology = endpoint => new DefaultTopology(endpoint);
+            MessageTopologyBuilder = new DefaultMessageTopologyBuilder();
         }
 
-        public IPublisherBuilder SetTopology(Func<Endpoint, IPublisherTopology> customTopology)
+        public IMessageTopologyBuilder MessageTopologyBuilder { get; private set; }
+
+        public IPublisherBuilder SetTopology(IMessageTopologyBuilder messageTopologyBuilder)
         {
-            publisherTopology = customTopology;
+            MessageTopologyBuilder = messageTopologyBuilder;
             return this;
         }
 
-        public IPublisherTopology BuildTopology(Endpoint messageType)
+        public IMessageTopology BuildTopology(IEndpoint endpoint)
         {
-            return publisherTopology(messageType);
+            return MessageTopologyBuilder.Build(endpoint);
         }
     }
 }

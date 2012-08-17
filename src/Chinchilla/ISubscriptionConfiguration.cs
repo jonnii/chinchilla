@@ -8,6 +8,6 @@ namespace Chinchilla
 
         IDeliveryStrategy BuildDeliveryStrategy(IDeliveryProcessor deliveryProcessor);
 
-        ISubscriberTopology BuildTopology(Endpoint endpoint);
+        IMessageTopology BuildTopology(IEndpoint endpoint);
     }
 }

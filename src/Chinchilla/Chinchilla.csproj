@@ -56,7 +56,7 @@
     <Compile Include="Endpoint.cs" />
     <Compile Include="IEndpoint.cs" />
     <Compile Include="IHasRoutingKey.cs" />
-    <Compile Include="Topologies\DefaultTopology.cs" />
+    <Compile Include="Topologies\DefaultMessageTopologyBuilder.cs" />
     <Compile Include="Delivery.cs" />
     <Compile Include="DeliveryStrategy.cs" />
     <Compile Include="Depot.cs" />
@@ -98,8 +98,8 @@
     <Compile Include="SubscriptionConfiguration.cs" />
     <Compile Include="SubscriptionFactory.cs" />
     <Compile Include="TaskDeliveryStrategy.cs" />
-    <Compile Include="Topologies\IPublisherTopology.cs" />
-    <Compile Include="Topologies\ISubscriberTopology.cs" />
+    <Compile Include="Topologies\IMessageTopology.cs" />
+    <Compile Include="Topologies\IMessageTopologyBuilder.cs" />
     <Compile Include="Topologies\Model\Bindable.cs" />
     <Compile Include="Topologies\Model\Binding.cs" />
     <Compile Include="Topologies\Model\Durability.cs" />
@@ -118,7 +118,7 @@
     <Compile Include="Topologies\Model\TopologyBuilder.cs" />
     <Compile Include="Topologies\Model\IExchange.cs" />
     <Compile Include="Topologies\Model\TopologyWriter.cs" />
-    <Compile Include="Topologies\SubscriptionTopology.cs" />
+    <Compile Include="Topologies\MessageTopology.cs" />
     <Compile Include="Trackable.cs" />
     <Compile Include="TrackableFactory.cs" />
     <Compile Include="UriConnectionString.cs" />
