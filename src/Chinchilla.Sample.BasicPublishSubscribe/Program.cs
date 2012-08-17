@@ -11,7 +11,10 @@ namespace Chinchilla.Sample.BasicPublishSubscribe
 
             using (var depot = Depot.Connect("localhost/samplepubsub"))
             {
-                depot.Subscribe<PubSubMessage>(m => Console.WriteLine(m.Body));
+                depot.Subscribe<PubSubMessage>(m => Console.WriteLine(m.Body), o => o.SubscribeOn("subscriber-1"));
+                depot.Subscribe<PubSubMessage>(m => Console.WriteLine(m.Body), o => o.SubscribeOn("subscriber-2"));
+
+                depot.Publish(new PubSubMessage { Body = "published!" });
             }
 
             Console.WriteLine("Finished press any key to close");

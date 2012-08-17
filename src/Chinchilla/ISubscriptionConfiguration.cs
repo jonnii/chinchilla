@@ -4,8 +4,10 @@ namespace Chinchilla
 {
     public interface ISubscriptionConfiguration
     {
+        string QueueName { get; }
+
         IDeliveryStrategy BuildDeliveryStrategy(IDeliveryProcessor deliveryProcessor);
 
-        ISubscriberTopology BuildTopology(string messageType);
+        ISubscriberTopology BuildTopology(Endpoint endpoint);
     }
 }

@@ -5,6 +5,6 @@ namespace Chinchilla
 {
     public interface IPublisherBuilder
     {
-        IPublisherBuilder SetTopology(Func<string, IPublisherTopology> customTopology);
+        IPublisherBuilder SetTopology(Func<Endpoint, IPublisherTopology> customTopology);
     }
 }

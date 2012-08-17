@@ -48,11 +48,11 @@ namespace Chinchilla.Integration.Features
 
         public class CustomSubscribeTopology : Topology, ISubscriberTopology, IPublisherTopology
         {
-            public CustomSubscribeTopology(string messageType)
+            public CustomSubscribeTopology(Endpoint endpoint)
             {
-                PublishExchange = DefineExchange(messageType, ExchangeType.Topic);
+                PublishExchange = DefineExchange(endpoint.MessageType, ExchangeType.Topic);
 
-                SubscribeQueue = DefineQueue(messageType);
+                SubscribeQueue = DefineQueue(endpoint.MessageType);
                 SubscribeQueue.BindTo(PublishExchange, new[] { "messages.even" });
             }
 

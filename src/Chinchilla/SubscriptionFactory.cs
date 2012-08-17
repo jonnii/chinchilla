@@ -28,7 +28,9 @@ namespace Chinchilla
             var topologyBuilder = new TopologyBuilder(modelReference);
 
             var messageType = typeof(TMessage).Name;
-            var topology = configuration.BuildTopology(messageType);
+            var endpoint = new Endpoint(configuration.QueueName ?? messageType, messageType);
+
+            var topology = configuration.BuildTopology(endpoint);
             topology.Visit(topologyBuilder);
 
             var consumerStrategy = configuration.BuildDeliveryStrategy(deliveryProcessor);

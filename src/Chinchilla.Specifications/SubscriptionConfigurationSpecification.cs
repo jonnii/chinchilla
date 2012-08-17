@@ -11,7 +11,7 @@ namespace Chinchilla.Specifications
         public class in_general : WithSubject<SubscriptionConfiguration>
         {
             It should_build_default_topology = () =>
-                Subject.BuildTopology("messageType").ShouldBeOfType<DefaultTopology>();
+                Subject.BuildTopology(new Endpoint("endpointName", "messageType")).ShouldBeOfType<DefaultTopology>();
         }
 
         [Subject(typeof(SubscriptionConfiguration))]
@@ -21,7 +21,7 @@ namespace Chinchilla.Specifications
                 Subject.SetTopology(_ => new CustomTopology());
 
             Because of = () =>
-                topology = Subject.BuildTopology("messageType");
+                topology = Subject.BuildTopology(new Endpoint("endpointName", "messageType"));
 
             It should_build_default_topology = () =>
                 topology.ShouldBeOfType<CustomTopology>();

@@ -53,6 +53,7 @@
     <Compile Include="Bus.cs" />
     <Compile Include="DefaultConnectionFactory.cs" />
     <Compile Include="ConnectionString.cs" />
+    <Compile Include="Endpoint.cs" />
     <Compile Include="IHasRoutingKey.cs" />
     <Compile Include="Topologies\DefaultTopology.cs" />
     <Compile Include="Delivery.cs" />

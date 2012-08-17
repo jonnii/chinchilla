@@ -9,7 +9,7 @@ namespace Chinchilla
     public interface IBus : IDisposable
     {
         /// <summary>
-        /// Opens a publish channel
+        /// Creates a publisher for a specific message type
         /// </summary>
         IPublisher<TMessage> CreatePublisher<TMessage>();
 

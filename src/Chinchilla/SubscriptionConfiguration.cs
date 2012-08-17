@@ -7,7 +7,9 @@ namespace Chinchilla
     {
         private Func<IDeliveryProcessor, IDeliveryStrategy> strategyBuilder = handler => new ImmediateDeliveryStrategy();
 
-        private Func<string, ISubscriberTopology> topologyBuilder = messageType => new DefaultTopology(messageType);
+        private Func<Endpoint, ISubscriberTopology> topologyBuilder = endpoint => new DefaultTopology(endpoint);
+
+        public string QueueName { get; private set; }
 
         public ISubscriptionBuilder DeliverUsing<TStrategy>(params Action<TStrategy>[] configurations)
             where TStrategy : IDeliveryStrategy, new()
@@ -32,14 +34,21 @@ namespace Chinchilla
             return consumer;
         }
 
-        public void SetTopology(Func<string, ISubscriberTopology> customTopologyBuilder)
+        public ISubscriptionBuilder SetTopology(Func<Endpoint, ISubscriberTopology> customTopologyBuilder)
         {
             topologyBuilder = customTopologyBuilder;
+            return this;
         }
 
-        public ISubscriberTopology BuildTopology(string messageType)
+        public ISubscriptionBuilder SubscribeOn(string subscriptionQueueName)
         {
-            return topologyBuilder(messageType);
+            QueueName = subscriptionQueueName;
+            return this;
+        }
+
+        public ISubscriberTopology BuildTopology(Endpoint endpoint)
+        {
+            return topologyBuilder(endpoint);
         }
 
         public override string ToString()

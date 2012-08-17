@@ -4,11 +4,11 @@ namespace Chinchilla.Topologies
 {
     public class DefaultTopology : Topology, ISubscriberTopology, IPublisherTopology
     {
-        public DefaultTopology(string messageType)
+        public DefaultTopology(Endpoint endpoint)
         {
-            PublishExchange = DefineExchange(messageType, ExchangeType.Fanout);
+            PublishExchange = DefineExchange(endpoint.MessageType, ExchangeType.Topic);
 
-            SubscribeQueue = DefineQueue(messageType);
+            SubscribeQueue = DefineQueue(endpoint.EndpointName);
             SubscribeQueue.BindTo(PublishExchange);
         }
 

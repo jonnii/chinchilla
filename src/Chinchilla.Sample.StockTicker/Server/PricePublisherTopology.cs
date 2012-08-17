@@ -5,9 +5,9 @@ namespace Chinchilla.Sample.StockTicker.Server
 {
     public class PricePublisherTopology : Topology, ISubscriberTopology, IPublisherTopology
     {
-        public PricePublisherTopology(string exchangeName)
+        public PricePublisherTopology(Endpoint endpoint)
         {
-            PublishExchange = DefineExchange(exchangeName, ExchangeType.Topic);
+            PublishExchange = DefineExchange(endpoint.MessageType, ExchangeType.Topic);
         }
 
         public IExchange PublishExchange { get; private set; }

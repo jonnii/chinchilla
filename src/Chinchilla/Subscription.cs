@@ -81,7 +81,27 @@ namespace Chinchilla
         {
             logger.DebugFormat("Disposing {0}", this);
 
+            if (disposed)
+            {
+                return;
+            }
+
             disposed = true;
+
+            // complete adding on the consumer queue and wait for the subscription
+            // thread to complete, this will give any processing jobs a change to complete
+            if (consumerQueue != null)
+            {
+                consumerQueue.CompleteAdding();
+            }
+
+            if (subscriptionThread != null)
+            {
+                subscriptionThread.Join();
+            }
+
+            // dispose of delivery strategy and the underlying model
+            // on this subscription
             deliveryStrategy.Dispose();
             modelReference.Dispose();
 
