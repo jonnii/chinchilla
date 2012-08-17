@@ -43,9 +43,9 @@ namespace Chinchilla.Topologies.Model
                     model.Execute(m =>
                         m.QueueDeclare(
                             queue.Name,
-                            true,   // durable
-                            false,  // exclusive
-                            false,  // auto-delete
+                            queue.Durability == Durability.Durable,   // durable
+                            queue.IsExclusive,  // exclusive
+                            queue.IsAutoDelete,  // auto-delete
                             args));
                 }
                 else

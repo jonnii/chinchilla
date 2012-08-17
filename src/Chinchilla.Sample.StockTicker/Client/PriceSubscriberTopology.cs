@@ -16,15 +16,9 @@ namespace Chinchilla.Sample.StockTicker.Client
         {
             var topology = new MessageTopology();
 
-            var clientExchangeName = string.Format("prices-{0}", clientId);
-            var exchange = topology.DefineExchange(
-                clientExchangeName,
-                ExchangeType.Topic,
-                isAutoDelete: true,
-                durablility: Durability.Transient);
-
-            topology.SubscribeQueue = topology.DefineQueue();
-            topology.SubscribeQueue.BindTo(exchange);
+            topology.SubscribeQueue = topology.DefineQueue("prices." + clientId);
+            topology.SubscribeQueue.IsAutoDelete = true;
+            topology.SubscribeQueue.Durability = Durability.Transient;
 
             return topology;
         }

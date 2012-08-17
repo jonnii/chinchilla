@@ -8,6 +8,8 @@ namespace Chinchilla.Topologies.Model
 
         bool IsAutoDelete { get; set; }
 
+        bool IsExclusive { get; set; }
+
         TimeSpan? MessageTimeToLive { get; set; }
 
         TimeSpan? QueueAutoExpire { get; set; }

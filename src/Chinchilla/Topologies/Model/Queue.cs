@@ -14,12 +14,13 @@ namespace Chinchilla.Topologies.Model
         {
             Name = name;
             Durability = Durability.Durable;
-            IsAutoDelete = false;
         }
 
         public Durability Durability { get; set; }
 
         public bool IsAutoDelete { get; set; }
+
+        public bool IsExclusive { get; set; }
 
         public TimeSpan? MessageTimeToLive { get; set; }
 

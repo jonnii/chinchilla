@@ -22,5 +22,7 @@ namespace Chinchilla
         ISubscription Subscribe<TMessage>(Action<TMessage> onMessage, Action<ISubscriptionBuilder> builder);
 
         ISubscription Subscribe<TMessage>(IConsumer<TMessage> consumer);
+
+        ISubscription Subscribe<TMessage>(IConsumer<TMessage> consumer, Action<ISubscriptionBuilder> builder);
     }
 }

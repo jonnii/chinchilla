@@ -15,6 +15,9 @@ namespace Chinchilla
 
         ISubscriptionBuilder SetTopology(IMessageTopologyBuilder messageTopologyBuilder);
 
+        ISubscriptionBuilder SetTopology<TBuilder>()
+            where TBuilder : IMessageTopologyBuilder, new();
+
         ISubscriptionBuilder SubscribeOn(string subscriptionQueueName);
     }
 }

@@ -45,6 +45,13 @@ namespace Chinchilla
             return this;
         }
 
+        public ISubscriptionBuilder SetTopology<TBuilder>()
+            where TBuilder : IMessageTopologyBuilder, new()
+        {
+            SetTopology(new TBuilder());
+            return this;
+        }
+
         public ISubscriptionBuilder SubscribeOn(string subscriptionQueueName)
         {
             QueueName = subscriptionQueueName;

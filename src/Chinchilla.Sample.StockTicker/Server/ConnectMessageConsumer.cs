@@ -25,12 +25,19 @@ namespace Chinchilla.Sample.StockTicker.Server
             Console.WriteLine("Client Connected: {0} on {1} for {2}", message.ClientId, message.QueueName, formattedKeys);
 
             var binding = new Binding(
+                new Queue(message.QueueName),
                 new Exchange(exchange.Name, ExchangeType.Topic),
-                new Exchange(message.QueueName, ExchangeType.Topic),
                 keys);
 
-            var topologyBuilder = new TopologyBuilder(publisher.ModelReference);
-            topologyBuilder.Visit(binding);
+            try
+            {
+                var topologyBuilder = new TopologyBuilder(publisher.ModelReference);
+                topologyBuilder.Visit(binding);
+            }
+            catch
+            {
+                // TODO: Throw exception here to reject the message
+            }
         }
     }
 }

@@ -22,11 +22,11 @@ namespace Chinchilla.Sample.StockTicker.Client
         {
             priceSubscription = bus.Subscribe<PriceMessage>(OnPrice, ConfigurePriceSubscription);
 
-            var binding = priceSubscription.Queue.Bindings.First();
+            var binding = priceSubscription.Queue;
 
             bus.Publish(new ConnectMessage(
                 id,
-                binding.Exchange.Name,
+                binding.Name,
                 new[] { "GOOG" }));
         }
 
