@@ -73,6 +73,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PublisherConfigurationSpecification.cs" />
     <Compile Include="PublisherSpecification.cs" />
+    <Compile Include="Serializers\JsonMessageSerializerSpecification.cs" />
     <Compile Include="SubscriptionConfigurationSpecification.cs" />
     <Compile Include="SubscriptionSpecification.cs" />
     <Compile Include="Topologies\Model\BindingSpecification.cs" />

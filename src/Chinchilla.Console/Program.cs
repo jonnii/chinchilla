@@ -28,19 +28,19 @@ namespace Chinchilla.Console
             });
             publisher.Start();
 
-            var consumer = new Thread(() =>
-            {
-                using (var bus = Depot.Connect("localhost"))
-                {
-                    bus.Subscribe<HelloWorldMessage>(m => System.Console.WriteLine(m.Message));
+            //var consumer = new Thread(() =>
+            //{
+            //    using (var bus = Depot.Connect("localhost"))
+            //    {
+            //        bus.Subscribe<HelloWorldMessage>(m => System.Console.WriteLine(m.Message));
 
-                    while (running)
-                    {
-                        Thread.Sleep(1000);
-                    }
-                }
-            });
-            consumer.Start();
+            //        while (running)
+            //        {
+            //            Thread.Sleep(1000);
+            //        }
+            //    }
+            //});
+            //consumer.Start();
 
             System.Console.WriteLine("Waiting for you!");
             System.Console.ReadLine();

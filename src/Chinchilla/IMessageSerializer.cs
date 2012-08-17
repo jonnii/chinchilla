@@ -6,6 +6,8 @@ namespace Chinchilla
     /// </summary>
     public interface IMessageSerializer
     {
+        string ContentType { get; }
+
         byte[] Serialize<T>(IMessage<T> message);
 
         IMessage<T> Deserialize<T>(byte[] message);

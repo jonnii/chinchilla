@@ -5,6 +5,11 @@ namespace Chinchilla.Serializers
 {
     public class JsonMessageSerializer : IMessageSerializer
     {
+        public string ContentType
+        {
+            get { return "application/json"; }
+        }
+
         public byte[] Serialize<T>(IMessage<T> message)
         {
             return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));

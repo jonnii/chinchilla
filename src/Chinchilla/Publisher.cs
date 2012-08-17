@@ -27,13 +27,17 @@ namespace Chinchilla
 
         public void Publish(TMessage message)
         {
-            var defaultProperties = ModelReference.Execute(m => m.CreateBasicProperties());
+            var wrappedMessage = Message.Create(message);
+            var serializedMessage = serializer.Serialize(wrappedMessage);
 
-            var serializedMessage = serializer.Serialize(
-                Message.Create(message));
+            var defaultProperties = ModelReference.Execute(m => m.CreateBasicProperties());
+            defaultProperties.ContentType = serializer.ContentType;
 
             var hasRoutingKey = message as IHasRoutingKey;
-            var routingKey = hasRoutingKey != null ? hasRoutingKey.RoutingKey : "#";
+            
+            var routingKey = hasRoutingKey != null
+                ? hasRoutingKey.RoutingKey
+                : "#";
 
             ModelReference.Execute(
                 m => m.BasicPublish(
