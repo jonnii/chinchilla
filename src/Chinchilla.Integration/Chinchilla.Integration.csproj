@@ -48,6 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Features\Api\RabbitAdminFeature.cs" />
     <Compile Include="Features\ConnectionFeature.cs" />
     <Compile Include="Features\ConsumerFeature.cs" />
