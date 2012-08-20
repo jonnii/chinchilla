@@ -1,9 +1,7 @@
-using Chinchilla.Topologies;
-
 namespace Chinchilla
 {
-    public interface IPublisherConfiguration
+    public interface IPublisherConfiguration : IEndpointConfiguration
     {
-        IMessageTopology BuildTopology(IEndpoint endpoint);
+        IRouter BuildRouter();
     }
 }

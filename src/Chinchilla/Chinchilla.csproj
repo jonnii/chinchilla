@@ -53,9 +53,13 @@
     <Compile Include="Bus.cs" />
     <Compile Include="DefaultConnectionFactory.cs" />
     <Compile Include="ConnectionString.cs" />
+    <Compile Include="DefaultRouter.cs" />
     <Compile Include="Endpoint.cs" />
+    <Compile Include="EndpointConfiguration.cs" />
     <Compile Include="IEndpoint.cs" />
+    <Compile Include="IEndpointConfiguration.cs" />
     <Compile Include="IHasRoutingKey.cs" />
+    <Compile Include="IRouter.cs" />
     <Compile Include="Topologies\DefaultMessageTopologyBuilder.cs" />
     <Compile Include="Delivery.cs" />
     <Compile Include="DeliveryStrategy.cs" />

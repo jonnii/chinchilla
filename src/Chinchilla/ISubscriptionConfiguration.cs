@@ -1,13 +1,9 @@
-using Chinchilla.Topologies;
-
 namespace Chinchilla
 {
-    public interface ISubscriptionConfiguration
+    public interface ISubscriptionConfiguration : IEndpointConfiguration
     {
         string QueueName { get; }
 
         IDeliveryStrategy BuildDeliveryStrategy(IDeliveryProcessor deliveryProcessor);
-
-        IMessageTopology BuildTopology(IEndpoint endpoint);
     }
 }

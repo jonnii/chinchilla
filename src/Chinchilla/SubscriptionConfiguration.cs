@@ -3,16 +3,9 @@ using Chinchilla.Topologies;
 
 namespace Chinchilla
 {
-    public class SubscriptionConfiguration : ISubscriptionConfiguration, ISubscriptionBuilder
+    public class SubscriptionConfiguration : EndpointConfiguration, ISubscriptionConfiguration, ISubscriptionBuilder
     {
         private Func<IDeliveryProcessor, IDeliveryStrategy> strategyBuilder = handler => new ImmediateDeliveryStrategy();
-
-        public SubscriptionConfiguration()
-        {
-            MessageTopologyBuilder = new DefaultMessageTopologyBuilder();
-        }
-
-        public IMessageTopologyBuilder MessageTopologyBuilder { get; set; }
 
         public string QueueName { get; private set; }
 
@@ -56,11 +49,6 @@ namespace Chinchilla
         {
             QueueName = subscriptionQueueName;
             return this;
-        }
-
-        public IMessageTopology BuildTopology(IEndpoint endpoint)
-        {
-            return MessageTopologyBuilder.Build(endpoint);
         }
 
         public override string ToString()

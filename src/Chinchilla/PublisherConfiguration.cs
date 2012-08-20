@@ -3,24 +3,32 @@ using Chinchilla.Topologies;
 
 namespace Chinchilla
 {
-    public class PublisherConfiguration : IPublisherConfiguration, IPublisherBuilder
+    public class PublisherConfiguration : EndpointConfiguration, IPublisherConfiguration, IPublisherBuilder
     {
-        public PublisherConfiguration()
+        private Func<IRouter> routerBuilder = () => new DefaultRouter();
+
+        public IPublisherBuilder RouteWith<TRouter>()
+            where TRouter : IRouter, new()
         {
-            MessageTopologyBuilder = new DefaultMessageTopologyBuilder();
+            routerBuilder = () => new TRouter();
+            return this;
         }
 
-        public IMessageTopologyBuilder MessageTopologyBuilder { get; private set; }
+        public IPublisherBuilder RouteWith(IRouter router)
+        {
+            routerBuilder = () => router;
+            return this;
+        }
+
+        public IRouter BuildRouter()
+        {
+            return routerBuilder();
+        }
 
         public IPublisherBuilder SetTopology(IMessageTopologyBuilder messageTopologyBuilder)
         {
             MessageTopologyBuilder = messageTopologyBuilder;
             return this;
-        }
-
-        public IMessageTopology BuildTopology(IEndpoint endpoint)
-        {
-            return MessageTopologyBuilder.Build(endpoint);
         }
     }
 }

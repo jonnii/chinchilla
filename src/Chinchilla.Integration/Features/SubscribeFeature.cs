@@ -14,11 +14,10 @@ namespace Chinchilla.Integration.Features
         {
             using (var bus = Depot.Connect("localhost/integration"))
             {
-                using (bus.Subscribe((HelloWorldMessage hwm) => { }))
-                {
-                    Assert.That(admin.Exists(IntegrationVHost, new Queue("HelloWorldMessage")), "did not create queue");
-                    Assert.That(admin.Exists(IntegrationVHost, new Exchange("HelloWorldMessage")), "did not create exchange");
-                }
+                bus.Subscribe((HelloWorldMessage hwm) => { });
+
+                Assert.That(admin.Exists(IntegrationVHost, new Queue("HelloWorldMessage")), "did not create queue");
+                Assert.That(admin.Exists(IntegrationVHost, new Exchange("HelloWorldMessage")), "did not create exchange");
             }
         }
 
@@ -29,15 +28,19 @@ namespace Chinchilla.Integration.Features
             {
                 HelloWorldMessage lastReceived = null;
                 var numReceived = 0;
-                using (bus.Subscribe((HelloWorldMessage hwm) => { lastReceived = hwm; ++numReceived; }))
-                {
-                    for (var i = 0; i < 100; ++i)
-                    {
-                        bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
-                    }
 
-                    Thread.Sleep(1000);
+                bus.Subscribe((HelloWorldMessage hwm) =>
+                {
+                    lastReceived = hwm;
+                    ++numReceived;
+                });
+
+                for (var i = 0; i < 100; ++i)
+                {
+                    bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
                 }
+
+                Thread.Sleep(1000);
 
                 Assert.That(lastReceived, Is.Not.Null);
                 Assert.That(lastReceived.Message, Is.EqualTo("subscribe!"));
@@ -54,15 +57,14 @@ namespace Chinchilla.Integration.Features
                 var numReceived = 0;
                 var handler = new Action<HelloWorldMessage>(hwm => { lastReceived = hwm; ++numReceived; });
 
-                using (bus.Subscribe(handler, o => o.DeliverUsing<WorkerPoolDeliveryStrategy>(s => s.NumWorkers = 5)))
-                {
-                    for (var i = 0; i < 100; ++i)
-                    {
-                        bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
-                    }
+                bus.Subscribe(handler, o => o.DeliverUsing<WorkerPoolDeliveryStrategy>(s => s.NumWorkers = 5));
 
-                    Thread.Sleep(1000);
+                for (var i = 0; i < 100; ++i)
+                {
+                    bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
                 }
+
+                Thread.Sleep(1000);
 
                 Assert.That(lastReceived, Is.Not.Null);
                 Assert.That(lastReceived.Message, Is.EqualTo("subscribe!"));
@@ -79,15 +81,13 @@ namespace Chinchilla.Integration.Features
                 var numReceived = 0;
                 var handler = new Action<HelloWorldMessage>(hwm => { lastReceived = hwm; ++numReceived; });
 
-                using (bus.Subscribe(handler, o => o.DeliverUsing<TaskDeliveryStrategy>()))
+                bus.Subscribe(handler, o => o.DeliverUsing<TaskDeliveryStrategy>());
+                for (var i = 0; i < 100; ++i)
                 {
-                    for (var i = 0; i < 100; ++i)
-                    {
-                        bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
-                    }
-
-                    Thread.Sleep(1000);
+                    bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
                 }
+
+                Thread.Sleep(1000);
 
                 Assert.That(lastReceived, Is.Not.Null);
                 Assert.That(lastReceived.Message, Is.EqualTo("subscribe!"));
@@ -100,11 +100,10 @@ namespace Chinchilla.Integration.Features
         {
             using (var bus = Depot.Connect("localhost/integration"))
             {
-                using (var subscription = bus.Subscribe((HelloWorldMessage m) => { }, o => o.SubscribeOn("gimme-dem-messages")))
-                {
-                    var queueName = subscription.Queue.Name;
-                    Assert.That(queueName, Is.EqualTo("gimme-dem-messages"));
-                }
+                var subscription = bus.Subscribe((HelloWorldMessage m) => { }, o => o.SubscribeOn("gimme-dem-messages"));
+
+                var queueName = subscription.Queue.Name;
+                Assert.That(queueName, Is.EqualTo("gimme-dem-messages"));
             }
         }
     }

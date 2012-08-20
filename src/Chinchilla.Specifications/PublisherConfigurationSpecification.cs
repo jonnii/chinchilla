@@ -17,5 +17,40 @@ namespace Chinchilla.Specifications
 
             static IMessageTopology messageTopology;
         }
+
+        [Subject(typeof(PublisherConfiguration))]
+        public class when_building_router : WithSubject<PublisherConfiguration>
+        {
+            Because of = () =>
+                router = Subject.BuildRouter();
+
+            It should_build_default_router = () =>
+                router.ShouldBeOfType<DefaultRouter>();
+
+            static IRouter router;
+        }
+
+        [Subject(typeof(PublisherConfiguration))]
+        public class when_building_custom_router : WithSubject<PublisherConfiguration>
+        {
+            Establish context = () =>
+                Subject.RouteWith(new CustomRouter());
+
+            Because of = () =>
+                router = Subject.BuildRouter();
+
+            It should_build_custom_router = () =>
+                router.ShouldBeOfType<CustomRouter>();
+
+            static IRouter router;
+        }
+
+        public class CustomRouter : IRouter
+        {
+            public string Route<TMessage>(TMessage message)
+            {
+                return "#";
+            }
+        }
     }
 }

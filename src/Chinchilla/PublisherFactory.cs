@@ -22,10 +22,13 @@ namespace Chinchilla
             var topologyBuilder = new TopologyBuilder(modelReference);
             topology.Visit(topologyBuilder);
 
+            var router = configuration.BuildRouter();
+
             return new Publisher<TMessage>(
                 modelReference,
                 messageSerializer,
-                topology.PublishExchange);
+                topology.PublishExchange,
+                router);
         }
     }
 }

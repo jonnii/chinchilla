@@ -49,5 +49,32 @@ namespace Chinchilla.Integration.Features
                 }
             }
         }
+
+        [Test]
+        public void ShouldPublishWithCustomRouter()
+        {
+            using (var bus = Depot.Connect("localhost/integration"))
+            {
+                var publisher = bus.CreatePublisher<HelloWorldMessage>(o => o.RouteWith<CustomRouter>());
+
+                using (publisher)
+                {
+                    for (var i = 0; i < 100; ++i)
+                    {
+                        publisher.Publish(new HelloWorldMessage());
+                    }
+
+                    Assert.That(publisher.NumPublishedMessages, Is.EqualTo(100));
+                }
+            }
+        }
+
+        public class CustomRouter : IRouter
+        {
+            public string Route<TMessage>(TMessage message)
+            {
+                return "#";
+            }
+        }
     }
 }

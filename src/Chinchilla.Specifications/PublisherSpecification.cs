@@ -57,6 +57,9 @@ namespace Chinchilla.Specifications
             It should_set_content_type_on_properties = () =>
                 properties.ContentType.ShouldEqual("content-type");
 
+            It should_route_message = () =>
+                The<IRouter>().WasToldTo(r => r.Route(Param.IsAny<TestMessage>()));
+
             static IModel model;
 
             static IBasicProperties properties;
