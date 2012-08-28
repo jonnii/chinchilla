@@ -50,14 +50,14 @@ namespace Chinchilla
                 throw new ChinchillaException("A consumer factory builder is required");
             }
 
-            if (!ConnectionString.StartsWith(AmqpProtocol))
-            {
-                ConnectionString = string.Concat(AmqpProtocol, ConnectionString);
-            }
-
             if (ConnectionString.StartsWith(RabbitMqProtocol))
             {
                 ConnectionString = ConnectionString.Replace(RabbitMqProtocol, AmqpProtocol);
+            }
+
+            if (!ConnectionString.StartsWith(AmqpProtocol))
+            {
+                ConnectionString = string.Concat(AmqpProtocol, ConnectionString);
             }
         }
     }
