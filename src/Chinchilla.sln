@@ -39,6 +39,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{5496A96B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla.Sample.BasicPublishSubscribe", "Chinchilla.Sample.BasicPublishSubscribe\Chinchilla.Sample.BasicPublishSubscribe.csproj", "{C80E7036-F562-4A4A-99F6-4AA3D0E78F60}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla.Sample.CastleConsumers", "Chinchilla.Sample.CastleConsumers\Chinchilla.Sample.CastleConsumers.csproj", "{C4B70E2C-6D02-44D0-956C-DF63B84D1FC3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{C80E7036-F562-4A4A-99F6-4AA3D0E78F60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C80E7036-F562-4A4A-99F6-4AA3D0E78F60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C80E7036-F562-4A4A-99F6-4AA3D0E78F60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4B70E2C-6D02-44D0-956C-DF63B84D1FC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4B70E2C-6D02-44D0-956C-DF63B84D1FC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4B70E2C-6D02-44D0-956C-DF63B84D1FC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4B70E2C-6D02-44D0-956C-DF63B84D1FC3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,5 +86,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{18907D88-9DA2-4961-847A-96442EB00D5A} = {BAC27513-29CF-4CB9-85B8-58F6D52A417B}
 		{C80E7036-F562-4A4A-99F6-4AA3D0E78F60} = {BAC27513-29CF-4CB9-85B8-58F6D52A417B}
+		{C4B70E2C-6D02-44D0-956C-DF63B84D1FC3} = {BAC27513-29CF-4CB9-85B8-58F6D52A417B}
 	EndGlobalSection
 EndGlobal
