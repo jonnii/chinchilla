@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Chinchilla</id>
+    <version>0.0.0.1</version>
+    <title>Chinchilla</title>
+    <authors>Jonathan Goldman</authors>
+    <owners>Jonathan Goldman</owners>
+    <summary>Making RabbitMq Awesome</summary>
+    <description>Chinchilla is a little library to hlp make RabbitMq easier to use.</description>
+    <language>en-US</language>
+    <projectUrl>http://github.com/jonnii/chinchilla</projectUrl>
+    <licenseUrl>https://github.com/jonnii/chinchilla/blob/master/LICENSE.txt</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <tags>rabbitmq chinchilla</tags>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="4.5" />
+      <dependency id="RabbitMQ.Client" version="2.8" />
+    </dependencies>
+  </metadata>
+</package>

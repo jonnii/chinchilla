@@ -1,5 +1,8 @@
-﻿using Machine.Fakes;
+﻿using System.Collections.Concurrent;
+using Chinchilla.Topologies.Model;
+using Machine.Fakes;
 using Machine.Specifications;
+using RabbitMQ.Client.Events;
 
 namespace Chinchilla.Specifications
 {
@@ -8,6 +11,10 @@ namespace Chinchilla.Specifications
         [Subject(typeof(Subscription))]
         public class when_starting : WithSubject<Subscription>
         {
+            Establish context = () =>
+                The<IModelReference>().WhenToldTo(r => r.GetConsumerQueue(Param.IsAny<IQueue>()))
+                    .Return(new BlockingCollection<BasicDeliverEventArgs>());
+
             Because of = () =>
                 Subject.Start();
 

@@ -30,6 +30,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{5496A96B-C826-473C-BBF3-32C6C2BCB136}"
 	ProjectSection(SolutionItems) = preProject
 		CommonAssemblyInfo.cs = CommonAssemblyInfo.cs
+		..\build\default.ps1 = ..\build\default.ps1
+		..\build\package.nuspec = ..\build\package.nuspec
+		..\build\psake.ps1 = ..\build\psake.ps1
+		..\build\psake.psm1 = ..\build\psake.psm1
 		..\VERSION = ..\VERSION
 	EndProjectSection
 EndProject
