@@ -8,6 +8,24 @@ namespace Chinchilla.Specifications
     public class ConsumerSubscriberSpecification
     {
         [Subject(typeof(ConsumerSubscriber))]
+        public class when_connecting_to_iconsumer : WithFakes
+        {
+            Establish context = () =>
+                subscriber = new ConsumerSubscriber(An<IBus>(), An<IConsumer>());
+
+            Because of = () =>
+                exception = Catch.Exception(() => subscriber.Connect());
+
+            It should_throw = () =>
+                exception.ShouldBeOfType<ChinchillaException>();
+
+            static ConsumerSubscriber subscriber;
+
+            private static Exception exception;
+        }
+
+
+        [Subject(typeof(ConsumerSubscriber))]
         public class when_connecting : WithFakes
         {
             Establish context = () =>

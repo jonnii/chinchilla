@@ -46,7 +46,16 @@ namespace Chinchilla
         private ISubscription Connect(MethodInfo methodInfo, object[] parameters)
         {
             var method = consumer.GetType().GetMethod("Consume");
-            var messageType = method.GetParameters().First().ParameterType;
+
+            if (method == null)
+            {
+                throw new ChinchillaException(
+                    "Could not get Consume method from consumer, did you try to subscribe to IConsumer, instead of IConsumer<T>?");
+            }
+
+            var messageType = method.GetParameters()
+                .First()
+                .ParameterType;
 
             var actionType = typeof(Action<>).MakeGenericType(messageType);
             var consumeAction = Delegate.CreateDelegate(actionType, consumer, method);
