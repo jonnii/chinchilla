@@ -49,17 +49,8 @@ namespace Chinchilla.Specifications
         }
 
         [Subject(typeof(Bus))]
-        public class when_subscribing : with_bus
+        public class when_subscribing : with_subscription
         {
-            Establish establish = () =>
-            {
-                subscription = An<ISubscription>();
-                The<ISubscriptionFactory>().WhenToldTo(
-                    s => s.Create(
-                        Param.IsAny<IModelReference>(),
-                        Param.IsAny<ISubscriptionConfiguration>(), Param.IsAny<Action<TestMessage>>())).Return(subscription);
-            };
-
             Because of = () =>
                 Subject.Subscribe<TestMessage>(_ => { });
 
@@ -68,8 +59,30 @@ namespace Chinchilla.Specifications
 
             It should_start_subscription = () =>
                 subscription.WasToldTo(s => s.Start());
+        }
 
-            static ISubscription subscription;
+        [Subject(typeof(Bus))]
+        public class when_subscribing_to_consumer_instance : with_subscription
+        {
+            Because of = () =>
+                Subject.Subscribe(new TestConsumer());
+
+            It should_start_subscription = () =>
+                subscription.WasToldTo(s => s.Start());
+        }
+
+        [Subject(typeof(Bus))]
+        public class when_subscribing_to_consumer_type : with_subscription
+        {
+            Establish context = () =>
+                The<IConsumerFactory>().WhenToldTo(f => f.Build<TestConsumer>())
+                    .Return(new TestConsumer());
+
+            Because of = () =>
+                Subject.Subscribe<TestConsumer>();
+
+            It should_create_subscription = () =>
+                The<IConsumerFactory>().WasToldTo(f => f.Build<TestConsumer>());
         }
 
         [Subject(typeof(Bus))]
@@ -89,6 +102,28 @@ namespace Chinchilla.Specifications
         {
             Establish context = () =>
                 The<IModelFactory>().WhenToldTo(c => c.CreateModel()).Return(An<IModelReference>());
+        }
+
+        public class with_subscription : with_bus
+        {
+            Establish establish = () =>
+            {
+                subscription = An<ISubscription>();
+                The<ISubscriptionFactory>().WhenToldTo(
+                    s => s.Create(
+                        Param.IsAny<IModelReference>(),
+                        Param.IsAny<ISubscriptionConfiguration>(), Param.IsAny<Action<TestMessage>>())).Return(subscription);
+            };
+
+            protected static ISubscription subscription;
+        }
+
+        public class TestConsumer : IConsumer<TestMessage>
+        {
+            public void Consume(TestMessage message)
+            {
+
+            }
         }
     }
 }

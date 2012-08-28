@@ -15,6 +15,13 @@ namespace Chinchilla
             return Connect(settings);
         }
 
+        public static IBus Connect(string connectionString, DepotSettings settings)
+        {
+            settings.ConnectionString = connectionString;
+
+            return Connect(settings);
+        }
+
         public static IBus Connect(DepotSettings settings)
         {
             if (settings == null)
@@ -26,12 +33,14 @@ namespace Chinchilla
 
             var connectionString = settings.ConnectionString;
             var connectionFactory = settings.ConnectionFactoryBuilder();
+            var consumerFactory = settings.ConsumerFactoryBuilder();
 
             var connection = connectionFactory.Create(new Uri(connectionString));
             var messageSerializer = new JsonMessageSerializer();
 
             return new Bus(
                 connection,
+                consumerFactory,
                 new PublisherFactory(messageSerializer),
                 new SubscriptionFactory(messageSerializer));
         }

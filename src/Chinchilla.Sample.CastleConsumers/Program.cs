@@ -13,11 +13,18 @@ namespace Chinchilla.Sample.CastleConsumers
 
             using (var container = new WindsorContainer())
             {
+                var currentContainer = container;
+
                 container.Register(
-                    AllTypes.FromThisAssembly().BasedOn(typeof(IConsumer<>)),
+                    AllTypes.FromThisAssembly().BasedOn(typeof(IConsumer)),
                     Component.For<IBus>().UsingFactoryMethod(() =>
                     {
-                        return Depot.Connect("localhost/samplepubsub");
+                        var settings = new DepotSettings
+                        {
+                            ConsumerFactoryBuilder = () => new WindsorConsumerFactory(currentContainer)
+                        };
+
+                        return Depot.Connect("localhost/samplepubsub", settings);
                     }));
 
                 var bus = container.Resolve<IBus>();
@@ -31,10 +38,5 @@ namespace Chinchilla.Sample.CastleConsumers
                 Console.ReadKey();
             }
         }
-    }
-
-    public class PubSubMessage
-    {
-        public string Body { get; set; }
     }
 }

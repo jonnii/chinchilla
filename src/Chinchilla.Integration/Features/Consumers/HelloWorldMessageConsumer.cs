@@ -1,4 +1,5 @@
-﻿using Chinchilla.Integration.Features.Messages;
+﻿using System;
+using Chinchilla.Integration.Features.Messages;
 
 namespace Chinchilla.Integration.Features.Consumers
 {
@@ -6,7 +7,7 @@ namespace Chinchilla.Integration.Features.Consumers
     {
         public void Consume(HelloWorldMessage message)
         {
-
+            Console.WriteLine("consuming message!");
         }
     }
 }

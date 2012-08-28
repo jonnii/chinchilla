@@ -67,6 +67,7 @@
     </Compile>
     <Compile Include="BusSpecification.cs" />
     <Compile Include="ConnectionStringSpecification.cs" />
+    <Compile Include="ConsumerSubscriberSpecification.cs" />
     <Compile Include="DefaultRouterSpecification.cs" />
     <Compile Include="DepotSettingsSpecification.cs" />
     <Compile Include="DepotSpecification.cs" />

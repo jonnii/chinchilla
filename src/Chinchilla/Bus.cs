@@ -13,14 +13,18 @@ namespace Chinchilla
 
         private readonly ISubscriptionFactory subscriptionFactory;
 
+        private readonly IConsumerFactory consumerFactory;
+
         public Bus(
             IModelFactory modelFactory,
+            IConsumerFactory consumerFactory,
             IPublisherFactory publisherFactory,
             ISubscriptionFactory subscriptionFactory)
         {
             this.modelFactory = modelFactory;
             this.publisherFactory = publisherFactory;
             this.subscriptionFactory = subscriptionFactory;
+            this.consumerFactory = consumerFactory;
         }
 
         public ISubscription Subscribe<TMessage>(Action<TMessage> onMessage)
@@ -37,16 +41,6 @@ namespace Chinchilla
             return Subscribe(onMessage, configuration);
         }
 
-        public ISubscription Subscribe<TMessage>(IConsumer<TMessage> consumer)
-        {
-            return Subscribe<TMessage>(consumer.Consume);
-        }
-
-        public ISubscription Subscribe<TMessage>(IConsumer<TMessage> consumer, Action<ISubscriptionBuilder> builder)
-        {
-            return Subscribe<TMessage>(consumer.Consume, builder);
-        }
-
         private ISubscription Subscribe<TMessage>(Action<TMessage> onMessage, ISubscriptionConfiguration subscriptionConfiguration)
         {
             logger.DebugFormat("Subscribing to action callback of type {0}", typeof(TMessage).Name);
@@ -59,6 +53,25 @@ namespace Chinchilla
             subscription.Start();
 
             return subscription;
+        }
+
+        public ISubscription Subscribe(IConsumer consumer)
+        {
+            var instance = new ConsumerSubscriber(this, consumer);
+            return instance.Connect();
+        }
+
+        public ISubscription Subscribe(IConsumer consumer, Action<ISubscriptionBuilder> builder)
+        {
+            var instance = new ConsumerSubscriber(this, consumer);
+            return instance.Connect(builder);
+        }
+
+        public ISubscription Subscribe<TConsumer>()
+            where TConsumer : IConsumer
+        {
+            var consumer = consumerFactory.Build<TConsumer>();
+            return Subscribe(consumer);
         }
 
         public IPublisher<TMessage> CreatePublisher<TMessage>()
