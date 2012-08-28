@@ -50,8 +50,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoRegisterConsumers.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PubSubConsumer.cs" />
     <Compile Include="PubSubMessage.cs" />
     <Compile Include="WindsorConsumerFactory.cs" />
   </ItemGroup>

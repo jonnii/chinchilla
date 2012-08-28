@@ -16,7 +16,7 @@ namespace Chinchilla.Sample.CastleConsumers
                 var currentContainer = container;
 
                 container.Register(
-                    AllTypes.FromThisAssembly().BasedOn(typeof(IConsumer)),
+                    AllTypes.FromThisAssembly().BasedOn(typeof(IConsumer)).WithServiceAllInterfaces(),
                     Component.For<IBus>().UsingFactoryMethod(() =>
                     {
                         var settings = new DepotSettings
@@ -24,15 +24,14 @@ namespace Chinchilla.Sample.CastleConsumers
                             ConsumerFactoryBuilder = () => new WindsorConsumerFactory(currentContainer)
                         };
 
-                        return Depot.Connect("localhost/samplepubsub", settings);
+                        settings.AddStartupConcern(new AutoRegisterConsumers(currentContainer));
+
+                        return Depot.Connect("localhost/castle_consumer", settings);
                     }));
 
                 var bus = container.Resolve<IBus>();
 
-                bus.Publish(new PubSubMessage
-                {
-                    Body = "published!"
-                });
+                bus.Publish(new PubSubMessage { Body = "published!" });
 
                 Console.WriteLine("Finished press any key to close");
                 Console.ReadKey();

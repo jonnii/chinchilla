@@ -38,11 +38,18 @@ namespace Chinchilla
             var connection = connectionFactory.Create(new Uri(connectionString));
             var messageSerializer = new JsonMessageSerializer();
 
-            return new Bus(
+            var bus = new Bus(
                 connection,
                 consumerFactory,
                 new PublisherFactory(messageSerializer),
                 new SubscriptionFactory(messageSerializer));
+
+            foreach (var concern in settings.StartupConcerns)
+            {
+                concern.Run(bus);
+            }
+
+            return bus;
         }
     }
 }

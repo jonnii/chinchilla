@@ -1,10 +1,13 @@
 using System;
+using System.Collections.Generic;
 
 namespace Chinchilla
 {
     public class DepotSettings
     {
         private const string AmqpProtocol = "amqp://";
+
+        private readonly List<IBusConcern> startupConcerns = new List<IBusConcern>();
 
         public DepotSettings()
         {
@@ -17,6 +20,16 @@ namespace Chinchilla
         public Func<IConnectionFactory> ConnectionFactoryBuilder { get; set; }
 
         public Func<IConsumerFactory> ConsumerFactoryBuilder { get; set; }
+
+        public IEnumerable<IBusConcern> StartupConcerns
+        {
+            get { return startupConcerns; }
+        }
+
+        public void AddStartupConcern(IBusConcern concern)
+        {
+            startupConcerns.Add(concern);
+        }
 
         public void Validate()
         {

@@ -57,12 +57,14 @@ namespace Chinchilla
 
         public ISubscription Subscribe(IConsumer consumer)
         {
+            logger.DebugFormat("Registering consumer {0}", consumer.GetType().Name);
             var instance = new ConsumerSubscriber(this, consumer);
             return instance.Connect();
         }
 
         public ISubscription Subscribe(IConsumer consumer, Action<ISubscriptionBuilder> builder)
         {
+            logger.DebugFormat("Registering consumer {0}", consumer.GetType().Name);
             var instance = new ConsumerSubscriber(this, consumer);
             return instance.Connect(builder);
         }
@@ -70,6 +72,7 @@ namespace Chinchilla
         public ISubscription Subscribe<TConsumer>()
             where TConsumer : IConsumer
         {
+            logger.DebugFormat("Buliding consumer {0}", typeof(TConsumer).Name);
             var consumer = consumerFactory.Build<TConsumer>();
             return Subscribe(consumer);
         }
@@ -107,6 +110,7 @@ namespace Chinchilla
 
         public void Dispose()
         {
+            consumerFactory.Dispose();
             subscriptionFactory.Dispose();
             modelFactory.Dispose();
         }

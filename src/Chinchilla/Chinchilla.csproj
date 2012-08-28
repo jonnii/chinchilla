@@ -60,6 +60,7 @@
     <Compile Include="DepotSettings.cs" />
     <Compile Include="Endpoint.cs" />
     <Compile Include="EndpointConfiguration.cs" />
+    <Compile Include="IBusConcern.cs" />
     <Compile Include="IConsumerFactory.cs" />
     <Compile Include="IEndpoint.cs" />
     <Compile Include="IEndpointConfiguration.cs" />

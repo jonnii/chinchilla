@@ -96,6 +96,9 @@ namespace Chinchilla.Specifications
 
             It should_dispose_model_factory = () =>
                 The<IModelFactory>().WasToldTo(f => f.Dispose());
+
+            It should_dispose_consumer_factory = () =>
+                The<IConsumerFactory>().WasToldTo(f => f.Dispose());
         }
 
         public class with_bus : WithSubject<Bus>

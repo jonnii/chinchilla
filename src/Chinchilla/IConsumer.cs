@@ -9,5 +9,4 @@
     {
         void Consume(TMessage message);
     }
-
 }
