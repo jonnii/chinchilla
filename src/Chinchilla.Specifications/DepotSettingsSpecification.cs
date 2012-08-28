@@ -35,6 +35,20 @@ namespace Chinchilla.Specifications
             static IConsumerFactory builder;
         }
 
+
+        [Subject(typeof(DepotSettings))]
+        public class when_validating_connection_string_starting_with_rabbitmq_protocol : with_settings
+        {
+            Establish context = () =>
+                settings.ConnectionString = "rabbitmq://foo/bar";
+
+            Because of = () =>
+                settings.Validate();
+
+            It should_build_default_consumer_factory = () =>
+                settings.ConnectionString.ShouldStartWith("amqp://");
+        }
+
         public class with_settings
         {
             Establish context = () =>
