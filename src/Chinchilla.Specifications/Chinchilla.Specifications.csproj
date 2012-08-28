@@ -68,6 +68,7 @@
     <Compile Include="BusSpecification.cs" />
     <Compile Include="ConnectionStringSpecification.cs" />
     <Compile Include="DefaultRouterSpecification.cs" />
+    <Compile Include="DepotSettingsSpecification.cs" />
     <Compile Include="DepotSpecification.cs" />
     <Compile Include="Messages\TestMessage.cs" />
     <Compile Include="ModelFactorySpecification.cs" />

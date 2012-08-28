@@ -13,7 +13,11 @@ namespace Chinchilla.Specifications
                 connectionFactory = An<IConnectionFactory>();
 
             Because of = () =>
-                Depot.Connect("server/host", connectionFactory);
+                Depot.Connect(new DepotSettings
+                {
+                    ConnectionString = "server/host",
+                    ConnectionFactoryBuilder = () => connectionFactory
+                });
 
             It should_append_amqp_extension_if_missing = () =>
                 connectionFactory.WasToldTo(f => f.Create(new Uri("amqp://server/host")));

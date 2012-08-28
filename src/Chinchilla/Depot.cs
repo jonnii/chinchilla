@@ -5,20 +5,27 @@ namespace Chinchilla
 {
     public class Depot
     {
-        public const string AmqpProtocol = "amqp://";
-
         public static IBus Connect(string connectionString)
         {
-            var connectionFactory = new DefaultConnectionFactory();
-            return Connect(connectionString, connectionFactory);
+            var settings = new DepotSettings
+            {
+                ConnectionString = connectionString
+            };
+
+            return Connect(settings);
         }
 
-        public static IBus Connect(string connectionString, IConnectionFactory connectionFactory)
+        public static IBus Connect(DepotSettings settings)
         {
-            if (!connectionString.StartsWith(AmqpProtocol))
+            if (settings == null)
             {
-                connectionString = string.Concat(AmqpProtocol, connectionString);
+                throw new ArgumentNullException("settings");
             }
+
+            settings.Validate();
+
+            var connectionString = settings.ConnectionString;
+            var connectionFactory = settings.ConnectionFactoryBuilder();
 
             var connection = connectionFactory.Create(new Uri(connectionString));
             var messageSerializer = new JsonMessageSerializer();

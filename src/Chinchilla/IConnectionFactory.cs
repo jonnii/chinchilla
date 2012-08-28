@@ -1,5 +1,4 @@
 using System;
-using RabbitMQ.Client;
 
 namespace Chinchilla
 {

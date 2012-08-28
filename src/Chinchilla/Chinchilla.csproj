@@ -51,9 +51,11 @@
     </Compile>
     <Compile Include="ActionDeliveryProcessor.cs" />
     <Compile Include="Bus.cs" />
+    <Compile Include="ChinchillaException.cs" />
     <Compile Include="DefaultConnectionFactory.cs" />
     <Compile Include="ConnectionString.cs" />
     <Compile Include="DefaultRouter.cs" />
+    <Compile Include="DepotSettings.cs" />
     <Compile Include="Endpoint.cs" />
     <Compile Include="EndpointConfiguration.cs" />
     <Compile Include="IEndpoint.cs" />
