@@ -14,6 +14,9 @@ task PreparePackage -depends Test {
 
 	mkdir $packagesDirectory
 	cp ..\build\package.nuspec ..\targets\packages
+
+	mkdir ..\targets\packages\lib\net40
+	cp ..\targets\chinchilla\chinchilla.* ..\targets\packages\lib\net40
 }
 
 task PackagePre -depends PreparePackage {
