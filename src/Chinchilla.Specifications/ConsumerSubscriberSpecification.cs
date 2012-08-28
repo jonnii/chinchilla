@@ -24,7 +24,6 @@ namespace Chinchilla.Specifications
             private static Exception exception;
         }
 
-
         [Subject(typeof(ConsumerSubscriber))]
         public class when_connecting : WithFakes
         {
