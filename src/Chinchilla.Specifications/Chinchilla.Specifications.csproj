@@ -73,6 +73,8 @@
     <Compile Include="DeliverySpecification.cs" />
     <Compile Include="DepotSettingsSpecification.cs" />
     <Compile Include="DepotSpecification.cs" />
+    <Compile Include="ErrorQueueDeliveryFailureStrategySpecification.cs" />
+    <Compile Include="IgnoreDeliveryFailureStrategySpecification.cs" />
     <Compile Include="ImmediateDeliveryStrategySpecification.cs" />
     <Compile Include="Messages\TestMessage.cs" />
     <Compile Include="ModelFactorySpecification.cs" />

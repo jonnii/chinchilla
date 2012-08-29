@@ -6,7 +6,7 @@ namespace Chinchilla
     {
         public void Handle(IDelivery delivery, Exception exception)
         {
-
+            delivery.Accept();
         }
     }
 }
