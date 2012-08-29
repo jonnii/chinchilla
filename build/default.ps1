@@ -67,8 +67,7 @@ task Package -depends PreparePackage {
 }
 
 task Publish -depends Package {
-	gci .\..\targets\packages\*.nupkg | select -first 1
-	..\src\.nuget\nuget.exe Push $package.fullname
+	gci .\..\targets\packages\*.nupkg | ForEach-Object { ..\src\.nuget\nuget.exe Push $_.fullname }
 }
 
 task PublishPre -depends PackagePre {
