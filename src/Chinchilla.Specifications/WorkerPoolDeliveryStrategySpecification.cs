@@ -1,4 +1,5 @@
-﻿using Machine.Fakes;
+﻿using System;
+using Machine.Fakes;
 using Machine.Specifications;
 
 namespace Chinchilla.Specifications
@@ -12,7 +13,7 @@ namespace Chinchilla.Specifications
             {
                 processor = An<IDeliveryProcessor>();
                 delivery = An<IDelivery>();
-                
+
                 Subject.ConnectTo(processor);
             };
 
@@ -26,6 +27,31 @@ namespace Chinchilla.Specifications
                 delivery.WasToldTo(d => d.Accept());
 
             static IDeliveryProcessor processor;
+
+            static IDelivery delivery;
+        }
+
+        [Subject(typeof(WorkerPoolDeliveryStrategy))]
+        public class when_delivering_one_message_that_throws_exception : WithSubject<WorkerPoolDeliveryStrategy>
+        {
+            Establish context = () =>
+            {
+                var processor = An<IDeliveryProcessor>();
+                processor.WhenToldTo(p => p.Process(Param.IsAny<IDelivery>())).Throw(new Exception());
+
+                delivery = An<IDelivery>();
+
+                Subject.ConnectTo(processor);
+            };
+
+            Because of = () =>
+                Subject.DeliverOne(delivery);
+
+            It should_not_accept_delivery = () =>
+                delivery.WasNotToldTo(d => d.Accept());
+
+            It should_fail_delivery = () =>
+                delivery.WasToldTo(d => d.Failed(Param.IsAny<Exception>()));
 
             static IDelivery delivery;
         }

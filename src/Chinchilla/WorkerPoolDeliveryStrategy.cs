@@ -61,7 +61,16 @@ namespace Chinchilla
 
         public void DeliverOne(IDelivery delivery)
         {
-            connectedProcessor.Process(delivery);
+            try
+            {
+                connectedProcessor.Process(delivery);
+            }
+            catch (Exception e)
+            {
+                delivery.Failed(e);
+                return;
+            }
+
             delivery.Accept();
         }
 
