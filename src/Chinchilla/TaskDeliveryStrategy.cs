@@ -6,10 +6,26 @@ namespace Chinchilla
     {
         public override void Deliver(IDelivery delivery)
         {
+            DeliverOnTask(delivery);
+        }
+
+        public Task DeliverOnTask(IDelivery delivery)
+        {
             var currentDelivery = delivery;
 
-            Task.Factory.StartNew(() => connectedProcessor.Process(delivery))
-                .ContinueWith(_ => currentDelivery.Accept());
+            return Task.Factory.StartNew(() => connectedProcessor.Process(delivery))
+                .ContinueWith(
+                t =>
+                {
+                    if (t.IsFaulted)
+                    {
+                        currentDelivery.Failed(t.Exception);
+                    }
+                    else
+                    {
+                        currentDelivery.Accept();
+                    }
+                });
         }
     }
 }
