@@ -12,11 +12,17 @@ task PreparePackage -depends Test {
 		rm $packagesDirectory -recurse -force
 	}
 
-	mkdir $packagesDirectory
-	cp ..\build\package.nuspec ..\targets\packages
+	mkdir "$packagesDirectory\chinchilla"
+	cp ..\build\package.nuspec ..\targets\packages\chinchilla
 
-	mkdir ..\targets\packages\lib\net40
-	cp ..\targets\chinchilla\chinchilla.* ..\targets\packages\lib\net40
+	mkdir ..\targets\packages\chinchilla\lib\net40
+	cp ..\targets\chinchilla\chinchilla.* ..\targets\packages\chinchilla\lib\net40
+
+	mkdir "$packagesDirectory\chinchilla.api"
+	cp ..\build\package.api.nuspec ..\targets\packages\chinchilla.api
+
+	mkdir ..\targets\packages\chinchilla.api\lib\net40
+	cp ..\targets\chinchilla.api\chinchilla.api* ..\targets\packages\chinchilla.api\lib\net40
 }
 
 task PackagePre -depends PreparePackage {
@@ -25,12 +31,19 @@ task PackagePre -depends PreparePackage {
 	$when = (get-date).ToString("yyyyMMddHHmmss")
 	$packageVersion = "$version-$buildName-$when"
 
-	get-content ..\targets\packages\package.nuspec | 
-        %{$_ -replace '0.0.0.1', $packageVersion } > ..\targets\packages\package.nuspec.tmp
+	get-content ..\targets\packages\chinchilla\package.nuspec | 
+        %{$_ -replace '0.0.0.1', $packageVersion } > ..\targets\packages\chinchilla\package.nuspec.tmp
 	
-	mv ..\targets\packages\package.nuspec.tmp ..\targets\packages\package.nuspec -force
+	mv ..\targets\packages\chinchilla\package.nuspec.tmp ..\targets\packages\chinchilla\package.nuspec -force
 
-	..\src\.nuget\nuget.exe pack "..\targets\packages\package.nuspec" -outputdirectory ".\..\targets\packages"
+	..\src\.nuget\nuget.exe pack "..\targets\packages\chinchilla\package.nuspec" -outputdirectory ".\..\targets\packages"
+
+	get-content ..\targets\packages\chinchilla.api\package.api.nuspec | 
+        %{$_ -replace '0.0.0.1', $packageVersion } > ..\targets\packages\chinchilla.api\package.api.nuspec.tmp
+	
+	mv ..\targets\packages\chinchilla.api\package.api.nuspec.tmp ..\targets\packages\chinchilla.api\package.api.nuspec -force
+
+	..\src\.nuget\nuget.exe pack "..\targets\packages\chinchilla.api\package.api.nuspec" -outputdirectory ".\..\targets\packages"
 }
 
 task Package -depends PreparePackage {
@@ -38,22 +51,28 @@ task Package -depends PreparePackage {
 	$version = get-content ..\VERSION
 	$packageVersion = "$version"
 
-	get-content ..\targets\packages\package.nuspec | 
-        %{$_ -replace '0.0.0.1', $packageVersion } > ..\targets\packages\package.nuspec.tmp
+	get-content ..\targets\packages\chinchilla\package.nuspec | 
+        %{$_ -replace '0.0.0.1', $packageVersion } > ..\targets\packages\chinchilla\package.nuspec.tmp
 	
-	mv ..\targets\packages\package.nuspec.tmp ..\targets\packages\package.nuspec -force
+	mv ..\targets\packages\chinchilla\package.nuspec.tmp ..\targets\packages\chinchilla\package.nuspec -force
 
-	..\src\.nuget\nuget.exe pack "..\targets\packages\package.nuspec" -outputdirectory ".\..\targets\packages"	
+	..\src\.nuget\nuget.exe pack "..\targets\packages\chinchilla\package.nuspec" -outputdirectory ".\..\targets\packages"	
+
+	get-content ..\targets\packages\chinchilla.api\package.api.nuspec | 
+        %{$_ -replace '0.0.0.1', $packageVersion } > ..\targets\packages\chinchilla.api\package.api.nuspec.tmp
+	
+	mv ..\targets\packages\chinchilla.api\package.api.nuspec.tmp ..\targets\packages\chinchilla.api\package.api.nuspec -force
+
+	..\src\.nuget\nuget.exe pack "..\targets\packages\chinchilla.api\package.api.nuspec" -outputdirectory ".\..\targets\packages"	
 }
 
 task Publish -depends Package {
-	$package = gci .\..\targets\packages\*.nupkg | select -first 1
+	gci .\..\targets\packages\*.nupkg | select -first 1
 	..\src\.nuget\nuget.exe Push $package.fullname
 }
 
 task PublishPre -depends PackagePre {
-	$package = gci .\..\targets\packages\*.nupkg | select -first 1
-	..\src\.nuget\nuget.exe Push $package.fullname
+	gci .\..\targets\packages\*.nupkg | ForEach-Object { ..\src\.nuget\nuget.exe Push $_.fullname }
 }
 
 task CopyTools {
