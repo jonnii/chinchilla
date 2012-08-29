@@ -15,6 +15,8 @@ namespace Chinchilla
 
         private readonly IDeliveryStrategy deliveryStrategy;
 
+        private readonly IDeliveryFailureStrategy deliveryFailureStrategy;
+
         private BlockingCollection<BasicDeliverEventArgs> consumerQueue;
 
         private Thread subscriptionThread;
@@ -24,10 +26,12 @@ namespace Chinchilla
         public Subscription(
             IModelReference modelReference,
             IDeliveryStrategy deliveryStrategy,
+            IDeliveryFailureStrategy deliveryFailureStrategy,
             IQueue queue)
         {
             this.modelReference = modelReference;
             this.deliveryStrategy = deliveryStrategy;
+            this.deliveryFailureStrategy = deliveryFailureStrategy;
 
             Queue = queue;
         }
@@ -65,8 +69,8 @@ namespace Chinchilla
                 logger.DebugFormat("Subscription thread terminated for: {0}", this);
             });
 
-            subscriptionThread.Start();
             deliveryStrategy.Start();
+            subscriptionThread.Start();
         }
 
         public void OnAccept(IDelivery delivery)
@@ -75,6 +79,11 @@ namespace Chinchilla
                 m => m.BasicAck(delivery.Tag, false));
 
             ++NumAcceptedMessages;
+        }
+
+        public void OnFailed(IDelivery delivery, Exception exception)
+        {
+            deliveryFailureStrategy.Handle(delivery, exception);
         }
 
         public override void Dispose()

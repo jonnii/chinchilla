@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using Chinchilla.Topologies.Model;
 using Machine.Fakes;
 using Machine.Specifications;
@@ -20,6 +21,17 @@ namespace Chinchilla.Specifications
 
             It should_start_delivery_strategy = () =>
                 The<IDeliveryStrategy>().WasToldTo(d => d.Start());
+        }
+
+        [Subject(typeof(Subscription))]
+        public class when_ : WithSubject<Subscription>
+        {
+            Establish context = () => { };
+
+            Because of = () =>
+                Subject.OnFailed(An<IDelivery>(), new Exception());
+
+            private It should_ = () => { };
         }
 
         [Subject(typeof(Subscription))]

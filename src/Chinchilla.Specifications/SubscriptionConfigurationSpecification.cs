@@ -65,5 +65,32 @@ namespace Chinchilla.Specifications
 
             static IDeliveryStrategy strategy;
         }
+
+        [Subject(typeof(SubscriptionConfiguration))]
+        public class when_building_default_delivery_failure_strategy : WithSubject<SubscriptionConfiguration>
+        {
+            Because of = () =>
+                strategy = Subject.BuildDeliveryFailureStrategy();
+
+            It should_build_immediate_strategy = () =>
+                strategy.ShouldBeOfType<ErrorQueueDeliveryFailureStrategy>();
+
+            static IDeliveryFailureStrategy strategy;
+        }
+
+        [Subject(typeof(SubscriptionConfiguration))]
+        public class when_building_configured_delivery_failure_strategy : WithSubject<SubscriptionConfiguration>
+        {
+            Establish context = () =>
+                Subject.DeliverFailuresUsing<IgnoreDeliveryFailureStrategy>();
+
+            Because of = () =>
+                strategy = Subject.BuildDeliveryFailureStrategy();
+
+            It should_create_strategy_of_correct_type = () =>
+                strategy.ShouldBeOfType<IgnoreDeliveryFailureStrategy>();
+
+            static IDeliveryFailureStrategy strategy;
+        }
     }
 }

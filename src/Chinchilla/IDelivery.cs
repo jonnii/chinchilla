@@ -1,3 +1,5 @@
+using System;
+
 namespace Chinchilla
 {
     /// <summary>
@@ -15,5 +17,11 @@ namespace Chinchilla
         /// removed from the exchange
         /// </summary>
         void Accept();
+
+        /// <summary>
+        /// Called when a delivery fails
+        /// </summary>
+        /// <param name="e">The exception which caused this failure</param>
+        void Failed(Exception e);
     }
 }

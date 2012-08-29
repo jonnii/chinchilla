@@ -56,14 +56,17 @@
     <Compile Include="DefaultConnectionFactory.cs" />
     <Compile Include="ConnectionString.cs" />
     <Compile Include="DefaultConsumerFactory.cs" />
+    <Compile Include="ErrorQueueDeliveryFailureStrategy.cs" />
     <Compile Include="DefaultRouter.cs" />
     <Compile Include="DepotSettings.cs" />
     <Compile Include="Endpoint.cs" />
     <Compile Include="EndpointConfiguration.cs" />
     <Compile Include="IBusConcern.cs" />
     <Compile Include="IConsumerFactory.cs" />
+    <Compile Include="IDeliveryFailureStrategy.cs" />
     <Compile Include="IEndpoint.cs" />
     <Compile Include="IEndpointConfiguration.cs" />
+    <Compile Include="IgnoreDeliveryFailureStrategy.cs" />
     <Compile Include="IHasRoutingKey.cs" />
     <Compile Include="IDeliveryContext.cs" />
     <Compile Include="IRouter.cs" />

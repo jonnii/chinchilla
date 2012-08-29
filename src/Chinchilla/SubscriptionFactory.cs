@@ -39,17 +39,25 @@ namespace Chinchilla
                 callback);
 
             var deliveryStrategy = configuration.BuildDeliveryStrategy(deliveryProcessor);
+            var deliveryFailureStrategy = configuration.BuildDeliveryFailureStrategy();
 
-            return Create(modelReference, deliveryStrategy, topology);
+            return Create(modelReference, deliveryStrategy, deliveryFailureStrategy, topology);
         }
 
         public ISubscription Create(
             IModelReference modelReference,
             IDeliveryStrategy deliveryStrategy,
+            IDeliveryFailureStrategy deliveryFailureStrategy,
             IMessageTopology messageTopology)
         {
-            var subscription = new Subscription(modelReference, deliveryStrategy, messageTopology.SubscribeQueue);
+            var subscription = new Subscription(
+                modelReference,
+                deliveryStrategy,
+                deliveryFailureStrategy,
+                messageTopology.SubscribeQueue);
+
             Track(subscription);
+
             return subscription;
         }
 

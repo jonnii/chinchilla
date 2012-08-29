@@ -1,10 +1,15 @@
+using System;
+
 namespace Chinchilla
 {
     public class Delivery : IDelivery
     {
         private readonly IDeliveryListener listener;
 
-        public Delivery(IDeliveryListener listener, ulong tag, byte[] body)
+        public Delivery(
+            IDeliveryListener listener,
+            ulong tag,
+            byte[] body)
         {
             this.listener = listener;
 
@@ -19,6 +24,11 @@ namespace Chinchilla
         public void Accept()
         {
             listener.OnAccept(this);
+        }
+
+        public void Failed(Exception e)
+        {
+            listener.OnFailed(this, e);
         }
     }
 }

@@ -5,5 +5,7 @@ namespace Chinchilla
         string QueueName { get; }
 
         IDeliveryStrategy BuildDeliveryStrategy(IDeliveryProcessor deliveryProcessor);
+
+        IDeliveryFailureStrategy BuildDeliveryFailureStrategy();
     }
 }
