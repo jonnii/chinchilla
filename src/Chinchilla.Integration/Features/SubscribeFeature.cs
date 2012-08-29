@@ -106,5 +106,28 @@ namespace Chinchilla.Integration.Features
                 Assert.That(queueName, Is.EqualTo("gimme-dem-messages"));
             }
         }
+
+        [Test]
+        public void ShouldCreateSubscriberWithCallbackWithContext()
+        {
+            using (var bus = Depot.Connect("localhost/integration"))
+            {
+                var numReceived = 0;
+
+                bus.Subscribe<HelloWorldMessage>((hwm, ctx) =>
+                {
+                    ++numReceived;
+                    Assert.That(ctx, Is.Not.Null);
+                });
+                for (var i = 0; i < 100; ++i)
+                {
+                    bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
+                }
+
+                Thread.Sleep(1000);
+
+                Assert.That(numReceived, Is.EqualTo(100));
+            }
+        }
     }
 }

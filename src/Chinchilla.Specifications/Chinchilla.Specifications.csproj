@@ -65,6 +65,7 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ActionDeliveryProcessorSpecification.cs" />
     <Compile Include="BusSpecification.cs" />
     <Compile Include="ConnectionStringSpecification.cs" />
     <Compile Include="ConsumerSubscriberSpecification.cs" />

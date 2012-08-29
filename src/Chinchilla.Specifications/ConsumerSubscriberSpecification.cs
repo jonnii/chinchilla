@@ -37,27 +37,7 @@ namespace Chinchilla.Specifications
                 subscriber.Connect();
 
             It should_subscribe = () =>
-                bus.WasToldTo(b => b.Subscribe(Param.IsAny<Action<TestMessage>>()));
-
-            static IBus bus;
-
-            static ConsumerSubscriber subscriber;
-        }
-
-        [Subject(typeof(ConsumerSubscriber))]
-        public class when_connecting_with_builder : WithFakes
-        {
-            Establish context = () =>
-            {
-                bus = An<IBus>();
-                subscriber = new ConsumerSubscriber(bus, new TestConsumer());
-            };
-
-            Because of = () =>
-                subscriber.Connect(_ => { });
-
-            It should_subscribe_with_builders = () =>
-                bus.WasToldTo(b => b.Subscribe(Param.IsAny<Action<TestMessage>>(), Param.IsAny<Action<ISubscriptionBuilder>>()));
+                bus.WasToldTo(b => b.Subscribe(Param.IsAny<Action<TestMessage, IMessageContext>>()));
 
             static IBus bus;
 
@@ -66,7 +46,7 @@ namespace Chinchilla.Specifications
 
         public class TestConsumer : IConsumer<TestMessage>
         {
-            public void Consume(TestMessage message)
+            public void Consume(TestMessage message, IMessageContext messageContext)
             {
 
             }

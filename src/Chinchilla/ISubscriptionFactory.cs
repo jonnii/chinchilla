@@ -7,6 +7,6 @@ namespace Chinchilla
         ISubscription Create<TMessage>(
             IModelReference modelReference,
             ISubscriptionConfiguration configuration,
-            Action<TMessage> processor);
+            Action<TMessage, IMessageContext> callback);
     }
 }

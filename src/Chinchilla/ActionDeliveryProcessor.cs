@@ -12,11 +12,11 @@ namespace Chinchilla
     {
         private readonly IMessageSerializer messageSerializer;
 
-        private readonly Action<T> handler;
+        private readonly Action<T, IMessageContext> handler;
 
         public ActionDeliveryProcessor(
             IMessageSerializer messageSerializer,
-            Action<T> handler)
+            Action<T, IMessageContext> handler)
         {
             this.messageSerializer = messageSerializer;
             this.handler = handler;
@@ -25,7 +25,8 @@ namespace Chinchilla
         public void Process(IDelivery delivery)
         {
             var deserialized = messageSerializer.Deserialize<T>(delivery.Body);
-            handler(deserialized.Body);
+
+            handler(deserialized.Body, new MessageContext());
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Chinchilla.Sample.StockTicker.Server
             this.publisher = publisher;
         }
 
-        public void Consume(ConnectMessage message)
+        public void Consume(ConnectMessage message, IMessageContext messageContext)
         {
             var exchange = publisher.Exchange;
 

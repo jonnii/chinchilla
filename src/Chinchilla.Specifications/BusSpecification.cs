@@ -115,7 +115,7 @@ namespace Chinchilla.Specifications
                 The<ISubscriptionFactory>().WhenToldTo(
                     s => s.Create(
                         Param.IsAny<IModelReference>(),
-                        Param.IsAny<ISubscriptionConfiguration>(), Param.IsAny<Action<TestMessage>>())).Return(subscription);
+                        Param.IsAny<ISubscriptionConfiguration>(), Param.IsAny<Action<TestMessage, IMessageContext>>())).Return(subscription);
             };
 
             protected static ISubscription subscription;
@@ -123,7 +123,7 @@ namespace Chinchilla.Specifications
 
         public class TestConsumer : IConsumer<TestMessage>
         {
-            public void Consume(TestMessage message)
+            public void Consume(TestMessage message, IMessageContext messageContext)
             {
 
             }

@@ -29,10 +29,20 @@ namespace Chinchilla
 
         public ISubscription Subscribe<TMessage>(Action<TMessage> onMessage)
         {
-            return Subscribe(onMessage, new SubscriptionConfiguration());
+            return Subscribe<TMessage>((m, c) => onMessage(m));
         }
 
         public ISubscription Subscribe<TMessage>(Action<TMessage> onMessage, Action<ISubscriptionBuilder> builder)
+        {
+            return Subscribe<TMessage>((m, c) => onMessage(m), builder);
+        }
+
+        public ISubscription Subscribe<TMessage>(Action<TMessage, IMessageContext> onMessage)
+        {
+            return Subscribe(onMessage, new SubscriptionConfiguration());
+        }
+
+        public ISubscription Subscribe<TMessage>(Action<TMessage, IMessageContext> onMessage, Action<ISubscriptionBuilder> builder)
         {
             var configuration = new SubscriptionConfiguration();
 
@@ -41,7 +51,7 @@ namespace Chinchilla
             return Subscribe(onMessage, configuration);
         }
 
-        private ISubscription Subscribe<TMessage>(Action<TMessage> onMessage, ISubscriptionConfiguration subscriptionConfiguration)
+        private ISubscription Subscribe<TMessage>(Action<TMessage, IMessageContext> onMessage, ISubscriptionConfiguration subscriptionConfiguration)
         {
             logger.DebugFormat("Subscribing to action callback of type {0}", typeof(TMessage).Name);
 
@@ -55,26 +65,19 @@ namespace Chinchilla
             return subscription;
         }
 
-        public ISubscription Subscribe(IConsumer consumer)
-        {
-            logger.DebugFormat("Registering consumer {0}", consumer.GetType().Name);
-            var instance = new ConsumerSubscriber(this, consumer);
-            return instance.Connect();
-        }
-
-        public ISubscription Subscribe(IConsumer consumer, Action<ISubscriptionBuilder> builder)
-        {
-            logger.DebugFormat("Registering consumer {0}", consumer.GetType().Name);
-            var instance = new ConsumerSubscriber(this, consumer);
-            return instance.Connect(builder);
-        }
-
         public ISubscription Subscribe<TConsumer>()
             where TConsumer : IConsumer
         {
             logger.DebugFormat("Buliding consumer {0}", typeof(TConsumer).Name);
             var consumer = consumerFactory.Build<TConsumer>();
             return Subscribe(consumer);
+        }
+
+        public ISubscription Subscribe(IConsumer consumer)
+        {
+            logger.DebugFormat("Registering consumer {0}", consumer.GetType().Name);
+            var instance = new ConsumerSubscriber(this, consumer);
+            return instance.Connect();
         }
 
         public IPublisher<TMessage> CreatePublisher<TMessage>()

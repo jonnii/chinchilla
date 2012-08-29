@@ -65,7 +65,9 @@
     <Compile Include="IEndpoint.cs" />
     <Compile Include="IEndpointConfiguration.cs" />
     <Compile Include="IHasRoutingKey.cs" />
+    <Compile Include="IMessageContext.cs" />
     <Compile Include="IRouter.cs" />
+    <Compile Include="MessageContext.cs" />
     <Compile Include="Topologies\DefaultMessageTopologyBuilder.cs" />
     <Compile Include="Delivery.cs" />
     <Compile Include="DeliveryStrategy.cs" />

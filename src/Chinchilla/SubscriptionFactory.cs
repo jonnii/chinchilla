@@ -11,7 +11,8 @@ namespace Chinchilla
 
         private readonly IMessageSerializer messageSerializer;
 
-        public SubscriptionFactory(IMessageSerializer messageSerializer)
+        public SubscriptionFactory(
+            IMessageSerializer messageSerializer)
         {
             this.messageSerializer = messageSerializer;
         }
@@ -19,7 +20,7 @@ namespace Chinchilla
         public ISubscription Create<TMessage>(
             IModelReference modelReference,
             ISubscriptionConfiguration configuration,
-            Action<TMessage> processor)
+            Action<TMessage, IMessageContext> callback)
         {
             logger.DebugFormat("Creating new handler subscription with configuration: {0}", configuration);
 
@@ -31,7 +32,7 @@ namespace Chinchilla
             var topology = configuration.BuildTopology(endpoint);
             topology.Visit(topologyBuilder);
 
-            var deliveryProcessor = new ActionDeliveryProcessor<TMessage>(messageSerializer, processor);
+            var deliveryProcessor = new ActionDeliveryProcessor<TMessage>(messageSerializer, callback);
             var consumerStrategy = configuration.BuildDeliveryStrategy(deliveryProcessor);
 
             return Create(modelReference, consumerStrategy, topology);

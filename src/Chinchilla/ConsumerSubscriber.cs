@@ -8,19 +8,14 @@ namespace Chinchilla
     {
         private static readonly MethodInfo subscribeMethod;
 
-        private static readonly MethodInfo subscribeMethodWithBuilder;
-
         static ConsumerSubscriber()
         {
             subscribeMethod = typeof(IBus).GetMethods()
-                .Single(m => m.Name == "Subscribe"
-                && m.GetGenericArguments().Count() == 1
-                && m.GetParameters().Count() == 1);
-
-            subscribeMethodWithBuilder = typeof(IBus).GetMethods()
-                .Single(m => m.Name == "Subscribe"
-                && m.GetGenericArguments().Count() == 1
-                && m.GetParameters().Count() == 2);
+                .Single(m =>
+                    m.Name == "Subscribe" &&
+                    m.GetGenericArguments().Count() == 1 &&
+                    m.GetParameters().Count() == 1 &&
+                    m.GetParameters().First().ParameterType.GetGenericArguments().Count() == 2);
         }
 
         private readonly IBus bus;
@@ -35,16 +30,6 @@ namespace Chinchilla
 
         public ISubscription Connect()
         {
-            return Connect(subscribeMethod, new object[1]);
-        }
-
-        public ISubscription Connect(Action<ISubscriptionBuilder> builder)
-        {
-            return Connect(subscribeMethodWithBuilder, new object[] { null, builder });
-        }
-
-        private ISubscription Connect(MethodInfo methodInfo, object[] parameters)
-        {
             var method = consumer.GetType().GetMethod("Consume");
 
             if (method == null)
@@ -57,14 +42,12 @@ namespace Chinchilla
                 .First()
                 .ParameterType;
 
-            var actionType = typeof(Action<>).MakeGenericType(messageType);
+            var actionType = typeof(Action<,>).MakeGenericType(messageType, typeof(IMessageContext));
             var consumeAction = Delegate.CreateDelegate(actionType, consumer, method);
 
-            var genericSubscribeMethod = methodInfo.MakeGenericMethod(messageType);
+            var genericSubscribeMethod = subscribeMethod.MakeGenericMethod(messageType);
 
-            parameters[0] = consumeAction;
-
-            return (ISubscription)genericSubscribeMethod.Invoke(bus, parameters);
+            return (ISubscription)genericSubscribeMethod.Invoke(bus, new object[] { consumeAction });
         }
     }
 }
