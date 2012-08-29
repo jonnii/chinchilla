@@ -1,4 +1,5 @@
 using System;
+using Chinchilla.Configuration;
 using Chinchilla.Logging;
 
 namespace Chinchilla

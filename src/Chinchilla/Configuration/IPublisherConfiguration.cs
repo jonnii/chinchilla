@@ -1,4 +1,4 @@
-namespace Chinchilla
+namespace Chinchilla.Configuration
 {
     public interface IPublisherConfiguration : IEndpointConfiguration
     {

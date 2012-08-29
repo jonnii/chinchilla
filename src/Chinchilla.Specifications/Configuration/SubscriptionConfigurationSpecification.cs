@@ -1,8 +1,9 @@
-﻿using Chinchilla.Topologies;
+﻿using Chinchilla.Configuration;
+using Chinchilla.Topologies;
 using Machine.Fakes;
 using Machine.Specifications;
 
-namespace Chinchilla.Specifications
+namespace Chinchilla.Specifications.Configuration
 {
     public class SubscriptionConfigurationSpecification
     {

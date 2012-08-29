@@ -1,3 +1,4 @@
+using Chinchilla.Configuration;
 using Chinchilla.Topologies.Model;
 
 namespace Chinchilla

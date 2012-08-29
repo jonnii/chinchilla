@@ -1,4 +1,5 @@
-﻿using Chinchilla.Topologies;
+﻿using Chinchilla.Configuration;
+using Chinchilla.Topologies;
 using Chinchilla.Topologies.Model;
 using Machine.Fakes;
 using Machine.Specifications;

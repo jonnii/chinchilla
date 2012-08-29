@@ -1,7 +1,7 @@
 using System;
 using Chinchilla.Topologies;
 
-namespace Chinchilla
+namespace Chinchilla.Configuration
 {
     public class PublisherConfiguration : EndpointConfiguration, IPublisherConfiguration, IPublisherBuilder
     {

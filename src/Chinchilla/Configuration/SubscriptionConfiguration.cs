@@ -1,7 +1,7 @@
 using System;
 using Chinchilla.Topologies;
 
-namespace Chinchilla
+namespace Chinchilla.Configuration
 {
     public class SubscriptionConfiguration : EndpointConfiguration, ISubscriptionConfiguration, ISubscriptionBuilder
     {

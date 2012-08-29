@@ -1,4 +1,5 @@
 ﻿using System;
+using Chinchilla.Configuration;
 using Chinchilla.Specifications.Messages;
 using Machine.Fakes;
 using Machine.Specifications;
