@@ -14,6 +14,11 @@ namespace Chinchilla
         ulong NumAcceptedMessages { get; }
 
         /// <summary>
+        /// The number of failed messages processed by this subscription
+        /// </summary>
+        ulong NumFailedMessages { get; }
+
+        /// <summary>
         /// The queue that is being subscribed to by this subscription
         /// </summary>
         IQueue Queue { get; }

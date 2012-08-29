@@ -38,6 +38,8 @@ namespace Chinchilla
 
         public ulong NumAcceptedMessages { get; private set; }
 
+        public ulong NumFailedMessages { get; private set; }
+
         public IQueue Queue { get; private set; }
 
         public void Start()
@@ -84,6 +86,8 @@ namespace Chinchilla
         public void OnFailed(IDelivery delivery, Exception exception)
         {
             deliveryFailureStrategy.Handle(delivery, exception);
+
+            ++NumFailedMessages;
         }
 
         public override void Dispose()
