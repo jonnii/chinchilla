@@ -37,12 +37,12 @@ namespace Chinchilla
             return Subscribe<TMessage>((m, c) => onMessage(m), builder);
         }
 
-        public ISubscription Subscribe<TMessage>(Action<TMessage, IMessageContext> onMessage)
+        public ISubscription Subscribe<TMessage>(Action<TMessage, IDeliveryContext> onMessage)
         {
             return Subscribe(onMessage, new SubscriptionConfiguration());
         }
 
-        public ISubscription Subscribe<TMessage>(Action<TMessage, IMessageContext> onMessage, Action<ISubscriptionBuilder> builder)
+        public ISubscription Subscribe<TMessage>(Action<TMessage, IDeliveryContext> onMessage, Action<ISubscriptionBuilder> builder)
         {
             var configuration = new SubscriptionConfiguration();
 
@@ -51,12 +51,17 @@ namespace Chinchilla
             return Subscribe(onMessage, configuration);
         }
 
-        private ISubscription Subscribe<TMessage>(Action<TMessage, IMessageContext> onMessage, ISubscriptionConfiguration subscriptionConfiguration)
+        private ISubscription Subscribe<TMessage>(Action<TMessage, IDeliveryContext> onMessage, ISubscriptionConfiguration subscriptionConfiguration)
         {
             logger.DebugFormat("Subscribing to action callback of type {0}", typeof(TMessage).Name);
 
             var model = modelFactory.CreateModel();
-            var subscription = subscriptionFactory.Create(model, subscriptionConfiguration, onMessage);
+
+            var subscription = subscriptionFactory.Create(
+                this,
+                model,
+                subscriptionConfiguration,
+                onMessage);
 
             logger.DebugFormat("Starting subscription: {0}", subscription);
 

@@ -37,7 +37,7 @@ namespace Chinchilla.Specifications
                 subscriber.Connect();
 
             It should_subscribe = () =>
-                bus.WasToldTo(b => b.Subscribe(Param.IsAny<Action<TestMessage, IMessageContext>>()));
+                bus.WasToldTo(b => b.Subscribe(Param.IsAny<Action<TestMessage, IDeliveryContext>>()));
 
             static IBus bus;
 
@@ -46,7 +46,7 @@ namespace Chinchilla.Specifications
 
         public class TestConsumer : IConsumer<TestMessage>
         {
-            public void Consume(TestMessage message, IMessageContext messageContext)
+            public void Consume(TestMessage message, IDeliveryContext deliveryContext)
             {
 
             }

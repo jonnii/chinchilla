@@ -42,7 +42,7 @@ namespace Chinchilla
                 .First()
                 .ParameterType;
 
-            var actionType = typeof(Action<,>).MakeGenericType(messageType, typeof(IMessageContext));
+            var actionType = typeof(Action<,>).MakeGenericType(messageType, typeof(IDeliveryContext));
             var consumeAction = Delegate.CreateDelegate(actionType, consumer, method);
 
             var genericSubscribeMethod = subscribeMethod.MakeGenericMethod(messageType);

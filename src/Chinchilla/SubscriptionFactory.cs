@@ -18,9 +18,10 @@ namespace Chinchilla
         }
 
         public ISubscription Create<TMessage>(
+            IBus bus,
             IModelReference modelReference,
             ISubscriptionConfiguration configuration,
-            Action<TMessage, IMessageContext> callback)
+            Action<TMessage, IDeliveryContext> callback)
         {
             logger.DebugFormat("Creating new handler subscription with configuration: {0}", configuration);
 
@@ -32,10 +33,14 @@ namespace Chinchilla
             var topology = configuration.BuildTopology(endpoint);
             topology.Visit(topologyBuilder);
 
-            var deliveryProcessor = new ActionDeliveryProcessor<TMessage>(messageSerializer, callback);
-            var consumerStrategy = configuration.BuildDeliveryStrategy(deliveryProcessor);
+            var deliveryProcessor = new ActionDeliveryProcessor<TMessage>(
+                bus,
+                messageSerializer,
+                callback);
 
-            return Create(modelReference, consumerStrategy, topology);
+            var deliveryStrategy = configuration.BuildDeliveryStrategy(deliveryProcessor);
+
+            return Create(modelReference, deliveryStrategy, topology);
         }
 
         public ISubscription Create(

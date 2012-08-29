@@ -10,13 +10,14 @@ namespace Chinchilla.Specifications
         {
             Establish context = () =>
             {
+                bus = An<IBus>();
                 serializer = An<IMessageSerializer>();
                 serializer.WhenToldTo(s => s.Deserialize<TestMessage>(Param.IsAny<byte[]>()))
                     .Return(new Message<TestMessage>(new TestMessage()));
 
-                Subject = new ActionDeliveryProcessor<TestMessage>(serializer, (m, c) =>
+                Subject = new ActionDeliveryProcessor<TestMessage>(bus, serializer, (m, c) =>
                 {
-                    messageContext = c;
+                    deliveryContext = c;
                 });
 
                 delivery = An<IDelivery>();
@@ -26,15 +27,17 @@ namespace Chinchilla.Specifications
                 Subject.Process(delivery);
 
             It should_pass_message_context_to_callback = () =>
-                messageContext.ShouldNotBeNull();
+                deliveryContext.ShouldNotBeNull();
 
             static ActionDeliveryProcessor<TestMessage> Subject;
 
             static IMessageSerializer serializer;
 
-            static IMessageContext messageContext;
+            static IDeliveryContext deliveryContext;
 
             static IDelivery delivery;
+
+            static IBus bus;
         }
 
         public class TestMessage { }

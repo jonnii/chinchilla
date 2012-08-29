@@ -7,17 +7,21 @@ namespace Chinchilla
     /// typed message. The body of this message is then handed to an action 
     /// callback.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">The type of message to be delivered to the action</typeparam>
     public class ActionDeliveryProcessor<T> : IDeliveryProcessor
     {
+        private readonly IBus bus;
+
         private readonly IMessageSerializer messageSerializer;
 
-        private readonly Action<T, IMessageContext> handler;
+        private readonly Action<T, IDeliveryContext> handler;
 
         public ActionDeliveryProcessor(
+            IBus bus,
             IMessageSerializer messageSerializer,
-            Action<T, IMessageContext> handler)
+            Action<T, IDeliveryContext> handler)
         {
+            this.bus = bus;
             this.messageSerializer = messageSerializer;
             this.handler = handler;
         }
@@ -25,8 +29,9 @@ namespace Chinchilla
         public void Process(IDelivery delivery)
         {
             var deserialized = messageSerializer.Deserialize<T>(delivery.Body);
+            var deliveryContext = new DeliveryContext(bus);
 
-            handler(deserialized.Body, new MessageContext());
+            handler(deserialized.Body, deliveryContext);
         }
     }
 }

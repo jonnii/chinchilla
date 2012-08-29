@@ -17,6 +17,6 @@
         /// <summary>
         /// Consumes a message
         /// </summary>
-        void Consume(TMessage message, IMessageContext messageContext);
+        void Consume(TMessage message, IDeliveryContext deliveryContext);
     }
 }

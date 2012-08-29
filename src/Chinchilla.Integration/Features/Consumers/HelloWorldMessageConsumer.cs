@@ -5,7 +5,7 @@ namespace Chinchilla.Integration.Features.Consumers
 {
     public class HelloWorldMessageConsumer : IConsumer<HelloWorldMessage>
     {
-        public void Consume(HelloWorldMessage message, IMessageContext messageContext)
+        public void Consume(HelloWorldMessage message, IDeliveryContext deliveryContext)
         {
             Console.WriteLine("consuming message!");
         }
