@@ -67,11 +67,11 @@ task Package -depends PreparePackage {
 }
 
 task Publish -depends Package {
-	gci .\..\targets\packages\*.nupkg | ForEach-Object { ..\src\.nuget\nuget.exe Push $_.fullname }
+	gci .\..\targets\packages\*.nupkg | foreach { ..\src\.nuget\nuget.exe Push $_.fullname }
 }
 
 task PublishPre -depends PackagePre {
-	gci .\..\targets\packages\*.nupkg | ForEach-Object { ..\src\.nuget\nuget.exe Push $_.fullname }
+	gci .\..\targets\packages\*.nupkg | foreach { ..\src\.nuget\nuget.exe Push $_.fullname }
 }
 
 task CopyTools {
