@@ -71,7 +71,7 @@ namespace Chinchilla.Specifications.Configuration
         public class when_building_default_delivery_failure_strategy : WithSubject<SubscriptionConfiguration>
         {
             Because of = () =>
-                strategy = Subject.BuildDeliveryFailureStrategy();
+                strategy = Subject.BuildDeliveryFailureStrategy(An<IBus>());
 
             It should_build_immediate_strategy = () =>
                 strategy.ShouldBeOfType<ErrorQueueDeliveryFailureStrategy>();
@@ -86,7 +86,7 @@ namespace Chinchilla.Specifications.Configuration
                 Subject.DeliverFailuresUsing<IgnoreDeliveryFailureStrategy>();
 
             Because of = () =>
-                strategy = Subject.BuildDeliveryFailureStrategy();
+                strategy = Subject.BuildDeliveryFailureStrategy(An<IBus>());
 
             It should_create_strategy_of_correct_type = () =>
                 strategy.ShouldBeOfType<IgnoreDeliveryFailureStrategy>();

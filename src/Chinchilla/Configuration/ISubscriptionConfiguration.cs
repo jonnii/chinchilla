@@ -6,6 +6,6 @@ namespace Chinchilla.Configuration
 
         IDeliveryStrategy BuildDeliveryStrategy(IDeliveryProcessor deliveryProcessor);
 
-        IDeliveryFailureStrategy BuildDeliveryFailureStrategy();
+        IDeliveryFailureStrategy BuildDeliveryFailureStrategy(IBus bus);
     }
 }

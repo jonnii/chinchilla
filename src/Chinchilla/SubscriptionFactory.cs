@@ -40,7 +40,7 @@ namespace Chinchilla
                 callback);
 
             var deliveryStrategy = configuration.BuildDeliveryStrategy(deliveryProcessor);
-            var deliveryFailureStrategy = configuration.BuildDeliveryFailureStrategy();
+            var deliveryFailureStrategy = configuration.BuildDeliveryFailureStrategy(bus);
 
             return Create(modelReference, deliveryStrategy, deliveryFailureStrategy, topology);
         }

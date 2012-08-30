@@ -7,7 +7,7 @@ namespace Chinchilla.Configuration
     {
         private Func<IDeliveryProcessor, IDeliveryStrategy> strategyBuilder = handler => new ImmediateDeliveryStrategy();
 
-        private Func<IDeliveryFailureStrategy> failureStrategyBuilder = () => new ErrorQueueDeliveryFailureStrategy();
+        private Func<IBus, IDeliveryFailureStrategy> failureStrategyBuilder = bus => new ErrorQueueDeliveryFailureStrategy(bus);
 
         public string QueueName { get; private set; }
 
@@ -30,7 +30,7 @@ namespace Chinchilla.Configuration
         public ISubscriptionBuilder DeliverFailuresUsing<TStrategy>(params Action<TStrategy>[] configurations)
             where TStrategy : IDeliveryFailureStrategy, new()
         {
-            failureStrategyBuilder = () =>
+            failureStrategyBuilder = bus =>
             {
                 var strategy = new TStrategy();
                 foreach (var configuration in configurations)
@@ -50,9 +50,9 @@ namespace Chinchilla.Configuration
             return consumer;
         }
 
-        public IDeliveryFailureStrategy BuildDeliveryFailureStrategy()
+        public IDeliveryFailureStrategy BuildDeliveryFailureStrategy(IBus bus)
         {
-            return failureStrategyBuilder();
+            return failureStrategyBuilder(bus);
         }
 
         public ISubscriptionBuilder SetTopology(IMessageTopologyBuilder messageTopologyBuilder)

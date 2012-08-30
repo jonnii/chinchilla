@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -34,8 +33,11 @@ namespace Chinchilla.Api
 
         private IHttpClient BuildClient()
         {
-            var settings = HttpClientSettings.Default;
-            settings.Authenticator = new BasicAuthenticator("guest", "guest");
+            var settings = new HttpClientSettings
+            {
+                Authenticator = new BasicAuthenticator("guest", "guest")
+            };
+
             settings.Configure<JsonDotNetSerializer>(s =>
                 s.ConfigureSettings(c =>
                     c.ContractResolver = new RabbitContractResolver()));

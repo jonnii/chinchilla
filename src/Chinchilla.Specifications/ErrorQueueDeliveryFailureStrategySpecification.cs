@@ -7,7 +7,7 @@ namespace Chinchilla.Specifications
     public class ErrorQueueDeliveryFailureStrategySpecification
     {
         [Subject(typeof(ErrorQueueDeliveryFailureStrategy))]
-        public class when_handling_failed_delivery : WithSubject<ErrorQueueDeliveryFailureStrategy>
+        public class when_handling_failed_delivery : with_strategy
         {
             Establish context = () =>
                 delivery = An<IDelivery>();
@@ -19,6 +19,24 @@ namespace Chinchilla.Specifications
                 delivery.WasToldTo(d => d.Accept());
 
             static IDelivery delivery;
+        }
+
+        public class with_strategy : WithFakes
+        {
+            Establish context = () =>
+            {
+                var publisher = An<IPublisher<FailedMessage>>();
+
+                var bus = An<IBus>();
+                bus.WhenToldTo(b => b.CreatePublisher<FailedMessage>(
+                    Param.IsAny<Action<IPublisherBuilder>>())).Return(publisher);
+
+                Subject = new ErrorQueueDeliveryFailureStrategy(bus);
+            };
+
+            protected static ErrorQueueDeliveryFailureStrategy Subject;
+
+            protected static IPublisher<FailedMessage> publisher;
         }
     }
 }
