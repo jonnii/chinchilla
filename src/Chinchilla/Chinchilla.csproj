@@ -56,6 +56,7 @@
     <Compile Include="DefaultConnectionFactory.cs" />
     <Compile Include="ConnectionString.cs" />
     <Compile Include="DefaultConsumerFactory.cs" />
+    <Compile Include="Error.cs" />
     <Compile Include="ErrorQueueDeliveryFailureStrategy.cs" />
     <Compile Include="DefaultRouter.cs" />
     <Compile Include="DepotSettings.cs" />

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -40,7 +41,9 @@ namespace Chinchilla.Api
 
             settings.Configure<JsonDotNetSerializer>(s =>
                 s.ConfigureSettings(c =>
-                    c.ContractResolver = new RabbitContractResolver()));
+                {
+                    c.ContractResolver = new RabbitContractResolver();
+                }));
 
             return HttpClient.Create(root, settings);
         }
@@ -99,6 +102,35 @@ namespace Chinchilla.Api
         public bool Exists(VirtualHost virtualHost, Exchange exchange)
         {
             return Exchanges(virtualHost).Any(e => e.Name == exchange.Name);
+        }
+
+        public IEnumerable<Message> Messages(VirtualHost virtualHost, Queue queue)
+        {
+            var options = new
+            {
+                vhost = virtualHost.Name,
+                name = queue.Name,
+                count = "1",
+                requeue = "true",
+                encoding = "auto",
+                truncate = "50000"
+            };
+
+            var resource = Client.BuildRelativeResource("queues/:vhost/:queue/get", new
+            {
+                vhost = virtualHost.Name,
+                queue = queue.Name
+            });
+
+            var postRequest = new PostRequest(resource, new ObjectRequestBody(options));
+
+            // need to set accept to empty string or the http management plugin
+            // will complain
+            postRequest.AddHeader("Accept", string.Empty);
+
+            return Client.Run(postRequest)
+                .OnOk()
+                .As<List<Message>>();
         }
     }
 }

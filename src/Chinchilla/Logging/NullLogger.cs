@@ -1,3 +1,5 @@
+using System;
+
 namespace Chinchilla.Logging
 {
     public class NullLogger : ILogger
@@ -15,6 +17,18 @@ namespace Chinchilla.Logging
         }
 
         public void DebugFormat(string format, params object[] args)
+        {
+        }
+
+        public void Error(Exception exception)
+        {
+        }
+
+        public void Error(Exception exception, string message)
+        {
+        }
+
+        public void ErrorFormat(Exception exception, string format, params object[] args)
         {
         }
     }

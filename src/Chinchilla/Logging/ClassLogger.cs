@@ -1,3 +1,5 @@
+using System;
+
 namespace Chinchilla.Logging
 {
     public class ClassLogger<T> : ILogger
@@ -20,6 +22,21 @@ namespace Chinchilla.Logging
         public void DebugFormat(string format, params object[] args)
         {
             Logger.Target.DebugFormat(format, args);
+        }
+
+        public void Error(Exception exception)
+        {
+            Logger.Target.Error(exception);
+        }
+
+        public void Error(Exception exception, string message)
+        {
+            Logger.Target.Error(exception, message);
+        }
+
+        public void ErrorFormat(Exception exception, string format, params object[] args)
+        {
+            Logger.Target.ErrorFormat(exception, format, args);
         }
     }
 }

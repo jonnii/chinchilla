@@ -25,10 +25,10 @@ namespace Chinchilla.Specifications
         {
             Establish context = () =>
             {
-                var publisher = An<IPublisher<FailedMessage>>();
+                var publisher = An<IPublisher<Error>>();
 
                 var bus = An<IBus>();
-                bus.WhenToldTo(b => b.CreatePublisher<FailedMessage>(
+                bus.WhenToldTo(b => b.CreatePublisher<Error>(
                     Param.IsAny<Action<IPublisherBuilder>>())).Return(publisher);
 
                 Subject = new ErrorQueueDeliveryFailureStrategy(bus);
@@ -36,7 +36,7 @@ namespace Chinchilla.Specifications
 
             protected static ErrorQueueDeliveryFailureStrategy Subject;
 
-            protected static IPublisher<FailedMessage> publisher;
+            protected static IPublisher<Error> publisher;
         }
     }
 }

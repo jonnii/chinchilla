@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
+using Chinchilla.Api;
 using Chinchilla.Integration.Features.Messages;
 using NUnit.Framework;
 
@@ -36,6 +38,13 @@ namespace Chinchilla.Integration.Features
                 bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
 
                 Thread.Sleep(200);
+
+                Assert.That(admin.Exists(IntegrationVHost, new Queue("ErrorQueue")));
+                Assert.That(admin.Exists(IntegrationVHost, new Exchange("ErrorExchange")));
+
+                var messages = admin.Messages(IntegrationVHost, new Queue("ErrorQueue"));
+
+                Assert.That(messages.Count(), Is.EqualTo(1));
             }
         }
 

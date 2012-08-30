@@ -23,5 +23,23 @@ namespace Chinchilla.Logging
         {
             Console.WriteLine("DEBUG: " + format, args);
         }
+
+        public void Error(Exception exception)
+        {
+            Console.WriteLine(exception.Message);
+            Console.WriteLine(exception.StackTrace);
+        }
+
+        public void Error(Exception exception, string message)
+        {
+            Console.WriteLine(message);
+            Error(exception);
+        }
+
+        public void ErrorFormat(Exception exception, string format, params object[] args)
+        {
+            Console.WriteLine(format, args);
+            Error(exception);
+        }
     }
 }

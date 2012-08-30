@@ -23,5 +23,7 @@ namespace Chinchilla.Api
         bool Exists(VirtualHost virtualHost, Queue queue);
 
         bool Exists(VirtualHost virtualHost, Exchange exchange);
+
+        IEnumerable<Message> Messages(VirtualHost virtualHost, Queue queue);
     }
 }
