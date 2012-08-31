@@ -61,7 +61,7 @@
     <Compile Include="Features\Messages\HelloWorldMessage.cs" />
     <Compile Include="Features\PublishFeature.cs" />
     <Compile Include="Features\SubscribeFeature.cs" />
-    <Compile Include="Features\SubscriberErrorFeature.cs" />
+    <Compile Include="Features\SubscriberFaultFeature.cs" />
     <Compile Include="Features\WithApi.cs" />
     <Compile Include="Features\WithLogging.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -5,23 +5,33 @@ using Chinchilla.Topologies.Model;
 
 namespace Chinchilla
 {
-    public class ErrorQueueDeliveryFailureStrategy : IDeliveryFailureStrategy, IMessageTopologyBuilder
+    public class ErrorQueueFaultStrategy : IFaultStrategy, IMessageTopologyBuilder
     {
-        private readonly ILogger logger = Logger.Create<ErrorQueueDeliveryFailureStrategy>();
+        private readonly ILogger logger = Logger.Create<ErrorQueueFaultStrategy>();
 
-        private readonly IPublisher<Error> publisher;
+        private readonly IPublisher<Fault> publisher;
 
-        public ErrorQueueDeliveryFailureStrategy(IBus bus)
+        public ErrorQueueFaultStrategy(IBus bus)
         {
-            publisher = bus.CreatePublisher<Error>(o => o.SetTopology(this));
+            publisher = bus.CreatePublisher<Fault>(o => o.SetTopology(this));
         }
 
         public void Handle(IDelivery delivery, Exception exception)
         {
             logger.ErrorFormat(exception, "Error Queue is handlinge exception");
 
-            publisher.Publish(new Error());
+            var error = BuildFault(delivery, exception);
+            publisher.Publish(error);
+
             delivery.Accept();
+        }
+
+        public Fault BuildFault(IDelivery delivery, Exception exception)
+        {
+            return new Fault
+            {
+                RoutingKey = delivery.RoutingKey
+            };
         }
 
         public IMessageTopology Build(IEndpoint endpoint)

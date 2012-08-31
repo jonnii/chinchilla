@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace Chinchilla.Integration.Features
 {
     [TestFixture]
-    public class SubscriberErrorFeature : WithApi
+    public class SubscriberFaultFeature : WithApi
     {
         [Test]
         public void ShouldAllowConfigurationOfCustomDeliveryFailureStrategies()
@@ -19,7 +19,7 @@ namespace Chinchilla.Integration.Features
 
                 bus.Subscribe(
                     (HelloWorldMessage hwm) => { throw new Exception("ERMAGHERD, EXPLODE!!11"); },
-                    opt => opt.DeliverFailuresUsing<CustomDeliveryFailureStrategy>(s => s.OnException(() => ++numExceptions)));
+                    opt => opt.DeliverFailuresUsing<CustomFaultStrategy>(s => s.OnException(() => ++numExceptions)));
 
                 bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
 
@@ -43,12 +43,11 @@ namespace Chinchilla.Integration.Features
                 Assert.That(admin.Exists(IntegrationVHost, new Exchange("ErrorExchange")));
 
                 var messages = admin.Messages(IntegrationVHost, new Queue("ErrorQueue"));
-
                 Assert.That(messages.Count(), Is.EqualTo(1));
             }
         }
 
-        public class CustomDeliveryFailureStrategy : IDeliveryFailureStrategy
+        public class CustomFaultStrategy : IFaultStrategy
         {
             private Action notifier;
 

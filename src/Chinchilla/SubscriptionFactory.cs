@@ -48,13 +48,13 @@ namespace Chinchilla
         public ISubscription Create(
             IModelReference modelReference,
             IDeliveryStrategy deliveryStrategy,
-            IDeliveryFailureStrategy deliveryFailureStrategy,
+            IFaultStrategy faultStrategy,
             IMessageTopology messageTopology)
         {
             var subscription = new Subscription(
                 modelReference,
                 deliveryStrategy,
-                deliveryFailureStrategy,
+                faultStrategy,
                 messageTopology.SubscribeQueue);
 
             Track(subscription);

@@ -3,10 +3,10 @@
 namespace Chinchilla
 {
     /// <summary>
-    /// A delivery failure strategy is invoked when a handler of consumer
+    /// A fault strategy is invoked when a handler of consumer
     /// throws an exception while processing a message
     /// </summary>
-    public interface IDeliveryFailureStrategy
+    public interface IFaultStrategy
     {
         void Handle(IDelivery delivery, Exception exception);
     }

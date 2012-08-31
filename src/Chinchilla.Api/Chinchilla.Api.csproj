@@ -53,6 +53,7 @@
     <Compile Include="Exchange.cs" />
     <Compile Include="IRabbitAdmin.cs" />
     <Compile Include="Message.cs" />
+    <Compile Include="MessageProperties.cs" />
     <Compile Include="Permissions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queue.cs" />

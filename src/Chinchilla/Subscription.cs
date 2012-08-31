@@ -15,7 +15,7 @@ namespace Chinchilla
 
         private readonly IDeliveryStrategy deliveryStrategy;
 
-        private readonly IDeliveryFailureStrategy deliveryFailureStrategy;
+        private readonly IFaultStrategy faultStrategy;
 
         private BlockingCollection<BasicDeliverEventArgs> consumerQueue;
 
@@ -26,12 +26,12 @@ namespace Chinchilla
         public Subscription(
             IModelReference modelReference,
             IDeliveryStrategy deliveryStrategy,
-            IDeliveryFailureStrategy deliveryFailureStrategy,
+            IFaultStrategy faultStrategy,
             IQueue queue)
         {
             this.modelReference = modelReference;
             this.deliveryStrategy = deliveryStrategy;
-            this.deliveryFailureStrategy = deliveryFailureStrategy;
+            this.faultStrategy = faultStrategy;
 
             Queue = queue;
         }
@@ -64,7 +64,12 @@ namespace Chinchilla
                         break;
                     }
 
-                    var delivery = new Delivery(this, item.DeliveryTag, item.Body);
+                    var delivery = new Delivery(
+                        this,
+                        item.DeliveryTag,
+                        item.Body,
+                        item.RoutingKey);
+
                     deliveryStrategy.Deliver(delivery);
                 }
 
@@ -85,7 +90,7 @@ namespace Chinchilla
 
         public void OnFailed(IDelivery delivery, Exception exception)
         {
-            deliveryFailureStrategy.Handle(delivery, exception);
+            faultStrategy.Handle(delivery, exception);
 
             ++NumFailedMessages;
         }

@@ -19,7 +19,7 @@ namespace Chinchilla
         /// <typeparam name="TStrategy">The type of the failure strategy</typeparam>
         /// <param name="configurations">Any configuration for this strategy</param>
         ISubscriptionBuilder DeliverFailuresUsing<TStrategy>(params Action<TStrategy>[] configurations)
-            where TStrategy : IDeliveryFailureStrategy, new();
+            where TStrategy : IFaultStrategy, new();
 
         ISubscriptionBuilder SetTopology(IMessageTopologyBuilder messageTopologyBuilder);
 

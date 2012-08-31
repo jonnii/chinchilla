@@ -14,7 +14,7 @@ namespace Chinchilla.Specifications
                 listener = An<IDeliveryListener>();
 
                 delivery = new Delivery(
-                    listener, 1234, new byte[] { 0xd, 0xe, 0xa, 0xd });
+                    listener, 1234, new byte[] { 0xd, 0xe, 0xa, 0xd }, "routing-key");
             };
 
             Because of = () =>

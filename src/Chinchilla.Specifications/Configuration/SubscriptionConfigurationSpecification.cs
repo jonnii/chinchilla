@@ -74,24 +74,24 @@ namespace Chinchilla.Specifications.Configuration
                 strategy = Subject.BuildDeliveryFailureStrategy(An<IBus>());
 
             It should_build_immediate_strategy = () =>
-                strategy.ShouldBeOfType<ErrorQueueDeliveryFailureStrategy>();
+                strategy.ShouldBeOfType<ErrorQueueFaultStrategy>();
 
-            static IDeliveryFailureStrategy strategy;
+            static IFaultStrategy strategy;
         }
 
         [Subject(typeof(SubscriptionConfiguration))]
         public class when_building_configured_delivery_failure_strategy : WithSubject<SubscriptionConfiguration>
         {
             Establish context = () =>
-                Subject.DeliverFailuresUsing<IgnoreDeliveryFailureStrategy>();
+                Subject.DeliverFailuresUsing<IgnoreFaultStrategy>();
 
             Because of = () =>
                 strategy = Subject.BuildDeliveryFailureStrategy(An<IBus>());
 
             It should_create_strategy_of_correct_type = () =>
-                strategy.ShouldBeOfType<IgnoreDeliveryFailureStrategy>();
+                strategy.ShouldBeOfType<IgnoreFaultStrategy>();
 
-            static IDeliveryFailureStrategy strategy;
+            static IFaultStrategy strategy;
         }
     }
 }

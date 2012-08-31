@@ -2,8 +2,13 @@ using System;
 
 namespace Chinchilla
 {
-    public class Error
+    public class Fault : IHasRoutingKey
     {
+        public Fault()
+        {
+            OccuredAt = DateTime.UtcNow;
+        }
+
         public string RoutingKey { get; set; }
 
         public string Exchange { get; set; }
@@ -12,6 +17,6 @@ namespace Chinchilla
 
         public string Message { get; set; }
 
-        public DateTime DateTime { get; set; }
+        public DateTime OccuredAt { get; set; }
     }
 }

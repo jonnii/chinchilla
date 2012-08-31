@@ -8,9 +8,20 @@ namespace Chinchilla
     /// </summary>
     public interface IDelivery
     {
+        /// <summary>
+        /// The delivery tag
+        /// </summary>
         ulong Tag { get; }
 
+        /// <summary>
+        /// The raw body of the delivery
+        /// </summary>
         byte[] Body { get; }
+
+        /// <summary>
+        /// The original routing key for this delivery
+        /// </summary>
+        string RoutingKey { get; }
 
         /// <summary>
         /// Indicates that this delivery has been processed and can be

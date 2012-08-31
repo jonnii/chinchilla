@@ -4,10 +4,10 @@ using Machine.Specifications;
 
 namespace Chinchilla.Specifications
 {
-    public class IgnoreDeliveryFailureStrategySpecification
+    public class IgnoreFaultStrategySpecification
     {
-        [Subject(typeof(IDeliveryFailureStrategy))]
-        public class when_handling_delivery_exception : WithSubject<IgnoreDeliveryFailureStrategy>
+        [Subject(typeof(IgnoreFaultStrategy))]
+        public class when_handling_delivery_exception : WithSubject<IgnoreFaultStrategy>
         {
             Establish context = () =>
                 delivery = An<IDelivery>();
