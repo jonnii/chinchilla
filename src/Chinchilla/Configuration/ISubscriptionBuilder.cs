@@ -8,24 +8,39 @@ namespace Chinchilla.Configuration
         /// <summary>
         /// Changes the delivery strategy for the subscription.
         /// </summary>
-        /// <typeparam name="TStrategy">The type of strategy to use</typeparam>
-        /// <param name="configurations">Any configuration for this strategy</param>
         ISubscriptionBuilder DeliverUsing<TStrategy>(params Action<TStrategy>[] configurations)
             where TStrategy : IDeliveryStrategy, new();
 
         /// <summary>
-        /// Changes the strategy for failed deliveries
+        /// Changes the strategy for faulted deliveries
         /// </summary>
-        /// <typeparam name="TStrategy">The type of the failure strategy</typeparam>
-        /// <param name="configurations">Any configuration for this strategy</param>
         ISubscriptionBuilder DeliverFaultsUsing<TStrategy>(params Action<TStrategy>[] configurations)
             where TStrategy : IFaultStrategy, new();
 
-        ISubscriptionBuilder SetTopology(IMessageTopologyBuilder messageTopologyBuilder);
+        /// <summary>
+        /// Sets the topology of this subscription
+        /// </summary>
+        ISubscriptionBuilder SetTopology(IMessageTopologyBuilder builder);
 
+        /// <summary>
+        /// Sets the topology of this subscription
+        /// </summary>
         ISubscriptionBuilder SetTopology<TBuilder>()
             where TBuilder : IMessageTopologyBuilder, new();
 
+        /// <summary>
+        /// Changes the queue name that this subscription subscribes on.
+        /// </summary>
         ISubscriptionBuilder SubscribeOn(string subscriptionQueueName);
+
+        /// <summary>
+        /// Changes the prefetch count
+        /// </summary>
+        ISubscriptionBuilder WithPrefetchCount(ushort prefetchCount);
+
+        /// <summary>
+        /// Changes the prefetch size
+        /// </summary>
+        ISubscriptionBuilder WithPrefetchSize(uint prefetchSize);
     }
 }

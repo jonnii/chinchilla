@@ -65,9 +65,9 @@ namespace Chinchilla.Configuration
             return failureStrategyBuilder(bus);
         }
 
-        public ISubscriptionBuilder SetTopology(IMessageTopologyBuilder messageTopologyBuilder)
+        public ISubscriptionBuilder SetTopology(IMessageTopologyBuilder builder)
         {
-            MessageTopologyBuilder = messageTopologyBuilder;
+            MessageTopologyBuilder = builder;
             return this;
         }
 
@@ -81,6 +81,18 @@ namespace Chinchilla.Configuration
         public ISubscriptionBuilder SubscribeOn(string subscriptionQueueName)
         {
             QueueName = subscriptionQueueName;
+            return this;
+        }
+
+        public ISubscriptionBuilder WithPrefetchCount(ushort prefetchCount)
+        {
+            PrefetchCount = prefetchCount;
+            return this;
+        }
+
+        public ISubscriptionBuilder WithPrefetchSize(uint prefetchSize)
+        {
+            PrefetchSize = prefetchSize;
             return this;
         }
 
