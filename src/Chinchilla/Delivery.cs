@@ -10,13 +10,15 @@ namespace Chinchilla
             IDeliveryListener listener,
             ulong tag,
             byte[] body,
-            string routingKey)
+            string routingKey,
+            string exchange)
         {
             this.listener = listener;
 
             Tag = tag;
             Body = body;
             RoutingKey = routingKey;
+            Exchange = exchange;
         }
 
         public ulong Tag { get; private set; }
@@ -24,6 +26,8 @@ namespace Chinchilla
         public byte[] Body { get; private set; }
 
         public string RoutingKey { get; private set; }
+
+        public string Exchange { get; private set; }
 
         public void Accept()
         {

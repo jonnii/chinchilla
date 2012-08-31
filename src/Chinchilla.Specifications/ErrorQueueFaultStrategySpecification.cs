@@ -28,6 +28,7 @@ namespace Chinchilla.Specifications
             {
                 delivery = An<IDelivery>();
                 delivery.WhenToldTo(d => d.RoutingKey).Return("delivery-routing-key");
+                delivery.WhenToldTo(d => d.Exchange).Return("delivery-exchange");
             };
 
             Because of = () =>
@@ -35,6 +36,9 @@ namespace Chinchilla.Specifications
 
             It should_have_routing_key_for_original_message = () =>
                 fault.RoutingKey.ShouldEqual("delivery-routing-key");
+
+            It should_have_exchange_for_original_message = () =>
+                fault.Exchange.ShouldEqual("delivery-exchange");
 
             It should_have_fault_exception_message = () =>
                 fault.Exception.Message.ShouldEqual("ermagherd");

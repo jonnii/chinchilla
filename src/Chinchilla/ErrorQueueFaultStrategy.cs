@@ -36,7 +36,8 @@ namespace Chinchilla
                     Message = exception.Message,
                     Type = exception.GetType().FullName,
                     StackTrace = exception.StackTrace
-                }
+                },
+                Exchange = delivery.Exchange
             };
         }
 

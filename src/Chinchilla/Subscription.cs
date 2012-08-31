@@ -68,7 +68,8 @@ namespace Chinchilla
                         this,
                         item.DeliveryTag,
                         item.Body,
-                        item.RoutingKey);
+                        item.RoutingKey,
+                        item.Exchange);
 
                     deliveryStrategy.Deliver(delivery);
                 }

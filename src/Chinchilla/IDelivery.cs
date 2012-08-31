@@ -24,6 +24,11 @@ namespace Chinchilla
         string RoutingKey { get; }
 
         /// <summary>
+        /// The exchange that this message was routed through
+        /// </summary>
+        string Exchange { get; }
+
+        /// <summary>
         /// Indicates that this delivery has been processed and can be
         /// removed from the exchange
         /// </summary>
