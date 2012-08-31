@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using Chinchilla.Logging;
 using Chinchilla.Topologies;
 using Chinchilla.Topologies.Model;
@@ -28,6 +29,8 @@ namespace Chinchilla
 
         public Fault BuildFault(IDelivery delivery, Exception exception)
         {
+            var messageAsString = Encoding.UTF8.GetString(delivery.Body);
+
             return new Fault
             {
                 RoutingKey = delivery.RoutingKey,
@@ -37,7 +40,8 @@ namespace Chinchilla
                     Type = exception.GetType().FullName,
                     StackTrace = exception.StackTrace
                 },
-                Exchange = delivery.Exchange
+                Exchange = delivery.Exchange,
+                FaultedMessage = messageAsString
             };
         }
 

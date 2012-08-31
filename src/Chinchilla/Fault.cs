@@ -15,7 +15,7 @@ namespace Chinchilla
 
         public FaultException Exception { get; set; }
 
-        public string Message { get; set; }
+        public string FaultedMessage { get; set; }
 
         public DateTime OccuredAt { get; set; }
     }

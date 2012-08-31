@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using Machine.Fakes;
 using Machine.Specifications;
 
@@ -29,6 +30,7 @@ namespace Chinchilla.Specifications
                 delivery = An<IDelivery>();
                 delivery.WhenToldTo(d => d.RoutingKey).Return("delivery-routing-key");
                 delivery.WhenToldTo(d => d.Exchange).Return("delivery-exchange");
+                delivery.WhenToldTo(d => d.Body).Return(Encoding.Default.GetBytes("omg-failed"));
             };
 
             Because of = () =>
@@ -45,6 +47,9 @@ namespace Chinchilla.Specifications
 
             It should_have_fault_exception_type = () =>
                 fault.Exception.Type.ShouldContain("System.Exception");
+
+            It should_have_faulted_message = () =>
+                fault.FaultedMessage.ShouldEqual("omg-failed");
 
             static IDelivery delivery;
 
