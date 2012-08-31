@@ -36,11 +36,15 @@ namespace Chinchilla
             Queue = queue;
         }
 
+        public IQueue Queue { get; private set; }
+
+        public uint PrefetchSize { get; set; }
+
+        public ushort PrefetchCount { get; set; }
+
         public ulong NumAcceptedMessages { get; private set; }
 
         public ulong NumFailedMessages { get; private set; }
-
-        public IQueue Queue { get; private set; }
 
         public void Start()
         {

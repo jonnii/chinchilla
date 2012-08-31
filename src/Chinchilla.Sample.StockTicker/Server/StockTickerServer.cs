@@ -1,4 +1,5 @@
 using System.Threading;
+using Chinchilla.Configuration;
 using Chinchilla.Sample.StockTicker.Messages;
 
 namespace Chinchilla.Sample.StockTicker.Server

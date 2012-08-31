@@ -4,8 +4,12 @@ namespace Chinchilla.Configuration
     {
         string QueueName { get; }
 
+        uint PrefetchSize { get; }
+
+        ushort PrefetchCount { get; }
+
         IDeliveryStrategy BuildDeliveryStrategy(IDeliveryProcessor deliveryProcessor);
 
-        IFaultStrategy BuildDeliveryFailureStrategy(IBus bus);
+        IFaultStrategy BuildFaultStrategy(IBus bus);
     }
 }

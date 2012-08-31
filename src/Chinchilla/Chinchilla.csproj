@@ -91,11 +91,11 @@
     <Compile Include="IModelFactory.cs" />
     <Compile Include="IModelReference.cs" />
     <Compile Include="IPublisher.cs" />
-    <Compile Include="IPublisherBuilder.cs" />
+    <Compile Include="Configuration\IPublisherBuilder.cs" />
     <Compile Include="Configuration\IPublisherConfiguration.cs" />
     <Compile Include="IPublisherFactory.cs" />
     <Compile Include="Configuration\ISubscriptionConfiguration.cs" />
-    <Compile Include="ISubscriptionBuilder.cs" />
+    <Compile Include="Configuration\ISubscriptionBuilder.cs" />
     <Compile Include="ISubscriptionFactory.cs" />
     <Compile Include="Logging\ClassLogger.cs" />
     <Compile Include="Logging\ConsoleLogger.cs" />

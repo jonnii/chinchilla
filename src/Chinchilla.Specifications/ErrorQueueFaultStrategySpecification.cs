@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using Chinchilla.Configuration;
 using Machine.Fakes;
 using Machine.Specifications;
 

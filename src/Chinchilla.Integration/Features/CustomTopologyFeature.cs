@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using Chinchilla.Configuration;
 using Chinchilla.Integration.Features.Messages;
 using Chinchilla.Topologies;
 using Chinchilla.Topologies.Model;

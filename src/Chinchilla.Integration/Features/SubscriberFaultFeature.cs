@@ -19,7 +19,7 @@ namespace Chinchilla.Integration.Features
 
                 bus.Subscribe(
                     (HelloWorldMessage hwm) => { throw new Exception("ERMAGHERD, EXPLODE!!11"); },
-                    opt => opt.DeliverFailuresUsing<CustomFaultStrategy>(s => s.OnException(() => ++numExceptions)));
+                    opt => opt.DeliverFaultsUsing<CustomFaultStrategy>(s => s.OnException(() => ++numExceptions)));
 
                 bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
 

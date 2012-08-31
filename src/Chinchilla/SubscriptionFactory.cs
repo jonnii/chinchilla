@@ -1,7 +1,6 @@
 using System;
 using Chinchilla.Configuration;
 using Chinchilla.Logging;
-using Chinchilla.Topologies;
 using Chinchilla.Topologies.Model;
 
 namespace Chinchilla
@@ -26,6 +25,11 @@ namespace Chinchilla
         {
             logger.DebugFormat("Creating new handler subscription with configuration: {0}", configuration);
 
+            var deliveryProcessor = new ActionDeliveryProcessor<TMessage>(
+                bus,
+                messageSerializer,
+                callback);
+
             var messageType = typeof(TMessage).Name;
             var endpoint = new Endpoint(configuration.QueueName ?? messageType, messageType);
 
@@ -34,31 +38,26 @@ namespace Chinchilla
             var topology = configuration.BuildTopology(endpoint);
             topology.Visit(topologyBuilder);
 
-            var deliveryProcessor = new ActionDeliveryProcessor<TMessage>(
-                bus,
-                messageSerializer,
-                callback);
-
             var deliveryStrategy = configuration.BuildDeliveryStrategy(deliveryProcessor);
-            var deliveryFailureStrategy = configuration.BuildDeliveryFailureStrategy(bus);
+            var faultStrategy = configuration.BuildFaultStrategy(bus);
 
-            return Create(modelReference, deliveryStrategy, deliveryFailureStrategy, topology);
-        }
-
-        public ISubscription Create(
-            IModelReference modelReference,
-            IDeliveryStrategy deliveryStrategy,
-            IFaultStrategy faultStrategy,
-            IMessageTopology messageTopology)
-        {
             var subscription = new Subscription(
                 modelReference,
                 deliveryStrategy,
                 faultStrategy,
-                messageTopology.SubscribeQueue);
+                topology.SubscribeQueue)
+            {
+                PrefetchSize = configuration.PrefetchSize,
+                PrefetchCount = configuration.PrefetchCount
+            };
 
+            return Create(subscription);
+        }
+
+        public ISubscription Create(
+            Subscription subscription)
+        {
             Track(subscription);
-
             return subscription;
         }
 

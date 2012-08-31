@@ -9,7 +9,17 @@ namespace Chinchilla.Configuration
 
         private Func<IBus, IFaultStrategy> failureStrategyBuilder = bus => new ErrorQueueFaultStrategy(bus);
 
+        public SubscriptionConfiguration()
+        {
+            PrefetchSize = 0;
+            PrefetchCount = 50;
+        }
+
         public string QueueName { get; private set; }
+
+        public uint PrefetchSize { get; private set; }
+
+        public ushort PrefetchCount { get; private set; }
 
         public ISubscriptionBuilder DeliverUsing<TStrategy>(params Action<TStrategy>[] configurations)
             where TStrategy : IDeliveryStrategy, new()
@@ -27,7 +37,7 @@ namespace Chinchilla.Configuration
             return this;
         }
 
-        public ISubscriptionBuilder DeliverFailuresUsing<TStrategy>(params Action<TStrategy>[] configurations)
+        public ISubscriptionBuilder DeliverFaultsUsing<TStrategy>(params Action<TStrategy>[] configurations)
             where TStrategy : IFaultStrategy, new()
         {
             failureStrategyBuilder = bus =>
@@ -50,7 +60,7 @@ namespace Chinchilla.Configuration
             return consumer;
         }
 
-        public IFaultStrategy BuildDeliveryFailureStrategy(IBus bus)
+        public IFaultStrategy BuildFaultStrategy(IBus bus)
         {
             return failureStrategyBuilder(bus);
         }

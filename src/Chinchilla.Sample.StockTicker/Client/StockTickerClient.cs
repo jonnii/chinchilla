@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Chinchilla.Configuration;
 using Chinchilla.Sample.StockTicker.Messages;
 
 namespace Chinchilla.Sample.StockTicker.Client

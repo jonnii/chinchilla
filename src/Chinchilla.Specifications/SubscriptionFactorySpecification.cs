@@ -1,4 +1,4 @@
-﻿using Chinchilla.Topologies;
+﻿using Chinchilla.Topologies.Model;
 using Machine.Fakes;
 using Machine.Specifications;
 
@@ -9,11 +9,9 @@ namespace Chinchilla.Specifications
         [Subject(typeof(SubscriptionFactory))]
         public class when_creating_subscription : WithSubject<SubscriptionFactory>
         {
-            Establish context = () => { };
-
             Because of = () =>
                 subscription = (Subscription)Subject.Create(
-                    An<IModelReference>(), An<IDeliveryStrategy>(), An<IFaultStrategy>(), An<IMessageTopology>());
+                    new Subscription(An<IModelReference>(), An<IDeliveryStrategy>(), An<IFaultStrategy>(), An<IQueue>()));
 
             It should_track_subscription = () =>
                 Subject.IsTracking(subscription).ShouldBeTrue();
@@ -26,7 +24,7 @@ namespace Chinchilla.Specifications
         {
             Establish context = () =>
                 subscription = (Subscription)Subject.Create(
-                    An<IModelReference>(), An<IDeliveryStrategy>(), An<IFaultStrategy>(), An<IMessageTopology>());
+                    new Subscription(An<IModelReference>(), An<IDeliveryStrategy>(), An<IFaultStrategy>(), An<IQueue>()));
 
             Because of = () =>
                 subscription.Dispose();

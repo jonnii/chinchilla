@@ -1,6 +1,6 @@
 using Chinchilla.Topologies;
 
-namespace Chinchilla
+namespace Chinchilla.Configuration
 {
     public interface IPublisherBuilder
     {

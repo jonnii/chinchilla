@@ -8,6 +8,16 @@ namespace Chinchilla.Specifications.Configuration
     public class SubscriptionConfigurationSpecification
     {
         [Subject(typeof(SubscriptionConfiguration))]
+        public class in_general : WithSubject<SubscriptionConfiguration>
+        {
+            It should_have_default_prefetch_count = () =>
+                Subject.PrefetchCount.ShouldEqual((ushort)50);
+
+            It should_have_default_prefetch_size = () =>
+                Subject.PrefetchSize.ShouldEqual((uint)0);
+        }
+
+        [Subject(typeof(SubscriptionConfiguration))]
         public class when_building_default_topology : WithSubject<SubscriptionConfiguration>
         {
             Because of = () =>
@@ -71,7 +81,7 @@ namespace Chinchilla.Specifications.Configuration
         public class when_building_default_delivery_failure_strategy : WithSubject<SubscriptionConfiguration>
         {
             Because of = () =>
-                strategy = Subject.BuildDeliveryFailureStrategy(An<IBus>());
+                strategy = Subject.BuildFaultStrategy(An<IBus>());
 
             It should_build_immediate_strategy = () =>
                 strategy.ShouldBeOfType<ErrorQueueFaultStrategy>();
@@ -83,10 +93,10 @@ namespace Chinchilla.Specifications.Configuration
         public class when_building_configured_delivery_failure_strategy : WithSubject<SubscriptionConfiguration>
         {
             Establish context = () =>
-                Subject.DeliverFailuresUsing<IgnoreFaultStrategy>();
+                Subject.DeliverFaultsUsing<IgnoreFaultStrategy>();
 
             Because of = () =>
-                strategy = Subject.BuildDeliveryFailureStrategy(An<IBus>());
+                strategy = Subject.BuildFaultStrategy(An<IBus>());
 
             It should_create_strategy_of_correct_type = () =>
                 strategy.ShouldBeOfType<IgnoreFaultStrategy>();

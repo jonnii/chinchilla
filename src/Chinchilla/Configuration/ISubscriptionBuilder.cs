@@ -1,7 +1,7 @@
 using System;
 using Chinchilla.Topologies;
 
-namespace Chinchilla
+namespace Chinchilla.Configuration
 {
     public interface ISubscriptionBuilder
     {
@@ -18,7 +18,7 @@ namespace Chinchilla
         /// </summary>
         /// <typeparam name="TStrategy">The type of the failure strategy</typeparam>
         /// <param name="configurations">Any configuration for this strategy</param>
-        ISubscriptionBuilder DeliverFailuresUsing<TStrategy>(params Action<TStrategy>[] configurations)
+        ISubscriptionBuilder DeliverFaultsUsing<TStrategy>(params Action<TStrategy>[] configurations)
             where TStrategy : IFaultStrategy, new();
 
         ISubscriptionBuilder SetTopology(IMessageTopologyBuilder messageTopologyBuilder);
