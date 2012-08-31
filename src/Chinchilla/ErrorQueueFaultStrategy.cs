@@ -34,14 +34,14 @@ namespace Chinchilla
             return new Fault
             {
                 RoutingKey = delivery.RoutingKey,
+                Exchange = delivery.Exchange,
+                FaultedMessage = messageAsString,
                 Exception = new FaultException
                 {
                     Message = exception.Message,
                     Type = exception.GetType().FullName,
                     StackTrace = exception.StackTrace
-                },
-                Exchange = delivery.Exchange,
-                FaultedMessage = messageAsString
+                }
             };
         }
 
