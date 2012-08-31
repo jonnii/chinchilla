@@ -36,6 +36,12 @@ namespace Chinchilla.Specifications
             It should_have_routing_key_for_original_message = () =>
                 fault.RoutingKey.ShouldEqual("delivery-routing-key");
 
+            It should_have_fault_exception_message = () =>
+                fault.Exception.Message.ShouldEqual("ermagherd");
+
+            It should_have_fault_exception_type = () =>
+                fault.Exception.Type.ShouldContain("System.Exception");
+
             static IDelivery delivery;
 
             static Fault fault;

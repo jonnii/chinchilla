@@ -30,7 +30,13 @@ namespace Chinchilla
         {
             return new Fault
             {
-                RoutingKey = delivery.RoutingKey
+                RoutingKey = delivery.RoutingKey,
+                Exception = new FaultException
+                {
+                    Message = exception.Message,
+                    Type = exception.GetType().FullName,
+                    StackTrace = exception.StackTrace
+                }
             };
         }
 

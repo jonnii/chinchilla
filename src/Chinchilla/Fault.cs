@@ -13,7 +13,7 @@ namespace Chinchilla
 
         public string Exchange { get; set; }
 
-        public string Exception { get; set; }
+        public FaultException Exception { get; set; }
 
         public string Message { get; set; }
 

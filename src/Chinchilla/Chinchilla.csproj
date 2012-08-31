@@ -62,6 +62,7 @@
     <Compile Include="DepotSettings.cs" />
     <Compile Include="Endpoint.cs" />
     <Compile Include="Configuration\EndpointConfiguration.cs" />
+    <Compile Include="FaultException.cs" />
     <Compile Include="IBusConcern.cs" />
     <Compile Include="IConsumerFactory.cs" />
     <Compile Include="IFaultStrategy.cs" />
