@@ -4,7 +4,7 @@ namespace Chinchilla.Topologies
 {
     public class DefaultMessageTopologyBuilder : IMessageTopologyBuilder
     {
-        public IMessageTopology Build(IEndpoint endpoint)
+        public virtual IMessageTopology Build(IEndpoint endpoint)
         {
             var topology = new MessageTopology();
 
