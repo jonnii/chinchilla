@@ -1,12 +1,15 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using Chinchilla.Configuration;
 
 namespace Chinchilla
 {
     public class ConsumerSubscriber
     {
         private static readonly MethodInfo subscribeMethod;
+
+        private static readonly MethodInfo subscribeMethodWithConfiguration;
 
         static ConsumerSubscriber()
         {
@@ -15,6 +18,13 @@ namespace Chinchilla
                     m.Name == "Subscribe" &&
                     m.GetGenericArguments().Count() == 1 &&
                     m.GetParameters().Count() == 1 &&
+                    m.GetParameters().First().ParameterType.GetGenericArguments().Count() == 2);
+
+            subscribeMethodWithConfiguration = typeof(IBus).GetMethods()
+                .Single(m =>
+                    m.Name == "Subscribe" &&
+                    m.GetGenericArguments().Count() == 1 &&
+                    m.GetParameters().Count() == 2 &&
                     m.GetParameters().First().ParameterType.GetGenericArguments().Count() == 2);
         }
 
@@ -45,9 +55,27 @@ namespace Chinchilla
             var actionType = typeof(Action<,>).MakeGenericType(messageType, typeof(IDeliveryContext));
             var consumeAction = Delegate.CreateDelegate(actionType, consumer, method);
 
-            var genericSubscribeMethod = subscribeMethod.MakeGenericMethod(messageType);
+            if (consumer is IConfigurableConsumer)
+            {
+                var configureMethod = consumer
+                    .GetType()
+                    .GetMethod("ConfigureSubscription");
 
-            return (ISubscription)genericSubscribeMethod.Invoke(bus, new object[] { consumeAction });
+                var configureAction = Delegate.CreateDelegate(
+                    typeof(Action<ISubscriptionBuilder>),
+                    consumer,
+                    configureMethod);
+
+                var genericSubscribeMethod = subscribeMethodWithConfiguration.MakeGenericMethod(messageType);
+
+                return (ISubscription)genericSubscribeMethod.Invoke(bus, new object[] { consumeAction, configureAction });
+            }
+            else
+            {
+                var genericSubscribeMethod = subscribeMethod.MakeGenericMethod(messageType);
+
+                return (ISubscription)genericSubscribeMethod.Invoke(bus, new object[] { consumeAction });
+            }
         }
     }
 }

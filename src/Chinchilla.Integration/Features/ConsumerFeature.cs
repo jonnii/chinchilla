@@ -1,4 +1,5 @@
 ﻿using System.Threading;
+using Chinchilla.Api;
 using Chinchilla.Integration.Features.Consumers;
 using Chinchilla.Integration.Features.Messages;
 using NUnit.Framework;
@@ -42,6 +43,25 @@ namespace Chinchilla.Integration.Features
                     Thread.Sleep(1000);
 
                     Assert.That(subscriber.NumAcceptedMessages, Is.EqualTo(100));
+                }
+            }
+        }
+
+        [Test]
+        public void ShouldSubscribeWithConsumerWithCustomConfiguration()
+        {
+            using (var bus = Depot.Connect("localhost/integration"))
+            {
+                using (bus.Subscribe<CustomConfigurationConsumer>())
+                {
+                    for (var i = 0; i < 1; ++i)
+                    {
+                        bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
+                    }
+
+                    Thread.Sleep(1000);
+
+                    Assert.That(admin.Exists(IntegrationVHost, new Queue("custom-subscription-endpoint")), "did not create queue");
                 }
             }
         }

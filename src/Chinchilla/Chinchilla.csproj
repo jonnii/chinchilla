@@ -64,6 +64,7 @@
     <Compile Include="Configuration\EndpointConfiguration.cs" />
     <Compile Include="FaultException.cs" />
     <Compile Include="IBusConcern.cs" />
+    <Compile Include="Configuration\IConfigurableConsumer.cs" />
     <Compile Include="IConsumerFactory.cs" />
     <Compile Include="IFaultStrategy.cs" />
     <Compile Include="IEndpoint.cs" />

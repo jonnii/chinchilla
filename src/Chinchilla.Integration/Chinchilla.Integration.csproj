@@ -56,6 +56,7 @@
     <Compile Include="Features\Api\RabbitAdminFeature.cs" />
     <Compile Include="Features\ConnectionFeature.cs" />
     <Compile Include="Features\ConsumerFeature.cs" />
+    <Compile Include="Features\Consumers\CustomConfigurationConsumer.cs" />
     <Compile Include="Features\Consumers\HelloWorldMessageConsumer.cs" />
     <Compile Include="Features\CustomTopologyFeature.cs" />
     <Compile Include="Features\Messages\HelloWorldMessage.cs" />
