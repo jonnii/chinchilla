@@ -74,6 +74,7 @@
     <Compile Include="IDeliveryContext.cs" />
     <Compile Include="IRouter.cs" />
     <Compile Include="DeliveryContext.cs" />
+    <Compile Include="MultiSubscription.cs" />
     <Compile Include="Topologies\DefaultMessageTopologyBuilder.cs" />
     <Compile Include="Delivery.cs" />
     <Compile Include="DeliveryStrategy.cs" />

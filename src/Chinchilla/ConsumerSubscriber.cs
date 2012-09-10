@@ -40,7 +40,32 @@ namespace Chinchilla
 
         public ISubscription Connect()
         {
-            var method = consumer.GetType().GetMethod("Consume");
+            var interfaces = consumer
+                .GetType()
+                .GetInterfaces()
+                .Where(i => typeof(IConsumer).IsAssignableFrom(i) && i != typeof(IConsumer));
+
+            if (!interfaces.Any())
+            {
+                throw new ChinchillaException(
+                    "Could not find any interfaces that are assignable to IConsumer, did you implement IConsumer<T>?");
+            }
+
+            var subscriptions = interfaces.Select(ConnectConsumerInterface).ToList();
+
+            if (subscriptions.Count == 1)
+            {
+                return subscriptions.First();
+            }
+            else
+            {
+                return new MultiSubscription(subscriptions);
+            }
+        }
+
+        private ISubscription ConnectConsumerInterface(Type consumerInterfaceType)
+        {
+            var method = consumerInterfaceType.GetMethod("Consume");
 
             if (method == null)
             {
