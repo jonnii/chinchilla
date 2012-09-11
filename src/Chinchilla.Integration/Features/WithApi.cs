@@ -12,7 +12,7 @@ namespace Chinchilla.Integration.Features
         [SetUp]
         public void ResetVirtualHost()
         {
-            admin = RabbitAdmin.Create("http://localhost:55672/api");
+            admin = new RabbitAdmin("http://localhost:55672/api");
             admin.Delete(IntegrationVHost);
             admin.Create(IntegrationVHost);
             admin.Create(IntegrationVHost, new User("guest"), Permission.All);

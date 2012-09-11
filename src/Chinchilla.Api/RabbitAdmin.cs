@@ -9,16 +9,11 @@ namespace Chinchilla.Api
 {
     public class RabbitAdmin : IRabbitAdmin
     {
-        public static IRabbitAdmin Create(string root)
-        {
-            return new RabbitAdmin(root);
-        }
-
         private readonly string root;
 
         private IHttpClient httpClient;
 
-        private RabbitAdmin(string root)
+        public RabbitAdmin(string root)
         {
             this.root = root;
         }
