@@ -15,7 +15,7 @@ namespace Chinchilla.Integration.Features
             admin = RabbitAdmin.Create("http://localhost:55672/api");
             admin.Delete(IntegrationVHost);
             admin.Create(IntegrationVHost);
-            admin.Create(IntegrationVHost, new User("guest"), Permissions.All);
+            admin.Create(IntegrationVHost, new User("guest"), Permission.All);
         }
     }
 }

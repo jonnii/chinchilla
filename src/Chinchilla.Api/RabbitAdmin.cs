@@ -70,6 +70,13 @@ namespace Chinchilla.Api
             return Client.Get("queues/:vhost", new { vhost = virtualHost.Name }).OnOk().As<List<Queue>>();
         }
 
+        public IEnumerable<Permissions> Permissions(VirtualHost virtualHost)
+        {
+            return Client.Get("vhosts/:name/permissions", new { virtualHost.Name })
+                .OnOk()
+                .As<List<Permissions>>();
+        }
+
         public bool Create(VirtualHost virtualHost)
         {
             return Client.Put("vhosts/:name", new { name = virtualHost.Name }).Is(HttpStatusCode.NoContent);
@@ -85,10 +92,10 @@ namespace Chinchilla.Api
             return Client.Delete("connections/:name", new { name = connection.Name }).Is(HttpStatusCode.NoContent);
         }
 
-        public bool Create(VirtualHost virtualHost, User user, Permissions permissions)
+        public bool Create(VirtualHost virtualHost, User user, Permission permission)
         {
             return Client.Put(
-                permissions,
+                permission,
                 "permissions/:vhost/:user", new { vhost = virtualHost.Name, user = user.Name })
             .Is(HttpStatusCode.NoContent);
         }

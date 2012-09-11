@@ -12,13 +12,15 @@ namespace Chinchilla.Api
 
         IEnumerable<Queue> Queues(VirtualHost virtualHost);
 
+        IEnumerable<Permissions> Permissions(VirtualHost virtualHost);
+
         bool Create(VirtualHost virtualHost);
 
         bool Delete(VirtualHost virtualHost);
 
         bool Delete(Connection connection);
 
-        bool Create(VirtualHost virtualHost, User user, Permissions permissions);
+        bool Create(VirtualHost virtualHost, User user, Permission permission);
 
         bool Exists(VirtualHost virtualHost, Queue queue);
 
