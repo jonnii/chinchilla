@@ -51,6 +51,7 @@
     </Compile>
     <Compile Include="Connection.cs" />
     <Compile Include="Exchange.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="IRabbitAdmin.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="MessageProperties.cs" />

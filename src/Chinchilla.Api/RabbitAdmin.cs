@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using Chinchilla.Api.Extensions;
 using SpeakEasy;
 using SpeakEasy.Authenticators;
 using SpeakEasy.Serializers;
@@ -39,7 +40,9 @@ namespace Chinchilla.Api
                     c.ContractResolver = new RabbitContractResolver();
                 }));
 
-            return HttpClient.Create(root, settings);
+            var rootWithReplacements = root.FormatWithReplacements();
+
+            return HttpClient.Create(rootWithReplacements, settings);
         }
 
         public IEnumerable<VirtualHost> VirtualHosts

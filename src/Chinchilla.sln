@@ -42,6 +42,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla.Sample.BasicPubl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla.Sample.CastleConsumers", "Chinchilla.Sample.CastleConsumers\Chinchilla.Sample.CastleConsumers.csproj", "{C4B70E2C-6D02-44D0-956C-DF63B84D1FC3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla.Api.Specifications", "Chinchilla.Api.Specifications\Chinchilla.Api.Specifications.csproj", "{66A2C8F1-049A-4E77-9BEC-81BC4298B1DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -80,6 +82,10 @@ Global
 		{C4B70E2C-6D02-44D0-956C-DF63B84D1FC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4B70E2C-6D02-44D0-956C-DF63B84D1FC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4B70E2C-6D02-44D0-956C-DF63B84D1FC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66A2C8F1-049A-4E77-9BEC-81BC4298B1DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66A2C8F1-049A-4E77-9BEC-81BC4298B1DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66A2C8F1-049A-4E77-9BEC-81BC4298B1DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66A2C8F1-049A-4E77-9BEC-81BC4298B1DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
