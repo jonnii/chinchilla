@@ -2,7 +2,7 @@ using Chinchilla.Topologies.Model;
 
 namespace Chinchilla.Topologies
 {
-    public class DefaultMessageTopologyBuilder : IMessageTopologyBuilder
+    public class DefaultSubscribeTopologyBuilder : IMessageTopologyBuilder
     {
         public virtual IMessageTopology Build(IEndpoint endpoint)
         {

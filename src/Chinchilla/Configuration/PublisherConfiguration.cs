@@ -7,6 +7,11 @@ namespace Chinchilla.Configuration
     {
         private Func<IRouter> routerBuilder = () => new DefaultRouter();
 
+        public PublisherConfiguration()
+        {
+            MessageTopologyBuilder = new DefaultPublishTopologyBuilder();
+        }
+
         public IPublisherBuilder RouteWith<TRouter>()
             where TRouter : IRouter, new()
         {

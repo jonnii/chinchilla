@@ -11,6 +11,7 @@ namespace Chinchilla.Configuration
 
         public SubscriptionConfiguration()
         {
+            MessageTopologyBuilder = new DefaultSubscribeTopologyBuilder();
             PrefetchSize = 0;
             PrefetchCount = 50;
         }
