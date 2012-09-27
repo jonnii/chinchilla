@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Chinchilla.Topologies.Model;
 
 namespace Chinchilla
@@ -19,9 +20,9 @@ namespace Chinchilla
         ulong NumFailedMessages { get; }
 
         /// <summary>
-        /// The queue that is being subscribed to by this subscription
+        /// The queues that are being subscribed to by this subscription
         /// </summary>
-        IQueue Queue { get; }
+        IEnumerable<IQueue> Queues { get; }
 
         /// <summary>
         /// Starts the subscription

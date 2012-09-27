@@ -45,7 +45,7 @@ namespace Chinchilla
                 modelReference,
                 deliveryStrategy,
                 faultStrategy,
-                topology.SubscribeQueue)
+                new[] { topology.SubscribeQueue })
             {
                 PrefetchSize = configuration.PrefetchSize,
                 PrefetchCount = configuration.PrefetchCount

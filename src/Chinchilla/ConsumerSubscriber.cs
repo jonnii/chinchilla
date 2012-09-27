@@ -57,10 +57,8 @@ namespace Chinchilla
             {
                 return subscriptions.First();
             }
-            else
-            {
-                return new MultiSubscription(subscriptions);
-            }
+
+            return new MultiSubscription(subscriptions);
         }
 
         private ISubscription ConnectConsumerInterface(Type consumerInterfaceType)

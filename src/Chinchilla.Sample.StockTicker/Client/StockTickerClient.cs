@@ -23,7 +23,7 @@ namespace Chinchilla.Sample.StockTicker.Client
         {
             priceSubscription = bus.Subscribe<PriceMessage>(OnPrice, ConfigurePriceSubscription);
 
-            var binding = priceSubscription.Queue;
+            var binding = priceSubscription.Queues.Single();
 
             bus.Publish(new ConnectMessage(
                 id,

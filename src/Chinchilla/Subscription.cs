@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Chinchilla.Logging;
 using Chinchilla.Topologies.Model;
@@ -27,16 +29,16 @@ namespace Chinchilla
             IModelReference modelReference,
             IDeliveryStrategy deliveryStrategy,
             IFaultStrategy faultStrategy,
-            IQueue queue)
+            IEnumerable<IQueue> queues)
         {
             this.modelReference = modelReference;
             this.deliveryStrategy = deliveryStrategy;
             this.faultStrategy = faultStrategy;
 
-            Queue = queue;
+            Queues = queues;
         }
 
-        public IQueue Queue { get; private set; }
+        public IEnumerable<IQueue> Queues { get; private set; }
 
         public uint PrefetchSize { get; set; }
 
@@ -51,7 +53,9 @@ namespace Chinchilla
             modelReference.Execute(m => m.BasicQos(0, 0, false));
 
             logger.Debug("Creating Consumer");
-            consumerQueue = modelReference.GetConsumerQueue(Queue);
+
+            var queue = Queues.Single();
+            consumerQueue = modelReference.GetConsumerQueue(queue);
 
             logger.Debug("Starting listener thread");
             subscriptionThread = new Thread(() =>

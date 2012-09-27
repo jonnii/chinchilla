@@ -31,7 +31,7 @@ namespace Chinchilla
             get { throw new NotImplementedException(); }
         }
 
-        public IQueue Queue
+        public IEnumerable<IQueue> Queues
         {
             get { throw new NotImplementedException(); }
         }

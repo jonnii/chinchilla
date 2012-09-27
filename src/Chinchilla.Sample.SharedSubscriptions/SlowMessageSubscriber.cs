@@ -21,6 +21,8 @@ namespace Chinchilla.Sample.SharedSubscriptions
 
             subscription = bus.Subscribe<SharedMessage>(
                 ProcessMessage, a => a.SetTopology(builder));
+
+
         }
 
         public void ProcessMessage(SharedMessage message)

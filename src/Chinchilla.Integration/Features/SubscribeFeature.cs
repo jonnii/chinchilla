@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using Chinchilla.Api;
 using Chinchilla.Integration.Features.Messages;
@@ -102,7 +103,7 @@ namespace Chinchilla.Integration.Features
             {
                 var subscription = bus.Subscribe((HelloWorldMessage m) => { }, o => o.SubscribeOn("gimme-dem-messages"));
 
-                var queueName = subscription.Queue.Name;
+                var queueName = subscription.Queues.Single().Name;
                 Assert.That(queueName, Is.EqualTo("gimme-dem-messages"));
             }
         }
