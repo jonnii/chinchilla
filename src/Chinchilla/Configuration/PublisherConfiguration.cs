@@ -43,5 +43,10 @@ namespace Chinchilla.Configuration
             MessageTopologyBuilder = messageTopologyBuilder;
             return this;
         }
+
+        public override string ToString()
+        {
+            return string.Format("[PublishConfiguration ExchangeName={0}]", ExchangeName ?? "<auto>");
+        }
     }
 }

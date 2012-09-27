@@ -102,7 +102,7 @@ namespace Chinchilla
 
         private IPublisher<TMessage> CreatePublisher<TMessage>(IPublisherConfiguration configuration)
         {
-            logger.DebugFormat("creating publisher for {0}", typeof(TMessage).Name);
+            logger.DebugFormat("Creating publisher for {0} with configuration {1}", typeof(TMessage).Name, configuration);
 
             var model = modelFactory.CreateModel();
 

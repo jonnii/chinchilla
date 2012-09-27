@@ -137,7 +137,8 @@ namespace Chinchilla
 
         public override string ToString()
         {
-            return "[Subscription]";
+            var queueNames = string.Join(",", Queues.Select(q => q.Name));
+            return string.Format("[Subscription Queues={0}]", queueNames);
         }
     }
 }

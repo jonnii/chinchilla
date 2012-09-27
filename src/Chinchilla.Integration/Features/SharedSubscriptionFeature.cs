@@ -7,7 +7,7 @@ namespace Chinchilla.Integration.Features
     [TestFixture]
     public class SharedSubscriptionFeature : WithApi
     {
-        [Test, Explicit]
+        [Test]
         public void ShouldReceivedPublishedMessage()
         {
             using (var bus = Depot.Connect("localhost/integration"))

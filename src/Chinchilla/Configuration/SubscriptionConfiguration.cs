@@ -103,7 +103,11 @@ namespace Chinchilla.Configuration
 
         public override string ToString()
         {
-            return string.Format("[SubscriptionConfiguration]");
+            var queueNames = QueueNames.Any()
+                ? string.Join(",", QueueNames)
+                : "<auto>";
+
+            return string.Format("[SubscriptionConfiguration QueueNames={0}]", queueNames);
         }
     }
 }
