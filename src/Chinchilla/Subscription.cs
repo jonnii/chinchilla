@@ -11,6 +11,8 @@ namespace Chinchilla
 {
     public class Subscription : Trackable, ISubscription, IDeliveryListener
     {
+        private const int ConsumerTakeTimeoutInMs = 50;
+
         private readonly ILogger logger = Logger.Create<Subscription>();
 
         private readonly IModelReference modelReference;
@@ -61,13 +63,16 @@ namespace Chinchilla
                 while (!disposed)
                 {
                     BasicDeliverEventArgs item;
-                    try
-                    {
-                        item = consumerQueue.Take();
-                    }
-                    catch (InvalidOperationException)
+                    var itemTaken = consumerQueue.TryTake(out item, ConsumerTakeTimeoutInMs);
+
+                    if (disposed && !itemTaken)
                     {
                         break;
+                    }
+
+                    if (!disposed && !itemTaken)
+                    {
+                        continue;
                     }
 
                     var delivery = new Delivery(
