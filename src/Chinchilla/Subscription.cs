@@ -21,7 +21,7 @@ namespace Chinchilla
 
         private readonly IFaultStrategy faultStrategy;
 
-        private BlockingCollection<BasicDeliverEventArgs> consumerQueue;
+        private IEnumerable<BlockingCollection<BasicDeliverEventArgs>> consumerQueues;
 
         private Thread subscriptionThread;
 
@@ -54,23 +54,42 @@ namespace Chinchilla
         {
             modelReference.Execute(m => m.BasicQos(0, 0, false));
 
-            var queue = Queues.Single();
-            consumerQueue = modelReference.GetConsumerQueue(queue);
+            // build a consumer for each queue
+
+            consumerQueues = Queues
+                .Select(q => modelReference.GetConsumerQueue(q))
+                .ToArray();
 
             logger.Debug("Starting listener thread");
+
             subscriptionThread = new Thread(() =>
             {
                 while (!disposed)
                 {
-                    BasicDeliverEventArgs item;
-                    var itemTaken = consumerQueue.TryTake(out item, ConsumerTakeTimeoutInMs);
+                    BasicDeliverEventArgs item = null;
+
+                    // grab the first item where any of the consumer queues has a value
+
+                    var itemTaken = consumerQueues
+                        .Any(q => q.TryTake(out item, ConsumerTakeTimeoutInMs));
+
+                    // if we're dead and we didn't find an item, 
+                    // it means it's time to pack up and go home
 
                     if (disposed && !itemTaken)
                     {
                         break;
                     }
 
+                    // if we're not dead and we didn't find an item
+                    // lets go around again
+
                     if (!disposed && !itemTaken)
+                    {
+                        continue;
+                    }
+
+                    if (item == null)
                     {
                         continue;
                     }
@@ -120,9 +139,12 @@ namespace Chinchilla
 
             // complete adding on the consumer queue and wait for the subscription
             // thread to complete, this will give any processing jobs a change to complete
-            if (consumerQueue != null)
+            if (consumerQueues != null)
             {
-                consumerQueue.CompleteAdding();
+                foreach (var consumerQueue in consumerQueues)
+                {
+                    consumerQueue.CompleteAdding();
+                }
             }
 
             if (subscriptionThread != null)
