@@ -9,7 +9,7 @@ namespace Chinchilla.Sample.SharedSubscriptions
 
         private readonly FastMessageSubscriber fastClient = new FastMessageSubscriber();
 
-        private readonly SlowMessageSubscriber slowClient = new SlowMessageSubscriber();
+        private readonly SlowAndFastMessageSubscriber slowAndFastClient = new SlowAndFastMessageSubscriber();
 
         public void Run()
         {
@@ -19,14 +19,14 @@ namespace Chinchilla.Sample.SharedSubscriptions
             var fastThread = new Thread(() => fastClient.Start());
             fastThread.Start();
 
-            var slowThread = new Thread(() => slowClient.Start());
+            var slowThread = new Thread(() => slowAndFastClient.Start());
             slowThread.Start();
         }
 
         public void Dispose()
         {
             fastClient.Stop();
-            slowClient.Stop();
+            slowAndFastClient.Stop();
             server.Stop();
         }
     }

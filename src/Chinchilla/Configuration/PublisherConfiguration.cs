@@ -12,6 +12,8 @@ namespace Chinchilla.Configuration
             MessageTopologyBuilder = new DefaultPublishTopologyBuilder();
         }
 
+        public string ExchangeName { get; set; }
+
         public IPublisherBuilder RouteWith<TRouter>()
             where TRouter : IRouter, new()
         {
@@ -22,6 +24,12 @@ namespace Chinchilla.Configuration
         public IPublisherBuilder RouteWith(IRouter router)
         {
             routerBuilder = () => router;
+            return this;
+        }
+
+        public IPublisherBuilder PublishOn(string exchangeName)
+        {
+            ExchangeName = exchangeName;
             return this;
         }
 

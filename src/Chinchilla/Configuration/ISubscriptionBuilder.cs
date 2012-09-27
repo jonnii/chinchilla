@@ -31,7 +31,9 @@ namespace Chinchilla.Configuration
         /// <summary>
         /// Changes the queue name that this subscription subscribes on.
         /// </summary>
-        ISubscriptionBuilder SubscribeOn(string subscriptionQueueName);
+        /// <param name="queueName">The name of the queue to subscribe on</param>
+        /// <param name="otherQueueNames">Any additional queues to subscribe on</param>
+        ISubscriptionBuilder SubscribeOn(string queueName, params string[] otherQueueNames);
 
         /// <summary>
         /// Changes the prefetch count

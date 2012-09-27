@@ -4,13 +4,13 @@ using Chinchilla.Topologies;
 
 namespace Chinchilla.Sample.SharedSubscriptions
 {
-    public class SlowMessageSubscriber
+    public class SlowAndFastMessageSubscriber
     {
         private readonly IBus bus;
 
         private ISubscription subscription;
 
-        public SlowMessageSubscriber()
+        public SlowAndFastMessageSubscriber()
         {
             bus = Depot.Connect("localhost/shared-subscriptions");
         }
@@ -20,9 +20,7 @@ namespace Chinchilla.Sample.SharedSubscriptions
             var builder = new DefaultSubscribeTopologyBuilder("messages.slow");
 
             subscription = bus.Subscribe<SharedMessage>(
-                ProcessMessage, a => a.SetTopology(builder));
-
-
+                ProcessMessage, a => a.SetTopology(builder).SubscribeOn("slow-messages", "fast-messages"));
         }
 
         public void ProcessMessage(SharedMessage message)

@@ -19,7 +19,8 @@ namespace Chinchilla.Sample.SharedSubscriptions
 
             var messageIndex = 0;
 
-            using (var publisher = bus.CreatePublisher<SharedMessage>(o => o.RouteWith<SharedMessageRouter>()))
+            using (var publisher = bus.CreatePublisher<SharedMessage>(
+                o => o.RouteWith<SharedMessageRouter>().SetTopology(new MessagePublisherTopology())))
             {
                 while (isRunning)
                 {

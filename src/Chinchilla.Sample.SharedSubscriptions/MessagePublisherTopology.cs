@@ -1,13 +1,13 @@
+using Chinchilla.Topologies;
 using Chinchilla.Topologies.Model;
 
-namespace Chinchilla.Topologies
+namespace Chinchilla.Sample.SharedSubscriptions
 {
-    public class DefaultPublishTopologyBuilder : IMessageTopologyBuilder
+    public class MessagePublisherTopology : IMessageTopologyBuilder
     {
-        public virtual IMessageTopology Build(IEndpoint endpoint)
+        public IMessageTopology Build(IEndpoint endpoint)
         {
             var topology = new MessageTopology();
-
             topology.PublishExchange = topology.DefineExchange(endpoint.Name, ExchangeType.Topic);
 
             return topology;

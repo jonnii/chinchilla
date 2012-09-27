@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Chinchilla.Topologies;
 
 namespace Chinchilla.Configuration
@@ -12,11 +14,12 @@ namespace Chinchilla.Configuration
         public SubscriptionConfiguration()
         {
             MessageTopologyBuilder = new DefaultSubscribeTopologyBuilder();
+            QueueNames = Enumerable.Empty<string>();
             PrefetchSize = 0;
             PrefetchCount = 50;
         }
 
-        public string QueueName { get; private set; }
+        public IEnumerable<string> QueueNames { get; private set; }
 
         public uint PrefetchSize { get; private set; }
 
@@ -79,9 +82,10 @@ namespace Chinchilla.Configuration
             return this;
         }
 
-        public ISubscriptionBuilder SubscribeOn(string subscriptionQueueName)
+        public ISubscriptionBuilder SubscribeOn(string queueName, params string[] otherQueueNames)
         {
-            QueueName = subscriptionQueueName;
+            QueueNames = new[] { queueName }.Concat(otherQueueNames);
+
             return this;
         }
 

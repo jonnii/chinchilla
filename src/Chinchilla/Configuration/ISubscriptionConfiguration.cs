@@ -1,8 +1,10 @@
+using System.Collections.Generic;
+
 namespace Chinchilla.Configuration
 {
     public interface ISubscriptionConfiguration : IEndpointConfiguration
     {
-        string QueueName { get; }
+        IEnumerable<string> QueueNames { get; }
 
         uint PrefetchSize { get; }
 

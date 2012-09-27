@@ -1,5 +1,4 @@
 ﻿using Chinchilla.Configuration;
-using Chinchilla.Serializers;
 
 namespace Chinchilla
 {

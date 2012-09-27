@@ -17,7 +17,7 @@ namespace Chinchilla
             IPublisherConfiguration configuration)
         {
             var messageType = typeof(TMessage).Name;
-            var endpoint = new Endpoint(messageType, messageType);
+            var endpoint = new Endpoint(configuration.ExchangeName ?? messageType, messageType);
             var topology = configuration.BuildTopology(endpoint);
 
             var topologyBuilder = new TopologyBuilder(modelReference);

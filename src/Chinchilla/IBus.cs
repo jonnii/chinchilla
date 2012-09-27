@@ -14,8 +14,14 @@ namespace Chinchilla
         /// </summary>
         IPublisher<TMessage> CreatePublisher<TMessage>();
 
+        /// <summary>
+        /// Creates a publisher for a specific message type with custom configuration
+        /// </summary>
         IPublisher<TMessage> CreatePublisher<TMessage>(Action<IPublisherBuilder> builder);
 
+        /// <summary>
+        /// Publishes a message on the default publisher
+        /// </summary>
         void Publish<TMessage>(TMessage message);
 
         ISubscription Subscribe<TMessage>(Action<TMessage> onMessage);

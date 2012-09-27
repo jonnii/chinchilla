@@ -34,6 +34,21 @@ namespace Chinchilla.Integration.Features
         }
 
         [Test]
+        public void ShouldCreatePublisherWithCustomPublishExchange()
+        {
+            using (var bus = Depot.Connect("localhost/integration"))
+            {
+                using (var publisher = bus.CreatePublisher<HelloWorldMessage>(o => o.PublishOn("custom-exchange-name")))
+                {
+                    publisher.Publish(new HelloWorldMessage());
+                    Assert.That(publisher.NumPublishedMessages, Is.EqualTo(1));
+                }
+            }
+
+            Assert.That(admin.Exchanges(IntegrationVHost).Any(e => e.Name == "custom-exchange-name"));
+        }
+
+        [Test]
         public void ShouldPublishMultipleMessages()
         {
             using (var bus = Depot.Connect("localhost/integration"))

@@ -10,5 +10,10 @@ namespace Chinchilla.Configuration
             where TRouter : IRouter, new();
 
         IPublisherBuilder RouteWith(IRouter router);
+
+        /// <summary>
+        /// Overrides the default exchange name that the publisher will publish on
+        /// </summary>
+        IPublisherBuilder PublishOn(string exchangeName);
     }
 }

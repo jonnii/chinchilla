@@ -45,6 +45,7 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="FastMessageSubscriber.cs" />
+    <Compile Include="MessagePublisherTopology.cs" />
     <Compile Include="MessageType.cs" />
     <Compile Include="MessagePublisher.cs" />
     <Compile Include="Program.cs" />
@@ -52,7 +53,7 @@
     <Compile Include="SharedMessage.cs" />
     <Compile Include="SharedMessageRouter.cs" />
     <Compile Include="SharedSubscriptionSample.cs" />
-    <Compile Include="SlowMessageSubscriber.cs" />
+    <Compile Include="SlowAndFastMessageSubscriber.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
