@@ -18,13 +18,18 @@ namespace Chinchilla.Sample.SharedSubscriptions
             var builder = new DefaultSubscribeTopologyBuilder();
 
             bus.Subscribe<SharedMessage>(
-                ProcessMessage, a => a.SetTopology(builder).SubscribeOn("fast-messages"));
+                ProcessMessage, a => a.SetTopology(builder).SubscribeOn("fast-messages").DeliverUsing<WorkerPoolDeliveryStrategy>(s => s.NumWorkers = 1));
         }
 
         public void ProcessMessage(SharedMessage message)
         {
+            //if (message.MessageType == MessageType.Slow)
+            //{
+            //    throw new Exception("Fast message consumer cannot process slow messages");
+            //}
+
             Console.WriteLine("Processing (fast) {0}", message);
-            Thread.Sleep(500);
+            Thread.Sleep(3000);
         }
 
         public void Stop()

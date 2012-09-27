@@ -22,13 +22,19 @@ namespace Chinchilla.Sample.SharedSubscriptions
             subscription = bus.Subscribe<SharedMessage>(
                 ProcessMessage,
                 a => a.SetTopology(builder)
-                    .SubscribeOn("slow-messages", "fast-messages"));
+                    .SubscribeOn("slow-messages", "fast-messages")
+                    .DeliverUsing<WorkerPoolDeliveryStrategy>(s => s.NumWorkers = 1));
         }
 
         public void ProcessMessage(SharedMessage message)
         {
             Console.WriteLine("Processing (slow) {0}", message);
-            Thread.Sleep(5000);
+
+            var messageProcessingTime = message.MessageType == MessageType.Slow
+                ? 10000
+                : 3000;
+
+            Thread.Sleep(messageProcessingTime);
         }
 
         public void Stop()
