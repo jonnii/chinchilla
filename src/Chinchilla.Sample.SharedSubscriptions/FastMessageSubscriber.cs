@@ -15,7 +15,7 @@ namespace Chinchilla.Sample.SharedSubscriptions
 
         public void Start()
         {
-            var builder = new DefaultSubscribeTopologyBuilder("messages.fast");
+            var builder = new DefaultSubscribeTopologyBuilder();
 
             bus.Subscribe<SharedMessage>(
                 ProcessMessage, a => a.SetTopology(builder).SubscribeOn("fast-messages"));

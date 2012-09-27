@@ -17,10 +17,12 @@ namespace Chinchilla.Sample.SharedSubscriptions
 
         public void Start()
         {
-            var builder = new DefaultSubscribeTopologyBuilder("messages.slow");
+            var builder = new DefaultSubscribeTopologyBuilder();
 
             subscription = bus.Subscribe<SharedMessage>(
-                ProcessMessage, a => a.SetTopology(builder).SubscribeOn("slow-messages", "fast-messages"));
+                ProcessMessage,
+                a => a.SetTopology(builder)
+                    .SubscribeOn("slow-messages", "fast-messages"));
         }
 
         public void ProcessMessage(SharedMessage message)

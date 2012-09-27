@@ -52,8 +52,6 @@ namespace Chinchilla
         {
             modelReference.Execute(m => m.BasicQos(0, 0, false));
 
-            logger.Debug("Creating Consumer");
-
             var queue = Queues.Single();
             consumerQueue = modelReference.GetConsumerQueue(queue);
 
