@@ -18,7 +18,6 @@ namespace Chinchilla.Topologies
             var topology = new MessageTopology();
 
             topology.PublishExchange = topology.DefineExchange(endpoint.MessageType, ExchangeType.Topic);
-
             topology.SubscribeQueue = topology.DefineQueue(endpoint.Name);
 
             if (string.IsNullOrEmpty(routingKey))

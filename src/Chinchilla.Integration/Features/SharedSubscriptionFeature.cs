@@ -19,8 +19,8 @@ namespace Chinchilla.Integration.Features
                     ++numReceived;
                 }, o => o.SubscribeOn("queue-1", "queue-2"));
 
-                var first = bus.CreatePublisher<HelloWorldMessage>(o => o.PublishOn("queue-1"));
-                var second = bus.CreatePublisher<HelloWorldMessage>(o => o.PublishOn("queue-2"));
+                var first = bus.CreatePublisher<HelloWorldMessage>(o => o.PublishOn("hello-exchange-1"));
+                var second = bus.CreatePublisher<HelloWorldMessage>(o => o.PublishOn("hello-exchange-2"));
 
                 for (var i = 0; i < 50; ++i)
                 {

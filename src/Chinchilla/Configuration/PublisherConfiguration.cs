@@ -12,7 +12,7 @@ namespace Chinchilla.Configuration
             MessageTopologyBuilder = new DefaultPublishTopologyBuilder();
         }
 
-        public string ExchangeName { get; set; }
+        public string EndpointName { get; set; }
 
         public IPublisherBuilder RouteWith<TRouter>()
             where TRouter : IRouter, new()
@@ -27,9 +27,9 @@ namespace Chinchilla.Configuration
             return this;
         }
 
-        public IPublisherBuilder PublishOn(string exchangeName)
+        public IPublisherBuilder PublishOn(string endpointName)
         {
-            ExchangeName = exchangeName;
+            EndpointName = endpointName;
             return this;
         }
 
@@ -46,7 +46,7 @@ namespace Chinchilla.Configuration
 
         public override string ToString()
         {
-            return string.Format("[PublishConfiguration ExchangeName={0}]", ExchangeName ?? "<auto>");
+            return string.Format("[PublishConfiguration EndpointName={0}]", EndpointName ?? "<auto>");
         }
     }
 }

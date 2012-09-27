@@ -32,7 +32,7 @@ namespace Chinchilla
                 callback);
 
             var messageType = typeof(TMessage).Name;
-            var endpoint = new Endpoint(configuration.QueueNames.FirstOrDefault() ?? messageType, messageType);
+            var endpoint = new Endpoint(configuration.EndpointNames.FirstOrDefault() ?? messageType, messageType);
 
             var topologyBuilder = new TopologyBuilder(modelReference);
 

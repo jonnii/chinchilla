@@ -14,12 +14,12 @@ namespace Chinchilla.Configuration
         public SubscriptionConfiguration()
         {
             MessageTopologyBuilder = new DefaultSubscribeTopologyBuilder();
-            QueueNames = Enumerable.Empty<string>();
+            EndpointNames = Enumerable.Empty<string>();
             PrefetchSize = 0;
             PrefetchCount = 50;
         }
 
-        public IEnumerable<string> QueueNames { get; private set; }
+        public IEnumerable<string> EndpointNames { get; private set; }
 
         public uint PrefetchSize { get; private set; }
 
@@ -82,9 +82,9 @@ namespace Chinchilla.Configuration
             return this;
         }
 
-        public ISubscriptionBuilder SubscribeOn(string queueName, params string[] otherQueueNames)
+        public ISubscriptionBuilder SubscribeOn(string endpointName, params string[] otherEndpointNames)
         {
-            QueueNames = new[] { queueName }.Concat(otherQueueNames);
+            EndpointNames = new[] { endpointName }.Concat(otherEndpointNames);
 
             return this;
         }
@@ -103,11 +103,11 @@ namespace Chinchilla.Configuration
 
         public override string ToString()
         {
-            var queueNames = QueueNames.Any()
-                ? string.Join(",", QueueNames)
+            var formattedNames = EndpointNames.Any()
+                ? string.Join(",", EndpointNames)
                 : "<auto>";
 
-            return string.Format("[SubscriptionConfiguration QueueNames={0}]", queueNames);
+            return string.Format("[SubscriptionConfiguration EndpointNames={0}]", formattedNames);
         }
     }
 }

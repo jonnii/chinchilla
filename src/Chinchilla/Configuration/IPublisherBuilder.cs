@@ -12,8 +12,8 @@ namespace Chinchilla.Configuration
         IPublisherBuilder RouteWith(IRouter router);
 
         /// <summary>
-        /// Overrides the default exchange name that the publisher will publish on
+        /// Overrides the default endpoint name that the publisher will publish on
         /// </summary>
-        IPublisherBuilder PublishOn(string exchangeName);
+        IPublisherBuilder PublishOn(string endpointName);
     }
 }

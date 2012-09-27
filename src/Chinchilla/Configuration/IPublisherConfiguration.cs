@@ -4,6 +4,6 @@ namespace Chinchilla.Configuration
     {
         IRouter BuildRouter();
 
-        string ExchangeName { get; }
+        string EndpointName { get; }
     }
 }
