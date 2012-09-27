@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Chinchilla.Configuration;
 using Chinchilla.Logging;
@@ -32,12 +33,11 @@ namespace Chinchilla
                 callback);
 
             var messageType = typeof(TMessage).Name;
-            var endpoint = new Endpoint(configuration.EndpointNames.FirstOrDefault() ?? messageType, messageType);
 
-            var topologyBuilder = new TopologyBuilder(modelReference);
-
-            var topology = configuration.BuildTopology(endpoint);
-            topology.Visit(topologyBuilder);
+            var subscriptionQueues = GetSubscriptionQueuesForEndpoints(
+                messageType,
+                modelReference,
+                configuration);
 
             var deliveryStrategy = configuration.BuildDeliveryStrategy(deliveryProcessor);
             var faultStrategy = configuration.BuildFaultStrategy(bus);
@@ -46,13 +46,35 @@ namespace Chinchilla
                 modelReference,
                 deliveryStrategy,
                 faultStrategy,
-                new[] { topology.SubscribeQueue })
+                subscriptionQueues)
             {
                 PrefetchSize = configuration.PrefetchSize,
                 PrefetchCount = configuration.PrefetchCount
             };
 
             return Create(subscription);
+        }
+
+        private IEnumerable<IQueue> GetSubscriptionQueuesForEndpoints(
+            string messageType,
+            IModelReference modelReference,
+            ISubscriptionConfiguration configuration)
+        {
+            var endpointNames = configuration.EndpointNames.Any()
+                ? configuration.EndpointNames
+                : new[] { messageType };
+
+            foreach (var endpointName in endpointNames)
+            {
+                var endpoint = new Endpoint(endpointName, messageType);
+
+                var topologyBuilder = new TopologyBuilder(modelReference);
+
+                var topology = configuration.BuildTopology(endpoint);
+                topology.Visit(topologyBuilder);
+
+                yield return topology.SubscribeQueue;
+            }
         }
 
         public ISubscription Create(
