@@ -23,6 +23,7 @@ namespace Chinchilla.Sample.SharedSubscriptions
                 ProcessMessage,
                 a => a.SetTopology(builder)
                     .SubscribeOn("slow-messages", "fast-messages")
+                    .WithPrefetchCount(1)
                     .DeliverUsing<WorkerPoolDeliveryStrategy>(s => s.NumWorkers = 1));
         }
 

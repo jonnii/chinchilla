@@ -18,7 +18,11 @@ namespace Chinchilla.Sample.SharedSubscriptions
             var builder = new DefaultSubscribeTopologyBuilder();
 
             bus.Subscribe<SharedMessage>(
-                ProcessMessage, a => a.SetTopology(builder).SubscribeOn("fast-messages").DeliverUsing<WorkerPoolDeliveryStrategy>(s => s.NumWorkers = 1));
+                ProcessMessage,
+                a => a.SetTopology(builder)
+                    .SubscribeOn("fast-messages")
+                    .WithPrefetchCount(1)
+                    .DeliverUsing<WorkerPoolDeliveryStrategy>(s => s.NumWorkers = 1));
         }
 
         public void ProcessMessage(SharedMessage message)

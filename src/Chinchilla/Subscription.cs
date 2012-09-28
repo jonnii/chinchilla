@@ -52,7 +52,9 @@ namespace Chinchilla
 
         public void Start()
         {
-            modelReference.Execute(m => m.BasicQos(0, 0, false));
+            logger.InfoFormat("Starting subscription: {0}", this);
+
+            modelReference.Execute(m => m.BasicQos(PrefetchSize, PrefetchCount, false));
 
             // build a consumer for each queue
 
@@ -60,7 +62,7 @@ namespace Chinchilla
                 .Select(q => modelReference.GetConsumerQueue(q))
                 .ToArray();
 
-            logger.Debug("Starting listener thread");
+            logger.Debug(" -> Starting listener thread");
 
             subscriptionThread = new Thread(() =>
             {
@@ -163,7 +165,7 @@ namespace Chinchilla
         public override string ToString()
         {
             var queueNames = string.Join(",", Queues.Select(q => q.Name));
-            return string.Format("[Subscription Queues={0}]", queueNames);
+            return string.Format("[Subscription Queues={0}, PrefetchCount={1}, PrefetchSize={2}]", queueNames, PrefetchCount, PrefetchSize);
         }
     }
 }
