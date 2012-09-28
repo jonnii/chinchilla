@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Chinchilla by jonnii</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Chinchilla</h1>
+        <p>Making RabbitMq More Awesome!</p>
+        <p class="view"><a href="https://github.com/jonnii/chinchilla">View the Project on GitHub <small>jonnii/chinchilla</small></a></p>
+        <ul>
+          <li><a href="https://github.com/jonnii/chinchilla/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/jonnii/chinchilla/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/jonnii/chinchilla">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>chinchilla <a href="http://coderwall.com/jonnii"><img src="http://api.coderwall.com/jonnii/endorsecount.png" alt="endorse"></a>
+</h1>
+
+<p>Rabbits are furry and lovable, and what's more lovable and furry than a Chinchilla?
+What does this have to do with anything? Well, this is a RabbitMQ library to help 
+you be more awesome with RabbitMQ when you need to be awesome, which is every day.</p>
+
+<h1>Show me the goods</h1>
+
+<pre><code>// connect to a rabbitmq server
+var bus = Depot.Connect("server")
+
+// publish a message
+bus.Publish(new HelloWorldMessage());
+
+// publish a lot of messages
+using (var publisher = bus.CreatePublisher&lt;HelloWorldMessage&gt;())
+{
+    // this will use a publisher dedicated to this message type
+    publisher.Publish(new HelloWorldMessage());
+}
+
+// subscribe to messages
+bus.Subscribe((HelloWorldMessage message) =&gt; { Console.WriteLine("WOAH!") });
+
+// subscribe with a message consumer
+bus.Subscribe(new HelloWorldMessageConsumer());
+
+// subscribe and process messages with a number of workers
+bus.Subscribe((HelloWorldMessage message) =&gt; {}, 
+    o =&gt; o.DeliverUsing&lt;WorkerPoolDeliveryStrategy&gt;(s =&gt; s.NumWorkers = 5));
+
+// subscribe and process messages on the task factory
+bus.Subscribe((HelloWorldMessage message) =&gt; {}, 
+    o =&gt; o.DeliverUsing&lt;TaskDeliveryStrategy&gt;());
+</code></pre>
+
+<h1>Samples?</h1>
+
+<p>There are a few samples available that show off some of the features of Chinchilla.</p>
+
+<h1>Alternatives choices?</h1>
+
+<p>There are plenty of fantastic RabbitMQ libraries out there and you should evaluate
+each and every one of them before making a choice. I suggest looking at:</p>
+
+<ul>
+<li>EasyNetQ (<a href="http://easynetq.com/">http://easynetq.com/</a>)</li>
+<li>MassTransit (<a href="http://masstransit-project.com/">http://masstransit-project.com/</a>)</li>
+<li>Burrow.NET (<a href="https://github.com/vanthoainguyen/Burrow.NET">https://github.com/vanthoainguyen/Burrow.NET</a>)</li>
+<li>RabbitBus (<a href="https://github.com/derekgreer/rabbitBus">https://github.com/derekgreer/rabbitBus</a>)</li>
+</ul><p>Each one is slightly different, and depending on your needs might fit your requirements better.</p>
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/jonnii">jonnii</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
