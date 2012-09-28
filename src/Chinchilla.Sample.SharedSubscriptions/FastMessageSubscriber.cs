@@ -23,11 +23,6 @@ namespace Chinchilla.Sample.SharedSubscriptions
 
         public void ProcessMessage(SharedMessage message)
         {
-            //if (message.MessageType == MessageType.Slow)
-            //{
-            //    throw new Exception("Fast message consumer cannot process slow messages");
-            //}
-
             Console.WriteLine("Processing (fast) {0}", message);
             Thread.Sleep(3000);
         }
