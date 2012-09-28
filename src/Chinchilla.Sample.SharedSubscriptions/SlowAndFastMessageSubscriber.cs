@@ -20,8 +20,8 @@ namespace Chinchilla.Sample.SharedSubscriptions
                 ProcessMessage,
                 a => a.SetTopology(builder)
                     .SubscribeOn("slow-messages", "fast-messages")
-                    .WithPrefetchCount(1)
-                    .DeliverUsing<WorkerPoolDeliveryStrategy>(s => s.NumWorkers = 1));
+                    .WithPrefetchCount(2)
+                    .DeliverUsing<WorkerPoolDeliveryStrategy>(s => s.NumWorkers = 2));
         }
 
         public void ProcessMessage(SharedMessage message)
@@ -29,19 +29,19 @@ namespace Chinchilla.Sample.SharedSubscriptions
             Console.WriteLine("Processing (slow) {0}", message);
 
             var messageProcessingTime = message.MessageType == MessageType.Slow
-                ? 20000
+                ? 10000
                 : 3000;
 
             if (message.MessageType == MessageType.Slow)
             {
-                Console.WriteLine("starting slow message");
+                Console.WriteLine("starting slow message " + message.Id);
             }
 
             Thread.Sleep(messageProcessingTime);
 
             if (message.MessageType == MessageType.Slow)
             {
-                Console.WriteLine("finishing slow message");
+                Console.WriteLine("finishing slow message " + message.Id);
             }
         }
 

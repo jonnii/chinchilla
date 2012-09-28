@@ -21,7 +21,7 @@ namespace Chinchilla.Specifications.Configuration
         public class when_building_default_topology : WithSubject<SubscriptionConfiguration>
         {
             Because of = () =>
-                messageTopology = Subject.BuildTopology(new Endpoint("endpointName", "messageType"));
+                messageTopology = Subject.BuildTopology(new Endpoint("endpointName", "messageType", 0));
 
             It should_build_topology = () =>
                 messageTopology.ShouldNotBeNull();
@@ -39,7 +39,7 @@ namespace Chinchilla.Specifications.Configuration
             };
 
             Because of = () =>
-                Subject.BuildTopology(new Endpoint("endpointName", "messageType"));
+                Subject.BuildTopology(new Endpoint("endpointName", "messageType", 0));
 
             It should_build_default_topology = () =>
                 builder.WasToldTo(b => b.Build(Param.IsAny<IEndpoint>()));

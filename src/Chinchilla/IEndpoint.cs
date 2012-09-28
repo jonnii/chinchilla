@@ -10,6 +10,15 @@ namespace Chinchilla
         /// </summary>
         string Name { get; }
 
+        /// <summary>
+        /// The type of the message received at this endpoint
+        /// </summary>
         string MessageType { get; }
+
+        /// <summary>
+        /// Indicates the ordinal of this endpoint
+        /// in a subscription.
+        /// </summary>
+        int Ordinal { get; }
     }
 }

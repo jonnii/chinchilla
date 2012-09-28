@@ -19,7 +19,11 @@ namespace Chinchilla.Sample.SharedSubscriptions
             topology.PublishExchange = topology.DefineExchange(endpoint.MessageType, ExchangeType.Topic);
 
             topology.SubscribeQueue = topology.DefineQueue(endpoint.Name);
-            topology.SubscribeQueue.BindTo(topology.PublishExchange, routingKey);
+
+            if (endpoint.Ordinal == 0)
+            {
+                topology.SubscribeQueue.BindTo(topology.PublishExchange, routingKey);
+            }
 
             return topology;
         }

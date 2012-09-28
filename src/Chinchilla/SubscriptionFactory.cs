@@ -64,17 +64,17 @@ namespace Chinchilla
                 ? configuration.EndpointNames
                 : new[] { messageType };
 
-            foreach (var endpointName in endpointNames)
+            return endpointNames.Select((endpointName, i) =>
             {
-                var endpoint = new Endpoint(endpointName, messageType);
+                var endpoint = new Endpoint(endpointName, messageType, i);
 
                 var topologyBuilder = new TopologyBuilder(modelReference);
 
                 var topology = configuration.BuildTopology(endpoint);
                 topology.Visit(topologyBuilder);
 
-                yield return topology.SubscribeQueue;
-            }
+                return topology.SubscribeQueue;
+            });
         }
 
         public ISubscription Create(

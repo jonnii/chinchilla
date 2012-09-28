@@ -24,13 +24,13 @@ namespace Chinchilla.Sample.SharedSubscriptions
             {
                 while (isRunning)
                 {
-                    var message = messageIndex % 20 == 0
+                    var message = messageIndex % 30 == 0
                         ? new SharedMessage(messageIndex, MessageType.Slow)
                         : new SharedMessage(messageIndex, MessageType.Fast);
 
                     publisher.Publish(message);
 
-                    Thread.Sleep(1000);
+                    Thread.Sleep(800);
 
                     ++messageIndex;
                 }

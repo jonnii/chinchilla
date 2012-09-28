@@ -26,6 +26,11 @@ namespace Chinchilla.Sample.SharedSubscriptions
 
         public void ProcessMessage(SharedMessage message)
         {
+            if (message.MessageType == MessageType.Slow)
+            {
+                throw new Exception("Not supported");
+            }
+
             Console.WriteLine("Processing (fast) {0}", message);
             Thread.Sleep(3000);
         }
