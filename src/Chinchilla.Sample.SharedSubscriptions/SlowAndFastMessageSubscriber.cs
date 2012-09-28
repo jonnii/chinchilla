@@ -1,6 +1,5 @@
 using System;
 using System.Threading;
-using Chinchilla.Topologies;
 
 namespace Chinchilla.Sample.SharedSubscriptions
 {
@@ -15,7 +14,7 @@ namespace Chinchilla.Sample.SharedSubscriptions
 
         public void Start()
         {
-            var builder = new DefaultSubscribeTopologyBuilder();
+            var builder = new SubscriberTopology("messages.slow");
 
             bus.Subscribe<SharedMessage>(
                 ProcessMessage,

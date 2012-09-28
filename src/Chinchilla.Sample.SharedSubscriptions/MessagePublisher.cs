@@ -17,7 +17,7 @@ namespace Chinchilla.Sample.SharedSubscriptions
         {
             isRunning = true;
 
-            var messageIndex = 0;
+            var messageIndex = 1;
 
             using (var publisher = bus.CreatePublisher<SharedMessage>(
                 o => o.RouteWith<SharedMessageRouter>().SetTopology(new MessagePublisherTopology())))
@@ -30,7 +30,7 @@ namespace Chinchilla.Sample.SharedSubscriptions
 
                     publisher.Publish(message);
 
-                    Thread.Sleep(2000);
+                    Thread.Sleep(1000);
 
                     ++messageIndex;
                 }

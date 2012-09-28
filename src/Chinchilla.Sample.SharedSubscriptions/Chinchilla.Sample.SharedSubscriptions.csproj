@@ -54,6 +54,7 @@
     <Compile Include="SharedMessageRouter.cs" />
     <Compile Include="SharedSubscriptionSample.cs" />
     <Compile Include="SlowAndFastMessageSubscriber.cs" />
+    <Compile Include="SubscriberTopology.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
