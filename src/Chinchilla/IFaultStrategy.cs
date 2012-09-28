@@ -8,6 +8,11 @@ namespace Chinchilla
     /// </summary>
     public interface IFaultStrategy
     {
-        void Handle(IDelivery delivery, Exception exception);
+        /// <summary>
+        /// Handle a delivery failure
+        /// </summary>
+        /// <param name="delivery">The delivery that failed</param>
+        /// <param name="exception">The exception that caused the delivery to fail</param>
+        void ProcessFailedDelivery(IDelivery delivery, Exception exception);
     }
 }

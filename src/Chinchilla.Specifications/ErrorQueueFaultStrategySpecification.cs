@@ -15,7 +15,7 @@ namespace Chinchilla.Specifications
                 delivery = An<IDelivery>();
 
             Because of = () =>
-                Subject.Handle(delivery, new Exception());
+                Subject.ProcessFailedDelivery(delivery, new Exception());
 
             It should_accept_delivery = () =>
                 delivery.WasToldTo(d => d.Accept());

@@ -9,7 +9,7 @@ namespace Chinchilla
             return new IgnoreFaultStrategy();
         }
 
-        public void Handle(IDelivery delivery, Exception exception)
+        public void ProcessFailedDelivery(IDelivery delivery, Exception exception)
         {
             delivery.Accept();
         }

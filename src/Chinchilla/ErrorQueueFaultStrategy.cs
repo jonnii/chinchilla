@@ -10,19 +10,20 @@ namespace Chinchilla
     {
         private readonly ILogger logger = Logger.Create<ErrorQueueFaultStrategy>();
 
-        private readonly IPublisher<Fault> publisher;
+        private readonly Lazy<IPublisher<Fault>> publisher;
 
         public ErrorQueueFaultStrategy(IBus bus)
         {
-            publisher = bus.CreatePublisher<Fault>(o => o.SetTopology(this));
+            publisher = new Lazy<IPublisher<Fault>>(
+                () => bus.CreatePublisher<Fault>(o => o.SetTopology(this)));
         }
 
-        public void Handle(IDelivery delivery, Exception exception)
+        public void ProcessFailedDelivery(IDelivery delivery, Exception exception)
         {
             logger.ErrorFormat(exception, "Error Queue is handlinge exception");
 
             var error = BuildFault(delivery, exception);
-            publisher.Publish(error);
+            publisher.Value.Publish(error);
 
             delivery.Accept();
         }

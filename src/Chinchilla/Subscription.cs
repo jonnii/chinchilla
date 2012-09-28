@@ -123,7 +123,7 @@ namespace Chinchilla
 
         public void OnFailed(IDelivery delivery, Exception exception)
         {
-            faultStrategy.Handle(delivery, exception);
+            faultStrategy.ProcessFailedDelivery(delivery, exception);
 
             ++NumFailedMessages;
         }

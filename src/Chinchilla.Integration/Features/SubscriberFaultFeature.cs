@@ -51,7 +51,7 @@ namespace Chinchilla.Integration.Features
         {
             private Action notifier;
 
-            public void Handle(IDelivery delivery, Exception exception)
+            public void ProcessFailedDelivery(IDelivery delivery, Exception exception)
             {
                 notifier();
             }
