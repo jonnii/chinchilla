@@ -38,8 +38,7 @@ Show me the goods
 Samples?
 ========
 
-There is currently one sample which demonstrates publishing and subscribing to ticker/price updates, there
-will be more samples soon... I promise.
+There are a few samples available that show off some of the features of Chinchilla.
 
 Alternatives choices?
 =====================
@@ -47,9 +46,9 @@ Alternatives choices?
 There are plenty of fantastic RabbitMQ libraries out there and you should evaluate
 each and every one of them before making a choice. I suggest looking at:
 
-EasyNetQ (http://easynetq.com/)
-MassTransit (http://masstransit-project.com/)
-Burrow.NET (https://github.com/vanthoainguyen/Burrow.NET)
-RabbitBus (https://github.com/derekgreer/rabbitBus)
+* EasyNetQ (http://easynetq.com/)
+* MassTransit (http://masstransit-project.com/)
+* Burrow.NET (https://github.com/vanthoainguyen/Burrow.NET)
+* RabbitBus (https://github.com/derekgreer/rabbitBus)
 
 Each one is slightly different, and depending on your needs might fit your requirements better.
