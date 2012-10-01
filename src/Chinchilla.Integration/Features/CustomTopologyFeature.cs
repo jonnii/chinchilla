@@ -29,7 +29,7 @@ namespace Chinchilla.Integration.Features
                 );
 
                 using (bus.Subscribe(onMessage, subscriptionBuilder))
-                {
+                {   
                     using (var publisher = bus.CreatePublisher<HelloWorldMessage>(publisherBuilder))
                     {
                         for (var i = 0; i < 100; ++i)

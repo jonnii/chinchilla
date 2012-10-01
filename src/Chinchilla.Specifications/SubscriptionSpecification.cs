@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using Chinchilla.Topologies.Model;
 using Machine.Fakes;
 using Machine.Specifications;
@@ -24,17 +23,6 @@ namespace Chinchilla.Specifications
         }
 
         [Subject(typeof(Subscription))]
-        public class when_failed : WithSubject<Subscription>
-        {
-            Establish context = () => { };
-
-            Because of = () =>
-                Subject.OnFailed(An<IDelivery>(), new Exception());
-
-            private It should_ = () => { };
-        }
-
-        [Subject(typeof(Subscription))]
         public class when_disposing : WithSubject<Subscription>
         {
             Because of = () =>
@@ -50,13 +38,11 @@ namespace Chinchilla.Specifications
             {
                 modelReference = An<IModelReference>();
                 deliveryStrategy = An<IDeliveryStrategy>();
-                faultStrategy = An<IFaultStrategy>();
+                deliveryQueue = An<IDeliveryQueue>();
 
                 Subject = new Subscription(
-                    modelReference,
                     deliveryStrategy,
-                    faultStrategy,
-                    new[] { new Queue("subscription-queue-name") });
+                    new[] { deliveryQueue });
             };
 
             protected static Subscription Subject;
@@ -65,7 +51,7 @@ namespace Chinchilla.Specifications
 
             protected static IDeliveryStrategy deliveryStrategy;
 
-            protected static IFaultStrategy faultStrategy;
+            protected static IDeliveryQueue deliveryQueue;
         }
     }
 }

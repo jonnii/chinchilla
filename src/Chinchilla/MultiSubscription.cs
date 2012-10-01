@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Chinchilla.Topologies.Model;
 
 namespace Chinchilla
 {
@@ -21,17 +20,17 @@ namespace Chinchilla
             }
         }
 
-        public ulong NumAcceptedMessages
+        public long NumAcceptedMessages
         {
             get { throw new NotImplementedException(); }
         }
 
-        public ulong NumFailedMessages
+        public long NumFailedMessages
         {
             get { throw new NotImplementedException(); }
         }
 
-        public IEnumerable<IQueue> Queues
+        public IDeliveryQueue[] Queues
         {
             get { throw new NotImplementedException(); }
         }

@@ -12,7 +12,7 @@ namespace Chinchilla.Specifications
         {
             Because of = () =>
                 subscription = (Subscription)Subject.Create(
-                    new Subscription(An<IModelReference>(), An<IDeliveryStrategy>(), An<IFaultStrategy>(), An<IEnumerable<IQueue>>()));
+                    new Subscription(An<IDeliveryStrategy>(), new[] { An<IDeliveryQueue>() }));
 
             It should_track_subscription = () =>
                 Subject.IsTracking(subscription).ShouldBeTrue();
@@ -25,7 +25,7 @@ namespace Chinchilla.Specifications
         {
             Establish context = () =>
                 subscription = (Subscription)Subject.Create(
-                    new Subscription(An<IModelReference>(), An<IDeliveryStrategy>(), An<IFaultStrategy>(), An<IEnumerable<IQueue>>()));
+                    new Subscription(An<IDeliveryStrategy>(), new[] { An<IDeliveryQueue>() }));
 
             Because of = () =>
                 subscription.Dispose();

@@ -56,6 +56,7 @@
     <Compile Include="DefaultConnectionFactory.cs" />
     <Compile Include="ConnectionString.cs" />
     <Compile Include="DefaultConsumerFactory.cs" />
+    <Compile Include="DeliveryQueue.cs" />
     <Compile Include="Fault.cs" />
     <Compile Include="ErrorQueueFaultStrategy.cs" />
     <Compile Include="DefaultRouter.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="IBusConcern.cs" />
     <Compile Include="Configuration\IConfigurableConsumer.cs" />
     <Compile Include="IConsumerFactory.cs" />
+    <Compile Include="IDeliveryQueue.cs" />
     <Compile Include="IFaultStrategy.cs" />
     <Compile Include="IEndpoint.cs" />
     <Compile Include="Configuration\IEndpointConfiguration.cs" />

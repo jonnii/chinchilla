@@ -1,12 +1,15 @@
 using System;
+using RabbitMQ.Client.Events;
 
 namespace Chinchilla
 {
-    /// <summary>
-    /// A subscription is a handle to a subscribed action
-    /// </summary>
-    public interface ISubscription : IDisposable
+    public interface IDeliveryQueue : IDeliveryListener, IDisposable
     {
+        /// <summary>
+        /// The name of this delivery queue
+        /// </summary>
+        string Name { get; }
+
         /// <summary>
         /// The number of messages accepted by this subscription
         /// </summary>
@@ -18,13 +21,8 @@ namespace Chinchilla
         long NumFailedMessages { get; }
 
         /// <summary>
-        /// The queues that are being subscribed to by this subscription
+        /// Tries to take a message from the delivery queue
         /// </summary>
-        IDeliveryQueue[] Queues { get; }
-
-        /// <summary>
-        /// Starts the subscription
-        /// </summary>
-        void Start();
+        bool TryTake(out BasicDeliverEventArgs item);
     }
 }

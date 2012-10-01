@@ -26,6 +26,13 @@ namespace Chinchilla
             return reference;
         }
 
+        public IModelReference CreateModel(string tag)
+        {
+            var reference = new ModelReference(connection.CreateModel(), tag);
+            Track(reference);
+            return reference;
+        }
+
         public void Reconnect(IConnection newConnection)
         {
             logger.Debug("Resetting model factory connection");

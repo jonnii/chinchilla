@@ -1,66 +1,44 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using Chinchilla.Logging;
-using Chinchilla.Topologies.Model;
 using RabbitMQ.Client.Events;
 
 namespace Chinchilla
 {
-    public class Subscription : Trackable, ISubscription, IDeliveryListener
+    public class Subscription : Trackable, ISubscription
     {
-        private const int ConsumerTakeTimeoutInMs = 50;
-
         private readonly ILogger logger = Logger.Create<Subscription>();
 
-        private readonly IModelReference modelReference;
-
         private readonly IDeliveryStrategy deliveryStrategy;
-
-        private readonly IFaultStrategy faultStrategy;
-
-        private IEnumerable<BlockingCollection<BasicDeliverEventArgs>> consumerQueues;
 
         private Thread subscriptionThread;
 
         private bool disposed;
 
         public Subscription(
-            IModelReference modelReference,
             IDeliveryStrategy deliveryStrategy,
-            IFaultStrategy faultStrategy,
-            IEnumerable<IQueue> queues)
+            IDeliveryQueue[] queues)
         {
-            this.modelReference = modelReference;
             this.deliveryStrategy = deliveryStrategy;
-            this.faultStrategy = faultStrategy;
 
             Queues = queues;
         }
 
-        public IEnumerable<IQueue> Queues { get; private set; }
+        public IDeliveryQueue[] Queues { get; private set; }
 
-        public uint PrefetchSize { get; set; }
+        public long NumAcceptedMessages
+        {
+            get { return Queues.Sum(q => q.NumAcceptedMessages); }
+        }
 
-        public ushort PrefetchCount { get; set; }
-
-        public ulong NumAcceptedMessages { get; private set; }
-
-        public ulong NumFailedMessages { get; private set; }
+        public long NumFailedMessages
+        {
+            get { return Queues.Sum(q => q.NumFailedMessages); }
+        }
 
         public void Start()
         {
             logger.InfoFormat("Starting subscription: {0}", this);
-
-            modelReference.Execute(m => m.BasicQos(PrefetchSize, PrefetchCount, false));
-
-            // build a consumer for each queue
-
-            consumerQueues = Queues
-                .Select(q => modelReference.GetConsumerQueue(q))
-                .ToArray();
 
             logger.Debug(" -> Starting listener thread");
 
@@ -72,13 +50,13 @@ namespace Chinchilla
 
                     // grab the first item where any of the consumer queues has a value
 
-                    var itemTaken = consumerQueues
-                        .Any(q => q.TryTake(out item, ConsumerTakeTimeoutInMs));
+                    var queue = Queues
+                        .FirstOrDefault(q => q.TryTake(out item));
 
                     // if we're dead and we didn't find an item, 
                     // it means it's time to pack up and go home
 
-                    if (disposed && !itemTaken)
+                    if (disposed && queue == null)
                     {
                         break;
                     }
@@ -86,7 +64,7 @@ namespace Chinchilla
                     // if we're not dead and we didn't find an item
                     // lets go around again
 
-                    if (!disposed && !itemTaken)
+                    if (!disposed && queue == null)
                     {
                         continue;
                     }
@@ -97,7 +75,7 @@ namespace Chinchilla
                     }
 
                     var delivery = new Delivery(
-                        this,
+                        queue,
                         item.DeliveryTag,
                         item.Body,
                         item.RoutingKey,
@@ -113,21 +91,6 @@ namespace Chinchilla
             subscriptionThread.Start();
         }
 
-        public void OnAccept(IDelivery delivery)
-        {
-            modelReference.Execute(
-                m => m.BasicAck(delivery.Tag, false));
-
-            ++NumAcceptedMessages;
-        }
-
-        public void OnFailed(IDelivery delivery, Exception exception)
-        {
-            faultStrategy.ProcessFailedDelivery(delivery, exception);
-
-            ++NumFailedMessages;
-        }
-
         public override void Dispose()
         {
             logger.DebugFormat("Disposing {0}", this);
@@ -141,11 +104,11 @@ namespace Chinchilla
 
             // complete adding on the consumer queue and wait for the subscription
             // thread to complete, this will give any processing jobs a change to complete
-            if (consumerQueues != null)
+            if (Queues != null)
             {
-                foreach (var consumerQueue in consumerQueues)
+                foreach (var queue in Queues)
                 {
-                    consumerQueue.CompleteAdding();
+                    queue.Dispose();
                 }
             }
 
@@ -157,15 +120,14 @@ namespace Chinchilla
             // dispose of delivery strategy and the underlying model
             // on this subscription
             deliveryStrategy.Dispose();
-            modelReference.Dispose();
 
             base.Dispose();
         }
 
         public override string ToString()
         {
-            var queueNames = string.Join(",", Queues.Select(q => q.Name));
-            return string.Format("[Subscription Queues={0}, PrefetchCount={1}, PrefetchSize={2}]", queueNames, PrefetchCount, PrefetchSize);
+            var queueNames = string.Join(",", Queues.Select(q => q.ToString()));
+            return string.Format("[Subscription Queues={0}]", queueNames);
         }
     }
 }

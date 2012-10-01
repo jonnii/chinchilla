@@ -104,16 +104,17 @@ namespace Chinchilla.Integration.Features
                     }
                 });
 
-                using (bus.Subscribe((HelloWorldMessage m) => { })) { }
-
-                for (var i = 0; i < 100; ++i)
-                {
-                    bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
-                }
-
                 var subscription = bus.Subscribe(handler);
+
                 using (subscription)
                 {
+                    Console.WriteLine("Publishing 100 messages");
+                    var publisher = bus.CreatePublisher<HelloWorldMessage>();
+                    for (var i = 0; i < 100; ++i)
+                    {
+                        publisher.Publish(new HelloWorldMessage { Message = "subscribe!" });
+                    }
+
                     Thread.Sleep(1000);
                 }
 

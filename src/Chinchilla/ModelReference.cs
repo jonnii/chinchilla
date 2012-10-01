@@ -19,9 +19,19 @@ namespace Chinchilla
         private Action initializeConsumer = () => { };
 
         public ModelReference(IModel model)
+            : this(model, Guid.NewGuid().ToString())
+        {
+
+        }
+
+        public ModelReference(IModel model, string tag)
         {
             this.model = model;
+
+            Tag = tag;
         }
+
+        public string Tag { get; private set; }
 
         public void Execute(Action<IModel> action)
         {
@@ -35,7 +45,7 @@ namespace Chinchilla
 
         public void Reconnect(IModel newModel)
         {
-            logger.DebugFormat("Changing model");
+            logger.DebugFormat("Reconnecting: {0}", Tag);
 
             model = newModel;
             initializeConsumer();

@@ -55,9 +55,6 @@ namespace Chinchilla.Specifications
             Because of = () =>
                 Subject.Subscribe<TestMessage>(_ => { });
 
-            It should_create_new_model = () =>
-                The<IModelFactory>().WasToldTo(c => c.CreateModel());
-
             It should_start_subscription = () =>
                 subscription.WasToldTo(s => s.Start());
         }
@@ -116,7 +113,6 @@ namespace Chinchilla.Specifications
                 The<ISubscriptionFactory>().WhenToldTo(
                     s => s.Create(
                         Param.IsAny<IBus>(),
-                        Param.IsAny<IModelReference>(),
                         Param.IsAny<ISubscriptionConfiguration>(), Param.IsAny<Action<TestMessage, IDeliveryContext>>())).Return(subscription);
             };
 

@@ -11,17 +11,20 @@ namespace Chinchilla
     {
         private readonly ILogger logger = Logger.Create<SubscriptionFactory>();
 
+        private readonly IModelFactory modelFactory;
+
         private readonly IMessageSerializer messageSerializer;
 
         public SubscriptionFactory(
+            IModelFactory modelFactory,
             IMessageSerializer messageSerializer)
         {
+            this.modelFactory = modelFactory;
             this.messageSerializer = messageSerializer;
         }
 
         public ISubscription Create<TMessage>(
             IBus bus,
-            IModelReference modelReference,
             ISubscriptionConfiguration configuration,
             Action<TMessage, IDeliveryContext> callback)
         {
@@ -34,31 +37,25 @@ namespace Chinchilla
 
             var messageType = typeof(TMessage).Name;
 
-            var subscriptionQueues = GetSubscriptionQueuesForEndpoints(
-                messageType,
-                modelReference,
-                configuration);
-
-            var deliveryStrategy = configuration.BuildDeliveryStrategy(deliveryProcessor);
             var faultStrategy = configuration.BuildFaultStrategy(bus);
 
+            var deliveryQueues = GetSubscriptionQueuesForEndpoints(
+                messageType,
+                configuration,
+                faultStrategy);
+
+            var deliveryStrategy = configuration.BuildDeliveryStrategy(deliveryProcessor);
             var subscription = new Subscription(
-                modelReference,
                 deliveryStrategy,
-                faultStrategy,
-                subscriptionQueues)
-            {
-                PrefetchSize = configuration.PrefetchSize,
-                PrefetchCount = configuration.PrefetchCount
-            };
+                deliveryQueues.ToArray());
 
             return Create(subscription);
         }
 
-        private IEnumerable<IQueue> GetSubscriptionQueuesForEndpoints(
+        private IEnumerable<IDeliveryQueue> GetSubscriptionQueuesForEndpoints(
             string messageType,
-            IModelReference modelReference,
-            ISubscriptionConfiguration configuration)
+            ISubscriptionConfiguration configuration,
+            IFaultStrategy faultStrategy)
         {
             var endpointNames = configuration.EndpointNames.Any()
                 ? configuration.EndpointNames
@@ -66,6 +63,8 @@ namespace Chinchilla
 
             return endpointNames.Select((endpointName, i) =>
             {
+                var modelReference = modelFactory.CreateModel(endpointName);
+
                 var endpoint = new Endpoint(endpointName, messageType, i);
 
                 var topologyBuilder = new TopologyBuilder(modelReference);
@@ -73,7 +72,16 @@ namespace Chinchilla
                 var topology = configuration.BuildTopology(endpoint);
                 topology.Visit(topologyBuilder);
 
-                return topology.SubscribeQueue;
+                var subscribeQueue = topology.SubscribeQueue;
+
+                modelReference.Execute(
+                    m => m.BasicQos(
+                        configuration.PrefetchSize,
+                        configuration.PrefetchCount,
+                        false));
+
+                return new DeliveryQueue(
+                    subscribeQueue, modelReference, faultStrategy);
             });
         }
 

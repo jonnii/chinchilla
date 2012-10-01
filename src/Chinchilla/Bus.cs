@@ -56,11 +56,8 @@ namespace Chinchilla
         {
             logger.DebugFormat("Subscribing to action callback of type {0}", typeof(TMessage).Name);
 
-            var model = modelFactory.CreateModel();
-
             var subscription = subscriptionFactory.Create(
                 this,
-                model,
                 subscriptionConfiguration,
                 onMessage);
 
@@ -102,7 +99,9 @@ namespace Chinchilla
 
         private IPublisher<TMessage> CreatePublisher<TMessage>(IPublisherConfiguration configuration)
         {
-            logger.DebugFormat("Creating publisher for {0} with configuration {1}", typeof(TMessage).Name, configuration);
+            logger.DebugFormat("Creating publisher for {0} with configuration {1}",
+                typeof(TMessage).Name,
+                configuration);
 
             var model = modelFactory.CreateModel();
 

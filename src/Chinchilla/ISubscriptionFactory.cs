@@ -7,7 +7,6 @@ namespace Chinchilla
     {
         ISubscription Create<TMessage>(
             IBus bus,
-            IModelReference modelReference,
             ISubscriptionConfiguration configuration,
             Action<TMessage, IDeliveryContext> callback);
     }

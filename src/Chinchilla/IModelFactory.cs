@@ -7,6 +7,8 @@ namespace Chinchilla
     {
         IModelReference CreateModel();
 
+        IModelReference CreateModel(string tag);
+
         void Reconnect(IConnection newConnection);
     }
 }
