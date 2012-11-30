@@ -24,16 +24,54 @@ namespace Chinchilla
         /// </summary>
         void Publish<TMessage>(TMessage message);
 
+        /// <summary>
+        /// Subcribes an action handler for a specific message type
+        /// </summary>
+        /// <typeparam name="TMessage">The type of message to subscribe to</typeparam>
+        /// <param name="onMessage">The handler to invoke when a message is received</param>
+        /// <returns>A subscription</returns>
         ISubscription Subscribe<TMessage>(Action<TMessage> onMessage);
 
+        /// <summary>
+        /// Subcribes an action handler for a specific message type with a subscription builder
+        /// to customize the subscription
+        /// </summary>
+        /// <typeparam name="TMessage">The type of message to subscribe to</typeparam>
+        /// <param name="onMessage">The handler to invoke when a message is received</param>
+        /// <param name="builder">The builder configuration</param>
+        /// <returns>A subscription</returns>
         ISubscription Subscribe<TMessage>(Action<TMessage> onMessage, Action<ISubscriptionBuilder> builder);
 
+        /// <summary>
+        /// Subcribes an action handler for a specific message type
+        /// </summary>
+        /// <typeparam name="TMessage">The type of message to subscribe to</typeparam>
+        /// <param name="onMessage">The handler to invoke when a message is received</param>
+        /// <returns>A subscription</returns>
         ISubscription Subscribe<TMessage>(Action<TMessage, IDeliveryContext> onMessage);
 
+        /// <summary>
+        /// Subcribes an action handler for a specific message type with a subscription builder
+        /// to customize the subscription
+        /// </summary>
+        /// <typeparam name="TMessage">The type of message to subscribe to</typeparam>
+        /// <param name="onMessage">The handler to invoke when a message is received</param>
+        /// <param name="builder">The builder configuration</param>
+        /// <returns>A subscription</returns>
         ISubscription Subscribe<TMessage>(Action<TMessage, IDeliveryContext> onMessage, Action<ISubscriptionBuilder> builder);
 
+        /// <summary>
+        /// Subscribes a consumer
+        /// </summary>
+        /// <param name="consumer">The consumer to subscribe</param>
+        /// <returns>A subscription</returns>
         ISubscription Subscribe(IConsumer consumer);
 
+        /// <summary>
+        /// Subscribes a consumer
+        /// </summary>
+        /// <typeparam name="TConsumer">The type of the consumer to subscribe</typeparam>
+        /// <returns>A subscription</returns>
         ISubscription Subscribe<TConsumer>()
             where TConsumer : IConsumer;
     }
