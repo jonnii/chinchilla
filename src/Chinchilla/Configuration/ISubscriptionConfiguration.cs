@@ -4,11 +4,11 @@ namespace Chinchilla.Configuration
 {
     public interface ISubscriptionConfiguration : IEndpointConfiguration
     {
-        IEnumerable<string> EndpointNames { get; }
-
         uint PrefetchSize { get; }
 
         ushort PrefetchCount { get; }
+
+        IEnumerable<string> EndpointNames { get; }
 
         IDeliveryStrategy BuildDeliveryStrategy(IDeliveryProcessor deliveryProcessor);
 
