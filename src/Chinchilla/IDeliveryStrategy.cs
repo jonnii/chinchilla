@@ -6,6 +6,8 @@ namespace Chinchilla
     {
         void ConnectTo(IDeliveryProcessor processor);
 
+        bool IsStartable { get; }
+
         void Start();
 
         void Deliver(IDelivery delivery);

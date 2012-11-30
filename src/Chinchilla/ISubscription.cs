@@ -23,6 +23,16 @@ namespace Chinchilla
         IDeliveryQueue[] Queues { get; }
 
         /// <summary>
+        /// Indicates whether or not this subscription can be started
+        /// </summary>
+        bool IsStartable { get; }
+
+        /// <summary>
+        /// Indicates whether or not this subscription has been started
+        /// </summary>
+        bool IsStarted { get; }
+
+        /// <summary>
         /// Starts the subscription
         /// </summary>
         void Start();

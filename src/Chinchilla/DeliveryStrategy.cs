@@ -9,10 +9,21 @@ namespace Chinchilla
             connectedProcessor = processor;
         }
 
-        public virtual void Start() { }
+        public virtual bool IsStartable
+        {
+            get { return true; }
+        }
+
+        public virtual void Start()
+        {
+
+        }
 
         public abstract void Deliver(IDelivery delivery);
 
-        public virtual void Dispose() { }
+        public virtual void Dispose()
+        {
+
+        }
     }
 }

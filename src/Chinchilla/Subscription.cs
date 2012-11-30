@@ -26,6 +26,13 @@ namespace Chinchilla
 
         public IDeliveryQueue[] Queues { get; private set; }
 
+        public bool IsStarted { get; private set; }
+
+        public bool IsStartable
+        {
+            get { return deliveryStrategy.IsStartable; }
+        }
+
         public long NumAcceptedMessages
         {
             get { return Queues.Sum(q => q.NumAcceptedMessages); }
@@ -89,6 +96,8 @@ namespace Chinchilla
 
             deliveryStrategy.Start();
             subscriptionThread.Start();
+
+            IsStarted = true;
         }
 
         public override void Dispose()
@@ -112,7 +121,7 @@ namespace Chinchilla
                 }
             }
 
-            if (subscriptionThread != null)
+            if (subscriptionThread != null && subscriptionThread.IsAlive)
             {
                 subscriptionThread.Join();
             }

@@ -9,6 +9,28 @@ namespace Chinchilla.Specifications
     public class SubscriptionSpecification
     {
         [Subject(typeof(Subscription))]
+        public class in_general : with_subscription
+        {
+            It should_not_be_started = () =>
+                Subject.IsStarted.ShouldBeFalse();
+        }
+
+        [Subject(typeof(Subscription))]
+        public class when_checking_is_startable : with_subscription
+        {
+            Establish context = () =>
+                deliveryStrategy.WhenToldTo(s => s.IsStartable).Return(true);
+
+            Because of = () =>
+                startable = Subject.IsStartable;
+
+            It should_be_startable = () =>
+                startable.ShouldBeTrue();
+
+            static bool startable;
+        }
+
+        [Subject(typeof(Subscription))]
         public class when_starting : with_subscription
         {
             Establish context = () =>
@@ -17,6 +39,9 @@ namespace Chinchilla.Specifications
 
             Because of = () =>
                 Subject.Start();
+
+            It should_be_started = () =>
+                Subject.IsStarted.ShouldBeTrue();
 
             It should_start_delivery_strategy = () =>
                 deliveryStrategy.WasToldTo(d => d.Start());

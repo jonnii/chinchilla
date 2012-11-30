@@ -74,6 +74,20 @@ namespace Chinchilla.Integration.Features
         }
 
         [Test]
+        public void ShouldNotStartSubscriptionIfSubscriptionConfigurationIsInvalidAndThrowsIfStarted()
+        {
+            using (var bus = Depot.Connect("localhost/integration"))
+            {
+                var subscription = bus.Subscribe(
+                    (HelloWorldMessage m) => { },
+                    o => o.DeliverUsing<WorkerPoolDeliveryStrategy>(s => s.NumWorkers = 0));
+
+                Assert.That(subscription.IsStarted, Is.False);
+                Assert.Throws<ChinchillaException>(subscription.Start);
+            }
+        }
+
+        [Test]
         public void ShouldCreateSubscriberWithTaskPoolStrategy()
         {
             using (var bus = Depot.Connect("localhost/integration"))

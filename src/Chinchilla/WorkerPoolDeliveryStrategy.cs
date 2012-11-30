@@ -24,11 +24,27 @@ namespace Chinchilla
 
         public int NumWorkers { get; set; }
 
+        public override bool IsStartable
+        {
+            get { return NumWorkers > 0; }
+        }
+
         public override void Start()
         {
             logger.DebugFormat("Starting {0}", this);
 
-            threads = Enumerable.Range(0, NumWorkers).Select(_ => new Thread(StartTakingMessages)).ToArray();
+            if (NumWorkers <= 0)
+            {
+                throw new ChinchillaException(
+                    "Could not start the worker pool delivery queue " +
+                    "because the number of configured worker threads is zero");
+            }
+
+            threads = Enumerable
+                .Range(0, NumWorkers)
+                .Select(_ => new Thread(StartTakingMessages))
+                .ToArray();
+
             foreach (var thread in threads)
             {
                 thread.Start();

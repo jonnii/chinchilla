@@ -63,7 +63,14 @@ namespace Chinchilla
 
             logger.DebugFormat("Starting subscription: {0}", subscription);
 
-            subscription.Start();
+            if (subscription.IsStartable)
+            {
+                subscription.Start();
+            }
+            else
+            {
+                logger.InfoFormat("Could not start subscription, invalid configuration: {0}", subscription);
+            }
 
             return subscription;
         }

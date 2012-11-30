@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Chinchilla
 {
@@ -33,6 +34,22 @@ namespace Chinchilla
         public IDeliveryQueue[] Queues
         {
             get { throw new NotImplementedException(); }
+        }
+
+        public bool IsStartable
+        {
+            get
+            {
+                return subscriptions.All(s => s.IsStartable);
+            }
+        }
+
+        public bool IsStarted
+        {
+            get
+            {
+                return subscriptions.All(s => s.IsStarted);
+            }
         }
 
         public void Start()

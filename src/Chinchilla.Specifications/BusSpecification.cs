@@ -60,6 +60,19 @@ namespace Chinchilla.Specifications
         }
 
         [Subject(typeof(Bus))]
+        public class when_subscribing_with_invalid_subscription_configuration : with_subscription
+        {
+            Establish context = () =>
+                subscription.WhenToldTo(s => s.IsStartable).Return(false);
+
+            Because of = () =>
+                Subject.Subscribe<TestMessage>(_ => { });
+
+            It should_not_start_subscription = () =>
+                subscription.WasNotToldTo(s => s.Start());
+        }
+
+        [Subject(typeof(Bus))]
         public class when_subscribing_to_consumer_instance : with_subscription
         {
             Because of = () =>
@@ -110,6 +123,8 @@ namespace Chinchilla.Specifications
             Establish establish = () =>
             {
                 subscription = An<ISubscription>();
+                subscription.WhenToldTo(s => s.IsStartable).Return(true);
+
                 The<ISubscriptionFactory>().WhenToldTo(
                     s => s.Create(
                         Param.IsAny<IBus>(),
