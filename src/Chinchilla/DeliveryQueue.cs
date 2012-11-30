@@ -15,7 +15,7 @@ namespace Chinchilla
 
         private readonly IFaultStrategy faultStrategy;
 
-        private readonly BlockingCollection<BasicDeliverEventArgs> consumerQueue;
+        private BlockingCollection<BasicDeliverEventArgs> consumerQueue;
 
         public DeliveryQueue(
             IQueue queue,
@@ -25,8 +25,6 @@ namespace Chinchilla
             this.queue = queue;
             this.modelReference = modelReference;
             this.faultStrategy = faultStrategy;
-
-            consumerQueue = modelReference.GetConsumerQueue(queue);
         }
 
         public string Name
@@ -55,7 +53,19 @@ namespace Chinchilla
 
         public bool TryTake(out BasicDeliverEventArgs item)
         {
+            if (consumerQueue == null)
+            {
+                throw new InvalidOperationException(
+                    "Cannot take out of the consumer queue until the delivery has been started, " +
+                    "did you call Start?");
+            }
+
             return consumerQueue.TryTake(out item, ConsumerTakeTimeoutInMs);
+        }
+
+        public void Start()
+        {
+            consumerQueue = modelReference.GetConsumerQueue(queue);
         }
 
         public void CompleteAdding()
@@ -70,7 +80,11 @@ namespace Chinchilla
 
         public void Dispose()
         {
-            consumerQueue.CompleteAdding();
+            if (consumerQueue != null)
+            {
+                consumerQueue.CompleteAdding();
+            }
+
             modelReference.Dispose();
         }
     }

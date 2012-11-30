@@ -24,5 +24,7 @@ namespace Chinchilla
         /// Tries to take a message from the delivery queue
         /// </summary>
         bool TryTake(out BasicDeliverEventArgs item);
+
+        void Start();
     }
 }

@@ -11,7 +11,7 @@ namespace Chinchilla
 
         private readonly IDeliveryStrategy deliveryStrategy;
 
-        private Thread subscriptionThread;
+        private Thread listenerThread;
 
         private bool disposed;
 
@@ -47,9 +47,27 @@ namespace Chinchilla
         {
             logger.InfoFormat("Starting subscription: {0}", this);
 
-            logger.Debug(" -> Starting listener thread");
+            logger.Debug(" -> Building listener thread");
+            listenerThread = BuildListenerThread();
 
-            subscriptionThread = new Thread(() =>
+            logger.Debug(" -> starting delivery strategy");
+            deliveryStrategy.Start();
+
+            logger.Debug(" -> starting all queues");
+            foreach (var queue in Queues)
+            {
+                queue.Start();
+            }
+
+            logger.Debug(" -> Starting listener thread");
+            listenerThread.Start();
+
+            IsStarted = true;
+        }
+
+        private Thread BuildListenerThread()
+        {
+            return new Thread(() =>
             {
                 while (!disposed)
                 {
@@ -93,11 +111,6 @@ namespace Chinchilla
 
                 logger.DebugFormat("Subscription thread terminated for: {0}", this);
             });
-
-            deliveryStrategy.Start();
-            subscriptionThread.Start();
-
-            IsStarted = true;
         }
 
         public override void Dispose()
@@ -121,9 +134,9 @@ namespace Chinchilla
                 }
             }
 
-            if (subscriptionThread != null && subscriptionThread.IsAlive)
+            if (listenerThread != null && listenerThread.IsAlive)
             {
-                subscriptionThread.Join();
+                listenerThread.Join();
             }
 
             // dispose of delivery strategy and the underlying model
