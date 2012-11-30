@@ -29,7 +29,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{CB7D3068-A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{5496A96B-C826-473C-BBF3-32C6C2BCB136}"
 	ProjectSection(SolutionItems) = preProject
+		..\CHANGELOG.md = ..\CHANGELOG.md
 		CommonAssemblyInfo.cs = CommonAssemblyInfo.cs
+		..\CONTRIBUTING.md = ..\CONTRIBUTING.md
 		..\build\default.ps1 = ..\build\default.ps1
 		..\build\package.api.nuspec = ..\build\package.api.nuspec
 		..\build\package.nuspec = ..\build\package.nuspec
