@@ -7,7 +7,7 @@
     <authors>Jonathan Goldman</authors>
     <owners>Jonathan Goldman</owners>
     <summary>Making RabbitMq Awesome</summary>
-    <description>Chinchilla is a little library to hlp make RabbitMq easier to use.</description>
+    <description>Chinchilla is a little library to help make RabbitMq easier to use.</description>
     <language>en-US</language>
     <projectUrl>http://github.com/jonnii/chinchilla</projectUrl>
     <licenseUrl>https://github.com/jonnii/chinchilla/blob/master/LICENSE.txt</licenseUrl>
