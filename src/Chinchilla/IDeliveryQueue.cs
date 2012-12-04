@@ -1,9 +1,8 @@
-using System;
 using RabbitMQ.Client.Events;
 
 namespace Chinchilla
 {
-    public interface IDeliveryQueue : IDeliveryListener, IDisposable
+    public interface IDeliveryQueue : IDeliveryListener
     {
         /// <summary>
         /// The name of this delivery queue

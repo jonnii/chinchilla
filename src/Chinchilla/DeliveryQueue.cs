@@ -68,22 +68,9 @@ namespace Chinchilla
             consumerQueue = modelReference.GetConsumerQueue(queue);
         }
 
-        public void CompleteAdding()
-        {
-            consumerQueue.CompleteAdding();
-        }
-
         public override string ToString()
         {
             return string.Format("[DeliveryQueue Name={0}]", Name);
-        }
-
-        public void Dispose()
-        {
-            if (consumerQueue != null)
-            {
-                consumerQueue.CompleteAdding();
-            }
         }
     }
 }

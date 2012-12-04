@@ -129,6 +129,7 @@ namespace Chinchilla
             }
 
             // 1. we're disposing, let everyone know
+
             isDisposing = true;
 
             // 2. tell the channel to stop receiving new messages
@@ -149,18 +150,13 @@ namespace Chinchilla
 
             // 4. stop the delivery strategy, this will wait for any work currently
             //    running to finish
+
             logger.Info("SHUTDOWN: Stopping delivery strategy");
             deliveryStrategy.Stop();
 
-            if (Queues != null)
-            {
-                foreach (var queue in Queues)
-                {
-                    queue.Dispose();
-                }
-            }
+            // 5. finally we can dispose of the model reference, this will close
+            //    the model and cancel any consumers that are outstanding
 
-            // finally we can dispose of the model reference
             logger.Info("SHUTDOWN: disposing of model reference");
             modelReference.Dispose();
 

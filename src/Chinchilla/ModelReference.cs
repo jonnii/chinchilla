@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using Chinchilla.Logging;
 using Chinchilla.Topologies.Model;
 using RabbitMQ.Client;
@@ -14,9 +15,9 @@ namespace Chinchilla
         private readonly BlockingCollection<BasicDeliverEventArgs> deliverEventArgsQueue =
             new BlockingCollection<BasicDeliverEventArgs>();
 
-        private IModel model;
+        private readonly List<IQueue> consumerQueues = new List<IQueue>();
 
-        private Action initializeConsumer = () => { };
+        private IModel model;
 
         public ModelReference(IModel model)
             : this(model, Guid.NewGuid().ToString())
@@ -48,30 +49,36 @@ namespace Chinchilla
             logger.DebugFormat("Reconnecting: {0}", Tag);
 
             model = newModel;
-            initializeConsumer();
+
+            foreach (var queue in consumerQueues)
+            {
+                BindConsumerToQueue(queue);
+            }
         }
 
         public BlockingCollection<BasicDeliverEventArgs> GetConsumerQueue(IQueue queue)
         {
-            initializeConsumer = () =>
-            {
-                var consumerTag = string.Format("{0}@{1}", Tag, queue.Name);
+            consumerQueues.Add(queue);
 
-                var consumer = new SharedBlockingCollectionBasicConsumer(model, deliverEventArgsQueue)
-                {
-                    ConsumerTag = consumerTag
-                };
-
-                model.BasicConsume(
-                    queue.Name,             // queue
-                    false,                  // noAck 
-                    consumer.ConsumerTag,   // consumerTag
-                    consumer);              // consumer
-            };
-
-            initializeConsumer();
+            BindConsumerToQueue(queue);
 
             return deliverEventArgsQueue;
+        }
+
+        private void BindConsumerToQueue(IQueue queue)
+        {
+            var consumerTag = string.Format("{0}@{1}", Tag, queue.Name);
+
+            var consumer = new SharedBlockingCollectionBasicConsumer(model, deliverEventArgsQueue)
+            {
+                ConsumerTag = consumerTag
+            };
+
+            model.BasicConsume(
+                queue.Name, // queue
+                false, // noAck 
+                consumer.ConsumerTag, // consumerTag
+                consumer); // consumer
         }
 
         public override void Dispose()
