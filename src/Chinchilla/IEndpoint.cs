@@ -1,7 +1,8 @@
 namespace Chinchilla
 {
     /// <summary>
-    /// An end point is either an exchange or a queue 
+    /// An end point is either an exchange or a queue. Each 
+    /// endpoint will map to its own consumer
     /// </summary>
     public interface IEndpoint
     {

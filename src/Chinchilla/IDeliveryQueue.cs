@@ -25,6 +25,9 @@ namespace Chinchilla
         /// </summary>
         bool TryTake(out BasicDeliverEventArgs item);
 
+        /// <summary>
+        /// Starts the delivery queue
+        /// </summary>
         void Start();
     }
 }

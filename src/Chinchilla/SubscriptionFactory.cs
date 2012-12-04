@@ -61,10 +61,27 @@ namespace Chinchilla
                 ? configuration.EndpointNames
                 : new[] { messageType };
 
+            var endpoints = string.Join("|", endpointNames);
+
+            // each subscription get its own model, where each endpoint
+            // will be a consumer
+
+            var modelReference = modelFactory.CreateModel(endpoints);
+
+            // apply basic quality of service, this will set the prefetch count
+            // which is shared across all consumers
+
+            modelReference.Execute(
+                  m => m.BasicQos(
+                      configuration.PrefetchSize,
+                      configuration.PrefetchCount,
+                      false));
+
+            // for each endpoint we need to then construct the delivery queues
+            // which will have messages read from them
+
             return endpointNames.Select((endpointName, i) =>
             {
-                var modelReference = modelFactory.CreateModel(endpointName);
-
                 var endpoint = new Endpoint(endpointName, messageType, i);
 
                 var topologyBuilder = new TopologyBuilder(modelReference);
@@ -73,12 +90,6 @@ namespace Chinchilla
                 topology.Visit(topologyBuilder);
 
                 var subscribeQueue = topology.SubscribeQueue;
-
-                modelReference.Execute(
-                    m => m.BasicQos(
-                        configuration.PrefetchSize,
-                        configuration.PrefetchCount,
-                        false));
 
                 return new DeliveryQueue(
                     subscribeQueue, modelReference, faultStrategy);
