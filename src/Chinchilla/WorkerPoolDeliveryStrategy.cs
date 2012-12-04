@@ -13,9 +13,9 @@ namespace Chinchilla
         private readonly BlockingCollection<IDelivery> deliveries = new BlockingCollection<IDelivery>(
             new ConcurrentQueue<IDelivery>());
 
-        private Thread[] threads;
+        private Thread[] threads = new Thread[0];
 
-        private bool disposed;
+        private bool isStopping;
 
         public WorkerPoolDeliveryStrategy()
         {
@@ -58,7 +58,7 @@ namespace Chinchilla
 
         public void StartTakingMessages()
         {
-            while (!disposed)
+            while (!isStopping)
             {
                 IDelivery delivery;
 
@@ -90,12 +90,20 @@ namespace Chinchilla
             delivery.Accept();
         }
 
-        public override void Dispose()
+        public override void Stop()
         {
-            disposed = true;
+            logger.DebugFormat("Stopping {0}", this);
+
+            isStopping = true;
+
             deliveries.CompleteAdding();
 
-            logger.DebugFormat("Disposing of {0}", this);
+            foreach (var thread in threads)
+            {
+                thread.Join();
+            }
+
+            logger.DebugFormat("Stopped {0}", this);
         }
 
         public override string ToString()

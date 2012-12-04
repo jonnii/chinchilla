@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using Chinchilla.Logging;
 using RabbitMQ.Client.Events;
@@ -9,16 +10,20 @@ namespace Chinchilla
     {
         private readonly ILogger logger = Logger.Create<Subscription>();
 
+        private readonly IModelReference modelReference;
+
         private readonly IDeliveryStrategy deliveryStrategy;
 
         private Thread listenerThread;
 
-        private bool disposed;
+        private bool isDisposing;
 
         public Subscription(
+            IModelReference modelReference,
             IDeliveryStrategy deliveryStrategy,
             IDeliveryQueue[] queues)
         {
+            this.modelReference = modelReference;
             this.deliveryStrategy = deliveryStrategy;
 
             Queues = queues;
@@ -69,7 +74,7 @@ namespace Chinchilla
         {
             return new Thread(() =>
             {
-                while (!disposed)
+                while (!isDisposing)
                 {
                     BasicDeliverEventArgs item = null;
 
@@ -81,7 +86,7 @@ namespace Chinchilla
                     // if we're dead and we didn't find an item, 
                     // it means it's time to pack up and go home
 
-                    if (disposed && queue == null)
+                    if (isDisposing && queue == null)
                     {
                         break;
                     }
@@ -89,7 +94,7 @@ namespace Chinchilla
                     // if we're not dead and we didn't find an item
                     // lets go around again
 
-                    if (!disposed && queue == null)
+                    if (!isDisposing && queue == null)
                     {
                         continue;
                     }
@@ -115,17 +120,38 @@ namespace Chinchilla
 
         public override void Dispose()
         {
-            logger.DebugFormat("Disposing {0}", this);
+            logger.DebugFormat("Shutting down subscription: {0}", this);
 
-            if (disposed)
+            if (isDisposing)
             {
-                return;
+                var message = string.Format("Subscription already disposing: {0}", this);
+                throw new ObjectDisposedException(message);
             }
 
-            disposed = true;
+            // 1. we're disposing, let everyone know
+            isDisposing = true;
 
-            // complete adding on the consumer queue and wait for the subscription
-            // thread to complete, this will give any processing jobs a change to complete
+            // 2. tell the channel to stop receiving new messages
+
+            logger.Info("SHUTDOWN: Stopping channel flow");
+            modelReference.Execute(m => m.ChannelFlow(false));
+
+            // 3. we've disposed of the current subscription so wait for the 
+            //    listener thread to to finish doing what it's doing, it might
+            //    dispatch something to the delivery strategy. once we're done
+            //    with this then we'll stop accepting any new messages
+
+            logger.Info("SHUTDOWN: Waiting for listener thread to terminate");
+            if (listenerThread != null && listenerThread.IsAlive)
+            {
+                listenerThread.Join();
+            }
+
+            // 4. stop the delivery strategy, this will wait for any work currently
+            //    running to finish
+            logger.Info("SHUTDOWN: Stopping delivery strategy");
+            deliveryStrategy.Stop();
+
             if (Queues != null)
             {
                 foreach (var queue in Queues)
@@ -134,14 +160,9 @@ namespace Chinchilla
                 }
             }
 
-            if (listenerThread != null && listenerThread.IsAlive)
-            {
-                listenerThread.Join();
-            }
-
-            // dispose of delivery strategy and the underlying model
-            // on this subscription
-            deliveryStrategy.Dispose();
+            // finally we can dispose of the model reference
+            logger.Info("SHUTDOWN: disposing of model reference");
+            modelReference.Dispose();
 
             base.Dispose();
         }

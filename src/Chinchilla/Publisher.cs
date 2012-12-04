@@ -37,7 +37,7 @@ namespace Chinchilla
             var defaultProperties = ModelReference.Execute(m => m.CreateBasicProperties());
             defaultProperties.ContentType = serializer.ContentType;
 
-            var routingKey = router.Route<TMessage>(message);
+            var routingKey = router.Route(message);
 
             ModelReference.Execute(
                 m => m.BasicPublish(

@@ -39,34 +39,15 @@ namespace Chinchilla
 
             var faultStrategy = configuration.BuildFaultStrategy(bus);
 
-            var deliveryQueues = GetSubscriptionQueuesForEndpoints(
-                messageType,
-                configuration,
-                faultStrategy);
-
-            var deliveryStrategy = configuration.BuildDeliveryStrategy(deliveryProcessor);
-            var subscription = new Subscription(
-                deliveryStrategy,
-                deliveryQueues.ToArray());
-
-            return Create(subscription);
-        }
-
-        private IEnumerable<IDeliveryQueue> GetSubscriptionQueuesForEndpoints(
-            string messageType,
-            ISubscriptionConfiguration configuration,
-            IFaultStrategy faultStrategy)
-        {
             var endpointNames = configuration.EndpointNames.Any()
                 ? configuration.EndpointNames
                 : new[] { messageType };
 
-            var endpoints = string.Join("|", endpointNames);
-
             // each subscription get its own model, where each endpoint
             // will be a consumer
 
-            var modelReference = modelFactory.CreateModel(endpoints);
+            var modelReferenceTag = string.Join("|", endpointNames);
+            var modelReference = modelFactory.CreateModel(modelReferenceTag);
 
             // apply basic quality of service, this will set the prefetch count
             // which is shared across all consumers
@@ -77,9 +58,35 @@ namespace Chinchilla
                       configuration.PrefetchCount,
                       false));
 
-            // for each endpoint we need to then construct the delivery queues
-            // which will have messages read from them
+            var deliveryStrategy = configuration.BuildDeliveryStrategy(
+                deliveryProcessor);
 
+            var deliveryQueues = BuildDeliveryQueues(
+                endpointNames,
+                modelReference,
+                messageType,
+                configuration,
+                faultStrategy);
+
+            var subscription = new Subscription(
+                modelReference,
+                deliveryStrategy,
+                deliveryQueues.ToArray());
+
+            return Create(subscription);
+        }
+
+        /// <summary>
+        /// build delivery queues for each endpoint, where each delivery queue
+        /// will correspond to a basic consumer
+        /// </summary>
+        private IEnumerable<IDeliveryQueue> BuildDeliveryQueues(
+            IEnumerable<string> endpointNames,
+            IModelReference modelReference,
+            string messageType,
+            IEndpointConfiguration configuration,
+            IFaultStrategy faultStrategy)
+        {
             return endpointNames.Select((endpointName, i) =>
             {
                 var endpoint = new Endpoint(endpointName, messageType, i);

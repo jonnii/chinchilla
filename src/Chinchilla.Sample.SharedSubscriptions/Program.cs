@@ -17,6 +17,9 @@ namespace Chinchilla.Sample.SharedSubscriptions
                 sample.Run();
                 Console.ReadKey();
             }
+
+            Console.WriteLine("Done");
+            Console.ReadKey();
         }
     }
 }

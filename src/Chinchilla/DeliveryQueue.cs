@@ -84,8 +84,6 @@ namespace Chinchilla
             {
                 consumerQueue.CompleteAdding();
             }
-
-            modelReference.Dispose();
         }
     }
 }

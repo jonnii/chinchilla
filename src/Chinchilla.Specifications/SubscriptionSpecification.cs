@@ -54,7 +54,7 @@ namespace Chinchilla.Specifications
                 Subject.Dispose();
 
             It should_dispose_delivery_strategy = () =>
-                The<IDeliveryStrategy>().WasToldTo(d => d.Dispose());
+                The<IDeliveryStrategy>().WasToldTo(d => d.Stop());
         }
 
         public class with_subscription : WithFakes
@@ -66,6 +66,7 @@ namespace Chinchilla.Specifications
                 deliveryQueue = An<IDeliveryQueue>();
 
                 Subject = new Subscription(
+                    modelReference,
                     deliveryStrategy,
                     new[] { deliveryQueue });
             };

@@ -55,9 +55,11 @@ namespace Chinchilla
         {
             initializeConsumer = () =>
             {
+                var consumerTag = string.Format("{0}@{1}", Tag, queue.Name);
+
                 var consumer = new SharedBlockingCollectionBasicConsumer(model, deliverEventArgsQueue)
                 {
-                    ConsumerTag = Guid.NewGuid().ToString()
+                    ConsumerTag = consumerTag
                 };
 
                 model.BasicConsume(

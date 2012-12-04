@@ -144,5 +144,35 @@ namespace Chinchilla.Integration.Features
                 Assert.That(numReceived, Is.EqualTo(100));
             }
         }
+
+        [Test]
+        public void ShouldShutdown()
+        {
+            var seen = 0;
+
+            using (var bus = Depot.Connect("localhost/integration"))
+            {
+                var subscription = bus.Subscribe((HelloWorldMessage hwm) =>
+                {
+                    Console.WriteLine("!!! Starting message");
+                    Thread.Sleep(2000);
+                    ++seen;
+                    Console.WriteLine("!!! Finished message");
+                }, o => o.DeliverUsing<WorkerPoolDeliveryStrategy>(s => s.NumWorkers = 1));
+
+                bus.Publish(new HelloWorldMessage
+                {
+                    Message = "subscribe!"
+                });
+
+                Thread.Sleep(500);
+
+                subscription.Dispose();
+            }
+
+            Assert.That(seen, Is.EqualTo(1));
+            var count = admin.Messages(IntegrationVHost, new Queue("HelloWorldMessage")).Count();
+            Assert.That(count, Is.EqualTo(0));
+        }
     }
 }

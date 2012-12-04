@@ -21,7 +21,7 @@ namespace Chinchilla
 
         public abstract void Deliver(IDelivery delivery);
 
-        public virtual void Dispose()
+        public virtual void Stop()
         {
 
         }
