@@ -29,8 +29,8 @@ namespace Chinchilla.Sample.SharedSubscriptions
             Console.WriteLine("Processing (slow) {0}", message);
 
             var messageProcessingTime = message.MessageType == MessageType.Slow
-                ? 10000
-                : 3000;
+                ? 50000
+                : 1000;
 
             if (message.MessageType == MessageType.Slow)
             {

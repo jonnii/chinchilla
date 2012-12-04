@@ -30,7 +30,7 @@ namespace Chinchilla.Sample.SharedSubscriptions
 
                     publisher.Publish(message);
 
-                    Thread.Sleep(800);
+                    Thread.Sleep(200);
 
                     ++messageIndex;
                 }

@@ -32,7 +32,7 @@ namespace Chinchilla.Sample.SharedSubscriptions
             }
 
             Console.WriteLine("Processing (fast) {0}", message);
-            Thread.Sleep(3000);
+            Thread.Sleep(1000);
         }
 
         public void Stop()
