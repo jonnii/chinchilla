@@ -75,10 +75,10 @@ namespace Chinchilla
             };
 
             model.BasicConsume(
-                queue.Name, // queue
-                false, // noAck 
-                consumer.ConsumerTag, // consumerTag
-                consumer); // consumer
+                queue.Name,             // queue
+                false,                  // noAck 
+                consumer.ConsumerTag,   // consumerTag
+                consumer);              // consumer
         }
 
         public override void Dispose()
