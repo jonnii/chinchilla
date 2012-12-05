@@ -4,7 +4,7 @@ using Chinchilla.Topologies.Model;
 namespace Chinchilla
 {
     /// <summary>
-    /// A publish channel is used to publish messages to an exchange
+    /// A publisher is used to publish messages to an exchange
     /// </summary>
     public interface IPublisher<in TMessage> : IDisposable
     {

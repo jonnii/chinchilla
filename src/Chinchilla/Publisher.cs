@@ -2,7 +2,9 @@ using Chinchilla.Topologies.Model;
 
 namespace Chinchilla
 {
-    public class Publisher<TMessage> : IPublisher<TMessage>
+    public class Publisher : Trackable { }
+
+    public class Publisher<TMessage> : Publisher, IPublisher<TMessage>
     {
         private readonly IRouter router;
 

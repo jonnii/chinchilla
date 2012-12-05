@@ -127,6 +127,7 @@ namespace Chinchilla
         {
             consumerFactory.Dispose();
             subscriptionFactory.Dispose();
+            publisherFactory.Dispose();
             modelFactory.Dispose();
         }
     }

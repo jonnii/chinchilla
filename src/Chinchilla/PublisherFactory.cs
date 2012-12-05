@@ -3,7 +3,7 @@ using Chinchilla.Topologies.Model;
 
 namespace Chinchilla
 {
-    public class PublisherFactory : IPublisherFactory
+    public class PublisherFactory : TrackableFactory<Publisher>, IPublisherFactory
     {
         private readonly IMessageSerializer messageSerializer;
 
@@ -25,11 +25,15 @@ namespace Chinchilla
 
             var router = configuration.BuildRouter();
 
-            return new Publisher<TMessage>(
+            var publisher = new Publisher<TMessage>(
                 modelReference,
                 messageSerializer,
                 topology.PublishExchange,
                 router);
+
+            Track(publisher);
+
+            return publisher;
         }
     }
 }
