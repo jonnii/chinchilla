@@ -14,6 +14,8 @@ namespace Chinchilla.Configuration
 
         public string EndpointName { get; set; }
 
+        public string ContentType { get; private set; }
+
         public IPublisherBuilder RouteWith<TRouter>()
             where TRouter : IRouter, new()
         {
@@ -30,6 +32,12 @@ namespace Chinchilla.Configuration
         public IPublisherBuilder PublishOn(string endpointName)
         {
             EndpointName = endpointName;
+            return this;
+        }
+
+        public IPublisherBuilder SerializeWith(string contentType)
+        {
+            ContentType = contentType;
             return this;
         }
 

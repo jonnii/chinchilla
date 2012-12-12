@@ -51,7 +51,7 @@ namespace Chinchilla
             ++NumPublishedMessages;
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             if (disposed)
             {

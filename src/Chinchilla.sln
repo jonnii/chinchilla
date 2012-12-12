@@ -48,6 +48,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla.Api.Specificatio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla.Sample.SharedSubscriptions", "Chinchilla.Sample.SharedSubscriptions\Chinchilla.Sample.SharedSubscriptions.csproj", "{869604D7-0A26-46D2-95CA-55CDFDA51615}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla.Serializers.MsgPack", "Chinchilla.Serializers.MsgPack\Chinchilla.Serializers.MsgPack.csproj", "{039882A0-5236-4903-8302-6603330EFE7B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla.Serializers.MsgPack.Specifications", "Chinchilla.Serializers.MsgPack.Specifications\Chinchilla.Serializers.MsgPack.Specifications.csproj", "{79F4A054-2E3E-42F3-A22D-919B588530B6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -94,6 +98,14 @@ Global
 		{869604D7-0A26-46D2-95CA-55CDFDA51615}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{869604D7-0A26-46D2-95CA-55CDFDA51615}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{869604D7-0A26-46D2-95CA-55CDFDA51615}.Release|Any CPU.Build.0 = Release|Any CPU
+		{039882A0-5236-4903-8302-6603330EFE7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{039882A0-5236-4903-8302-6603330EFE7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{039882A0-5236-4903-8302-6603330EFE7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{039882A0-5236-4903-8302-6603330EFE7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79F4A054-2E3E-42F3-A22D-919B588530B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79F4A054-2E3E-42F3-A22D-919B588530B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79F4A054-2E3E-42F3-A22D-919B588530B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79F4A054-2E3E-42F3-A22D-919B588530B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

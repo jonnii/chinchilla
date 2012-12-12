@@ -29,6 +29,11 @@ namespace Chinchilla
         string Exchange { get; }
 
         /// <summary>
+        /// The content type of this delivery
+        /// </summary>
+        string ContentType { get; }
+
+        /// <summary>
         /// Indicates that this delivery has been processed and can be
         /// removed from the exchange
         /// </summary>

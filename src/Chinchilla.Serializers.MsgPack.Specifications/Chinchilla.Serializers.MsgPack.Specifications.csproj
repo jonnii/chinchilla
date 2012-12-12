@@ -4,42 +4,44 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6CE4680B-EDE9-4D98-B751-98C0DF9DB01A}</ProjectGuid>
+    <ProjectGuid>{79F4A054-2E3E-42F3-A22D-919B588530B6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Chinchilla.Integration</RootNamespace>
-    <AssemblyName>Chinchilla.Integration</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <RootNamespace>Chinchilla.Serializers.MsgPack.Specifications</RootNamespace>
+    <AssemblyName>Chinchilla.Serializers.MsgPack.Specifications</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\targets\specifications\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <NoWarn>169</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\targets\specifications\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <NoWarn>169</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
+    <Reference Include="Machine.Specifications">
+      <HintPath>..\packages\Machine.Specifications.0.5.10\lib\net40\Machine.Specifications.dll</HintPath>
     </Reference>
-    <Reference Include="RabbitMQ.Client, Version=3.0.0.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\RabbitMQ.Client.3.0.0\lib\net30\RabbitMQ.Client.dll</HintPath>
+    <Reference Include="Machine.Specifications.Clr4">
+      <HintPath>..\packages\Machine.Specifications.0.5.10\lib\net40\Machine.Specifications.Clr4.dll</HintPath>
+    </Reference>
+    <Reference Include="Machine.Specifications.TDNetRunner">
+      <HintPath>..\packages\Machine.Specifications.0.5.10\lib\net40\Machine.Specifications.TDNetRunner.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -53,30 +55,13 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Features\Api\RabbitAdminFeature.cs" />
-    <Compile Include="Features\ConnectionFeature.cs" />
-    <Compile Include="Features\ConsumerFeature.cs" />
-    <Compile Include="Features\Consumers\CustomConfigurationConsumer.cs" />
-    <Compile Include="Features\Consumers\HelloWorldMessageConsumer.cs" />
-    <Compile Include="Features\CustomSerializersFeature.cs" />
-    <Compile Include="Features\CustomTopologyFeature.cs" />
-    <Compile Include="Features\Messages\HelloWorldMessage.cs" />
-    <Compile Include="Features\PublishFeature.cs" />
-    <Compile Include="Features\SharedSubscriptionFeature.cs" />
-    <Compile Include="Features\SubscribeFeature.cs" />
-    <Compile Include="Features\SubscriberFaultFeature.cs" />
-    <Compile Include="Features\WithApi.cs" />
-    <Compile Include="Features\WithLogging.cs" />
+    <Compile Include="MessagePackMessageSerializerSpecification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Chinchilla.Api\Chinchilla.Api.csproj">
-      <Project>{E53D95D3-DB21-4DF6-85DB-557C99E11F67}</Project>
-      <Name>Chinchilla.Api</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Chinchilla.Serializers.MsgPack\Chinchilla.Serializers.MsgPack.csproj">
       <Project>{039882A0-5236-4903-8302-6603330EFE7B}</Project>
       <Name>Chinchilla.Serializers.MsgPack</Name>

@@ -11,7 +11,8 @@ namespace Chinchilla
             ulong tag,
             byte[] body,
             string routingKey,
-            string exchange)
+            string exchange,
+            string contentType)
         {
             this.listener = listener;
 
@@ -19,6 +20,7 @@ namespace Chinchilla
             Body = body;
             RoutingKey = routingKey;
             Exchange = exchange;
+            ContentType = contentType;
         }
 
         public ulong Tag { get; private set; }
@@ -28,6 +30,8 @@ namespace Chinchilla
         public string RoutingKey { get; private set; }
 
         public string Exchange { get; private set; }
+
+        public string ContentType { get; private set; }
 
         public void Accept()
         {

@@ -74,8 +74,10 @@
     <Compile Include="IgnoreFaultStrategy.cs" />
     <Compile Include="IHasRoutingKey.cs" />
     <Compile Include="IDeliveryContext.cs" />
+    <Compile Include="IMessageSerializers.cs" />
     <Compile Include="IRouter.cs" />
     <Compile Include="DeliveryContext.cs" />
+    <Compile Include="MessageSerializers.cs" />
     <Compile Include="MultiSubscription.cs" />
     <Compile Include="Topologies\DefaultPublishTopologyBuilder.cs" />
     <Compile Include="Topologies\DefaultSubscribeTopologyBuilder.cs" />
@@ -108,7 +110,6 @@
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Logging\NullLogger.cs" />
     <Compile Include="Message.cs" />
-    <Compile Include="MessageProperties.cs" />
     <Compile Include="ModelFactory.cs" />
     <Compile Include="ModelReference.cs" />
     <Compile Include="Publisher.cs" />

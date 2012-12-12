@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.1.5
+
+  * ability to change the message serializer globally and per publisher
+
 ## 0.1.4
 
   * better shutdown handling

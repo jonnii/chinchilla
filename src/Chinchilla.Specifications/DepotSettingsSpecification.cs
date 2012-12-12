@@ -9,6 +9,9 @@ namespace Chinchilla.Specifications
         {
             It should_have_startup_concerns = () =>
                 settings.StartupConcerns.ShouldNotBeNull();
+
+            It should_have_message_serializers = () =>
+                settings.MessageSerializers.ShouldNotBeNull();
         }
 
         [Subject(typeof(DepotSettings))]
@@ -34,7 +37,6 @@ namespace Chinchilla.Specifications
 
             static IConsumerFactory builder;
         }
-
 
         [Subject(typeof(DepotSettings))]
         public class when_validating_connection_string_starting_with_rabbitmq_protocol : with_settings

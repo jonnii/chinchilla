@@ -36,13 +36,13 @@ namespace Chinchilla
             var consumerFactory = settings.ConsumerFactoryBuilder();
 
             var modelFactory = connectionFactory.Create(new Uri(connectionString));
-            var messageSerializer = new JsonMessageSerializer();
+            var messageSerializers = settings.MessageSerializers;
 
             var bus = new Bus(
                 modelFactory,
                 consumerFactory,
-                new PublisherFactory(messageSerializer),
-                new SubscriptionFactory(modelFactory, messageSerializer));
+                new PublisherFactory(messageSerializers),
+                new SubscriptionFactory(modelFactory, messageSerializers));
 
             foreach (var concern in settings.StartupConcerns)
             {

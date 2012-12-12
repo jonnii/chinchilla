@@ -12,11 +12,8 @@ namespace Chinchilla
     {
         public Message(T body)
         {
-            Properties = new MessageProperties();
             Body = body;
         }
-
-        public MessageProperties Properties { get; private set; }
 
         public T Body { get; private set; }
     }

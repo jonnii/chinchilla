@@ -11,16 +11,22 @@ namespace Chinchilla.Specifications
             Establish context = () =>
             {
                 bus = An<IBus>();
+
                 serializer = An<IMessageSerializer>();
                 serializer.WhenToldTo(s => s.Deserialize<TestMessage>(Param.IsAny<byte[]>()))
                     .Return(new Message<TestMessage>(new TestMessage()));
 
-                Subject = new ActionDeliveryProcessor<TestMessage>(bus, serializer, (m, c) =>
+                serializers = An<IMessageSerializers>();
+                serializers.WhenToldTo(s => s.FindOrDefault("content-type"))
+                    .Return(serializer);
+
+                Subject = new ActionDeliveryProcessor<TestMessage>(bus, serializers, (m, c) =>
                 {
                     deliveryContext = c;
                 });
 
                 delivery = An<IDelivery>();
+                delivery.WhenToldTo(d => d.ContentType).Return("content-type");
             };
 
             Because of = () =>
@@ -30,6 +36,8 @@ namespace Chinchilla.Specifications
                 deliveryContext.ShouldNotBeNull();
 
             static ActionDeliveryProcessor<TestMessage> Subject;
+
+            static IMessageSerializers serializers;
 
             static IMessageSerializer serializer;
 

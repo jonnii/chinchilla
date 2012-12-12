@@ -13,14 +13,14 @@ namespace Chinchilla
 
         private readonly IModelFactory modelFactory;
 
-        private readonly IMessageSerializer messageSerializer;
+        private readonly IMessageSerializers messageSerializers;
 
         public SubscriptionFactory(
             IModelFactory modelFactory,
-            IMessageSerializer messageSerializer)
+            IMessageSerializers messageSerializers)
         {
             this.modelFactory = modelFactory;
-            this.messageSerializer = messageSerializer;
+            this.messageSerializers = messageSerializers;
         }
 
         public ISubscription Create<TMessage>(
@@ -32,7 +32,7 @@ namespace Chinchilla
 
             var deliveryProcessor = new ActionDeliveryProcessor<TMessage>(
                 bus,
-                messageSerializer,
+                messageSerializers,
                 callback);
 
             var messageType = typeof(TMessage).Name;

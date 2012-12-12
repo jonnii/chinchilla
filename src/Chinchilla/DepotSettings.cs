@@ -15,9 +15,12 @@ namespace Chinchilla
         {
             ConnectionFactoryBuilder = () => new DefaultConnectionFactory();
             ConsumerFactoryBuilder = () => new DefaultConsumerFactory();
+            MessageSerializers = new MessageSerializers();
         }
 
         public string ConnectionString { get; set; }
+
+        public IMessageSerializers MessageSerializers { get; set; }
 
         public Func<IConnectionFactory> ConnectionFactoryBuilder { get; set; }
 

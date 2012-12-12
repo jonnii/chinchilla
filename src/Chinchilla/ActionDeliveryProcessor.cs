@@ -12,22 +12,23 @@ namespace Chinchilla
     {
         private readonly IBus bus;
 
-        private readonly IMessageSerializer messageSerializer;
+        private readonly IMessageSerializers messageSerializers;
 
         private readonly Action<T, IDeliveryContext> handler;
 
         public ActionDeliveryProcessor(
             IBus bus,
-            IMessageSerializer messageSerializer,
+            IMessageSerializers messageSerializers,
             Action<T, IDeliveryContext> handler)
         {
             this.bus = bus;
-            this.messageSerializer = messageSerializer;
+            this.messageSerializers = messageSerializers;
             this.handler = handler;
         }
 
         public void Process(IDelivery delivery)
         {
+            var messageSerializer = messageSerializers.FindOrDefault(delivery.ContentType);
             var deserialized = messageSerializer.Deserialize<T>(delivery.Body);
             var deliveryContext = new DeliveryContext(bus);
 

@@ -5,11 +5,11 @@ namespace Chinchilla
 {
     public class PublisherFactory : TrackableFactory<Publisher>, IPublisherFactory
     {
-        private readonly IMessageSerializer messageSerializer;
+        private readonly IMessageSerializers messageSerializers;
 
-        public PublisherFactory(IMessageSerializer messageSerializer)
+        public PublisherFactory(IMessageSerializers messageSerializers)
         {
-            this.messageSerializer = messageSerializer;
+            this.messageSerializers = messageSerializers;
         }
 
         public IPublisher<TMessage> Create<TMessage>(
@@ -24,6 +24,9 @@ namespace Chinchilla
             topology.Visit(topologyBuilder);
 
             var router = configuration.BuildRouter();
+
+            var messageSerializer = messageSerializers.FindOrDefault(
+                configuration.ContentType);
 
             var publisher = new Publisher<TMessage>(
                 modelReference,
