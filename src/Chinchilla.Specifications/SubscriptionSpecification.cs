@@ -25,7 +25,7 @@ namespace Chinchilla.Specifications
                 state.ShouldNotBeNull();
 
             It should_query_delivery_strategy_for_state = () =>
-                deliveryStrategy.WasToldTo(s => s.GetState());
+                deliveryStrategy.WasToldTo(s => s.GetWorkerStates());
 
             static SubscriptionState state;
         }

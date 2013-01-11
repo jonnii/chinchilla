@@ -11,12 +11,12 @@ namespace Chinchilla.Specifications
         public class when_querying_for_state : WithSubject<TaskDeliveryStrategy>
         {
             Because of = () =>
-                state = Subject.GetState();
+                states = Subject.GetWorkerStates();
 
             It should_get_state = () =>
-                state.ShouldNotBeNull();
+                states.ShouldNotBeNull();
 
-            static DeliveryStrategyState state;
+            static WorkerState[] states;
         }
 
         [Subject(typeof(TaskDeliveryStrategy))]

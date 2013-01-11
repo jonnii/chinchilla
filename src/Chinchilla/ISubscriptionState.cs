@@ -8,11 +8,11 @@ namespace Chinchilla
         public SubscriptionState(
             long numAcceptedMessages,
             long numFailedMessages,
-            DeliveryStrategyState deliveryStrategyState)
+            WorkerState[] workerStates)
         {
             NumAcceptedMessages = numAcceptedMessages;
             NumFailedMessages = numFailedMessages;
-            DeliveryStrategyState = deliveryStrategyState;
+            WorkerStates = workerStates;
         }
 
         /// <summary>
@@ -26,8 +26,8 @@ namespace Chinchilla
         public long NumFailedMessages { get; private set; }
 
         /// <summary>
-        /// The delivery strategy state
+        /// The state of all the workers in this subscription
         /// </summary>
-        public DeliveryStrategyState DeliveryStrategyState { get; set; }
+        public WorkerState[] WorkerStates { get; set; }
     }
 }

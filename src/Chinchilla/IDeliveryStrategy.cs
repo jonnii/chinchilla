@@ -12,6 +12,6 @@ namespace Chinchilla
 
         void Deliver(IDelivery delivery);
 
-        DeliveryStrategyState GetState();
+        WorkerState[] GetWorkerStates();
     }
 }

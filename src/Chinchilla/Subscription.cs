@@ -65,12 +65,12 @@ namespace Chinchilla
             var acceptedMessages = Queues.Sum(q => q.NumAcceptedMessages);
             var failedMessages = Queues.Sum(q => q.NumFailedMessages);
 
-            var deliveryStrategyState = deliveryStrategy.GetState();
+            var workerStates = deliveryStrategy.GetWorkerStates();
 
             return new SubscriptionState(
                 acceptedMessages,
                 failedMessages,
-                deliveryStrategyState);
+                workerStates);
         }
 
         private Thread BuildListenerThread()

@@ -9,9 +9,9 @@ namespace Chinchilla
             DeliverOnTask(delivery);
         }
 
-        public override DeliveryStrategyState GetState()
+        public override WorkerState[] GetWorkerStates()
         {
-            return new DeliveryStrategyState();
+            return new WorkerState[0];
         }
 
         public Task DeliverOnTask(IDelivery delivery)

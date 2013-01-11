@@ -14,18 +14,18 @@ namespace Chinchilla
             get { return true; }
         }
 
+        public abstract WorkerState[] GetWorkerStates();
+
         public virtual void Start()
         {
 
         }
 
-        public abstract void Deliver(IDelivery delivery);
-
-        public abstract DeliveryStrategyState GetState();
-
         public virtual void Stop()
         {
 
         }
+
+        public abstract void Deliver(IDelivery delivery);
     }
 }

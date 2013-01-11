@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Chinchilla.Logging;
@@ -56,9 +57,11 @@ namespace Chinchilla
             deliveries.Add(delivery);
         }
 
-        public override DeliveryStrategyState GetState()
+        public override WorkerState[] GetWorkerStates()
         {
-            return new DeliveryStrategyState();
+            return new WorkerState[0];
+
+            //return threads.Select(t => t.GetState()).ToArray();
         }
 
         public void StartTakingMessages()

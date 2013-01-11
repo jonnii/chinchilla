@@ -57,7 +57,7 @@
     <Compile Include="ConnectionString.cs" />
     <Compile Include="DefaultConsumerFactory.cs" />
     <Compile Include="DeliveryQueue.cs" />
-    <Compile Include="DeliveryStrategyState.cs" />
+    <Compile Include="WorkerState.cs" />
     <Compile Include="Fault.cs" />
     <Compile Include="ErrorQueueFaultStrategy.cs" />
     <Compile Include="DefaultRouter.cs" />

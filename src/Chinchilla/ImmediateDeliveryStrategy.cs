@@ -19,9 +19,9 @@ namespace Chinchilla
             delivery.Accept();
         }
 
-        public override DeliveryStrategyState GetState()
+        public override WorkerState[] GetWorkerStates()
         {
-            return new DeliveryStrategyState();
+            return new WorkerState[0];
         }
     }
 }

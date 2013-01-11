@@ -4,5 +4,5 @@ namespace Chinchilla
     /// A delivery strategy state contains all the details of what the message
     /// delivery system is currently doing
     /// </summary>
-    public class DeliveryStrategyState { }
+    public class WorkerState { }
 }
