@@ -9,6 +9,11 @@ namespace Chinchilla
             DeliverOnTask(delivery);
         }
 
+        public override DeliveryStrategyState GetState()
+        {
+            return new DeliveryStrategyState();
+        }
+
         public Task DeliverOnTask(IDelivery delivery)
         {
             var currentDelivery = delivery;

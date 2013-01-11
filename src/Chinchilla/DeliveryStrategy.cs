@@ -21,6 +21,8 @@ namespace Chinchilla
 
         public abstract void Deliver(IDelivery delivery);
 
+        public abstract DeliveryStrategyState GetState();
+
         public virtual void Stop()
         {
 

@@ -7,6 +7,18 @@ namespace Chinchilla.Specifications
     public class ImmediateDeliveryStrategySpecification
     {
         [Subject(typeof(ImmediateDeliveryStrategy))]
+        public class when_querying_for_state : WithSubject<ImmediateDeliveryStrategy>
+        {
+            Because of = () =>
+                state = Subject.GetState();
+
+            It should_get_state = () =>
+                state.ShouldNotBeNull();
+
+            static DeliveryStrategyState state;
+        }
+
+        [Subject(typeof(ImmediateDeliveryStrategy))]
         public class when_delivery_processor_throws_exception : WithSubject<ImmediateDeliveryStrategy>
         {
             Establish context = () =>

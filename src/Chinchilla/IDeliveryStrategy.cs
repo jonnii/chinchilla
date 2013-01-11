@@ -11,5 +11,7 @@ namespace Chinchilla
         void Stop();
 
         void Deliver(IDelivery delivery);
+
+        DeliveryStrategyState GetState();
     }
 }

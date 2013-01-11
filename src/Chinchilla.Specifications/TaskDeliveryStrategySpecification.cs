@@ -8,6 +8,18 @@ namespace Chinchilla.Specifications
     public class TaskDeliveryStrategySpecification
     {
         [Subject(typeof(TaskDeliveryStrategy))]
+        public class when_querying_for_state : WithSubject<TaskDeliveryStrategy>
+        {
+            Because of = () =>
+                state = Subject.GetState();
+
+            It should_get_state = () =>
+                state.ShouldNotBeNull();
+
+            static DeliveryStrategyState state;
+        }
+
+        [Subject(typeof(TaskDeliveryStrategy))]
         public class when_handling_delivery : WithSubject<TaskDeliveryStrategy>
         {
             Establish context = () =>

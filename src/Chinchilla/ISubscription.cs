@@ -30,6 +30,6 @@ namespace Chinchilla
         /// <summary>
         /// Gets the current subscription state
         /// </summary>
-        SubscriptionState GetSubscriptionState();
+        SubscriptionState GetState();
     }
 }

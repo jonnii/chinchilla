@@ -56,6 +56,11 @@ namespace Chinchilla
             deliveries.Add(delivery);
         }
 
+        public override DeliveryStrategyState GetState()
+        {
+            return new DeliveryStrategyState();
+        }
+
         public void StartTakingMessages()
         {
             while (!isStopping)

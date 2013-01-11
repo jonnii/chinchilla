@@ -60,13 +60,17 @@ namespace Chinchilla
             IsStarted = true;
         }
 
-        public SubscriptionState GetSubscriptionState()
+        public SubscriptionState GetState()
         {
             var acceptedMessages = Queues.Sum(q => q.NumAcceptedMessages);
             var failedMessages = Queues.Sum(q => q.NumFailedMessages);
 
+            var deliveryStrategyState = deliveryStrategy.GetState();
+
             return new SubscriptionState(
-                acceptedMessages, failedMessages);
+                acceptedMessages,
+                failedMessages,
+                deliveryStrategyState);
         }
 
         private Thread BuildListenerThread()

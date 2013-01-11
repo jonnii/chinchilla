@@ -5,10 +5,14 @@ namespace Chinchilla
     /// </summary>
     public class SubscriptionState
     {
-        public SubscriptionState(long numAcceptedMessages, long numFailedMessages)
+        public SubscriptionState(
+            long numAcceptedMessages,
+            long numFailedMessages,
+            DeliveryStrategyState deliveryStrategyState)
         {
             NumAcceptedMessages = numAcceptedMessages;
             NumFailedMessages = numFailedMessages;
+            DeliveryStrategyState = deliveryStrategyState;
         }
 
         /// <summary>
@@ -20,5 +24,10 @@ namespace Chinchilla
         /// The number of failed messages processed by this subscription
         /// </summary>
         public long NumFailedMessages { get; private set; }
+
+        /// <summary>
+        /// The delivery strategy state
+        /// </summary>
+        public DeliveryStrategyState DeliveryStrategyState { get; set; }
     }
 }

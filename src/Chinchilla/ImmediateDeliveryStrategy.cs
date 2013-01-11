@@ -18,5 +18,10 @@ namespace Chinchilla
 
             delivery.Accept();
         }
+
+        public override DeliveryStrategyState GetState()
+        {
+            return new DeliveryStrategyState();
+        }
     }
 }

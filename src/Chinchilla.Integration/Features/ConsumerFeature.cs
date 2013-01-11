@@ -23,7 +23,7 @@ namespace Chinchilla.Integration.Features
 
                     Thread.Sleep(1000);
 
-                    Assert.That(subscriber.GetSubscriptionState().NumAcceptedMessages, Is.EqualTo(100));
+                    Assert.That(subscriber.GetState().NumAcceptedMessages, Is.EqualTo(100));
                 }
             }
         }
@@ -42,7 +42,7 @@ namespace Chinchilla.Integration.Features
 
                     Thread.Sleep(1000);
 
-                    Assert.That(subscriber.GetSubscriptionState().NumAcceptedMessages, Is.EqualTo(100));
+                    Assert.That(subscriber.GetState().NumAcceptedMessages, Is.EqualTo(100));
                 }
             }
         }
