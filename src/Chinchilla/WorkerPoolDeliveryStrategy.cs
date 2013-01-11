@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Chinchilla.Logging;
 
 namespace Chinchilla
@@ -14,9 +11,7 @@ namespace Chinchilla
         private readonly BlockingCollection<IDelivery> deliveries = new BlockingCollection<IDelivery>(
             new ConcurrentQueue<IDelivery>());
 
-        private Thread[] threads = new Thread[0];
-
-        private bool isStopping;
+        private WorkerPoolThread[] threads = new WorkerPoolThread[0];
 
         public WorkerPoolDeliveryStrategy()
         {
@@ -43,7 +38,7 @@ namespace Chinchilla
 
             threads = Enumerable
                 .Range(0, NumWorkers)
-                .Select(_ => new Thread(StartTakingMessages))
+                .Select(_ => new WorkerPoolThread(deliveries, connectedProcessor))
                 .ToArray();
 
             foreach (var thread in threads)
@@ -59,50 +54,17 @@ namespace Chinchilla
 
         public override WorkerState[] GetWorkerStates()
         {
-            return new WorkerState[0];
-
-            //return threads.Select(t => t.GetState()).ToArray();
-        }
-
-        public void StartTakingMessages()
-        {
-            while (!isStopping)
-            {
-                IDelivery delivery;
-
-                try
-                {
-                    delivery = deliveries.Take();
-                }
-                catch (InvalidOperationException)
-                {
-                    break;
-                }
-
-                DeliverOne(delivery);
-            }
-        }
-
-        public void DeliverOne(IDelivery delivery)
-        {
-            try
-            {
-                connectedProcessor.Process(delivery);
-            }
-            catch (Exception e)
-            {
-                delivery.Failed(e);
-                return;
-            }
-
-            delivery.Accept();
+            return threads.Select(t => t.GetState()).ToArray();
         }
 
         public override void Stop()
         {
             logger.DebugFormat("Stopping {0}", this);
 
-            isStopping = true;
+            foreach (var thread in threads)
+            {
+                thread.IsStopping = true;
+            }
 
             deliveries.CompleteAdding();
 

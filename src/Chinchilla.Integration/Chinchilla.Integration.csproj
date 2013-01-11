@@ -63,6 +63,7 @@
     <Compile Include="Features\Messages\HelloWorldMessage.cs" />
     <Compile Include="Features\PublishFeature.cs" />
     <Compile Include="Features\SharedSubscriptionFeature.cs" />
+    <Compile Include="Features\StateQueryFeature.cs" />
     <Compile Include="Features\SubscribeFeature.cs" />
     <Compile Include="Features\SubscriberFaultFeature.cs" />
     <Compile Include="Features\WithApi.cs" />

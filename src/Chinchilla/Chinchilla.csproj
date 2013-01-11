@@ -57,6 +57,7 @@
     <Compile Include="ConnectionString.cs" />
     <Compile Include="DefaultConsumerFactory.cs" />
     <Compile Include="DeliveryQueue.cs" />
+    <Compile Include="WorkerPoolThread.cs" />
     <Compile Include="WorkerState.cs" />
     <Compile Include="Fault.cs" />
     <Compile Include="ErrorQueueFaultStrategy.cs" />
@@ -147,6 +148,7 @@
     <Compile Include="TrackableFactory.cs" />
     <Compile Include="UriConnectionString.cs" />
     <Compile Include="WorkerPoolDeliveryStrategy.cs" />
+    <Compile Include="WorkerStatus.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
