@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Chinchilla.Configuration;
 using Chinchilla.Logging;
 
@@ -81,6 +82,14 @@ namespace Chinchilla
             logger.DebugFormat("Buliding consumer {0}", typeof(TConsumer).Name);
             var consumer = consumerFactory.Build<TConsumer>();
             return Subscribe(consumer);
+        }
+
+        public SubscriptionState[] GetState()
+        {
+            return subscriptionFactory
+                .List()
+                .Select(s => s.GetState())
+                .ToArray();
         }
 
         public ISubscription Subscribe(IConsumer consumer)

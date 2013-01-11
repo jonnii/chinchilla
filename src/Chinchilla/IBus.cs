@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Chinchilla.Configuration;
 
 namespace Chinchilla
@@ -74,5 +75,10 @@ namespace Chinchilla
         /// <returns>A subscription</returns>
         ISubscription Subscribe<TConsumer>()
             where TConsumer : IConsumer;
+
+        /// <summary>
+        /// Gets all the subscription state
+        /// </summary>
+        SubscriptionState[] GetState();
     }
 }

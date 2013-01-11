@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.1.6.1
+
+  * expose subscription state on the bus
+
 ## 0.1.6
 
   * add the ability to query for the state of subscriptions

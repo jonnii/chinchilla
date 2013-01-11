@@ -23,6 +23,11 @@ namespace Chinchilla
             this.messageSerializers = messageSerializers;
         }
 
+        public IEnumerable<ISubscription> List()
+        {
+            return Tracked;
+        }
+
         public ISubscription Create<TMessage>(
             IBus bus,
             ISubscriptionConfiguration configuration,
