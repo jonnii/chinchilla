@@ -44,7 +44,7 @@ namespace Chinchilla
 
         public WorkerState GetState()
         {
-            return new WorkerState(status);
+            return new WorkerState("WorkerPoolThread", status);
         }
 
         public void BeforeStartMessagePump()

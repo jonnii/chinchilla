@@ -6,10 +6,18 @@ namespace Chinchilla
     /// </summary>
     public class WorkerState
     {
-        public WorkerState(WorkerStatus status)
+        public WorkerState(
+            string type,
+            WorkerStatus status)
         {
+            Type = type;
             Status = status;
         }
+
+        /// <summary>
+        /// The type of this worker
+        /// </summary>
+        public string Type { get; set; }
 
         /// <summary>
         /// The status of this worker

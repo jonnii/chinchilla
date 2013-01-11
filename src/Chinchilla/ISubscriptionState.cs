@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace Chinchilla
 {
     /// <summary>
@@ -6,28 +8,37 @@ namespace Chinchilla
     public class SubscriptionState
     {
         public SubscriptionState(
-            long numAcceptedMessages,
-            long numFailedMessages,
+            QueueState[] queueStates,
             WorkerState[] workerStates)
         {
-            NumAcceptedMessages = numAcceptedMessages;
-            NumFailedMessages = numFailedMessages;
+            QueueStates = queueStates;
             WorkerStates = workerStates;
         }
 
         /// <summary>
-        /// The number of messages accepted by this subscription
+        /// The state of all the queues on this subscription
         /// </summary>
-        public long NumAcceptedMessages { get; private set; }
-
-        /// <summary>
-        /// The number of failed messages processed by this subscription
-        /// </summary>
-        public long NumFailedMessages { get; private set; }
+        public QueueState[] QueueStates { get; set; }
 
         /// <summary>
         /// The state of all the workers in this subscription
         /// </summary>
         public WorkerState[] WorkerStates { get; set; }
+
+        /// <summary>
+        /// The total number of accepted messages
+        /// </summary>
+        public long TotalAcceptedMessages()
+        {
+            return QueueStates.Sum(q => q.NumAcceptedMessages);
+        }
+
+        /// <summary>
+        /// The total number of failed messages
+        /// </summary>
+        public long TotalFailedMessages()
+        {
+            return QueueStates.Sum(q => q.NumFailedMessages);
+        }
     }
 }

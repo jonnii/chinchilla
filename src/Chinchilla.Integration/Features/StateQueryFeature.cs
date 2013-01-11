@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using Chinchilla.Integration.Features.Messages;
 using NUnit.Framework;
@@ -21,12 +22,14 @@ namespace Chinchilla.Integration.Features
 
                     var state = subscription.GetState();
 
-                    Assert.That(state.NumAcceptedMessages, Is.EqualTo(0));
-                    Assert.That(state.NumFailedMessages, Is.EqualTo(0));
-                    Assert.That(state.WorkerStates.Length, Is.EqualTo(5));
+                    var queueState = state.QueueStates.Single();
+
+                    Assert.That(queueState.NumAcceptedMessages, Is.EqualTo(0));
+                    Assert.That(queueState.NumFailedMessages, Is.EqualTo(0));
 
                     var workerStates = state.WorkerStates;
 
+                    Assert.That(workerStates.Length, Is.EqualTo(5));
                     foreach (var workerState in workerStates)
                     {
                         Assert.That(workerState.Status, Is.EqualTo(WorkerStatus.Idle));

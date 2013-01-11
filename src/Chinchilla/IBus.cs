@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Chinchilla.Configuration;
 
 namespace Chinchilla

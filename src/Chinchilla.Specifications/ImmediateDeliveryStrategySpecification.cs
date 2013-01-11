@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Machine.Fakes;
 using Machine.Specifications;
 
@@ -14,6 +15,42 @@ namespace Chinchilla.Specifications
 
             It should_get_state = () =>
                 states.ShouldNotBeNull();
+
+            It should_have_single_idle_worker = () =>
+                states.Single().Status.ShouldEqual(WorkerStatus.Stopped);
+
+            static WorkerState[] states;
+        }
+
+        [Subject(typeof(ImmediateDeliveryStrategy))]
+        public class when_started : WithSubject<ImmediateDeliveryStrategy>
+        {
+            Establish context = () =>
+                Subject.Start();
+
+            Because of = () =>
+                states = Subject.GetWorkerStates();
+
+            It should_have_single_idle_worker = () =>
+                states.Single().Status.ShouldEqual(WorkerStatus.Idle);
+
+            static WorkerState[] states;
+        }
+
+        [Subject(typeof(ImmediateDeliveryStrategy))]
+        public class when_started_then_stopped : WithSubject<ImmediateDeliveryStrategy>
+        {
+            Establish context = () =>
+            {
+                Subject.Start();
+                Subject.Stop();
+            };
+
+            Because of = () =>
+                states = Subject.GetWorkerStates();
+
+            It should_have_single_idle_worker = () =>
+                states.Single().Status.ShouldEqual(WorkerStatus.Stopped);
 
             static WorkerState[] states;
         }

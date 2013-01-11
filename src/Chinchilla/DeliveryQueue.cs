@@ -68,6 +68,11 @@ namespace Chinchilla
             consumerQueue = modelReference.GetConsumerQueue(queue);
         }
 
+        public QueueState GetState()
+        {
+            return new QueueState(Name, NumAcceptedMessages, NumFailedMessages);
+        }
+
         public override string ToString()
         {
             return string.Format("[DeliveryQueue Name={0}]", Name);

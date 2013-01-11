@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.1.6.2
+
+  * expose more state for subscriptions
+
 ## 0.1.6.1
 
   * expose subscription state on the bus

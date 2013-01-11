@@ -28,5 +28,10 @@ namespace Chinchilla
         /// Starts the delivery queue
         /// </summary>
         void Start();
+
+        /// <summary>
+        /// Gets the state of this queue
+        /// </summary>
+        QueueState GetState();
     }
 }

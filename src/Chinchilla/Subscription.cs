@@ -62,14 +62,11 @@ namespace Chinchilla
 
         public SubscriptionState GetState()
         {
-            var acceptedMessages = Queues.Sum(q => q.NumAcceptedMessages);
-            var failedMessages = Queues.Sum(q => q.NumFailedMessages);
-
+            var queueStates = Queues.Select(q => q.GetState()).ToArray();
             var workerStates = deliveryStrategy.GetWorkerStates();
 
             return new SubscriptionState(
-                acceptedMessages,
-                failedMessages,
+                queueStates,
                 workerStates);
         }
 
