@@ -8,7 +8,6 @@ namespace Chinchilla.Integration.Features
     [TestFixture]
     public class StateQueryFeature : WithApi
     {
-
         [Test]
         public void ShouldCreateSubscriberWithWorkerPoolStrategy()
         {
