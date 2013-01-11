@@ -16,6 +16,18 @@ namespace Chinchilla.Specifications
         }
 
         [Subject(typeof(Subscription))]
+        public class when_getting_subscription_state : with_subscription
+        {
+            Because of = () =>
+                state = Subject.GetSubscriptionState();
+
+            It should_ = () =>
+                state.ShouldNotBeNull();
+
+            static SubscriptionState state;
+        }
+
+        [Subject(typeof(Subscription))]
         public class when_checking_is_startable : with_subscription
         {
             Establish context = () =>

@@ -77,8 +77,8 @@
     <Compile Include="IMessageSerializers.cs" />
     <Compile Include="IRouter.cs" />
     <Compile Include="DeliveryContext.cs" />
+    <Compile Include="ISubscriptionState.cs" />
     <Compile Include="MessageSerializers.cs" />
-    <Compile Include="MultiSubscription.cs" />
     <Compile Include="Topologies\DefaultPublishTopologyBuilder.cs" />
     <Compile Include="Topologies\DefaultSubscribeTopologyBuilder.cs" />
     <Compile Include="Delivery.cs" />

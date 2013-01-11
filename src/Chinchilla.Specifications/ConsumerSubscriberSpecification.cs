@@ -55,22 +55,16 @@ namespace Chinchilla.Specifications
             };
 
             Because of = () =>
-                subscription = subscriber.Connect();
-
-            It should_subscribe_for_first_interface = () =>
-                bus.WasToldTo(b => b.Subscribe(Param.IsAny<Action<TestMessage, IDeliveryContext>>()));
-
-            It should_subscribe_for_second_interface = () =>
-                bus.WasToldTo(b => b.Subscribe(Param.IsAny<Action<AnotherTestMessage, IDeliveryContext>>()));
+                exception = Catch.Exception(() => subscriber.Connect());
 
             It should_create_multi_subscription = () =>
-                subscription.ShouldBeOfType<MultiSubscription>();
+                exception.ShouldBeOfType<ChinchillaException>();
 
             static IBus bus;
 
             static ConsumerSubscriber subscriber;
 
-            static ISubscription subscription;
+            static Exception exception;
         }
 
         [Subject(typeof(ConsumerSubscriber))]

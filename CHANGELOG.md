@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.1.6
+
+  * add the ability to query for the state of subscriptions
+  * remove multi subscription, it's a bad idea
+
 ## 0.1.5
 
   * ability to change the message serializer globally and per publisher

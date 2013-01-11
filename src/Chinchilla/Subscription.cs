@@ -70,6 +70,11 @@ namespace Chinchilla
             IsStarted = true;
         }
 
+        public SubscriptionState GetSubscriptionState()
+        {
+            return new SubscriptionState();
+        }
+
         private Thread BuildListenerThread()
         {
             return new Thread(() =>

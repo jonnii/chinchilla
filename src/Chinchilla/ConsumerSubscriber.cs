@@ -51,14 +51,15 @@ namespace Chinchilla
                     "Could not find any interfaces that are assignable to IConsumer, did you implement IConsumer<T>?");
             }
 
-            var subscriptions = interfaces.Select(ConnectConsumerInterface).ToList();
-
-            if (subscriptions.Count == 1)
+            if (interfaces.Count() > 1)
             {
-                return subscriptions.First();
+                throw new ChinchillaException(
+                    "An consumer cannot consume more than one type of message.");
             }
 
-            return new MultiSubscription(subscriptions);
+            var consumerType = interfaces.Single();
+
+            return ConnectConsumerInterface(consumerType);
         }
 
         private ISubscription ConnectConsumerInterface(Type consumerInterfaceType)

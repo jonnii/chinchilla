@@ -36,5 +36,10 @@ namespace Chinchilla
         /// Starts the subscription
         /// </summary>
         void Start();
+
+        /// <summary>
+        /// Gets the current subscription state
+        /// </summary>
+        SubscriptionState GetSubscriptionState();
     }
 }
