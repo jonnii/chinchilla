@@ -38,16 +38,6 @@ namespace Chinchilla
             get { return deliveryStrategy.IsStartable; }
         }
 
-        public long NumAcceptedMessages
-        {
-            get { return Queues.Sum(q => q.NumAcceptedMessages); }
-        }
-
-        public long NumFailedMessages
-        {
-            get { return Queues.Sum(q => q.NumFailedMessages); }
-        }
-
         public void Start()
         {
             logger.InfoFormat("Starting subscription: {0}", this);
@@ -72,7 +62,11 @@ namespace Chinchilla
 
         public SubscriptionState GetSubscriptionState()
         {
-            return new SubscriptionState();
+            var acceptedMessages = Queues.Sum(q => q.NumAcceptedMessages);
+            var failedMessages = Queues.Sum(q => q.NumFailedMessages);
+
+            return new SubscriptionState(
+                acceptedMessages, failedMessages);
         }
 
         private Thread BuildListenerThread()
