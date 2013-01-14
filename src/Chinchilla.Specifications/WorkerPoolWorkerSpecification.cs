@@ -43,8 +43,11 @@ namespace Chinchilla.Specifications
                 state = Subject.GetState();
             };
 
-            It should_be_idle = () =>
+            It should_be_busy = () =>
                 state.Status.ShouldEqual(WorkerStatus.Busy);
+
+            It should_set_busy_since = () =>
+                state.BusySince.Value.ShouldBeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(1));
 
             static WorkerState state;
         }
@@ -60,6 +63,9 @@ namespace Chinchilla.Specifications
 
             It should_be_idle = () =>
                 state.Status.ShouldEqual(WorkerStatus.Idle);
+
+            It should_not_be_busy_since = () =>
+                state.BusySince.ShouldBeNull();
 
             static WorkerState state;
         }

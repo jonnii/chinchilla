@@ -24,7 +24,7 @@ namespace Chinchilla
 
         public override string WorkerType
         {
-            get { return "WorkerPoolThread"; }
+            get { return "WorkerPool"; }
         }
 
         public bool IsStopping { get; set; }

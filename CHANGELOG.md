@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.1.7
+
+  * task delivery strategy is now the default when creating a subscription
+  * remove immediate delivery strategy
+
 ## 0.1.6.2
 
   * expose more state for subscriptions

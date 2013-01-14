@@ -84,7 +84,6 @@
     <Compile Include="ErrorQueueFaultStrategySpecification.cs" />
     <Compile Include="FaultSpecification.cs" />
     <Compile Include="IgnoreFaultStrategySpecification.cs" />
-    <Compile Include="ImmediateDeliveryStrategySpecification.cs" />
     <Compile Include="MessageSerializersSpecification.cs" />
     <Compile Include="Messages\AnotherTestMessage.cs" />
     <Compile Include="Messages\TestMessage.cs" />

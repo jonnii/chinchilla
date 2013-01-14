@@ -53,8 +53,8 @@ namespace Chinchilla.Specifications.Configuration
             Because of = () =>
                 strategy = Subject.BuildDeliveryStrategy(An<IDeliveryProcessor>());
 
-            It should_build_immediate_strategy = () =>
-                strategy.ShouldBeOfType<ImmediateDeliveryStrategy>();
+            It should_build_task_delivery_strategy = () =>
+                strategy.ShouldBeOfType<TaskDeliveryStrategy>();
 
             static IDeliveryStrategy strategy;
         }

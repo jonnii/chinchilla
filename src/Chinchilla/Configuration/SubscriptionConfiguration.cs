@@ -7,7 +7,7 @@ namespace Chinchilla.Configuration
 {
     public class SubscriptionConfiguration : EndpointConfiguration, ISubscriptionConfiguration, ISubscriptionBuilder
     {
-        private Func<IDeliveryProcessor, IDeliveryStrategy> strategyBuilder = handler => new ImmediateDeliveryStrategy();
+        private Func<IDeliveryProcessor, IDeliveryStrategy> strategyBuilder = handler => new TaskDeliveryStrategy();
 
         private Func<IBus, IFaultStrategy> failureStrategyBuilder = bus => new ErrorQueueFaultStrategy(bus);
 

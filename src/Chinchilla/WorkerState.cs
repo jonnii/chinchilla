@@ -1,3 +1,5 @@
+using System;
+
 namespace Chinchilla
 {
     /// <summary>
@@ -6,12 +8,11 @@ namespace Chinchilla
     /// </summary>
     public class WorkerState
     {
-        public WorkerState(
-            string type,
-            WorkerStatus status)
+        public WorkerState(string type, WorkerStatus status, DateTime? busySince)
         {
             Type = type;
             Status = status;
+            BusySince = busySince;
         }
 
         /// <summary>
@@ -23,5 +24,10 @@ namespace Chinchilla
         /// The status of this worker
         /// </summary>
         public WorkerStatus Status { get; private set; }
+
+        /// <summary>
+        /// Indicates when this worker state last entered the busy state
+        /// </summary>
+        public DateTime? BusySince { get; set; }
     }
 }
