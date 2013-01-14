@@ -50,6 +50,7 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ActionDeliveryProcessor.cs" />
+    <Compile Include="ActionDisposable.cs" />
     <Compile Include="Bus.cs" />
     <Compile Include="ChinchillaException.cs" />
     <Compile Include="ConsumerSubscriber.cs" />
@@ -57,8 +58,10 @@
     <Compile Include="ConnectionString.cs" />
     <Compile Include="DefaultConsumerFactory.cs" />
     <Compile Include="DeliveryQueue.cs" />
+    <Compile Include="Worker.cs" />
     <Compile Include="QueueState.cs" />
-    <Compile Include="WorkerPoolThread.cs" />
+    <Compile Include="TaskWorker.cs" />
+    <Compile Include="WorkerPoolWorker.cs" />
     <Compile Include="WorkerState.cs" />
     <Compile Include="Fault.cs" />
     <Compile Include="ErrorQueueFaultStrategy.cs" />

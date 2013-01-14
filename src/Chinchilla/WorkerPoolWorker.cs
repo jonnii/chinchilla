@@ -4,7 +4,7 @@ using System.Threading;
 
 namespace Chinchilla
 {
-    public class WorkerPoolThread
+    public class WorkerPoolWorker : Worker
     {
         private readonly BlockingCollection<IDelivery> deliveries;
 
@@ -12,9 +12,7 @@ namespace Chinchilla
 
         private readonly Thread thread;
 
-        private WorkerStatus status = WorkerStatus.Stopped;
-
-        public WorkerPoolThread(
+        public WorkerPoolWorker(
             BlockingCollection<IDelivery> deliveries,
             IDeliveryProcessor connectedProcessor)
         {
@@ -22,6 +20,11 @@ namespace Chinchilla
             this.connectedProcessor = connectedProcessor;
 
             thread = new Thread(StartTakingMessages);
+        }
+
+        public override string WorkerType
+        {
+            get { return "WorkerPoolThread"; }
         }
 
         public bool IsStopping { get; set; }
@@ -42,14 +45,9 @@ namespace Chinchilla
             thread.Join();
         }
 
-        public WorkerState GetState()
-        {
-            return new WorkerState("WorkerPoolThread", status);
-        }
-
         public void BeforeStartMessagePump()
         {
-            status = WorkerStatus.Idle;
+            Status = WorkerStatus.Idle;
         }
 
         public void StartTakingMessages()
@@ -73,15 +71,11 @@ namespace Chinchilla
                     break;
                 }
 
-                BeforeDeliver();
-                Deliver(delivery);
-                AfterDeliver();
+                using (StartWorkingScope())
+                {
+                    Deliver(delivery);
+                }
             }
-        }
-
-        public void BeforeDeliver()
-        {
-            status = WorkerStatus.Busy;
         }
 
         public void Deliver(IDelivery delivery)
@@ -97,11 +91,6 @@ namespace Chinchilla
             }
 
             delivery.Accept();
-        }
-
-        public void AfterDeliver()
-        {
-            status = WorkerStatus.Idle;
         }
     }
 }

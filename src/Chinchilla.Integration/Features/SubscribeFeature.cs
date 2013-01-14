@@ -96,17 +96,24 @@ namespace Chinchilla.Integration.Features
                 var numReceived = 0;
                 var handler = new Action<HelloWorldMessage>(hwm => { lastReceived = hwm; ++numReceived; });
 
-                bus.Subscribe(handler, o => o.DeliverUsing<TaskDeliveryStrategy>());
-                for (var i = 0; i < 100; ++i)
+                using (var subscription = bus.Subscribe(handler, o => o.DeliverUsing<TaskDeliveryStrategy>()))
                 {
-                    bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
+                    for (var i = 0; i < 100; ++i)
+                    {
+                        bus.Publish(new HelloWorldMessage
+                        {
+                            Message = "subscribe!"
+                        });
+                    }
+
+                    Thread.Sleep(1000);
+
+                    Assert.That(lastReceived, Is.Not.Null);
+                    Assert.That(lastReceived.Message, Is.EqualTo("subscribe!"));
+                    Assert.That(numReceived, Is.EqualTo(100));
+
+                    Assert.That(subscription.GetState().WorkerStates.Count(), Is.EqualTo(0));
                 }
-
-                Thread.Sleep(1000);
-
-                Assert.That(lastReceived, Is.Not.Null);
-                Assert.That(lastReceived.Message, Is.EqualTo("subscribe!"));
-                Assert.That(numReceived, Is.EqualTo(100));
             }
         }
 

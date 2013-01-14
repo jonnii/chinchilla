@@ -104,7 +104,7 @@
     <Compile Include="Topologies\Model\QueueSpecification.cs" />
     <Compile Include="Topologies\Model\TopologySpecification.cs" />
     <Compile Include="WorkerPoolDeliveryStrategySpecification.cs" />
-    <Compile Include="WorkerPoolThreadSpecification.cs" />
+    <Compile Include="WorkerPoolWorkerSpecification.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

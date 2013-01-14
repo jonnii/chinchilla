@@ -5,9 +5,9 @@ using Machine.Specifications;
 
 namespace Chinchilla.Specifications
 {
-    public class WorkerPoolThreadSpecification
+    public class WorkerPoolWorkerSpecification
     {
-        [Subject(typeof(WorkerPoolThread))]
+        [Subject(typeof(WorkerPoolWorker))]
         public class when_getting_state_before_starting : with_worker_pool_thread
         {
             Because of = () =>
@@ -19,7 +19,7 @@ namespace Chinchilla.Specifications
             static WorkerState state;
         }
 
-        [Subject(typeof(WorkerPoolThread))]
+        [Subject(typeof(WorkerPoolWorker))]
         public class before_message_pump_started : with_worker_pool_thread
         {
             Because of = () =>
@@ -34,7 +34,7 @@ namespace Chinchilla.Specifications
             static WorkerState state;
         }
 
-        [Subject(typeof(WorkerPoolThread))]
+        [Subject(typeof(WorkerPoolWorker))]
         public class before_delivery : with_worker_pool_thread
         {
             Because of = () =>
@@ -49,7 +49,7 @@ namespace Chinchilla.Specifications
             static WorkerState state;
         }
 
-        [Subject(typeof(WorkerPoolThread))]
+        [Subject(typeof(WorkerPoolWorker))]
         public class after_delivery : with_worker_pool_thread
         {
             Because of = () =>
@@ -64,7 +64,7 @@ namespace Chinchilla.Specifications
             static WorkerState state;
         }
 
-        [Subject(typeof(WorkerPoolThread))]
+        [Subject(typeof(WorkerPoolWorker))]
         public class when_delivering_one_message : with_worker_pool_thread
         {
             Establish context = () =>
@@ -82,7 +82,7 @@ namespace Chinchilla.Specifications
             static IDelivery delivery;
         }
 
-        [Subject(typeof(WorkerPoolThread))]
+        [Subject(typeof(WorkerPoolWorker))]
         public class when_delivering_one_message_that_throws_exception : with_worker_pool_thread
         {
             Establish context = () =>
@@ -110,12 +110,12 @@ namespace Chinchilla.Specifications
                 var collection = new BlockingCollection<IDelivery>(new ConcurrentQueue<IDelivery>());
                 processor = An<IDeliveryProcessor>();
 
-                Subject = new WorkerPoolThread(collection, processor);
+                Subject = new WorkerPoolWorker(collection, processor);
             };
 
             protected static IDeliveryProcessor processor;
 
-            protected static WorkerPoolThread Subject;
+            protected static WorkerPoolWorker Subject;
         }
     }
 }

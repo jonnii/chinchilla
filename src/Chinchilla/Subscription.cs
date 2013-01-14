@@ -66,6 +66,8 @@ namespace Chinchilla
             var workerStates = deliveryStrategy.GetWorkerStates();
 
             return new SubscriptionState(
+                IsStarted,
+                IsStartable,
                 queueStates,
                 workerStates);
         }

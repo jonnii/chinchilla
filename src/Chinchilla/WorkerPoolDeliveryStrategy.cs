@@ -11,7 +11,7 @@ namespace Chinchilla
         private readonly BlockingCollection<IDelivery> deliveries = new BlockingCollection<IDelivery>(
             new ConcurrentQueue<IDelivery>());
 
-        private WorkerPoolThread[] threads = new WorkerPoolThread[0];
+        private WorkerPoolWorker[] workers = new WorkerPoolWorker[0];
 
         public WorkerPoolDeliveryStrategy()
         {
@@ -36,12 +36,12 @@ namespace Chinchilla
                     "because the number of configured worker threads is zero");
             }
 
-            threads = Enumerable
+            workers = Enumerable
                 .Range(0, NumWorkers)
-                .Select(_ => new WorkerPoolThread(deliveries, connectedProcessor))
+                .Select(_ => new WorkerPoolWorker(deliveries, connectedProcessor))
                 .ToArray();
 
-            foreach (var thread in threads)
+            foreach (var thread in workers)
             {
                 thread.Start();
             }
@@ -54,21 +54,21 @@ namespace Chinchilla
 
         public override WorkerState[] GetWorkerStates()
         {
-            return threads.Select(t => t.GetState()).ToArray();
+            return workers.Select(t => t.GetState()).ToArray();
         }
 
         public override void Stop()
         {
             logger.DebugFormat("Stopping {0}", this);
 
-            foreach (var thread in threads)
+            foreach (var thread in workers)
             {
                 thread.IsStopping = true;
             }
 
             deliveries.CompleteAdding();
 
-            foreach (var thread in threads)
+            foreach (var thread in workers)
             {
                 thread.Join();
             }

@@ -8,6 +8,13 @@ namespace Chinchilla.Specifications
     public class TaskDeliveryStrategySpecification
     {
         [Subject(typeof(TaskDeliveryStrategy))]
+        public class in_general : WithSubject<TaskDeliveryStrategy>
+        {
+            It should_have_no_workers = () =>
+                Subject.NumWorkers.ShouldEqual(0);
+        }
+
+        [Subject(typeof(TaskDeliveryStrategy))]
         public class when_querying_for_state : WithSubject<TaskDeliveryStrategy>
         {
             Because of = () =>
@@ -71,6 +78,26 @@ namespace Chinchilla.Specifications
             static IDelivery delivery;
 
             static Task task;
+        }
+
+        [Subject(typeof(TaskDeliveryStrategy))]
+        public class when_delivering_tasks : WithSubject<TaskDeliveryStrategy>
+        {
+            Because of = () =>
+            {
+                var deliveries = new[]
+                {
+                    Subject.DeliverOnTask(An<IDelivery>()),
+                    Subject.DeliverOnTask(An<IDelivery>()),
+                    Subject.DeliverOnTask(An<IDelivery>()),
+                    Subject.DeliverOnTask(An<IDelivery>())
+                };
+
+                Task.WaitAll(deliveries);
+            };
+
+            It should_have_no_workers = () =>
+                Subject.NumWorkers.ShouldEqual(0);
         }
     }
 }
