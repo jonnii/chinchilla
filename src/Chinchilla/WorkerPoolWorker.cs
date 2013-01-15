@@ -8,16 +8,14 @@ namespace Chinchilla
     {
         private readonly BlockingCollection<IDelivery> deliveries;
 
-        private readonly IDeliveryProcessor connectedProcessor;
-
         private readonly Thread thread;
 
         public WorkerPoolWorker(
             BlockingCollection<IDelivery> deliveries,
             IDeliveryProcessor connectedProcessor)
+            : base(connectedProcessor)
         {
             this.deliveries = deliveries;
-            this.connectedProcessor = connectedProcessor;
 
             thread = new Thread(StartTakingMessages);
         }
@@ -71,26 +69,8 @@ namespace Chinchilla
                     break;
                 }
 
-                using (StartWorkingScope())
-                {
-                    Deliver(delivery);
-                }
+                Deliver(delivery);
             }
-        }
-
-        public void Deliver(IDelivery delivery)
-        {
-            try
-            {
-                connectedProcessor.Process(delivery);
-            }
-            catch (Exception e)
-            {
-                delivery.Failed(e);
-                return;
-            }
-
-            delivery.Accept();
         }
     }
 }

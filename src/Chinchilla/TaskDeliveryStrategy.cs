@@ -35,30 +35,13 @@ namespace Chinchilla
 
             var currentDelivery = delivery;
 
-            return Task
-                .Factory
-                .StartNew(
-                    () =>
-                    {
-                        worker.BeforeDeliver();
-                        worker.Deliver(currentDelivery);
-                    })
-                .ContinueWith(
-                    t =>
-                    {
-                        if (t.IsFaulted)
-                        {
-                            currentDelivery.Failed(t.Exception);
-                        }
-                        else
-                        {
-                            currentDelivery.Accept();
-                        }
-                        worker.AfterDeliver();
+            return Task.Factory.StartNew(() =>
+            {
+                worker.Deliver(currentDelivery);
 
-                        TaskWorker removed;
-                        workers.TryRemove(worker.GetHashCode(), out removed);
-                    });
+                TaskWorker removed;
+                workers.TryRemove(worker.GetHashCode(), out removed);
+            });
         }
     }
 }
