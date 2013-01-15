@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Threading;
 using Chinchilla.Threading;
 using Machine.Fakes;
 using Machine.Specifications;
@@ -9,13 +10,31 @@ namespace Chinchilla.Specifications
     public class WorkerPoolWorkerSpecification
     {
         [Subject(typeof(WorkerPoolWorker))]
-        public class when_calling_start_twice
+        public class when_starting : with_worker_pool_thread
         {
-            Establish context = () => { };
+            Because of = () =>
+                Subject.Start();
 
-            private Because of = () => { };
+            It should_be_starting = () =>
+                Subject.Status.ShouldEqual(WorkerStatus.Starting);
 
-            private It should_ = () => { };
+            It should_start_thread = () =>
+                thread.WasToldTo(t => t.Start());
+        }
+
+        [Subject(typeof(WorkerPoolWorker))]
+        public class when_calling_start_twice : with_worker_pool_thread
+        {
+            Establish context = () =>
+                Subject.Start();
+
+            Because of = () =>
+                exception = Catch.Exception(() => Subject.Start());
+
+            It should_throw_invalid_operation_exception = () =>
+                exception.ShouldBeOfType<InvalidOperationException>();
+
+            static Exception exception;
         }
 
         [Subject(typeof(WorkerPoolWorker))]
@@ -127,7 +146,10 @@ namespace Chinchilla.Specifications
                 var collection = new BlockingCollection<IDelivery>(new ConcurrentQueue<IDelivery>());
                 processor = An<IDeliveryProcessor>();
 
+                thread = An<IThread>();
                 threadFactory = An<IThreadFactory>();
+                threadFactory.WhenToldTo(t => t.Create(Param.IsAny<ThreadStart>()))
+                    .Return(thread);
 
                 Subject = new WorkerPoolWorker(threadFactory, collection, processor);
             };
@@ -137,6 +159,8 @@ namespace Chinchilla.Specifications
             protected static WorkerPoolWorker Subject;
 
             protected static IThreadFactory threadFactory;
+
+            protected static IThread thread;
         }
     }
 }

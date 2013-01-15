@@ -27,12 +27,6 @@ namespace Chinchilla
                 BusySince);
         }
 
-        public void BeforeDeliver()
-        {
-            Status = WorkerStatus.Busy;
-            BusySince = DateTime.UtcNow;
-        }
-
         public void Deliver(IDelivery delivery)
         {
             BeforeDeliver();
@@ -48,6 +42,12 @@ namespace Chinchilla
             }
 
             AfterDeliver();
+        }
+
+        public void BeforeDeliver()
+        {
+            Status = WorkerStatus.Busy;
+            BusySince = DateTime.UtcNow;
         }
 
         public void AfterDeliver()

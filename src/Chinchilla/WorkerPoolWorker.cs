@@ -30,6 +30,13 @@ namespace Chinchilla
 
         public void Start()
         {
+            if (Status != WorkerStatus.Stopped)
+            {
+                throw new InvalidOperationException(
+                    "Cannot start this worker because it has already been started");
+            }
+
+            Status = WorkerStatus.Starting;
             thread.Start();
         }
 
