@@ -16,24 +16,33 @@ namespace Chinchilla.Integration.Features
             {
                 var handler = new Action<HelloWorldMessage>(hwm => { });
 
-                using (var subscription = bus.Subscribe(handler, o => o.DeliverUsing<WorkerPoolDeliveryStrategy>(s => s.NumWorkers = 5)))
+                var subscription = bus.Subscribe(handler, o => o.DeliverUsing<WorkerPoolDeliveryStrategy>(s => s.NumWorkers = 5));
+
+                Thread.Sleep(1000);
+
+                var state = subscription.GetState();
+
+                var queueState = state.QueueStates.Single();
+
+                Assert.That(queueState.NumAcceptedMessages, Is.EqualTo(0));
+                Assert.That(queueState.NumFailedMessages, Is.EqualTo(0));
+
+                var workerStates = state.WorkerStates;
+
+                Assert.That(workerStates.Length, Is.EqualTo(5));
+                foreach (var workerState in workerStates)
                 {
-                    Thread.Sleep(1000);
+                    Assert.That(workerState.Status, Is.EqualTo(WorkerStatus.Idle));
+                }
 
-                    var state = subscription.GetState();
+                subscription.Dispose();
 
-                    var queueState = state.QueueStates.Single();
-
-                    Assert.That(queueState.NumAcceptedMessages, Is.EqualTo(0));
-                    Assert.That(queueState.NumFailedMessages, Is.EqualTo(0));
-
-                    var workerStates = state.WorkerStates;
-
-                    Assert.That(workerStates.Length, Is.EqualTo(5));
-                    foreach (var workerState in workerStates)
-                    {
-                        Assert.That(workerState.Status, Is.EqualTo(WorkerStatus.Idle));
-                    }
+                state = subscription.GetState();
+                workerStates = state.WorkerStates;
+                Assert.That(workerStates.Length, Is.EqualTo(5));
+                foreach (var workerState in workerStates)
+                {
+                    Assert.That(workerState.Status, Is.EqualTo(WorkerStatus.Stopped));
                 }
             }
         }

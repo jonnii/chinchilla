@@ -45,9 +45,15 @@ namespace Chinchilla
             thread.Join();
         }
 
-        public void StopAndJoin()
+        public void Stop()
         {
             IsStopping = true;
+            Status = WorkerStatus.Stopping;
+        }
+
+        public void StopAndJoin()
+        {
+            Stop();
             thread.Join();
         }
 
@@ -79,6 +85,8 @@ namespace Chinchilla
 
                 Deliver(delivery);
             }
+
+            Status = WorkerStatus.Stopped;
         }
     }
 }

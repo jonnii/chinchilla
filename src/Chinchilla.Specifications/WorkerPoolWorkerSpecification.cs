@@ -38,6 +38,19 @@ namespace Chinchilla.Specifications
         }
 
         [Subject(typeof(WorkerPoolWorker))]
+        public class when_stopping : with_worker_pool_thread
+        {
+            Establish context = () =>
+                Subject.Start();
+
+            Because of = () =>
+                Subject.Stop();
+
+            It should_be_in_stopped_state = () =>
+                Subject.Status.ShouldEqual(WorkerStatus.Stopping);
+        }
+
+        [Subject(typeof(WorkerPoolWorker))]
         public class when_getting_state_before_starting : with_worker_pool_thread
         {
             Because of = () =>

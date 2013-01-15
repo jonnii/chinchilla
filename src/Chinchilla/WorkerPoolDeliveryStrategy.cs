@@ -64,9 +64,9 @@ namespace Chinchilla
         {
             logger.DebugFormat("Stopping {0}", this);
 
-            foreach (var thread in workers)
+            foreach (var worker in workers)
             {
-                thread.IsStopping = true;
+                worker.Stop();
             }
 
             deliveries.CompleteAdding();
