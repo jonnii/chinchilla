@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using Chinchilla.Threading;
 using Machine.Fakes;
 using Machine.Specifications;
 
@@ -7,6 +8,16 @@ namespace Chinchilla.Specifications
 {
     public class WorkerPoolWorkerSpecification
     {
+        [Subject(typeof(WorkerPoolWorker))]
+        public class when_calling_start_twice
+        {
+            Establish context = () => { };
+
+            private Because of = () => { };
+
+            private It should_ = () => { };
+        }
+
         [Subject(typeof(WorkerPoolWorker))]
         public class when_getting_state_before_starting : with_worker_pool_thread
         {
@@ -116,12 +127,16 @@ namespace Chinchilla.Specifications
                 var collection = new BlockingCollection<IDelivery>(new ConcurrentQueue<IDelivery>());
                 processor = An<IDeliveryProcessor>();
 
-                Subject = new WorkerPoolWorker(collection, processor);
+                threadFactory = An<IThreadFactory>();
+
+                Subject = new WorkerPoolWorker(threadFactory, collection, processor);
             };
 
             protected static IDeliveryProcessor processor;
 
             protected static WorkerPoolWorker Subject;
+
+            protected static IThreadFactory threadFactory;
         }
     }
 }

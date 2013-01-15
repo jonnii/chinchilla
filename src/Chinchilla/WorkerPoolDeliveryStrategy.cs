@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using System.Linq;
 using Chinchilla.Logging;
+using Chinchilla.Threading;
 
 namespace Chinchilla
 {
@@ -10,6 +11,8 @@ namespace Chinchilla
 
         private readonly BlockingCollection<IDelivery> deliveries = new BlockingCollection<IDelivery>(
             new ConcurrentQueue<IDelivery>());
+
+        private readonly IThreadFactory threadFactory = new ThreadFactory();
 
         private WorkerPoolWorker[] workers = new WorkerPoolWorker[0];
 
@@ -38,7 +41,7 @@ namespace Chinchilla
 
             workers = Enumerable
                 .Range(0, NumWorkers)
-                .Select(_ => new WorkerPoolWorker(deliveries, connectedProcessor))
+                .Select(_ => new WorkerPoolWorker(threadFactory, deliveries, connectedProcessor))
                 .ToArray();
 
             foreach (var thread in workers)

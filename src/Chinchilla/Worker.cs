@@ -21,7 +21,10 @@ namespace Chinchilla
 
         public WorkerState GetState()
         {
-            return new WorkerState(WorkerType, Status, BusySince);
+            return new WorkerState(
+                WorkerType,
+                Status,
+                BusySince);
         }
 
         public void BeforeDeliver()

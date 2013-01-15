@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Concurrent;
-using System.Threading;
+using Chinchilla.Threading;
 
 namespace Chinchilla
 {
@@ -8,16 +8,17 @@ namespace Chinchilla
     {
         private readonly BlockingCollection<IDelivery> deliveries;
 
-        private readonly Thread thread;
+        private readonly IThread thread;
 
         public WorkerPoolWorker(
+            IThreadFactory threadFactory,
             BlockingCollection<IDelivery> deliveries,
             IDeliveryProcessor connectedProcessor)
             : base(connectedProcessor)
         {
             this.deliveries = deliveries;
 
-            thread = new Thread(StartTakingMessages);
+            thread = threadFactory.Create(StartTakingMessages);
         }
 
         public override string WorkerType

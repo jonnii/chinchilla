@@ -58,6 +58,10 @@
     <Compile Include="ConnectionString.cs" />
     <Compile Include="DefaultConsumerFactory.cs" />
     <Compile Include="DeliveryQueue.cs" />
+    <Compile Include="Threading\IThread.cs" />
+    <Compile Include="Threading\IThreadFactory.cs" />
+    <Compile Include="Threading\ThreadFactory.cs" />
+    <Compile Include="Threading\ThreadWrapper.cs" />
     <Compile Include="Worker.cs" />
     <Compile Include="QueueState.cs" />
     <Compile Include="TaskWorker.cs" />
