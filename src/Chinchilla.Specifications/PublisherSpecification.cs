@@ -3,6 +3,7 @@ using Chinchilla.Specifications.Messages;
 using Machine.Fakes;
 using Machine.Specifications;
 using RabbitMQ.Client;
+using RabbitMQ.Client.Framing.v0_9_1;
 
 namespace Chinchilla.Specifications
 {
@@ -63,6 +64,43 @@ namespace Chinchilla.Specifications
             static IModel model;
 
             static IBasicProperties properties;
+        }
+
+        [Subject(typeof(Publisher<>))]
+        public class when_creating_properties : with_basic_properties<Publisher<TestMessage>>
+        {
+            Because of = () =>
+                properties = Subject.CreateProperties(new TestMessage());
+
+            It should_not_have_correlationId = () =>
+                properties.IsCorrelationIdPresent().ShouldBeFalse();
+
+            static IBasicProperties properties;
+        }
+
+        [Subject(typeof(Publisher<>))]
+        public class when_creating_properties_with_message_with_correlation_id : with_basic_properties<Publisher<CorrelatedTestMessage>>
+        {
+            Establish context = () =>
+                message = new CorrelatedTestMessage();
+
+            Because of = () =>
+                properties = Subject.CreateProperties(message);
+
+            It should_not_have_correlationId = () =>
+                properties.IsCorrelationIdPresent().ShouldBeTrue();
+
+            static IBasicProperties properties;
+
+            static CorrelatedTestMessage message;
+        }
+
+        public class with_basic_properties<TSubject> : WithSubject<TSubject>
+            where TSubject : class
+        {
+            Establish context = () =>
+                The<IModelReference>().WhenToldTo(r => r.Execute(Param.IsAny<Func<IModel, IBasicProperties>>()))
+                    .Return(new BasicProperties());
         }
     }
 }

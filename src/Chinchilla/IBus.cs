@@ -25,6 +25,14 @@ namespace Chinchilla
         void Publish<TMessage>(TMessage message);
 
         /// <summary>
+        /// Creates a requester for a specific message type combination
+        /// </summary>
+        /// <typeparam name="TRequest">The type of the message to send</typeparam>
+        /// <typeparam name="TResponse">The tyep of the message to receive on a response</typeparam>
+        /// <returns>A requester</returns>
+        IRequester<TRequest, TResponse> CreateRequester<TRequest, TResponse>();
+
+        /// <summary>
         /// Subcribes an action handler for a specific message type
         /// </summary>
         /// <typeparam name="TMessage">The type of message to subscribe to</typeparam>

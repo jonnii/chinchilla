@@ -1,4 +1,5 @@
 using Chinchilla.Topologies.Model;
+using RabbitMQ.Client;
 
 namespace Chinchilla
 {
@@ -35,10 +36,7 @@ namespace Chinchilla
         {
             var wrappedMessage = Message.Create(message);
             var serializedMessage = serializer.Serialize(wrappedMessage);
-
-            var defaultProperties = ModelReference.Execute(m => m.CreateBasicProperties());
-            defaultProperties.ContentType = serializer.ContentType;
-
+            var defaultProperties = CreateProperties(message);
             var routingKey = router.Route(message);
 
             ModelReference.Execute(
@@ -49,6 +47,20 @@ namespace Chinchilla
                     serializedMessage));
 
             ++NumPublishedMessages;
+        }
+
+        public IBasicProperties CreateProperties(TMessage message)
+        {
+            var defaultProperties = ModelReference.Execute(m => m.CreateBasicProperties());
+            defaultProperties.ContentType = serializer.ContentType;
+
+            var correlated = message as ICorrelated;
+            if (correlated != null)
+            {
+                defaultProperties.CorrelationId = correlated.CorrelationId.ToString();
+            }
+
+            return defaultProperties;
         }
 
         public override void Dispose()

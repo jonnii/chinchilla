@@ -132,6 +132,15 @@ namespace Chinchilla
             }
         }
 
+        public IRequester<TRequest, TResponse> CreateRequester<TRequest, TResponse>()
+        {
+            var subscriber = Subscribe<TResponse>(_ => { });
+            var publisher = CreatePublisher<TRequest>();
+            var requester = new Requester<TRequest, TResponse>(publisher);
+
+            return requester;
+        }
+
         public void Dispose()
         {
             consumerFactory.Dispose();
