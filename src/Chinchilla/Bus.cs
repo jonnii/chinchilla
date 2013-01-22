@@ -141,6 +141,16 @@ namespace Chinchilla
             return requester;
         }
 
+        public void Request<TRequest, TResponse>(TRequest message, Action<TResponse> onResponse)
+        {
+            var requester = CreateRequester<TRequest, TResponse>();
+            requester.Request(message, response =>
+            {
+                onResponse(response);
+                requester.Dispose();
+            });
+        }
+
         public void Dispose()
         {
             consumerFactory.Dispose();

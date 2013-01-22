@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.1.8
+
+  * add ability to set correlation ids on messages
+  * add ability to send requests with response handlers (rpc)
+
 ## 0.1.7
 
   * task delivery strategy is now the default when creating a subscription

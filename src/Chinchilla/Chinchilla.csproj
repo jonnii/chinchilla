@@ -58,7 +58,7 @@
     <Compile Include="ConnectionString.cs" />
     <Compile Include="DefaultConsumerFactory.cs" />
     <Compile Include="DeliveryQueue.cs" />
-    <Compile Include="CorrelatedBy.cs" />
+    <Compile Include="ICorrelated.cs" />
     <Compile Include="IRequester.cs" />
     <Compile Include="Requester.cs" />
     <Compile Include="Threading\IThread.cs" />

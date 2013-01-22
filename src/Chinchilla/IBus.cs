@@ -33,6 +33,15 @@ namespace Chinchilla
         IRequester<TRequest, TResponse> CreateRequester<TRequest, TResponse>();
 
         /// <summary>
+        /// Creates a simple request response
+        /// </summary>
+        /// <typeparam name="TRequest">The type of message to request</typeparam>
+        /// <typeparam name="TResponse">The type of the response message</typeparam>
+        /// <param name="message">The request message</param>
+        /// <param name="onResponse">The callback to call when a message is received</param>
+        void Request<TRequest, TResponse>(TRequest message, Action<TResponse> onResponse);
+
+        /// <summary>
         /// Subcribes an action handler for a specific message type
         /// </summary>
         /// <typeparam name="TMessage">The type of message to subscribe to</typeparam>

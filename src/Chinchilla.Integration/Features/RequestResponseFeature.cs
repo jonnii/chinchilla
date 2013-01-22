@@ -7,7 +7,7 @@ namespace Chinchilla.Integration.Features
     public class RequestResponseFeature : WithApi
     {
         [Test, Explicit]
-        public void ShouldCreatePublisher()
+        public void ShouldCreateRequestResponseWithRequester()
         {
             using (var bus = Depot.Connect("localhost/integration"))
             {
@@ -22,6 +22,21 @@ namespace Chinchilla.Integration.Features
                     Assert.That(capitalized, Is.Not.Null);
                     Assert.That(capitalized.Result, Is.EqualTo("WHERE AM I?"));
                 }
+            }
+        }
+
+        [Test, Explicit]
+        public void ShouldCreateRequestResponseOnBus()
+        {
+            using (var bus = Depot.Connect("localhost/integration"))
+            {
+                CapitalizedMessage capitalized = null;
+                bus.Request<CapitalizeMessage, CapitalizedMessage>(
+                    new CapitalizeMessage("where am i?"),
+                    response => { capitalized = response; });
+
+                Assert.That(capitalized, Is.Not.Null);
+                Assert.That(capitalized.Result, Is.EqualTo("WHERE AM I?"));
             }
         }
     }
