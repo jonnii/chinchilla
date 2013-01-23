@@ -60,6 +60,12 @@ namespace Chinchilla
                 defaultProperties.CorrelationId = correlated.CorrelationId.ToString();
             }
 
+            var replyTo = router.ReplyTo();
+            if (!string.IsNullOrEmpty(replyTo))
+            {
+                defaultProperties.ReplyTo = router.ReplyTo();
+            }
+
             return defaultProperties;
         }
 

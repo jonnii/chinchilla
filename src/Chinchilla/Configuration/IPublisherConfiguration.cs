@@ -6,6 +6,8 @@ namespace Chinchilla.Configuration
 
         string ContentType { get; }
 
+        string ReplyQueue { get; }
+
         IRouter BuildRouter();
     }
 }

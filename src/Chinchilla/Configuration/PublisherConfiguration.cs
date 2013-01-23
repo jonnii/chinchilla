@@ -5,27 +5,29 @@ namespace Chinchilla.Configuration
 {
     public class PublisherConfiguration : EndpointConfiguration, IPublisherConfiguration, IPublisherBuilder
     {
-        private Func<IRouter> routerBuilder = () => new DefaultRouter();
+        private Func<string, IRouter> routerBuilder = replyTo => new DefaultRouter(replyTo);
 
         public PublisherConfiguration()
         {
             MessageTopologyBuilder = new DefaultPublishTopologyBuilder();
         }
 
-        public string EndpointName { get; set; }
+        public string EndpointName { get; private set; }
 
         public string ContentType { get; private set; }
+
+        public string ReplyQueue { get; private set; }
 
         public IPublisherBuilder RouteWith<TRouter>()
             where TRouter : IRouter, new()
         {
-            routerBuilder = () => new TRouter();
+            routerBuilder = replyTo => new TRouter();
             return this;
         }
 
         public IPublisherBuilder RouteWith(IRouter router)
         {
-            routerBuilder = () => router;
+            routerBuilder = replyTo => router;
             return this;
         }
 
@@ -41,9 +43,15 @@ namespace Chinchilla.Configuration
             return this;
         }
 
+        public IPublisherBuilder ReplyTo(string queueName)
+        {
+            ReplyQueue = queueName;
+            return this;
+        }
+
         public IRouter BuildRouter()
         {
-            return routerBuilder();
+            return routerBuilder(ReplyQueue);
         }
 
         public IPublisherBuilder SetTopology(IMessageTopologyBuilder messageTopologyBuilder)

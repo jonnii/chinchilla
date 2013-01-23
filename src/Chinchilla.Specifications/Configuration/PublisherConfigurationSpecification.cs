@@ -46,11 +46,31 @@ namespace Chinchilla.Specifications.Configuration
             static IRouter router;
         }
 
+        [Subject(typeof(PublisherConfiguration))]
+        public class when_building_with_reply_to : WithSubject<PublisherConfiguration>
+        {
+            Establish context = () =>
+                Subject.ReplyTo("queue-name");
+
+            Because of = () =>
+                router = Subject.BuildRouter();
+
+            It should_build_custom_router = () =>
+                router.ReplyTo().ShouldEqual("queue-name");
+
+            static IRouter router;
+        }
+
         public class CustomRouter : IRouter
         {
             public string Route<TMessage>(TMessage message)
             {
                 return "#";
+            }
+
+            public string ReplyTo()
+            {
+                return string.Empty;
             }
         }
     }

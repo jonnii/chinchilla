@@ -2,9 +2,9 @@ using System;
 
 namespace Chinchilla.Sample.SharedSubscriptions
 {
-    public class SharedMessageRouter : IRouter
+    public class SharedMessageRouter : DefaultRouter
     {
-        public string Route<TMessage>(TMessage message)
+        public override string Route<TMessage>(TMessage message)
         {
             var sharedMessage = message as SharedMessage;
             if (sharedMessage == null)

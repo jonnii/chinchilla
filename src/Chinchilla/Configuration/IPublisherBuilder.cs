@@ -21,5 +21,7 @@ namespace Chinchilla.Configuration
         /// given content type
         /// </summary>
         IPublisherBuilder SerializeWith(string contentType);
+
+        IPublisherBuilder ReplyTo(string queueName);
     }
 }

@@ -84,9 +84,9 @@ namespace Chinchilla.Integration.Features
             }
         }
 
-        public class CustomRouter : IRouter
+        public class CustomRouter : DefaultRouter
         {
-            public string Route<TMessage>(TMessage message)
+            public override string Route<TMessage>(TMessage message)
             {
                 return "#";
             }

@@ -69,11 +69,17 @@ namespace Chinchilla.Specifications
         [Subject(typeof(Publisher<>))]
         public class when_creating_properties : with_basic_properties<Publisher<TestMessage>>
         {
+            Establish context = () =>
+                The<IRouter>().WhenToldTo(r => r.ReplyTo()).Return("reply-to");
+
             Because of = () =>
                 properties = Subject.CreateProperties(new TestMessage());
 
             It should_not_have_correlationId = () =>
                 properties.IsCorrelationIdPresent().ShouldBeFalse();
+
+            It should_set_reply_to = () =>
+                properties.ReplyTo.ShouldEqual("reply-to");
 
             static IBasicProperties properties;
         }

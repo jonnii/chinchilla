@@ -29,6 +29,18 @@ namespace Chinchilla.Specifications
             static string routingKey;
         }
 
+        [Subject(typeof(DefaultRouter))]
+        public class when_getting_reply_to_address : WithSubject<DefaultRouter>
+        {
+            Because of = () =>
+               reply = Subject.ReplyTo();
+
+            It should_not_have_reply_address = () =>
+                reply.ShouldBeEmpty();
+
+            static string reply;
+        }
+
         public class TestMessage { }
 
         public class TestMessageWithRoutingKey : IHasRoutingKey

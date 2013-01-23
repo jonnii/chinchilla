@@ -136,8 +136,16 @@ namespace Chinchilla
             where TRequest : ICorrelated
             where TResponse : ICorrelated
         {
+            logger.InfoFormat(
+                "Creating Requester for {0} responding to {1}",
+                typeof(TRequest).Name,
+                typeof(TResponse).Name);
+
             var subscriber = Subscribe<TResponse>(_ => { });
-            var publisher = CreatePublisher<TRequest>();
+
+            var queue = subscriber.Queues.First();
+
+            var publisher = CreatePublisher<TRequest>(p => p.ReplyTo(queue.Name));
             var requester = new Requester<TRequest, TResponse>(publisher);
 
             return requester;
