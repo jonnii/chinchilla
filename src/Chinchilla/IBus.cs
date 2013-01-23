@@ -30,7 +30,9 @@ namespace Chinchilla
         /// <typeparam name="TRequest">The type of the message to send</typeparam>
         /// <typeparam name="TResponse">The tyep of the message to receive on a response</typeparam>
         /// <returns>A requester</returns>
-        IRequester<TRequest, TResponse> CreateRequester<TRequest, TResponse>();
+        IRequester<TRequest, TResponse> CreateRequester<TRequest, TResponse>()
+            where TRequest : ICorrelated
+            where TResponse : ICorrelated;
 
         /// <summary>
         /// Creates a simple request response
@@ -39,7 +41,9 @@ namespace Chinchilla
         /// <typeparam name="TResponse">The type of the response message</typeparam>
         /// <param name="message">The request message</param>
         /// <param name="onResponse">The callback to call when a message is received</param>
-        void Request<TRequest, TResponse>(TRequest message, Action<TResponse> onResponse);
+        void Request<TRequest, TResponse>(TRequest message, Action<TResponse> onResponse)
+            where TRequest : ICorrelated
+            where TResponse : ICorrelated;
 
         /// <summary>
         /// Subcribes an action handler for a specific message type

@@ -3,6 +3,8 @@ using System;
 namespace Chinchilla
 {
     public class Requester<TRequest, TResponse> : IRequester<TRequest, TResponse>
+        where TRequest : ICorrelated
+        where TResponse : ICorrelated
     {
         private readonly IPublisher<TRequest> publisher;
 

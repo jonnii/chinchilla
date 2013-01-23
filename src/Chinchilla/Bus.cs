@@ -133,6 +133,8 @@ namespace Chinchilla
         }
 
         public IRequester<TRequest, TResponse> CreateRequester<TRequest, TResponse>()
+            where TRequest : ICorrelated
+            where TResponse : ICorrelated
         {
             var subscriber = Subscribe<TResponse>(_ => { });
             var publisher = CreatePublisher<TRequest>();
@@ -142,6 +144,8 @@ namespace Chinchilla
         }
 
         public void Request<TRequest, TResponse>(TRequest message, Action<TResponse> onResponse)
+            where TRequest : ICorrelated
+            where TResponse : ICorrelated
         {
             var requester = CreateRequester<TRequest, TResponse>();
             requester.Request(message, response =>
