@@ -112,7 +112,9 @@ namespace Chinchilla
                         item.Body,
                         item.RoutingKey,
                         item.Exchange,
-                        item.BasicProperties.ContentType);
+                        item.BasicProperties.ContentType,
+                        item.BasicProperties.CorrelationId,
+                        item.BasicProperties.ReplyTo);
 
                     deliveryStrategy.Deliver(delivery);
                 }

@@ -77,6 +77,7 @@
     <Compile Include="ConnectionStringSpecification.cs" />
     <Compile Include="ConsumerSubscriberSpecification.cs" />
     <Compile Include="DefaultRouterSpecification.cs" />
+    <Compile Include="DeliveryContextSpecification.cs" />
     <Compile Include="DeliveryQueueSpecification.cs" />
     <Compile Include="DeliverySpecification.cs" />
     <Compile Include="DepotSettingsSpecification.cs" />

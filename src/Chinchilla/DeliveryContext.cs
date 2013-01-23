@@ -2,11 +2,33 @@ namespace Chinchilla
 {
     public class DeliveryContext : IDeliveryContext
     {
-        public DeliveryContext(IBus bus)
+        public DeliveryContext(IBus bus, IDelivery delivery)
         {
             Bus = bus;
+            Delivery = delivery;
         }
 
         public IBus Bus { get; private set; }
+
+        public IDelivery Delivery { get; set; }
+
+        public void Reply<TMessage>(TMessage reply)
+        {
+            if (!Delivery.IsReplyable)
+            {
+                var message = string.Format(
+                    "Could not reply to the message with tag {0} with a message of type {1} " +
+                    "because the original delivery was not replyable",
+                    Delivery.Tag,
+                    typeof(TMessage).Name);
+
+                throw new ChinchillaException(message);
+            }
+
+            using (var publisher = Bus.CreatePublisher<TMessage>())
+            {
+                publisher.Publish(reply);
+            }
+        }
     }
 }

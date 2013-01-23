@@ -12,7 +12,9 @@ namespace Chinchilla
             byte[] body,
             string routingKey,
             string exchange,
-            string contentType)
+            string contentType,
+            string correlationId,
+            string replyTo)
         {
             this.listener = listener;
 
@@ -21,6 +23,8 @@ namespace Chinchilla
             RoutingKey = routingKey;
             Exchange = exchange;
             ContentType = contentType;
+            CorrelationId = correlationId;
+            ReplyTo = replyTo;
         }
 
         public ulong Tag { get; private set; }
@@ -32,6 +36,19 @@ namespace Chinchilla
         public string Exchange { get; private set; }
 
         public string ContentType { get; private set; }
+
+        public string CorrelationId { get; private set; }
+
+        public string ReplyTo { get; private set; }
+
+        public bool IsReplyable
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(CorrelationId)
+                    && !string.IsNullOrEmpty(ReplyTo);
+            }
+        }
 
         public void Accept()
         {

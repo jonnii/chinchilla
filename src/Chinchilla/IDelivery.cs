@@ -34,6 +34,11 @@ namespace Chinchilla
         string ContentType { get; }
 
         /// <summary>
+        /// Indicates that this delivery is correlated
+        /// </summary>
+        bool IsReplyable { get; }
+
+        /// <summary>
         /// Indicates that this delivery has been processed and can be
         /// removed from the exchange
         /// </summary>

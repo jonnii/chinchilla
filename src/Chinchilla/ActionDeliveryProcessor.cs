@@ -30,7 +30,7 @@ namespace Chinchilla
         {
             var messageSerializer = messageSerializers.FindOrDefault(delivery.ContentType);
             var deserialized = messageSerializer.Deserialize<T>(delivery.Body);
-            var deliveryContext = new DeliveryContext(bus);
+            var deliveryContext = new DeliveryContext(bus, delivery);
 
             handler(deserialized.Body, deliveryContext);
         }
