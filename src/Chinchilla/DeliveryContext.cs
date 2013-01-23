@@ -1,3 +1,6 @@
+using System;
+using Chinchilla.Topologies;
+
 namespace Chinchilla
 {
     public class DeliveryContext : IDeliveryContext
@@ -13,6 +16,7 @@ namespace Chinchilla
         public IDelivery Delivery { get; set; }
 
         public void Reply<TMessage>(TMessage reply)
+            where TMessage : ICorrelated
         {
             if (!Delivery.IsReplyable)
             {
@@ -25,7 +29,11 @@ namespace Chinchilla
                 throw new ChinchillaException(message);
             }
 
-            using (var publisher = Bus.CreatePublisher<TMessage>())
+            reply.CorrelationId = new Guid(Delivery.CorrelationId);
+
+            var topology = new DefaultResponseTopology(Delivery.ReplyTo);
+
+            using (var publisher = Bus.CreatePublisher<TMessage>(b => b.SetTopology(topology).BuildTopology(false)))
             {
                 publisher.Publish(reply);
             }

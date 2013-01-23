@@ -8,6 +8,13 @@ namespace Chinchilla.Specifications.Configuration
     public class PublisherConfigurationSpecification
     {
         [Subject(typeof(PublisherConfiguration))]
+        public class in_general : WithSubject<PublisherConfiguration>
+        {
+            It should_automatically_create_topology = () =>
+                Subject.ShouldBuildTopology.ShouldBeTrue();
+        }
+
+        [Subject(typeof(PublisherConfiguration))]
         public class when_building_default_topology : WithSubject<PublisherConfiguration>
         {
             Because of = () =>

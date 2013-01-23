@@ -16,19 +16,19 @@ namespace Chinchilla
         public Publisher(
             IModelReference modelReference,
             IMessageSerializer serializer,
-            IExchange exchange,
+            IBindable bindable,
             IRouter router)
         {
             this.router = Guard.NotNull(router, "router");
             this.serializer = Guard.NotNull(serializer, "serializer");
 
             ModelReference = Guard.NotNull(modelReference, "modelReference");
-            Exchange = Guard.NotNull(exchange, "exchange");
+            PublishTarget = Guard.NotNull(bindable, "bindable");
         }
 
         public IModelReference ModelReference { get; private set; }
 
-        public IExchange Exchange { get; private set; }
+        public IBindable PublishTarget { get; private set; }
 
         public long NumPublishedMessages { get; private set; }
 
@@ -41,7 +41,7 @@ namespace Chinchilla
 
             ModelReference.Execute(
                 m => m.BasicPublish(
-                    Exchange.Name,
+                    PublishTarget.Name,
                     routingKey,
                     defaultProperties,
                     serializedMessage));

@@ -41,10 +41,13 @@ namespace Chinchilla.Integration.Features
             public IMessageTopology Build(IEndpoint endpoint)
             {
                 var topology = new MessageTopology();
-                topology.SubscribeQueue = topology.DefineQueue(endpoint.Name);
-                topology.PublishExchange = topology.DefineExchange("exchange-" + endpoint.Name, ExchangeType.Topic);
 
-                topology.SubscribeQueue.BindTo(topology.PublishExchange);
+                var exchange = topology.DefineExchange("exchange-" + endpoint.Name, ExchangeType.Topic);
+
+                topology.SubscribeQueue = topology.DefineQueue(endpoint.Name);
+                topology.SubscribeQueue.BindTo(exchange);
+
+                topology.PublishTarget = exchange;
 
                 return topology;
             }

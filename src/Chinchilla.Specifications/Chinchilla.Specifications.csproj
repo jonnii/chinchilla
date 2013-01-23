@@ -87,6 +87,7 @@
     <Compile Include="IgnoreFaultStrategySpecification.cs" />
     <Compile Include="MessageSerializersSpecification.cs" />
     <Compile Include="Messages\AnotherTestMessage.cs" />
+    <Compile Include="Messages\CorrelatedMessage.cs" />
     <Compile Include="Messages\CorrelatedTestMessage.cs" />
     <Compile Include="Messages\TestMessage.cs" />
     <Compile Include="ModelFactorySpecification.cs" />

@@ -8,7 +8,7 @@ namespace Chinchilla.Sample.SharedSubscriptions
         public IMessageTopology Build(IEndpoint endpoint)
         {
             var topology = new MessageTopology();
-            topology.PublishExchange = topology.DefineExchange(endpoint.Name, ExchangeType.Topic);
+            topology.PublishTarget = topology.DefineExchange(endpoint.Name, ExchangeType.Topic);
 
             return topology;
         }

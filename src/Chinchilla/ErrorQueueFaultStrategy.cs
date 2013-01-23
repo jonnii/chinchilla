@@ -20,7 +20,7 @@ namespace Chinchilla
 
         public void ProcessFailedDelivery(IDelivery delivery, Exception exception)
         {
-            logger.ErrorFormat(exception, "Error Queue is handlinge exception");
+            logger.ErrorFormat(exception, "Error Queue is handling exception");
 
             var error = BuildFault(delivery, exception);
             publisher.Value.Publish(error);
@@ -50,10 +50,12 @@ namespace Chinchilla
         {
             var topology = new MessageTopology();
 
-            topology.PublishExchange = topology.DefineExchange("ErrorExchange", ExchangeType.Topic);
+            var exchange = topology.DefineExchange("ErrorExchange", ExchangeType.Topic);
 
             var queue = topology.DefineQueue("ErrorQueue");
-            queue.BindTo(topology.PublishExchange);
+            queue.BindTo(exchange);
+
+            topology.PublishTarget = exchange;
 
             return topology;
         }

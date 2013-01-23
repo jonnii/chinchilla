@@ -15,6 +15,7 @@ namespace Chinchilla
         /// </summary>
         /// <typeparam name="TMessage">The type of message to reply with</typeparam>
         /// <param name="reply">The message to reply with</param>
-        void Reply<TMessage>(TMessage reply);
+        void Reply<TMessage>(TMessage reply)
+            where TMessage : ICorrelated;
     }
 }

@@ -20,8 +20,11 @@ namespace Chinchilla
             var endpoint = new Endpoint(configuration.EndpointName ?? messageType, messageType, 0);
             var topology = configuration.BuildTopology(endpoint);
 
-            var topologyBuilder = new TopologyBuilder(modelReference);
-            topology.Visit(topologyBuilder);
+            if (configuration.ShouldBuildTopology)
+            {
+                var topologyBuilder = new TopologyBuilder(modelReference);
+                topology.Visit(topologyBuilder);
+            }
 
             var router = configuration.BuildRouter();
 
@@ -31,7 +34,7 @@ namespace Chinchilla
             var publisher = new Publisher<TMessage>(
                 modelReference,
                 messageSerializer,
-                topology.PublishExchange,
+                topology.PublishTarget,
                 router);
 
             Track(publisher);

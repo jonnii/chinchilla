@@ -6,7 +6,7 @@ namespace Chinchilla.Topologies
     {
         IQueue SubscribeQueue { get; }
 
-        IExchange PublishExchange { get; }
+        IBindable PublishTarget { get; }
 
         void Visit(ITopologyVisitor visitor);
     }

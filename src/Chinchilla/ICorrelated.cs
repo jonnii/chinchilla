@@ -11,6 +11,6 @@ namespace Chinchilla
         /// <summary>
         /// The correlation id for this message
         /// </summary>
-        Guid CorrelationId { get; }
+        Guid CorrelationId { get; set; }
     }
 }

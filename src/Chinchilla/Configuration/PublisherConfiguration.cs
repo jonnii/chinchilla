@@ -10,6 +10,7 @@ namespace Chinchilla.Configuration
         public PublisherConfiguration()
         {
             MessageTopologyBuilder = new DefaultPublishTopologyBuilder();
+            ShouldBuildTopology = true;
         }
 
         public string EndpointName { get; private set; }
@@ -17,6 +18,8 @@ namespace Chinchilla.Configuration
         public string ContentType { get; private set; }
 
         public string ReplyQueue { get; private set; }
+
+        public bool ShouldBuildTopology { get; private set; }
 
         public IPublisherBuilder RouteWith<TRouter>()
             where TRouter : IRouter, new()
@@ -46,6 +49,12 @@ namespace Chinchilla.Configuration
         public IPublisherBuilder ReplyTo(string queueName)
         {
             ReplyQueue = queueName;
+            return this;
+        }
+
+        public IPublisherBuilder BuildTopology(bool shouldBuildTopology)
+        {
+            ShouldBuildTopology = shouldBuildTopology;
             return this;
         }
 

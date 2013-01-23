@@ -65,6 +65,8 @@
     <Compile Include="Threading\IThreadFactory.cs" />
     <Compile Include="Threading\ThreadFactory.cs" />
     <Compile Include="Threading\ThreadWrapper.cs" />
+    <Compile Include="Topologies\DefaultRequestTopology.cs" />
+    <Compile Include="Topologies\DefaultResponseTopology.cs" />
     <Compile Include="Worker.cs" />
     <Compile Include="QueueState.cs" />
     <Compile Include="TaskWorker.cs" />

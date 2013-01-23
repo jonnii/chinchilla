@@ -14,7 +14,7 @@ namespace Chinchilla.Specifications
                 The<IDelivery>().WhenToldTo(d => d.IsReplyable).Return(false);
 
             Because of = () =>
-                exception = Catch.Exception(() => Subject.Reply(new TestMessage()));
+                exception = Catch.Exception(() => Subject.Reply(new CorrelatedMessage()));
 
             It should_throw_exception = () =>
                 exception.ShouldBeOfType<ChinchillaException>();

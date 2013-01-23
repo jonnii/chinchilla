@@ -34,9 +34,19 @@ namespace Chinchilla
         string ContentType { get; }
 
         /// <summary>
-        /// Indicates that this delivery is correlated
+        /// Indicates that this delivery is replyable
         /// </summary>
         bool IsReplyable { get; }
+
+        /// <summary>
+        /// The correlation id for this delivery
+        /// </summary>
+        string CorrelationId { get; }
+
+        /// <summary>
+        /// The reply to address on this delivery
+        /// </summary>
+        string ReplyTo { get; }
 
         /// <summary>
         /// Indicates that this delivery has been processed and can be

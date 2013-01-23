@@ -23,5 +23,7 @@ namespace Chinchilla.Configuration
         IPublisherBuilder SerializeWith(string contentType);
 
         IPublisherBuilder ReplyTo(string queueName);
+
+        IPublisherBuilder BuildTopology(bool shouldBuildTopology);
     }
 }

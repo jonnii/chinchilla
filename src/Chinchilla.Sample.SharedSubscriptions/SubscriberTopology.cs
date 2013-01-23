@@ -16,14 +16,15 @@ namespace Chinchilla.Sample.SharedSubscriptions
         {
             var topology = new MessageTopology();
 
-            topology.PublishExchange = topology.DefineExchange(endpoint.MessageType, ExchangeType.Topic);
-
+            var exchange = topology.DefineExchange(endpoint.MessageType, ExchangeType.Topic);
             topology.SubscribeQueue = topology.DefineQueue(endpoint.Name);
 
             if (endpoint.Ordinal == 0)
             {
-                topology.SubscribeQueue.BindTo(topology.PublishExchange, routingKey);
+                topology.SubscribeQueue.BindTo(exchange, routingKey);
             }
+
+            topology.PublishTarget = exchange;
 
             return topology;
         }

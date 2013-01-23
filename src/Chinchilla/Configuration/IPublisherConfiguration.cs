@@ -8,6 +8,8 @@ namespace Chinchilla.Configuration
 
         string ReplyQueue { get; }
 
+        bool ShouldBuildTopology { get; }
+
         IRouter BuildRouter();
     }
 }

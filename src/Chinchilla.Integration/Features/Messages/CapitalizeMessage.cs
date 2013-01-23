@@ -15,7 +15,7 @@ namespace Chinchilla.Integration.Features.Messages
             Word = word;
         }
 
-        public Guid CorrelationId { get; private set; }
+        public Guid CorrelationId { get; set; }
 
         public string Word { get; set; }
     }

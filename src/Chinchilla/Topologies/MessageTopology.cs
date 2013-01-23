@@ -6,6 +6,6 @@ namespace Chinchilla.Topologies
     {
         public IQueue SubscribeQueue { get; set; }
 
-        public IExchange PublishExchange { get; set; }
+        public IBindable PublishTarget { get; set; }
     }
 }

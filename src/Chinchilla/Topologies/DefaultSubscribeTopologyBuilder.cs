@@ -8,10 +8,12 @@ namespace Chinchilla.Topologies
         {
             var topology = new MessageTopology();
 
-            topology.PublishExchange = topology.DefineExchange(endpoint.MessageType, ExchangeType.Topic);
-            topology.SubscribeQueue = topology.DefineQueue(endpoint.Name);
+            var exchange = topology.DefineExchange(endpoint.MessageType, ExchangeType.Topic);
 
-            topology.SubscribeQueue.BindTo(topology.PublishExchange);
+            topology.SubscribeQueue = topology.DefineQueue(endpoint.Name);
+            topology.SubscribeQueue.BindTo(exchange);
+
+            topology.PublishTarget = exchange;
 
             return topology;
         }

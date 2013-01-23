@@ -29,7 +29,7 @@ namespace Chinchilla.Integration.Features
                 );
 
                 using (bus.Subscribe(onMessage, subscriptionBuilder))
-                {   
+                {
                     using (var publisher = bus.CreatePublisher<HelloWorldMessage>(publisherBuilder))
                     {
                         for (var i = 0; i < 100; ++i)
@@ -53,10 +53,12 @@ namespace Chinchilla.Integration.Features
             {
                 var topology = new MessageTopology();
 
-                topology.PublishExchange = topology.DefineExchange(endpoint.MessageType, ExchangeType.Topic);
+                var exchange = topology.DefineExchange(endpoint.MessageType, ExchangeType.Topic);
 
                 topology.SubscribeQueue = topology.DefineQueue(endpoint.MessageType);
-                topology.SubscribeQueue.BindTo(topology.PublishExchange, new[] { "messages.even" });
+                topology.SubscribeQueue.BindTo(exchange, new[] { "messages.even" });
+
+                topology.PublishTarget = exchange;
 
                 return topology;
             }
