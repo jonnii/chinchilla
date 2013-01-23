@@ -2,9 +2,9 @@
 
 namespace Chinchilla.Specifications.Messages
 {
-    public class CorrelatedTestMessage : ICorrelated
+    public class TestRequestMessage : ICorrelated
     {
-        public CorrelatedTestMessage()
+        public TestRequestMessage()
         {
             CorrelationId = Guid.NewGuid();
         }

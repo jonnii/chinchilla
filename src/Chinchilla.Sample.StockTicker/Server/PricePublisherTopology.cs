@@ -8,7 +8,7 @@ namespace Chinchilla.Sample.StockTicker.Server
         public IMessageTopology Build(IEndpoint endpoint)
         {
             var messageTopology = new MessageTopology();
-            messageTopology.PublishTarget = messageTopology.DefineExchange(endpoint.MessageType, ExchangeType.Topic);
+            messageTopology.PublishExchange = messageTopology.DefineExchange(endpoint.MessageType, ExchangeType.Topic);
             return messageTopology;
         }
     }

@@ -34,7 +34,7 @@ namespace Chinchilla
             var publisher = new Publisher<TMessage>(
                 modelReference,
                 messageSerializer,
-                topology.PublishTarget,
+                topology.PublishExchange,
                 router);
 
             Track(publisher);

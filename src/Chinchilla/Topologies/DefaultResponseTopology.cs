@@ -1,18 +1,13 @@
-﻿namespace Chinchilla.Topologies
+﻿using Chinchilla.Topologies.Model;
+
+namespace Chinchilla.Topologies
 {
     public class DefaultResponseTopology : IMessageTopologyBuilder
     {
-        private readonly string replyToQueueName;
-
-        public DefaultResponseTopology(string replyToQueueName)
-        {
-            this.replyToQueueName = replyToQueueName;
-        }
-
         public IMessageTopology Build(IEndpoint endpoint)
         {
             var topology = new MessageTopology();
-            topology.PublishTarget = topology.DefineQueue(replyToQueueName);
+            topology.PublishExchange = topology.DefineExchange(string.Empty, ExchangeType.Direct);
             return topology;
         }
     }

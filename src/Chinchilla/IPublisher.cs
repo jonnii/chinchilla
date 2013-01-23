@@ -14,9 +14,9 @@ namespace Chinchilla
         IModelReference ModelReference { get; }
 
         /// <summary>
-        /// The queue or exchange that is being published to
+        /// The exchange that is being published to
         /// </summary>
-        IBindable PublishTarget { get; }
+        IExchange Exchange { get; }
 
         /// <summary>
         /// The number of published messages

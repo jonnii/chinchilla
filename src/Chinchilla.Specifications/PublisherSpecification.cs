@@ -85,10 +85,10 @@ namespace Chinchilla.Specifications
         }
 
         [Subject(typeof(Publisher<>))]
-        public class when_creating_properties_with_message_with_correlation_id : with_basic_properties<Publisher<CorrelatedTestMessage>>
+        public class when_creating_properties_with_message_with_correlation_id : with_basic_properties<Publisher<TestRequestMessage>>
         {
             Establish context = () =>
-                message = new CorrelatedTestMessage();
+                message = new TestRequestMessage();
 
             Because of = () =>
                 properties = Subject.CreateProperties(message);
@@ -98,7 +98,7 @@ namespace Chinchilla.Specifications
 
             static IBasicProperties properties;
 
-            static CorrelatedTestMessage message;
+            static TestRequestMessage message;
         }
 
         public class with_basic_properties<TSubject> : WithSubject<TSubject>

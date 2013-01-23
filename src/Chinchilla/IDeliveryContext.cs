@@ -11,6 +11,11 @@ namespace Chinchilla
         IBus Bus { get; }
 
         /// <summary>
+        /// The delivery attached to this delivery context
+        /// </summary>
+        IDelivery Delivery { get; }
+
+        /// <summary>
         /// Replies to the message in this delivery context with another message
         /// </summary>
         /// <typeparam name="TMessage">The type of message to reply with</typeparam>

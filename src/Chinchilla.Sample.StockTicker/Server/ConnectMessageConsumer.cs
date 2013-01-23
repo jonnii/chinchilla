@@ -16,7 +16,7 @@ namespace Chinchilla.Sample.StockTicker.Server
 
         public void Consume(ConnectMessage message, IDeliveryContext deliveryContext)
         {
-            var exchange = publisher.PublishTarget;
+            var exchange = publisher.Exchange;
 
             var keys = message.Tickers.Select(
                 t => string.Format("prices.{0}", t)).ToArray();

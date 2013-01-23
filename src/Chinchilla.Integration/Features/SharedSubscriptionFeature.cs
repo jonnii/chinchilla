@@ -47,7 +47,7 @@ namespace Chinchilla.Integration.Features
                 topology.SubscribeQueue = topology.DefineQueue(endpoint.Name);
                 topology.SubscribeQueue.BindTo(exchange);
 
-                topology.PublishTarget = exchange;
+                topology.PublishExchange = exchange;
 
                 return topology;
             }

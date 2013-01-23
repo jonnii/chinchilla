@@ -18,7 +18,7 @@ namespace Chinchilla.Specifications
 
                 configuration.WhenToldTo(c => c.BuildRouter()).Return(An<IRouter>());
                 configuration.WhenToldTo(c => c.BuildTopology(Param.IsAny<IEndpoint>()))
-                    .Return(new MessageTopology { PublishTarget = An<IExchange>() });
+                    .Return(new MessageTopology { PublishExchange = An<IExchange>() });
 
                 The<IMessageSerializers>().WhenToldTo(s => s.FindOrDefault(Param.IsAny<string>()))
                     .Return(An<IMessageSerializer>());

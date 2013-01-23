@@ -55,7 +55,7 @@ namespace Chinchilla
             var queue = topology.DefineQueue("ErrorQueue");
             queue.BindTo(exchange);
 
-            topology.PublishTarget = exchange;
+            topology.PublishExchange = exchange;
 
             return topology;
         }

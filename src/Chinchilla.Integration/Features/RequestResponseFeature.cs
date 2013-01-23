@@ -8,7 +8,7 @@ namespace Chinchilla.Integration.Features
     [TestFixture]
     public class RequestResponseFeature : WithApi
     {
-        [Test, Explicit]
+        [Test]
         public void ShouldCreateRequestResponseWithRequester()
         {
             using (var bus = Depot.Connect("localhost/integration"))
@@ -31,7 +31,7 @@ namespace Chinchilla.Integration.Features
             }
         }
 
-        [Test, Explicit]
+        [Test]
         public void ShouldCreateRequestResponseOnBus()
         {
             using (var bus = Depot.Connect("localhost/integration"))

@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Concurrent;
+using System.Linq;
+using Chinchilla.Topologies;
 
 namespace Chinchilla
 {
@@ -6,25 +9,97 @@ namespace Chinchilla
         where TRequest : ICorrelated
         where TResponse : ICorrelated
     {
-        private readonly IPublisher<TRequest> publisher;
+        private readonly IBus bus;
 
-        public Requester(IPublisher<TRequest> publisher)
+        private readonly ConcurrentDictionary<string, Action<TResponse>> responders =
+            new ConcurrentDictionary<string, Action<TResponse>>();
+
+        private IPublisher<TRequest> publisher;
+
+        private ISubscription subscription;
+
+        public Requester(IBus bus)
         {
-            this.publisher = publisher;
+            this.bus = bus;
         }
 
         public void Request(TRequest message, Action<TResponse> onResponse)
         {
-            publisher.Publish(message);
+            var correlationId = message.CorrelationId.ToString();
+
+            if (RegisterResponseHandler(correlationId, onResponse))
+            {
+                publisher.Publish(message);
+            }
         }
 
-        private void HandleResponse(TResponse response)
+        public bool RegisterResponseHandler(string correlationId, Action<TResponse> onResponse)
         {
+            if (string.IsNullOrEmpty(correlationId))
+            {
+                var message = string.Format(
+                   "The requester {0}/{1} tried to register a response handler for a message with no correlation id",
+                   typeof(TRequest).Name,
+                   typeof(TResponse).Name);
 
+                throw new ChinchillaException(message);
+            }
+
+            return responders.TryAdd(correlationId, onResponse);
+        }
+
+        public void DispatchToRegisteredResponseHandler(TResponse response, IDeliveryContext deliveryContext)
+        {
+            var correlationId = deliveryContext.Delivery.CorrelationId;
+
+            if (string.IsNullOrEmpty(correlationId))
+            {
+                var message = string.Format(
+                    "The requester {0}/{1} received a response with with no correlation id",
+                    typeof(TRequest).Name,
+                    typeof(TResponse).Name);
+
+                throw new ChinchillaException(message);
+            }
+
+            Action<TResponse> handler;
+            if (!responders.TryGetValue(correlationId, out handler))
+            {
+                var message = string.Format(
+                    "The requester {0}/{1} received a response with a correlation id that wasn't found " +
+                    "in the responders dictionary.",
+                    typeof(TRequest).Name,
+                    typeof(TResponse).Name);
+
+                throw new ChinchillaException(message);
+            }
+
+            handler(response);
         }
 
         public void Dispose()
         {
+            if (publisher != null)
+            {
+                publisher.Dispose();
+            }
+
+            if (subscription != null)
+            {
+                subscription.Dispose();
+            }
+        }
+
+        public void Start()
+        {
+            subscription = bus.Subscribe<TResponse>(
+                DispatchToRegisteredResponseHandler,
+                b => b
+                    .SetTopology<DefaultRequestTopology>()
+                    .DeliverUsing<TaskDeliveryStrategy>());
+
+            var queue = subscription.Queues.First();
+            publisher = bus.CreatePublisher<TRequest>(p => p.ReplyTo(queue.Name));
         }
     }
 }

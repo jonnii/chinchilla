@@ -8,7 +8,7 @@ namespace Chinchilla.Topologies
         {
             var topology = new MessageTopology();
 
-            topology.PublishTarget = topology.DefineExchange(endpoint.Name, ExchangeType.Topic);
+            topology.PublishExchange = topology.DefineExchange(endpoint.Name, ExchangeType.Topic);
 
             return topology;
         }

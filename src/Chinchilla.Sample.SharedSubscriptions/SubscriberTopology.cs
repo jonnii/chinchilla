@@ -24,7 +24,7 @@ namespace Chinchilla.Sample.SharedSubscriptions
                 topology.SubscribeQueue.BindTo(exchange, routingKey);
             }
 
-            topology.PublishTarget = exchange;
+            topology.PublishExchange = exchange;
 
             return topology;
         }

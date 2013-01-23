@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using Chinchilla.Configuration;
 using Chinchilla.Logging;
-using Chinchilla.Topologies;
 
 namespace Chinchilla
 {
@@ -140,22 +139,8 @@ namespace Chinchilla
                 typeof(TRequest).Name,
                 typeof(TResponse).Name);
 
-            var subscriber = Subscribe<TResponse>(
-                (m, r) =>
-                {
-                    Console.WriteLine("foo");
-                },
-                b => b
-                    .SetTopology<DefaultRequestTopology>()
-                    .DeliverUsing<TaskDeliveryStrategy>());
-
-            var queue = subscriber.Queues.First();
-
-            logger.InfoFormat(" -> created subscriber with reply-to: {0}", queue);
-
-            var publisher = CreatePublisher<TRequest>(p => p.ReplyTo(queue.Name));
-            var requester = new Requester<TRequest, TResponse>(publisher);
-
+            var requester = new Requester<TRequest, TResponse>(this);
+            requester.Start();
             return requester;
         }
 
