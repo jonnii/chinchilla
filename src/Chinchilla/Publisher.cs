@@ -1,3 +1,4 @@
+using System.Threading;
 using Chinchilla.Topologies.Model;
 using RabbitMQ.Client;
 
@@ -12,6 +13,8 @@ namespace Chinchilla
         private readonly IMessageSerializer serializer;
 
         private bool disposed;
+
+        private long numPublishedMessages;
 
         public Publisher(
             IModelReference modelReference,
@@ -30,7 +33,10 @@ namespace Chinchilla
 
         public IExchange Exchange { get; private set; }
 
-        public long NumPublishedMessages { get; private set; }
+        public long NumPublishedMessages
+        {
+            get { return numPublishedMessages; }
+        }
 
         public void Publish(TMessage message)
         {
@@ -46,7 +52,7 @@ namespace Chinchilla
                     defaultProperties,
                     serializedMessage));
 
-            ++NumPublishedMessages;
+            Interlocked.Increment(ref numPublishedMessages);
         }
 
         public IBasicProperties CreateProperties(TMessage message)

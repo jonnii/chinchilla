@@ -17,6 +17,8 @@ namespace Chinchilla
 
         private readonly List<IQueue> consumerQueues = new List<IQueue>();
 
+        private readonly object executeLock = new object();
+
         private IModel model;
 
         public ModelReference(IModel model)
@@ -36,12 +38,18 @@ namespace Chinchilla
 
         public void Execute(Action<IModel> action)
         {
-            action(model);
+            lock (executeLock)
+            {
+                action(model);
+            }
         }
 
         public TR Execute<TR>(Func<IModel, TR> func)
         {
-            return func(model);
+            lock (executeLock)
+            {
+                return func(model);
+            }
         }
 
         public void Reconnect(IModel newModel)
