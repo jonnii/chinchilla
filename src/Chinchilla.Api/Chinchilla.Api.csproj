@@ -49,8 +49,10 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="BindingOptions.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="Exchange.cs" />
+    <Compile Include="ExchangeOptions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="IRabbitAdmin.cs" />
     <Compile Include="Message.cs" />
@@ -59,6 +61,7 @@
     <Compile Include="Permissions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queue.cs" />
+    <Compile Include="QueueOptions.cs" />
     <Compile Include="RabbitAdmin.cs" />
     <Compile Include="RabbitContractResolver.cs" />
     <Compile Include="User.cs" />

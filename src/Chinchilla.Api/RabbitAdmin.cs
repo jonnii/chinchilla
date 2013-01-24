@@ -42,7 +42,13 @@ namespace Chinchilla.Api
 
             var rootWithReplacements = root.FormatWithReplacements();
 
-            return HttpClient.Create(rootWithReplacements, settings);
+            var client = HttpClient.Create(rootWithReplacements, settings);
+
+            // add an accept header to all requests otherwise the api will complain
+            client.BeforeRequest += (sender, args) =>
+                args.Request.AddHeader("Accept", string.Empty);
+
+            return client;
         }
 
         public IEnumerable<VirtualHost> VirtualHosts
@@ -77,17 +83,60 @@ namespace Chinchilla.Api
 
         public bool Create(VirtualHost virtualHost)
         {
-            return Client.Put("vhosts/:name", new { name = virtualHost.Name }).Is(HttpStatusCode.NoContent);
+            return Client.Put("vhosts/:name", new { name = virtualHost.Name })
+                .Is(HttpStatusCode.NoContent);
+        }
+
+        public bool Create(VirtualHost virtualHost, Queue queue)
+        {
+            return Create(virtualHost, queue, QueueOptions.Default);
+        }
+
+        public bool Create(VirtualHost virtualHost, Queue queue, QueueOptions options)
+        {
+            return Client.Put(options, "queues/:vhost/:name", new { vhost = virtualHost.Name, queue.Name })
+                .Is(HttpStatusCode.NoContent);
+        }
+
+        public bool Create(VirtualHost virtualHost, Exchange exchange)
+        {
+            return Create(virtualHost, exchange, ExchangeOptions.Default);
+        }
+
+        public bool Create(VirtualHost virtualHost, Exchange exchange, ExchangeOptions options)
+        {
+            return Client.Put(options, "exchanges/:vhost/:name", new
+            {
+                vhost = virtualHost.Name,
+                exchange.Name,
+            }).Is(HttpStatusCode.NoContent);
+        }
+
+        public bool Create(VirtualHost virtualHost, Exchange exchange, Queue queue)
+        {
+            return Create(virtualHost, exchange, queue, BindingOptions.Default);
+        }
+
+        public bool Create(VirtualHost virtualHost, Exchange exchange, Queue queue, BindingOptions options)
+        {
+            return Client.Post(options, "bindings/:vhost/e/:exchange/q/:queue", new
+            {
+                vhost = virtualHost.Name,
+                exchange = exchange.Name,
+                queue = queue.Name
+            }).Is(HttpStatusCode.Created);
         }
 
         public bool Delete(VirtualHost virtualHost)
         {
-            return Client.Delete("vhosts/:name", new { name = virtualHost.Name }).Is(HttpStatusCode.NoContent);
+            return Client.Delete("vhosts/:name", new { name = virtualHost.Name })
+                .Is(HttpStatusCode.NoContent);
         }
 
         public bool Delete(Connection connection)
         {
-            return Client.Delete("connections/:name", new { name = connection.Name }).Is(HttpStatusCode.NoContent);
+            return Client.Delete("connections/:name", new { name = connection.Name })
+                .Is(HttpStatusCode.NoContent);
         }
 
         public bool Create(VirtualHost virtualHost, User user, Permission permission)
@@ -120,21 +169,11 @@ namespace Chinchilla.Api
                 truncate = "50000"
             };
 
-            var resource = Client.BuildRelativeResource("queues/:vhost/:queue/get", new
+            return Client.Post(options, "queues/:vhost/:queue/get", new
             {
                 vhost = virtualHost.Name,
                 queue = queue.Name
-            });
-
-            var postRequest = new PostRequest(resource, new ObjectRequestBody(options));
-
-            // need to set accept to empty string or the http management plugin
-            // will complain
-            postRequest.AddHeader("Accept", string.Empty);
-
-            return Client.Run(postRequest)
-                .OnOk()
-                .As<List<Message>>();
+            }).OnOk().As<List<Message>>();
         }
     }
 }

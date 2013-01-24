@@ -1,7 +1,7 @@
 using Chinchilla.Logging;
 using NUnit.Framework;
 
-namespace Chinchilla.Integration.Features
+namespace Chinchilla.Integration
 {
     public class WithLogging
     {

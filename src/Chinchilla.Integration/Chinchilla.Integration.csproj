@@ -71,8 +71,9 @@
     <Compile Include="Features\SubscribeFeature.cs" />
     <Compile Include="Features\SubscriberFaultFeature.cs" />
     <Compile Include="Features\WithApi.cs" />
-    <Compile Include="Features\WithLogging.cs" />
+    <Compile Include="WithLogging.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Soak\SoakTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

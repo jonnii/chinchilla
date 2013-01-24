@@ -16,15 +16,27 @@ namespace Chinchilla.Api
 
         bool Create(VirtualHost virtualHost);
 
-        bool Delete(VirtualHost virtualHost);
+        bool Create(VirtualHost virtualHost, Queue queue);
 
-        bool Delete(Connection connection);
+        bool Create(VirtualHost virtualHost, Queue queue, QueueOptions options);
+
+        bool Create(VirtualHost virtualHost, Exchange exchange);
+
+        bool Create(VirtualHost virtualHost, Exchange exchange, ExchangeOptions options);
 
         bool Create(VirtualHost virtualHost, User user, Permission permission);
+
+        bool Create(VirtualHost virtualHost, Exchange exchange, Queue queue);
+
+        bool Create(VirtualHost virtualHost, Exchange exchange, Queue queue, BindingOptions options);
 
         bool Exists(VirtualHost virtualHost, Queue queue);
 
         bool Exists(VirtualHost virtualHost, Exchange exchange);
+
+        bool Delete(VirtualHost virtualHost);
+
+        bool Delete(Connection connection);
 
         IEnumerable<Message> Messages(VirtualHost virtualHost, Queue queue);
     }
