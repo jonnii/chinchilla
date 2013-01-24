@@ -64,6 +64,7 @@
     <Compile Include="Features\Messages\CapitalizedMessage.cs" />
     <Compile Include="Features\Messages\HelloWorldMessage.cs" />
     <Compile Include="Features\Messages\CapitalizeMessage.cs" />
+    <Compile Include="Features\PublisherConfirmsFeature.cs" />
     <Compile Include="Features\PublishFeature.cs" />
     <Compile Include="Features\RequestResponseFeature.cs" />
     <Compile Include="Features\SharedSubscriptionFeature.cs" />

@@ -27,6 +27,6 @@ namespace Chinchilla
         /// Publishes a message
         /// </summary>
         /// <typeparam name="TMessage">The type of message to publish</typeparam>
-        void Publish(TMessage message);
+        IPublishReceipt Publish(TMessage message);
     }
 }

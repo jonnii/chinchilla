@@ -11,6 +11,7 @@ namespace Chinchilla.Configuration
         {
             MessageTopologyBuilder = new DefaultPublishTopologyBuilder();
             ShouldBuildTopology = true;
+            ShouldConfirm = true;
         }
 
         public string EndpointName { get; private set; }
@@ -20,6 +21,8 @@ namespace Chinchilla.Configuration
         public string ReplyQueue { get; private set; }
 
         public bool ShouldBuildTopology { get; private set; }
+
+        public bool ShouldConfirm { get; private set; }
 
         public IPublisherBuilder RouteWith<TRouter>()
             where TRouter : IRouter, new()
@@ -55,6 +58,12 @@ namespace Chinchilla.Configuration
         public IPublisherBuilder BuildTopology(bool shouldBuildTopology)
         {
             ShouldBuildTopology = shouldBuildTopology;
+            return this;
+        }
+
+        public IPublisherBuilder Confirm(bool shouldConfirm)
+        {
+            ShouldConfirm = shouldConfirm;
             return this;
         }
 
