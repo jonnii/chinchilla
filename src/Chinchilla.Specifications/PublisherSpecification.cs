@@ -66,6 +66,33 @@ namespace Chinchilla.Specifications
             static IBasicProperties properties;
         }
 
+        [Subject(typeof(ConfirmingPublisher<>))]
+        public class when_publishing_with_receipt : WithSubject<Publisher<TestMessage>>
+        {
+            Establish context = () =>
+            {
+                model = An<IModel>();
+                model.WhenToldTo(m => m.NextPublishSeqNo).Return(300);
+            };
+
+            Because of = () =>
+                receipt = Subject.PublishWithReceipt(model, "key", An<IBasicProperties>(), new byte[0]);
+
+            It should_mark_receipt_as_unknown = () =>
+                receipt.Status.ShouldEqual(PublishStatus.None);
+
+            It should_send_basic_publish = () =>
+                model.WasToldTo(m => m.BasicPublish(
+                    Param.IsAny<string>(),
+                    Param.IsAny<string>(),
+                    Param.IsAny<IBasicProperties>(),
+                    Param.IsAny<byte[]>()));
+
+            static IModel model;
+
+            static IPublishReceipt receipt;
+        }
+
         [Subject(typeof(Publisher<>))]
         public class when_creating_properties : with_basic_properties<Publisher<TestMessage>>
         {

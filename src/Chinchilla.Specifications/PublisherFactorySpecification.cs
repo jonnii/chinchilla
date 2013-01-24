@@ -9,7 +9,31 @@ namespace Chinchilla.Specifications
     public class PublisherFactorySpecification
     {
         [Subject(typeof(PublisherFactory))]
-        public class when_building_publisher : WithSubject<PublisherFactory>
+        public class when_building_publisher : with_publisher_factory
+        {
+            Because of = () =>
+                Subject.Create<TestMessage>(modelReference, configuration);
+
+            It should_build_router = () =>
+                configuration.WasToldTo(c => c.BuildRouter());
+        }
+
+        [Subject(typeof(PublisherFactory))]
+        public class when_building_publisher_with_confirms : with_publisher_factory
+        {
+            Establish context = () =>
+                configuration.WhenToldTo(c => c.ShouldConfirm).Return(true);
+
+            Because of = () =>
+                publisher = Subject.Create<TestMessage>(modelReference, configuration);
+
+            It should_create_confirming_publisher = () =>
+                publisher.ShouldBeOfType<ConfirmingPublisher<TestMessage>>();
+
+            private static IPublisher<TestMessage> publisher;
+        }
+
+        public class with_publisher_factory : WithSubject<PublisherFactory>
         {
             Establish context = () =>
             {
@@ -24,15 +48,9 @@ namespace Chinchilla.Specifications
                     .Return(An<IMessageSerializer>());
             };
 
-            Because of = () =>
-                Subject.Create<TestMessage>(modelReference, configuration);
+            protected static IPublisherConfiguration configuration;
 
-            It should_build_router = () =>
-                configuration.WasToldTo(c => c.BuildRouter());
-
-            static IPublisherConfiguration configuration;
-
-            static IModelReference modelReference;
+            protected static IModelReference modelReference;
         }
 
         public class TestMessage { }

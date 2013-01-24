@@ -59,8 +59,14 @@
     <Compile Include="DefaultConsumerFactory.cs" />
     <Compile Include="DeliveryQueue.cs" />
     <Compile Include="DirectRouter.cs" />
+    <Compile Include="DuplicatePublishReceiptException.cs" />
     <Compile Include="ICorrelated.cs" />
+    <Compile Include="IPublishReceipt.cs" />
     <Compile Include="IRequester.cs" />
+    <Compile Include="ConfirmingPublisher.cs" />
+    <Compile Include="NullReceipt.cs" />
+    <Compile Include="ConfirmReceipt.cs" />
+    <Compile Include="PublishStatus.cs" />
     <Compile Include="Requester.cs" />
     <Compile Include="Threading\IThread.cs" />
     <Compile Include="Threading\IThreadFactory.cs" />

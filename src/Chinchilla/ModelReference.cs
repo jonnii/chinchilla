@@ -17,6 +17,8 @@ namespace Chinchilla
 
         private readonly List<IQueue> consumerQueues = new List<IQueue>();
 
+        private readonly List<Action<IModel, IModel>> reconnectionHandlers = new List<Action<IModel, IModel>>();
+
         private readonly object executeLock = new object();
 
         private IModel model;
@@ -56,12 +58,22 @@ namespace Chinchilla
         {
             logger.DebugFormat("Reconnecting: {0}", Tag);
 
+            foreach (var reconnectHandler in reconnectionHandlers)
+            {
+                reconnectHandler(model, newModel);
+            }
+
             model = newModel;
 
             foreach (var queue in consumerQueues)
             {
                 BindConsumerToQueue(queue);
             }
+        }
+
+        public void OnReconnect(Action<IModel, IModel> reconnectionHandler)
+        {
+            reconnectionHandlers.Add(reconnectionHandler);
         }
 
         public BlockingCollection<BasicDeliverEventArgs> GetConsumerQueue(IQueue queue)
@@ -98,6 +110,8 @@ namespace Chinchilla
                 model.Close();
                 model.Dispose();
             }
+
+            reconnectionHandlers.Clear();
 
             base.Dispose();
         }
