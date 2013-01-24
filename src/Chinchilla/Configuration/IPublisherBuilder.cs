@@ -2,13 +2,25 @@ using Chinchilla.Topologies;
 
 namespace Chinchilla.Configuration
 {
+    /// <summary>
+    /// A publisher builder is used to configure the building of a publisher
+    /// </summary>
     public interface IPublisherBuilder
     {
+        /// <summary>
+        /// Sets the topology on this publisher
+        /// </summary>
         IPublisherBuilder SetTopology(IMessageTopologyBuilder messageTopologyBuilder);
 
+        /// <summary>
+        /// Sets the router
+        /// </summary>
         IPublisherBuilder RouteWith<TRouter>()
             where TRouter : IRouter, new();
 
+        /// <summary>
+        /// Sets the router
+        /// </summary>
         IPublisherBuilder RouteWith(IRouter router);
 
         /// <summary>
@@ -22,8 +34,14 @@ namespace Chinchilla.Configuration
         /// </summary>
         IPublisherBuilder SerializeWith(string contentType);
 
+        /// <summary>
+        /// Sets the queue name to reply to
+        /// </summary>
         IPublisherBuilder ReplyTo(string queueName);
 
+        /// <summary>
+        /// indicates whether or not the publisher should build the topology
+        /// </summary>
         IPublisherBuilder BuildTopology(bool shouldBuildTopology);
     }
 }
