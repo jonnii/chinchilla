@@ -12,6 +12,9 @@ namespace Chinchilla.Specifications.Configuration
         {
             It should_automatically_create_topology = () =>
                 Subject.ShouldBuildTopology.ShouldBeTrue();
+
+            It should_have_publisher_confirms_enabled_by_default = () =>
+                Subject.ShouldConfirm.ShouldBeTrue();
         }
 
         [Subject(typeof(PublisherConfiguration))]

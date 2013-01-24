@@ -1,6 +1,9 @@
+using System;
 using System.Threading;
+using Chinchilla.Logging;
 using Chinchilla.Topologies.Model;
 using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 
 namespace Chinchilla
 {
@@ -8,11 +11,13 @@ namespace Chinchilla
 
     public class Publisher<TMessage> : Publisher, IPublisher<TMessage>
     {
+        private readonly ILogger logger = Logger.Create<Publisher<TMessage>>();
+
         private readonly IRouter router;
 
         private readonly IMessageSerializer serializer;
 
-        private bool disposed;
+        protected bool disposed;
 
         private long numPublishedMessages;
 
@@ -38,21 +43,43 @@ namespace Chinchilla
             get { return numPublishedMessages; }
         }
 
-        public void Publish(TMessage message)
+        public virtual void Start()
+        {
+
+        }
+
+        public IPublishReceipt Publish(TMessage message)
         {
             var wrappedMessage = Message.Create(message);
             var serializedMessage = serializer.Serialize(wrappedMessage);
             var defaultProperties = CreateProperties(message);
             var routingKey = router.Route(message);
 
-            ModelReference.Execute(
-                m => m.BasicPublish(
-                    Exchange.Name,
+            var publishReceipt = ModelReference.Execute(
+                model => PublishWithReceipt(
+                    model,
                     routingKey,
                     defaultProperties,
                     serializedMessage));
 
             Interlocked.Increment(ref numPublishedMessages);
+
+            return publishReceipt;
+        }
+
+        public virtual IPublishReceipt PublishWithReceipt(
+            IModel model,
+            string routingKey,
+            IBasicProperties defaultProperties,
+            byte[] serializedMessage)
+        {
+            model.BasicPublish(
+                Exchange.Name,
+                routingKey,
+                defaultProperties,
+                serializedMessage);
+
+            return NullReceipt.Instance;
         }
 
         public IBasicProperties CreateProperties(TMessage message)
@@ -75,6 +102,19 @@ namespace Chinchilla
             return defaultProperties;
         }
 
+        public void EnableConfirms()
+        {
+            logger.InfoFormat("Enabling publisher confirms on {0}", this);
+
+            //ModelReference.OnReconnect();
+
+            ModelReference.Execute(m => m.ConfirmSelect());
+            ModelReference.Execute(m => m.BasicAcks += delegate(IModel model, BasicAckEventArgs args)
+            {
+                Console.WriteLine(args.DeliveryTag);
+            });
+        }
+
         public override void Dispose()
         {
             if (disposed)
@@ -83,7 +123,6 @@ namespace Chinchilla
             }
 
             ModelReference.Dispose();
-
             disposed = true;
         }
     }

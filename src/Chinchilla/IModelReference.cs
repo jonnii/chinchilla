@@ -39,5 +39,10 @@ namespace Chinchilla
         /// when a connection is reset
         /// </summary>
         void Reconnect(IModel newModel);
+
+        /// <summary>
+        /// Register a reconnect handler
+        /// </summary>
+        void OnReconnect(Action<IModel, IModel> reconnectionHandler);
     }
 }

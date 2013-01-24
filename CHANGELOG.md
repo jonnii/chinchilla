@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.1.9
+
+  * add support for publisher confirms
+  * publisher confirms are enabled by default
+
 ## 0.1.8
 
   * add ability to set correlation ids on messages

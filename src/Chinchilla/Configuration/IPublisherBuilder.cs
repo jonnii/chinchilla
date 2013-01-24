@@ -43,5 +43,10 @@ namespace Chinchilla.Configuration
         /// indicates whether or not the publisher should build the topology
         /// </summary>
         IPublisherBuilder BuildTopology(bool shouldBuildTopology);
+
+        /// <summary>
+        /// Indicates whether or not publisher confirms are enabled on this publisher
+        /// </summary>
+        IPublisherBuilder Confirm(bool shouldConfirm);
     }
 }

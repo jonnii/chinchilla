@@ -10,6 +10,8 @@ namespace Chinchilla.Configuration
 
         bool ShouldBuildTopology { get; }
 
+        bool ShouldConfirm { get; }
+
         IRouter BuildRouter();
     }
 }

@@ -31,11 +31,19 @@ namespace Chinchilla
             var messageSerializer = messageSerializers.FindOrDefault(
                 configuration.ContentType);
 
-            var publisher = new Publisher<TMessage>(
-                modelReference,
-                messageSerializer,
-                topology.PublishExchange,
-                router);
+            var publisher = configuration.ShouldConfirm
+                ? new ConfirmingPublisher<TMessage>(
+                    modelReference,
+                    messageSerializer,
+                    topology.PublishExchange,
+                    router)
+                : new Publisher<TMessage>(
+                    modelReference,
+                    messageSerializer,
+                    topology.PublishExchange,
+                    router);
+
+            publisher.Start();
 
             Track(publisher);
 
