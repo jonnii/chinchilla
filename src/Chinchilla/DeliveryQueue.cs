@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Threading;
 using Chinchilla.Topologies.Model;
 using RabbitMQ.Client.Events;
 
@@ -17,6 +18,10 @@ namespace Chinchilla
 
         private BlockingCollection<BasicDeliverEventArgs> consumerQueue;
 
+        private long numAcceptedMessages;
+
+        private long numFailedMessages;
+
         public DeliveryQueue(
             IQueue queue,
             IModelReference modelReference,
@@ -32,13 +37,19 @@ namespace Chinchilla
             get { return queue.Name; }
         }
 
-        public long NumAcceptedMessages { get; set; }
+        public long NumAcceptedMessages
+        {
+            get { return numAcceptedMessages; }
+        }
 
-        public long NumFailedMessages { get; private set; }
+        public long NumFailedMessages
+        {
+            get { return numFailedMessages; }
+        }
 
         public void OnAccept(IDelivery delivery)
         {
-            ++NumAcceptedMessages;
+            Interlocked.Increment(ref numAcceptedMessages);
 
             modelReference.Execute(
                 m => m.BasicAck(delivery.Tag, false));
@@ -48,7 +59,7 @@ namespace Chinchilla
         {
             faultStrategy.ProcessFailedDelivery(delivery, exception);
 
-            ++NumFailedMessages;
+            Interlocked.Increment(ref numFailedMessages);
         }
 
         public bool TryTake(out BasicDeliverEventArgs item)

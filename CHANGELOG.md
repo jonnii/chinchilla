@@ -5,6 +5,7 @@
   * add ability to set correlation ids on messages
   * add ability to send requests with response handlers (rpc)
   * added additional chinchilla.api functions
+  * thread safety fixes
 
 ## 0.1.7
 
