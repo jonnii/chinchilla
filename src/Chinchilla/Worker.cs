@@ -13,7 +13,9 @@ namespace Chinchilla
             Status = WorkerStatus.Stopped;
         }
 
-        public abstract string WorkerType { get; }
+        public abstract string Name { get; }
+
+        public abstract string Type { get; }
 
         public WorkerStatus Status { get; set; }
 
@@ -22,7 +24,8 @@ namespace Chinchilla
         public WorkerState GetState()
         {
             return new WorkerState(
-                WorkerType,
+                Name,
+                Type,
                 Status,
                 BusySince);
         }

@@ -6,22 +6,33 @@ namespace Chinchilla
 {
     public class WorkerPoolWorker : Worker
     {
+        private readonly int ordinal;
+
         private readonly BlockingCollection<IDelivery> deliveries;
 
         private readonly IThread thread;
 
         public WorkerPoolWorker(
+            int ordinal,
             IThreadFactory threadFactory,
             BlockingCollection<IDelivery> deliveries,
             IDeliveryProcessor connectedProcessor)
             : base(connectedProcessor)
         {
+            this.ordinal = ordinal;
             this.deliveries = deliveries;
 
             thread = threadFactory.Create(StartTakingMessages);
         }
 
-        public override string WorkerType
+        public int WorkerIndex { get; set; }
+
+        public override string Name
+        {
+            get { return string.Concat("pool-worker-", ordinal); }
+        }
+
+        public override string Type
         {
             get { return "WorkerPool"; }
         }

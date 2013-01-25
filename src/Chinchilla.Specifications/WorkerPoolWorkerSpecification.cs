@@ -10,6 +10,13 @@ namespace Chinchilla.Specifications
     public class WorkerPoolWorkerSpecification
     {
         [Subject(typeof(WorkerPoolWorker))]
+        public class in_general : with_worker_pool_thread
+        {
+            It should_have_name = () =>
+                Subject.Name.ShouldEqual("pool-worker-1");
+        }
+
+        [Subject(typeof(WorkerPoolWorker))]
         public class when_starting : with_worker_pool_thread
         {
             Because of = () =>
@@ -164,7 +171,7 @@ namespace Chinchilla.Specifications
                 threadFactory.WhenToldTo(t => t.Create(Param.IsAny<ThreadStart>()))
                     .Return(thread);
 
-                Subject = new WorkerPoolWorker(threadFactory, collection, processor);
+                Subject = new WorkerPoolWorker(1, threadFactory, collection, processor);
             };
 
             protected static IDeliveryProcessor processor;

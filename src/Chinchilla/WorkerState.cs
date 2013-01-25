@@ -8,12 +8,18 @@ namespace Chinchilla
     /// </summary>
     public class WorkerState
     {
-        public WorkerState(string type, WorkerStatus status, DateTime? busySince)
+        public WorkerState(string name, string type, WorkerStatus status, DateTime? busySince)
         {
+            Name = name;
             Type = type;
             Status = status;
             BusySince = busySince;
         }
+
+        /// <summary>
+        /// The name of this worker
+        /// </summary>
+        public string Name { get; set; }
 
         /// <summary>
         /// The type of this worker

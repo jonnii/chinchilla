@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.1.9.1
+
+  * give workers a name so they can be more easily identified
+
 ## 0.1.9
 
   * add support for publisher confirms

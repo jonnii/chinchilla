@@ -103,6 +103,7 @@
     <Compile Include="SubscriptionFactorySpecification.cs" />
     <Compile Include="SubscriptionSpecification.cs" />
     <Compile Include="TaskDeliveryStrategySpecification.cs" />
+    <Compile Include="TaskWorkerSpecification.cs" />
     <Compile Include="Topologies\Model\BindingSpecification.cs" />
     <Compile Include="Topologies\Model\ExchangeSpecification.cs" />
     <Compile Include="Topologies\Model\QueueSpecification.cs" />

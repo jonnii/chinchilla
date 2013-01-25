@@ -41,7 +41,7 @@ namespace Chinchilla
 
             workers = Enumerable
                 .Range(0, NumWorkers)
-                .Select(_ => new WorkerPoolWorker(threadFactory, deliveries, connectedProcessor))
+                .Select(ordinal => new WorkerPoolWorker(ordinal, threadFactory, deliveries, connectedProcessor))
                 .ToArray();
 
             foreach (var thread in workers)
