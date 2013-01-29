@@ -36,7 +36,7 @@ namespace Chinchilla.Integration.Features
                 // resume the worker
                 subscription.Workers.Resume(worker.Name);
                 WaitForDelivery();
-                Assert.That(seen, Is.EqualTo(0));
+                Assert.That(seen, Is.EqualTo(1));
                 state = subscription.State;
                 Assert.That(state.Workers.First().Status, Is.Not.EqualTo(WorkerStatus.Paused));
             }

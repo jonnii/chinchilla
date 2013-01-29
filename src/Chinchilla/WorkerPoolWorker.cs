@@ -13,9 +13,9 @@ namespace Chinchilla
 
         private readonly IThread thread;
 
-        private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-
         private readonly ManualResetEventSlim pauseEvent = new ManualResetEventSlim(true);
+
+        private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
         public WorkerPoolWorker(
             int ordinal,
@@ -78,6 +78,7 @@ namespace Chinchilla
 
             Status = WorkerStatus.Idle;
             pauseEvent.Set();
+            cancellationTokenSource = new CancellationTokenSource();
         }
 
         public void Stop()
