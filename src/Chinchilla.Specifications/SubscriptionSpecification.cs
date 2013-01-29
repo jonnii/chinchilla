@@ -11,6 +11,9 @@ namespace Chinchilla.Specifications
         [Subject(typeof(Subscription))]
         public class in_general : with_subscription
         {
+            It should_have_name = () =>
+                Subject.Name.ShouldNotBeNull();
+
             It should_not_be_started = () =>
                 Subject.IsStarted.ShouldBeFalse();
         }
@@ -81,6 +84,7 @@ namespace Chinchilla.Specifications
                 deliveryQueue = An<IDeliveryQueue>();
 
                 Subject = new Subscription(
+                    "awesome-name",
                     modelReference,
                     deliveryStrategy,
                     new[] { deliveryQueue });

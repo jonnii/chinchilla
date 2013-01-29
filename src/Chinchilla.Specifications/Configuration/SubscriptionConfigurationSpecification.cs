@@ -10,6 +10,9 @@ namespace Chinchilla.Specifications.Configuration
         [Subject(typeof(SubscriptionConfiguration))]
         public class in_general : WithSubject<SubscriptionConfiguration>
         {
+            It should_have_default_name = () =>
+                Subject.Name.ShouldNotBeEmpty();
+
             It should_have_default_prefetch_count = () =>
                 Subject.PrefetchCount.ShouldEqual((ushort)50);
 

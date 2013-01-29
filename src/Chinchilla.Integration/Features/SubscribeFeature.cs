@@ -129,6 +129,16 @@ namespace Chinchilla.Integration.Features
         }
 
         [Test]
+        public void ShouldCreateSubscriptionWithName()
+        {
+            using (var bus = Depot.Connect("localhost/integration"))
+            {
+                var subscription = bus.Subscribe((HelloWorldMessage m) => { }, o => o.WithName("fribble"));
+                Assert.That(subscription.Name, Is.EqualTo("fribble"));
+            }
+        }
+
+        [Test]
         public void ShouldCreateSubscriberWithCallbackWithContext()
         {
             using (var bus = Depot.Connect("localhost/integration"))

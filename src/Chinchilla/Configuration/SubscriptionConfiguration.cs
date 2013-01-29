@@ -13,17 +13,38 @@ namespace Chinchilla.Configuration
 
         public SubscriptionConfiguration()
         {
-            MessageTopologyBuilder = new DefaultSubscribeTopologyBuilder();
-            EndpointNames = Enumerable.Empty<string>();
+            Name = Guid.NewGuid().ToString();
             PrefetchSize = 0;
             PrefetchCount = 50;
+            MessageTopologyBuilder = new DefaultSubscribeTopologyBuilder();
+            EndpointNames = Enumerable.Empty<string>();
         }
 
-        public IEnumerable<string> EndpointNames { get; private set; }
+        public string Name { get; private set; }
 
         public uint PrefetchSize { get; private set; }
 
         public ushort PrefetchCount { get; private set; }
+
+        public IEnumerable<string> EndpointNames { get; private set; }
+
+        public ISubscriptionBuilder WithName(string name)
+        {
+            Name = name;
+            return this;
+        }
+
+        public ISubscriptionBuilder WithPrefetchCount(ushort prefetchCount)
+        {
+            PrefetchCount = prefetchCount;
+            return this;
+        }
+
+        public ISubscriptionBuilder WithPrefetchSize(uint prefetchSize)
+        {
+            PrefetchSize = prefetchSize;
+            return this;
+        }
 
         public ISubscriptionBuilder DeliverUsing<TStrategy>(params Action<TStrategy>[] configurations)
             where TStrategy : IDeliveryStrategy, new()
@@ -86,18 +107,6 @@ namespace Chinchilla.Configuration
         {
             EndpointNames = new[] { endpointName }.Concat(otherEndpointNames);
 
-            return this;
-        }
-
-        public ISubscriptionBuilder WithPrefetchCount(ushort prefetchCount)
-        {
-            PrefetchCount = prefetchCount;
-            return this;
-        }
-
-        public ISubscriptionBuilder WithPrefetchSize(uint prefetchSize)
-        {
-            PrefetchSize = prefetchSize;
             return this;
         }
 

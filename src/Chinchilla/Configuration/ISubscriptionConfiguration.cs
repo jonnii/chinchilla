@@ -4,6 +4,8 @@ namespace Chinchilla.Configuration
 {
     public interface ISubscriptionConfiguration : IEndpointConfiguration
     {
+        string Name { get; }
+
         uint PrefetchSize { get; }
 
         ushort PrefetchCount { get; }

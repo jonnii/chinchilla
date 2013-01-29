@@ -19,6 +19,7 @@ namespace Chinchilla
         private bool isDisposing;
 
         public Subscription(
+            string name,
             IModelReference modelReference,
             IDeliveryStrategy deliveryStrategy,
             IDeliveryQueue[] queues)
@@ -26,8 +27,11 @@ namespace Chinchilla
             this.modelReference = modelReference;
             this.deliveryStrategy = deliveryStrategy;
 
+            Name = name;
             Queues = queues;
         }
+
+        public string Name { get; private set; }
 
         public IDeliveryQueue[] Queues { get; private set; }
 
@@ -46,6 +50,7 @@ namespace Chinchilla
                 var workerStates = deliveryStrategy.GetWorkerStates();
 
                 return new SubscriptionState(
+                    Name,
                     IsStarted,
                     IsStartable,
                     queueStates,

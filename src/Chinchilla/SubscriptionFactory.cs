@@ -58,10 +58,10 @@ namespace Chinchilla
             // which is shared across all consumers
 
             modelReference.Execute(
-                  m => m.BasicQos(
-                      configuration.PrefetchSize,
-                      configuration.PrefetchCount,
-                      false));
+                m => m.BasicQos(
+                    configuration.PrefetchSize,
+                    configuration.PrefetchCount,
+                    false));
 
             var deliveryStrategy = configuration.BuildDeliveryStrategy(
                 deliveryProcessor);
@@ -74,6 +74,7 @@ namespace Chinchilla
                 faultStrategy);
 
             var subscription = new Subscription(
+                configuration.Name,
                 modelReference,
                 deliveryStrategy,
                 deliveryQueues.ToArray());

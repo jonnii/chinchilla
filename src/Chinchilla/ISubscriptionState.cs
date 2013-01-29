@@ -8,16 +8,23 @@ namespace Chinchilla
     public class SubscriptionState
     {
         public SubscriptionState(
+            string name,
             bool isStarted,
             bool isStartable,
             QueueState[] queueStates,
             WorkerState[] workerStates)
         {
+            Name = name;
             IsStarted = isStarted;
             IsStartable = isStartable;
             QueueStates = queueStates;
             Workers = workerStates;
         }
+
+        /// <summary>
+        /// The name of the subscription
+        /// </summary>
+        public string Name { get; set; }
 
         /// <summary>
         /// Indicates whether or not this subscription has been started

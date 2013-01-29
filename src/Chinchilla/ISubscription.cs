@@ -8,6 +8,11 @@ namespace Chinchilla
     public interface ISubscription : IDisposable
     {
         /// <summary>
+        /// The name of this subscription
+        /// </summary>
+        string Name { get; }
+
+        /// <summary>
         /// The queues that are being subscribed to by this subscription
         /// </summary>
         IDeliveryQueue[] Queues { get; }

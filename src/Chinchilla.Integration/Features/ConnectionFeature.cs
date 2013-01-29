@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using Chinchilla.Integration.Features.Messages;
 using Chinchilla.Topologies.Model;
 using NUnit.Framework;
@@ -93,7 +94,7 @@ namespace Chinchilla.Integration.Features
                 var numReceived = 0;
                 var handler = new Action<HelloWorldMessage>(hwm =>
                 {
-                    ++numReceived;
+                    Interlocked.Increment(ref numReceived);
 
                     if (numReceived == 50)
                     {
