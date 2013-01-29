@@ -16,6 +16,11 @@ namespace Chinchilla
 
         public abstract WorkerState[] GetWorkerStates();
 
+        public virtual IWorkersController GetWorkersController()
+        {
+            return new NullWorkersController();
+        }
+
         public virtual void Start()
         {
 

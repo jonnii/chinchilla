@@ -14,7 +14,7 @@ namespace Chinchilla
 
         private readonly IThreadFactory threadFactory = new ThreadFactory();
 
-        private WorkerPoolWorker[] workers = new WorkerPoolWorker[0];
+        private IWorkerPoolWorker[] workers = new IWorkerPoolWorker[0];
 
         public WorkerPoolDeliveryStrategy()
         {
@@ -42,11 +42,12 @@ namespace Chinchilla
             workers = Enumerable
                 .Range(0, NumWorkers)
                 .Select(ordinal => new WorkerPoolWorker(ordinal, threadFactory, deliveries, connectedProcessor))
+                .Cast<IWorkerPoolWorker>()
                 .ToArray();
 
-            foreach (var thread in workers)
+            foreach (var worker in workers)
             {
-                thread.Start();
+                worker.Start();
             }
         }
 
@@ -60,6 +61,18 @@ namespace Chinchilla
             return workers.Select(t => t.GetState()).ToArray();
         }
 
+        public override IWorkersController GetWorkersController()
+        {
+            if (workers.Length == 0)
+            {
+                throw new ChinchillaException(
+                    "Could not get a workers controller, this delivery strategy " +
+                    "has no workers yet, has it been started?");
+            }
+
+            return new WorkerPoolWorkersController(workers);
+        }
+
         public override void Stop()
         {
             logger.DebugFormat("Stopping {0}", this);
@@ -71,9 +84,9 @@ namespace Chinchilla
 
             deliveries.CompleteAdding();
 
-            foreach (var thread in workers)
+            foreach (var worker in workers)
             {
-                thread.Join();
+                worker.Join();
             }
 
             logger.DebugFormat("Stopped {0}", this);

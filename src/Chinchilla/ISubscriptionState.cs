@@ -16,7 +16,7 @@ namespace Chinchilla
             IsStarted = isStarted;
             IsStartable = isStartable;
             QueueStates = queueStates;
-            WorkerStates = workerStates;
+            Workers = workerStates;
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Chinchilla
         /// <summary>
         /// The state of all the workers in this subscription
         /// </summary>
-        public WorkerState[] WorkerStates { get; set; }
+        public WorkerState[] Workers { get; set; }
 
         /// <summary>
         /// The total number of accepted messages

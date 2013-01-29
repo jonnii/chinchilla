@@ -38,6 +38,26 @@ namespace Chinchilla
             get { return deliveryStrategy.IsStartable; }
         }
 
+        public SubscriptionState State
+        {
+            get
+            {
+                var queueStates = Queues.Select(q => q.GetState()).ToArray();
+                var workerStates = deliveryStrategy.GetWorkerStates();
+
+                return new SubscriptionState(
+                    IsStarted,
+                    IsStartable,
+                    queueStates,
+                    workerStates);
+            }
+        }
+
+        public IWorkersController Workers
+        {
+            get { return deliveryStrategy.GetWorkersController(); }
+        }
+
         public void Start()
         {
             logger.InfoFormat("Starting subscription: {0}", this);
@@ -58,18 +78,6 @@ namespace Chinchilla
             listenerThread.Start();
 
             IsStarted = true;
-        }
-
-        public SubscriptionState GetState()
-        {
-            var queueStates = Queues.Select(q => q.GetState()).ToArray();
-            var workerStates = deliveryStrategy.GetWorkerStates();
-
-            return new SubscriptionState(
-                IsStarted,
-                IsStartable,
-                queueStates,
-                workerStates);
         }
 
         private Thread BuildListenerThread()

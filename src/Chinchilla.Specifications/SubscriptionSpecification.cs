@@ -19,7 +19,7 @@ namespace Chinchilla.Specifications
         public class when_getting_subscription_state : with_subscription
         {
             Because of = () =>
-                state = Subject.GetState();
+                state = Subject.State;
 
             It should_get_state = () =>
                 state.ShouldNotBeNull();

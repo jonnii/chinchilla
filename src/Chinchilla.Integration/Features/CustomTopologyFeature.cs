@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Chinchilla.Configuration;
 using Chinchilla.Integration.Features.Messages;
 using Chinchilla.Topologies;
@@ -18,7 +19,7 @@ namespace Chinchilla.Integration.Features
                 HelloWorldMessage lastReceived = null;
                 var numReceived = 0;
 
-                var onMessage = new Action<HelloWorldMessage>(hwm => { lastReceived = hwm; ++numReceived; });
+                var onMessage = new Action<HelloWorldMessage>(hwm => { lastReceived = hwm; Interlocked.Increment(ref numReceived); });
                 var subscriptionBuilder = new Action<ISubscriptionBuilder>(b =>
                     b.SetTopology(new CustomSubscribeMessageTopology())
                 );

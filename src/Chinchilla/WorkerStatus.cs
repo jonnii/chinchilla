@@ -6,6 +6,7 @@ namespace Chinchilla
         Starting,
         Idle,
         Busy,
+        Paused,
         Stopping
     }
 }

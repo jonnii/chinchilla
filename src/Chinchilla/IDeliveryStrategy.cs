@@ -13,5 +13,7 @@ namespace Chinchilla
         void Deliver(IDelivery delivery);
 
         WorkerState[] GetWorkerStates();
+
+        IWorkersController GetWorkersController();
     }
 }

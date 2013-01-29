@@ -159,6 +159,41 @@ namespace Chinchilla.Specifications
             static IDelivery delivery;
         }
 
+        [Subject(typeof(WorkerPoolWorker))]
+        public class when_pausing : with_worker_pool_thread
+        {
+            Because of = () =>
+                Subject.Pause();
+
+            It should_should_be_in_paused_state = () =>
+                Subject.Status.ShouldEqual(WorkerStatus.Paused);
+        }
+
+        [Subject(typeof(WorkerPoolWorker))]
+        public class when_resuming : with_worker_pool_thread
+        {
+            Establish context = () =>
+                Subject.Pause();
+
+            Because of = () =>
+                Subject.Resume();
+
+            It should_should_be_in_paused_state = () =>
+                Subject.Status.ShouldEqual(WorkerStatus.Idle);
+        }
+
+        [Subject(typeof(WorkerPoolWorker))]
+        public class when_resuming_unpaused_worker : with_worker_pool_thread
+        {
+            Because of = () =>
+                exception = Catch.Exception(() => Subject.Resume());
+
+            It should_throw_exception = () =>
+                exception.ShouldBeOfType<InvalidOperationException>();
+
+            static Exception exception;
+        }
+
         public class with_worker_pool_thread : WithFakes
         {
             Establish context = () =>

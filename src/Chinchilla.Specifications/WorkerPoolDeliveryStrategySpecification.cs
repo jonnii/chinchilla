@@ -52,5 +52,32 @@ namespace Chinchilla.Specifications
 
             static Exception exception;
         }
+
+        [Subject(typeof(WorkerPoolDeliveryStrategy))]
+        public class when_getting_workers_controller_when_stopped : WithSubject<WorkerPoolDeliveryStrategy>
+        {
+            Because of = () =>
+                exception = Catch.Exception(() => Subject.GetWorkersController());
+
+            It should_be_pool_delivery_workers_controller = () =>
+                exception.ShouldBeOfType<ChinchillaException>();
+
+            static Exception exception;
+        }
+
+        [Subject(typeof(WorkerPoolDeliveryStrategy))]
+        public class when_getting_workers_controller : WithSubject<WorkerPoolDeliveryStrategy>
+        {
+            Establish context = () =>
+                Subject.Start();
+
+            Because of = () =>
+                controller = Subject.GetWorkersController();
+
+            It should_be_pool_delivery_workers_controller = () =>
+                controller.ShouldBeOfType<WorkerPoolWorkersController>();
+
+            static IWorkersController controller;
+        }
     }
 }

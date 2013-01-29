@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.1.10
+
+  * small interface changes
+  * worker control, the ability to pause/resume a worker
+
 ## 0.1.9.1
 
   * give workers a name so they can be more easily identified

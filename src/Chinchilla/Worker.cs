@@ -2,7 +2,7 @@ using System;
 
 namespace Chinchilla
 {
-    public abstract class Worker
+    public abstract class Worker : IWorker
     {
         private readonly IDeliveryProcessor connectedProcessor;
 

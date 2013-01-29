@@ -111,7 +111,7 @@ namespace Chinchilla.Integration.Features
                     Assert.That(lastReceived.Message, Is.EqualTo("subscribe!"));
                     Assert.That(numReceived, Is.EqualTo(100));
 
-                    Assert.That(subscription.GetState().WorkerStates.Count(), Is.EqualTo(0));
+                    Assert.That(subscription.State.Workers.Count(), Is.EqualTo(0));
                 }
             }
         }

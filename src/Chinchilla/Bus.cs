@@ -86,7 +86,7 @@ namespace Chinchilla
         {
             return subscriptionFactory
                 .List()
-                .Select(s => s.GetState())
+                .Select(s => s.State)
                 .ToArray();
         }
 

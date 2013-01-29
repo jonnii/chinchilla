@@ -64,8 +64,12 @@
     <Compile Include="IPublishReceipt.cs" />
     <Compile Include="IRequester.cs" />
     <Compile Include="ConfirmingPublisher.cs" />
+    <Compile Include="IWorker.cs" />
+    <Compile Include="IWorkerPoolWorker.cs" />
+    <Compile Include="IWorkersController.cs" />
     <Compile Include="NullReceipt.cs" />
     <Compile Include="ConfirmReceipt.cs" />
+    <Compile Include="NullWorkersController.cs" />
     <Compile Include="PublishStatus.cs" />
     <Compile Include="Requester.cs" />
     <Compile Include="Threading\IThread.cs" />
@@ -78,6 +82,7 @@
     <Compile Include="QueueState.cs" />
     <Compile Include="TaskWorker.cs" />
     <Compile Include="WorkerPoolWorker.cs" />
+    <Compile Include="WorkerPoolWorkersController.cs" />
     <Compile Include="WorkerState.cs" />
     <Compile Include="Fault.cs" />
     <Compile Include="ErrorQueueFaultStrategy.cs" />

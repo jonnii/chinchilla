@@ -1,16 +1,21 @@
 using System;
 using System.Collections.Concurrent;
+using System.Threading;
 using Chinchilla.Threading;
 
 namespace Chinchilla
 {
-    public class WorkerPoolWorker : Worker
+    public class WorkerPoolWorker : Worker, IWorkerPoolWorker
     {
         private readonly int ordinal;
 
         private readonly BlockingCollection<IDelivery> deliveries;
 
         private readonly IThread thread;
+
+        private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+
+        private readonly ManualResetEventSlim pauseEvent = new ManualResetEventSlim(true);
 
         public WorkerPoolWorker(
             int ordinal,
@@ -56,8 +61,28 @@ namespace Chinchilla
             thread.Join();
         }
 
+        public void Pause()
+        {
+            pauseEvent.Reset();
+            cancellationTokenSource.Cancel();
+            Status = WorkerStatus.Paused;
+        }
+
+        public void Resume()
+        {
+            if (Status != WorkerStatus.Paused)
+            {
+                throw new InvalidOperationException(
+                    "Cannot resume this worker because it has not yet been paused");
+            }
+
+            Status = WorkerStatus.Idle;
+            pauseEvent.Set();
+        }
+
         public void Stop()
         {
+            pauseEvent.Set();
             IsStopping = true;
             Status = WorkerStatus.Stopping;
         }
@@ -83,11 +108,17 @@ namespace Chinchilla
         {
             while (!IsStopping)
             {
+                pauseEvent.Wait();
+
                 IDelivery delivery;
 
                 try
                 {
-                    delivery = deliveries.Take();
+                    delivery = deliveries.Take(cancellationTokenSource.Token);
+                }
+                catch (OperationCanceledException)
+                {
+                    continue;
                 }
                 catch (InvalidOperationException)
                 {

@@ -22,7 +22,7 @@ namespace Chinchilla.Integration.Features
 
                     WaitForDelivery();
 
-                    Assert.That(subscriber.GetState().TotalAcceptedMessages(), Is.EqualTo(100));
+                    Assert.That(subscriber.State.TotalAcceptedMessages(), Is.EqualTo(100));
                 }
             }
         }
@@ -41,7 +41,7 @@ namespace Chinchilla.Integration.Features
 
                     WaitForDelivery();
 
-                    Assert.That(subscriber.GetState().TotalAcceptedMessages(), Is.EqualTo(100));
+                    Assert.That(subscriber.State.TotalAcceptedMessages(), Is.EqualTo(100));
                 }
             }
         }

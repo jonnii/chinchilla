@@ -19,14 +19,14 @@ namespace Chinchilla.Integration.Features
 
                 WaitForDelivery();
 
-                var state = subscription.GetState();
+                var state = subscription.State;
 
                 var queueState = state.QueueStates.Single();
 
                 Assert.That(queueState.NumAcceptedMessages, Is.EqualTo(0));
                 Assert.That(queueState.NumFailedMessages, Is.EqualTo(0));
 
-                var workerStates = state.WorkerStates;
+                var workerStates = state.Workers;
 
                 Assert.That(workerStates.Length, Is.EqualTo(5));
                 foreach (var workerState in workerStates)
@@ -36,8 +36,8 @@ namespace Chinchilla.Integration.Features
 
                 subscription.Dispose();
 
-                state = subscription.GetState();
-                workerStates = state.WorkerStates;
+                state = subscription.State;
+                workerStates = state.Workers;
                 Assert.That(workerStates.Length, Is.EqualTo(5));
                 foreach (var workerState in workerStates)
                 {
