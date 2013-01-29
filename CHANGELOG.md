@@ -4,6 +4,7 @@
 
   * small interface changes
   * worker control, the ability to pause/resume a worker
+  * give subscriptions a name
 
 ## 0.1.9.1
 
