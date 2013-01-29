@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
 using Chinchilla.Integration.Features.Messages;
 using Chinchilla.Topologies.Model;
 using NUnit.Framework;
@@ -115,7 +114,7 @@ namespace Chinchilla.Integration.Features
                         publisher.Publish(new HelloWorldMessage { Message = "subscribe!" });
                     }
 
-                    Thread.Sleep(1000);
+                    WaitForDelivery();
                 }
 
                 Assert.That(numReceived, Is.GreaterThanOrEqualTo(100));

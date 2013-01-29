@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using Chinchilla.Api;
+﻿using Chinchilla.Api;
 using Chinchilla.Integration.Features.Consumers;
 using Chinchilla.Integration.Features.Messages;
 using NUnit.Framework;
@@ -21,7 +20,7 @@ namespace Chinchilla.Integration.Features
                         bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
                     }
 
-                    Thread.Sleep(1000);
+                    WaitForDelivery();
 
                     Assert.That(subscriber.GetState().TotalAcceptedMessages(), Is.EqualTo(100));
                 }
@@ -40,7 +39,7 @@ namespace Chinchilla.Integration.Features
                         bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
                     }
 
-                    Thread.Sleep(1000);
+                    WaitForDelivery();
 
                     Assert.That(subscriber.GetState().TotalAcceptedMessages(), Is.EqualTo(100));
                 }
@@ -59,7 +58,7 @@ namespace Chinchilla.Integration.Features
                         bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
                     }
 
-                    Thread.Sleep(1000);
+                    WaitForDelivery();
 
                     Assert.That(admin.Exists(IntegrationVHost, new Queue("custom-subscription-endpoint")), "did not create queue");
                 }

@@ -1,3 +1,4 @@
+using System.Threading;
 using Chinchilla.Api;
 using NUnit.Framework;
 
@@ -16,6 +17,11 @@ namespace Chinchilla.Integration.Features
             admin.Delete(IntegrationVHost);
             admin.Create(IntegrationVHost);
             admin.Create(IntegrationVHost, new User("guest"), Permission.All);
+        }
+
+        protected void WaitForDelivery()
+        {
+            Thread.Sleep(500);
         }
     }
 }

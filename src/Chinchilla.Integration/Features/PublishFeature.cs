@@ -110,7 +110,7 @@ namespace Chinchilla.Integration.Features
                         thread.Join();
                     }
 
-                    Thread.Sleep(5000);
+                    WaitForDelivery();
 
                     Assert.That(publisher.NumPublishedMessages, Is.EqualTo(1000));
                 }

@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using Chinchilla.Integration.Features.Consumers;
+﻿using Chinchilla.Integration.Features.Consumers;
 using Chinchilla.Integration.Features.Messages;
 using NUnit.Framework;
 
@@ -23,7 +22,7 @@ namespace Chinchilla.Integration.Features
                         new CapitalizeMessage("where am i?"),
                         response => { capitalized = response; });
 
-                    Thread.Sleep(1000);
+                    WaitForDelivery();
 
                     Assert.That(capitalized, Is.Not.Null);
                     Assert.That(capitalized.Result, Is.EqualTo("WHERE AM I?"));
@@ -43,7 +42,7 @@ namespace Chinchilla.Integration.Features
                     new CapitalizeMessage("where am i?"),
                     response => { capitalized = response; });
 
-                Thread.Sleep(1000);
+                WaitForDelivery();
 
                 Assert.That(capitalized, Is.Not.Null);
                 Assert.That(capitalized.Result, Is.EqualTo("WHERE AM I?"));

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
 using Chinchilla.Api;
 using Chinchilla.Integration.Features.Messages;
 using NUnit.Framework;
@@ -41,7 +40,7 @@ namespace Chinchilla.Integration.Features
                     bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
                 }
 
-                Thread.Sleep(1000);
+                WaitForDelivery();
 
                 Assert.That(lastReceived, Is.Not.Null);
                 Assert.That(lastReceived.Message, Is.EqualTo("subscribe!"));
@@ -65,7 +64,7 @@ namespace Chinchilla.Integration.Features
                     bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
                 }
 
-                Thread.Sleep(1000);
+                WaitForDelivery();
 
                 Assert.That(lastReceived, Is.Not.Null);
                 Assert.That(lastReceived.Message, Is.EqualTo("subscribe!"));
@@ -106,7 +105,7 @@ namespace Chinchilla.Integration.Features
                         });
                     }
 
-                    Thread.Sleep(1000);
+                    WaitForDelivery();
 
                     Assert.That(lastReceived, Is.Not.Null);
                     Assert.That(lastReceived.Message, Is.EqualTo("subscribe!"));
@@ -146,7 +145,7 @@ namespace Chinchilla.Integration.Features
                     bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
                 }
 
-                Thread.Sleep(1000);
+                WaitForDelivery();
 
                 Assert.That(numReceived, Is.EqualTo(100));
             }
@@ -162,7 +161,7 @@ namespace Chinchilla.Integration.Features
                 var subscription = bus.Subscribe((HelloWorldMessage hwm) =>
                 {
                     Console.WriteLine("!!! Starting message");
-                    Thread.Sleep(2000);
+                    WaitForDelivery();
                     ++seen;
                     Console.WriteLine("!!! Finished message");
                 }, o => o.DeliverUsing<WorkerPoolDeliveryStrategy>(s => s.NumWorkers = 1));
@@ -172,7 +171,7 @@ namespace Chinchilla.Integration.Features
                     Message = "subscribe!"
                 });
 
-                Thread.Sleep(500);
+                WaitForDelivery();
 
                 subscription.Dispose();
             }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using Chinchilla.Configuration;
 using Chinchilla.Integration.Features.Messages;
 using Chinchilla.Topologies;
@@ -38,7 +37,7 @@ namespace Chinchilla.Integration.Features
                         }
                     }
 
-                    Thread.Sleep(1000);
+                    WaitForDelivery();
                 }
 
                 Assert.That(lastReceived, Is.Not.Null);

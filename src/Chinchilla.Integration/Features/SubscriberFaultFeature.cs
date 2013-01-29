@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
 using Chinchilla.Api;
 using Chinchilla.Integration.Features.Messages;
 using NUnit.Framework;
@@ -23,7 +22,7 @@ namespace Chinchilla.Integration.Features
 
                 bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
 
-                Thread.Sleep(1000);
+                WaitForDelivery();
 
                 Assert.That(numExceptions, Is.EqualTo(1));
             }
@@ -37,7 +36,7 @@ namespace Chinchilla.Integration.Features
                 bus.Subscribe((HelloWorldMessage hwm) => { throw new Exception("ERMAGHERD, EXPLODE!!11"); });
                 bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
 
-                Thread.Sleep(200);
+                WaitForDelivery();
 
                 Assert.That(admin.Exists(IntegrationVHost, new Queue("ErrorQueue")));
                 Assert.That(admin.Exists(IntegrationVHost, new Exchange("ErrorExchange")));

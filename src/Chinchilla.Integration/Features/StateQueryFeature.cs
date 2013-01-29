@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
 using Chinchilla.Integration.Features.Messages;
 using NUnit.Framework;
 
@@ -18,7 +17,7 @@ namespace Chinchilla.Integration.Features
 
                 var subscription = bus.Subscribe(handler, o => o.DeliverUsing<WorkerPoolDeliveryStrategy>(s => s.NumWorkers = 5));
 
-                Thread.Sleep(1000);
+                WaitForDelivery();
 
                 var state = subscription.GetState();
 
