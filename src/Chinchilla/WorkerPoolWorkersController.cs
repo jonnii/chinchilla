@@ -43,6 +43,7 @@ namespace Chinchilla
 
                 throw new ChinchillaException(message);
             }
+
             return worker;
         }
     }
