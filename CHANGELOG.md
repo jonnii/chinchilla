@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 0.1.10.1
+
+  * update to latest rabbit mq client
+
 ## 0.1.10
 
   * small interface changes
