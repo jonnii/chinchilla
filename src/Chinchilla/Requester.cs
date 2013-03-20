@@ -23,6 +23,18 @@ namespace Chinchilla
             this.bus = bus;
         }
 
+        public void Start()
+        {
+            subscription = bus.Subscribe<TResponse>(
+                DispatchToRegisteredResponseHandler,
+                b => b
+                         .SetTopology<DefaultRequestTopology>()
+                         .DeliverUsing<TaskDeliveryStrategy>());
+
+            var queue = subscription.Queues.First();
+            publisher = bus.CreatePublisher<TRequest>(p => p.ReplyTo(queue.Name));
+        }
+
         public void Request(TRequest message, Action<TResponse> onResponse)
         {
             var correlationId = message.CorrelationId.ToString();
@@ -88,18 +100,6 @@ namespace Chinchilla
             {
                 subscription.Dispose();
             }
-        }
-
-        public void Start()
-        {
-            subscription = bus.Subscribe<TResponse>(
-                DispatchToRegisteredResponseHandler,
-                b => b
-                    .SetTopology<DefaultRequestTopology>()
-                    .DeliverUsing<TaskDeliveryStrategy>());
-
-            var queue = subscription.Queues.First();
-            publisher = bus.CreatePublisher<TRequest>(p => p.ReplyTo(queue.Name));
         }
     }
 }
