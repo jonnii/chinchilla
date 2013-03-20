@@ -11,9 +11,11 @@ namespace Chinchilla.Sample.Timeouts.Consumer
 
             var exchange = topology.DefineExchange(endpoint.MessageType, ExchangeType.Topic);
 
+            // define an additional messages timedout topic exchange 
             topology.DefineExchange("messages.timedout", ExchangeType.Topic);
-
             topology.SubscribeQueue = topology.DefineQueue(endpoint.Name);
+
+            // on the subscription queue we need to specify what the dead letter exchange name is
             topology.SubscribeQueue.DeadLetterExchange = "messages.timedout";
             topology.SubscribeQueue.BindTo(exchange);
 

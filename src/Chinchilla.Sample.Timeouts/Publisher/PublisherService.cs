@@ -19,9 +19,14 @@ namespace Chinchilla.Sample.Timeouts.Publisher
         {
             isRunning = true;
 
+            // create a subscription to timeout messages 
+            // with a custom timeout subscription topology
+
             bus.Subscribe<TimeoutMessage>(
                 OnMessageTimeout,
                 s => s.SetTopology<TimeoutSubscriptionTopology>());
+
+            // in order to get timeouts our 
 
             using (var requester = bus.CreateRequester<TimeoutMessage, TimeoutResponse>())
             {

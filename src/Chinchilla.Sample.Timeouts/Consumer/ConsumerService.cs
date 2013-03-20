@@ -21,6 +21,8 @@ namespace Chinchilla.Sample.Timeouts.Consumer
 
         private void ConfigureWithDeadLetter(ISubscriptionBuilder builder)
         {
+            // configure our subscription with a custom dead letter topology
+
             builder
                 .SetTopology<DeadLetterTopology>()
                 .DeliverUsing<WorkerPoolDeliveryStrategy>(s => s.NumWorkers = 1)

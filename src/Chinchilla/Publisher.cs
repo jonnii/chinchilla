@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading;
 using Chinchilla.Topologies.Model;
 using RabbitMQ.Client;
