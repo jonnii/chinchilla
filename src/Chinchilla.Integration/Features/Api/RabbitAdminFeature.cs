@@ -10,7 +10,7 @@ namespace Chinchilla.Integration.Features.Api
         [Test]
         public void ShouldCreateVirtualHost()
         {
-            var api = new RabbitAdmin("http://localhost:55672/api");
+            var api = new RabbitAdmin("http://localhost:15672/api");
 
             api.Delete(new VirtualHost("test"));
 
