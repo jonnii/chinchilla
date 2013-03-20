@@ -1,9 +1,7 @@
-using System;
+using System.Collections.Generic;
 using System.Threading;
-using Chinchilla.Logging;
 using Chinchilla.Topologies.Model;
 using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
 
 namespace Chinchilla
 {
@@ -11,8 +9,6 @@ namespace Chinchilla
 
     public class Publisher<TMessage> : Publisher, IPublisher<TMessage>
     {
-        private readonly ILogger logger = Logger.Create<Publisher<TMessage>>();
-
         private readonly IRouter router;
 
         private readonly IMessageSerializer serializer;
@@ -93,6 +89,12 @@ namespace Chinchilla
                 defaultProperties.CorrelationId = correlated.CorrelationId.ToString();
             }
 
+            var timeout = message as IHasTimeOut;
+            if (timeout != null)
+            {
+                defaultProperties.Expiration = timeout.Timeout.TotalMilliseconds.ToString();
+            }
+
             var replyTo = router.ReplyTo();
             if (!string.IsNullOrEmpty(replyTo))
             {
@@ -100,19 +102,6 @@ namespace Chinchilla
             }
 
             return defaultProperties;
-        }
-
-        public void EnableConfirms()
-        {
-            logger.InfoFormat("Enabling publisher confirms on {0}", this);
-
-            //ModelReference.OnReconnect();
-
-            ModelReference.Execute(m => m.ConfirmSelect());
-            ModelReference.Execute(m => m.BasicAcks += delegate(IModel model, BasicAckEventArgs args)
-            {
-                Console.WriteLine(args.DeliveryTag);
-            });
         }
 
         public override void Dispose()

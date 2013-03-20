@@ -26,6 +26,8 @@ namespace Chinchilla.Topologies.Model
 
         public TimeSpan? QueueAutoExpire { get; set; }
 
+        public string DeadLetterExchange { get; set; }
+
         public override void Visit(ITopologyVisitor visitor)
         {
             visitor.Visit(this);

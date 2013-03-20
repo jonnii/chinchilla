@@ -11,6 +11,9 @@ namespace Chinchilla.Specifications.Topologies.Model
         {
             It should_not_have_bindings = () =>
                 Subject.HasBindings.ShouldBeFalse();
+
+            It should_not_have_deadletter_exchange = () =>
+                Subject.DeadLetterExchange.ShouldBeNull();
         }
 
         [Subject(typeof(Queue))]

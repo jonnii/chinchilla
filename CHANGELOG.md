@@ -1,5 +1,10 @@
 # CHANGELOG
 
+# 0.1.11
+
+  * add support for messages with a custom timeout
+  * add sample showing how to use timeouts
+
 # 0.1.10.2
 
   * update to latest rabbit mq client

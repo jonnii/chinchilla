@@ -40,6 +40,11 @@ namespace Chinchilla.Topologies.Model
                         args.Add("x-expires", queue.QueueAutoExpire.Value.Milliseconds);
                     }
 
+                    if (!string.IsNullOrEmpty(queue.DeadLetterExchange))
+                    {
+                        args.Add("x-dead-letter-exchange", queue.DeadLetterExchange);
+                    }
+
                     model.Execute(m =>
                         m.QueueDeclare(
                             queue.Name,

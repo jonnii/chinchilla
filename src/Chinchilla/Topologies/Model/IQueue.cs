@@ -13,5 +13,7 @@ namespace Chinchilla.Topologies.Model
         TimeSpan? MessageTimeToLive { get; set; }
 
         TimeSpan? QueueAutoExpire { get; set; }
+
+        string DeadLetterExchange { get; set; }
     }
 }

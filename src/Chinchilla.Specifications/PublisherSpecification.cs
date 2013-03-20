@@ -128,6 +128,26 @@ namespace Chinchilla.Specifications
             static TestRequestMessage message;
         }
 
+        [Subject(typeof(Publisher<>))]
+        public class when_creating_properties_with_message_with_timeout_support : with_basic_properties<Publisher<TestRequestMessage>>
+        {
+            Establish context = () =>
+                 message = new TestRequestMessage();
+
+            Because of = () =>
+                properties = Subject.CreateProperties(message);
+
+            It should_set_expiration = () =>
+                properties.IsExpirationPresent().ShouldBeTrue();
+
+            It should_set_expiration_ = () =>
+                properties.Expiration.ShouldEqual("60000");
+
+            static IBasicProperties properties;
+
+            static TestRequestMessage message;
+        }
+
         public class with_basic_properties<TSubject> : WithSubject<TSubject>
             where TSubject : class
         {
