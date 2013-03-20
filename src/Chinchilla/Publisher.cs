@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Threading;
 using Chinchilla.Topologies.Model;
 using RabbitMQ.Client;
@@ -50,6 +51,16 @@ namespace Chinchilla
             var defaultProperties = CreateProperties(message);
             var routingKey = router.Route(message);
 
+            if (routingKey == null)
+            {
+                var exceptionMessage = string.Format(
+                    "An error occured while trying to publish a message of type {0} because it has a null " +
+                    "routing key, this could be because IHasRoutingKey implemented, but the RoutingKey property " +
+                    "returned null.", typeof(TMessage).Name);
+
+                throw new ChinchillaException(exceptionMessage);
+            }
+
             var publishReceipt = ModelReference.Execute(
                 model => PublishWithReceipt(
                     model,
@@ -91,7 +102,8 @@ namespace Chinchilla
             var timeout = message as IHasTimeOut;
             if (timeout != null)
             {
-                defaultProperties.Expiration = timeout.Timeout.TotalMilliseconds.ToString();
+                var formattedExpiration = timeout.Timeout.TotalMilliseconds.ToString(CultureInfo.InvariantCulture);
+                defaultProperties.Expiration = formattedExpiration;
             }
 
             var replyTo = router.ReplyTo();

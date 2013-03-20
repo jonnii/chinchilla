@@ -40,6 +40,8 @@ namespace Chinchilla.Specifications
                 model = An<IModel>();
                 properties = An<IBasicProperties>();
 
+                The<IRouter>().WhenToldTo(r => r.Route(Param.IsAny<TestMessage>())).Return("#");
+
                 The<IModelReference>().WhenToldTo(r => r.Execute(Param.IsAny<Action<IModel>>()))
                     .Callback<Action<IModel>>(act => act(model));
 
