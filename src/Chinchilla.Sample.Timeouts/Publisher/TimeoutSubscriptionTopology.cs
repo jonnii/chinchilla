@@ -1,4 +1,5 @@
-﻿using Chinchilla.Topologies;
+﻿using System;
+using Chinchilla.Topologies;
 using Chinchilla.Topologies.Model;
 
 namespace Chinchilla.Sample.Timeouts.Publisher
@@ -11,8 +12,11 @@ namespace Chinchilla.Sample.Timeouts.Publisher
 
             var exchange = topology.DefineExchange("messages.timedout", ExchangeType.Topic);
 
-            topology.SubscribeQueue = topology.DefineQueue();
-            topology.SubscribeQueue.BindTo(exchange);
+            var queueName = "Timeouts_" + Guid.NewGuid();
+
+            topology.SubscribeQueue = topology.DefineQueue(queueName);
+            topology.SubscribeQueue.IsAutoDelete = true;
+            topology.SubscribeQueue.BindTo(exchange, queueName);
 
             topology.PublishExchange = exchange;
 

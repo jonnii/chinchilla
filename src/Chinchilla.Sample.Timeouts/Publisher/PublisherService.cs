@@ -21,20 +21,37 @@ namespace Chinchilla.Sample.Timeouts.Publisher
 
             // create a subscription to timeout messages 
             // with a custom timeout subscription topology
-
-            bus.Subscribe<TimeoutMessage>(
+            var subscription = bus.Subscribe<TimeoutMessage>(
                 OnMessageTimeout,
                 s => s.SetTopology<TimeoutSubscriptionTopology>());
 
-            // in order to get timeouts our 
+            // get the name of our subscription queue
+            var timeoutSubscriptionQueueName = subscription.Queues[0].Name;
 
+            // this subscription should never be fired
+            // create a subscription to timeout messages 
+            // with a custom timeout subscription topology
+            bus.Subscribe<TimeoutMessage>(
+                OnMessageTimeoutAlt,
+                s => s.SetTopology<TimeoutSubscriptionTopology>());
+
+            // create a standard requester
             using (var requester = bus.CreateRequester<TimeoutMessage, TimeoutResponse>())
             {
                 while (isRunning)
                 {
                     Console.WriteLine("[Publisher] Publishing new timeout message");
 
-                    requester.Request(new TimeoutMessage { JobId = Guid.NewGuid().ToString() }, OnResponse);
+                    // set the routing key on each message to the subscription
+                    // queue name, this will route our timeout message to our
+                    // timeout subscription
+                    var message = new TimeoutMessage
+                    {
+                        JobId = Guid.NewGuid().ToString(),
+                        RoutingKey = timeoutSubscriptionQueueName
+                    };
+
+                    requester.Request(message, OnResponse);
                     Thread.Sleep(3000);
                 }
             }
@@ -48,6 +65,11 @@ namespace Chinchilla.Sample.Timeouts.Publisher
         private void OnMessageTimeout(TimeoutMessage message)
         {
             Console.WriteLine("[Publisher] MESSAGE TIMEDOUT: {0}", message.JobId);
+        }
+
+        private void OnMessageTimeoutAlt(TimeoutMessage message)
+        {
+            throw new Exception("Other timeout subscriber, should never be called");
         }
 
         public void Stop()

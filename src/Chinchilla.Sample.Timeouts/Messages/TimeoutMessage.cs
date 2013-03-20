@@ -2,7 +2,7 @@
 
 namespace Chinchilla.Sample.Timeouts.Messages
 {
-    public class TimeoutMessage : IHasTimeOut, ICorrelated
+    public class TimeoutMessage : IHasTimeOut, ICorrelated, IHasRoutingKey
     {
         public TimeoutMessage()
         {
@@ -17,5 +17,7 @@ namespace Chinchilla.Sample.Timeouts.Messages
         {
             get { return TimeSpan.FromSeconds(2); }
         }
+
+        public string RoutingKey { get; set; }
     }
 }
