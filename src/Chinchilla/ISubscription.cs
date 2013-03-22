@@ -32,6 +32,9 @@ namespace Chinchilla
         /// </summary>
         SubscriptionState State { get; }
 
+        /// <summary>
+        /// Gets a workers controller for this subscription
+        /// </summary>
         IWorkersController Workers { get; }
 
         /// <summary>
