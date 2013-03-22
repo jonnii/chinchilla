@@ -100,5 +100,12 @@ namespace Chinchilla
         /// Gets all the subscription state
         /// </summary>
         SubscriptionState[] GetState();
+
+        /// <summary>
+        /// Finds a subscription by name
+        /// </summary>
+        /// <param name="subscriptionName">The name of the subscription to lookup</param>
+        /// <returns>A subscription</returns>
+        ISubscription FindSubscription(string subscriptionName);
     }
 }

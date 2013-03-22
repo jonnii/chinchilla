@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 0.1.12
+  
+  * ability to get a subscription by name from the bus
+
 # 0.1.11
 
   * add support for messages with a custom timeout

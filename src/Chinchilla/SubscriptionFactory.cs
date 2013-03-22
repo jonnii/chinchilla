@@ -82,6 +82,21 @@ namespace Chinchilla
             return Create(subscription);
         }
 
+        public ISubscription FindByName(string name)
+        {
+            var subscription = Tracked.FirstOrDefault(s => s.Name == name);
+
+            if (subscription == null)
+            {
+                var message = string.Format(
+                    "Could not find a subscription with the name: {0}", name);
+
+                throw new ChinchillaException(message);
+            }
+
+            return subscription;
+        }
+
         /// <summary>
         /// build delivery queues for each endpoint, where each delivery queue
         /// will correspond to a basic consumer

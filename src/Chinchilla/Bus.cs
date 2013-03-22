@@ -90,6 +90,11 @@ namespace Chinchilla
                 .ToArray();
         }
 
+        public ISubscription FindSubscription(string subscriptionName)
+        {
+            return subscriptionFactory.FindByName(subscriptionName);
+        }
+
         public ISubscription Subscribe(IConsumer consumer)
         {
             logger.DebugFormat("Registering consumer {0}", consumer.GetType().Name);

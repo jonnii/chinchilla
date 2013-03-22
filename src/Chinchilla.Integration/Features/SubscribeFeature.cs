@@ -22,6 +22,19 @@ namespace Chinchilla.Integration.Features
         }
 
         [Test]
+        public void ShouldFindSubscriptionByName()
+        {
+            using (var bus = Depot.Connect("localhost/integration"))
+            {
+                var existing = bus.Subscribe((HelloWorldMessage hwm) => { });
+
+                var subscription = bus.FindSubscription(existing.Name);
+
+                Assert.That(subscription, Is.Not.Null);
+            }
+        }
+
+        [Test]
         public void ShouldReceivedPublishedMessage()
         {
             using (var bus = Depot.Connect("localhost/integration"))
