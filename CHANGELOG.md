@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 0.1.12.1
+
+  * add auto delete subscriber topology
+
 # 0.1.12
   
   * ability to get a subscription by name from the bus
