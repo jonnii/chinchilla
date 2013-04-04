@@ -31,7 +31,7 @@ namespace Chinchilla
 
             reply.CorrelationId = new Guid(Delivery.CorrelationId);
 
-            var topology = new DefaultResponseTopology();
+            var topology = new DefaultResponseTopologyBuilder();
 
             using (var publisher = Bus.CreatePublisher<TMessage>(b => b
                 .SetTopology(topology)

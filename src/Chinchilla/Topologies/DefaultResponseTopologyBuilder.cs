@@ -2,7 +2,7 @@
 
 namespace Chinchilla.Topologies
 {
-    public class DefaultResponseTopology : IMessageTopologyBuilder
+    public class DefaultResponseTopologyBuilder : IMessageTopologyBuilder
     {
         public IMessageTopology Build(IEndpoint endpoint)
         {

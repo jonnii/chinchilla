@@ -1,6 +1,6 @@
 ﻿namespace Chinchilla.Topologies
 {
-    public class DefaultRequestTopology : IMessageTopologyBuilder
+    public class DefaultRequestTopologyBuilder : IMessageTopologyBuilder
     {
         public IMessageTopology Build(IEndpoint endpoint)
         {
