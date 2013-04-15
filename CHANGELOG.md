@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 0.1.12.2
+
+  * update packages
+
 # 0.1.12.1
 
   * add auto delete subscriber topology

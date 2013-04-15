@@ -35,11 +35,11 @@
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.5.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SpeakEasy, Version=0.1.13.1, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="SpeakEasy, Version=0.1.13.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\SpeakEasy.0.1.13.1\lib\net40\SpeakEasy.dll</HintPath>
+      <HintPath>..\packages\SpeakEasy.0.1.13.2\lib\net40\SpeakEasy.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
