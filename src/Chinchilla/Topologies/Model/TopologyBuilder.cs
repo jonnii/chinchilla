@@ -37,12 +37,17 @@ namespace Chinchilla.Topologies.Model
 
                     if (queue.QueueAutoExpire.HasValue)
                     {
-                        args.Add("x-expires", queue.QueueAutoExpire.Value.Milliseconds);
+                        args.Add("x-expires", queue.QueueAutoExpire.Value.TotalMilliseconds);
                     }
 
                     if (!string.IsNullOrEmpty(queue.DeadLetterExchange))
                     {
                         args.Add("x-dead-letter-exchange", queue.DeadLetterExchange);
+                    }
+
+                    if (queue.MessageTimeToLive.HasValue)
+                    {
+                        args.Add("x-message-ttl", (int)queue.MessageTimeToLive.Value.TotalMilliseconds);
                     }
 
                     model.Execute(m =>
