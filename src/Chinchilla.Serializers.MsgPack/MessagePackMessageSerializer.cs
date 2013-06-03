@@ -1,14 +1,12 @@
-﻿using MsgPack;
+﻿using MsgPack.Serialization;
 
 namespace Chinchilla.Serializers.MsgPack
 {
     public class MessagePackMessageSerializer : IMessageSerializer
     {
-        private readonly ObjectPacker packer;
-
-        public MessagePackMessageSerializer()
+        public class MessageWrapper<T>
         {
-            packer = new ObjectPacker();
+            public T Body { get; set; }
         }
 
         public string ContentType
@@ -18,15 +16,15 @@ namespace Chinchilla.Serializers.MsgPack
 
         public byte[] Serialize<T>(IMessage<T> message)
         {
-
-            var packed = packer.Pack(message);
-            return packed;
+            var packer = MessagePackSerializer.Create<MessageWrapper<T>>();
+            return packer.PackSingleObject(new MessageWrapper<T> { Body = message.Body });
         }
 
         public IMessage<T> Deserialize<T>(byte[] message)
         {
-            var unpacked = packer.Unpack<Message<T>>(message);
-            return unpacked;
+            var packer = MessagePackSerializer.Create<MessageWrapper<T>>();
+            var wrapped = packer.UnpackSingleObject(message);
+            return new Message<T>(wrapped.Body);
         }
     }
 }
