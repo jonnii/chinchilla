@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Chinchilla.Logging;
+using System.Threading;
 using RabbitMQ.Client;
+using RabbitMQ.Client.Exceptions;
+using Chinchilla.Logging;
 
 namespace Chinchilla
 {
@@ -69,13 +71,30 @@ namespace Chinchilla
 
         private void TryReconnect(IConnection connection)
         {
-            logger.DebugFormat(" -> Attempting reconnect");
+            int numTries = 0;
 
-            var newConnection = CreateConnection();
+            while (!connection.IsOpen)
+            {
+                try
+                {
+                    numTries++;
+                    logger.DebugFormat(" -> Attempting reconnect");
 
-            var connectionEndPoint = connection.Endpoint.ToString();
-            var modelFactory = modelFactories[connectionEndPoint];
-            modelFactory.Reconnect(newConnection);
+                    var newConnection = CreateConnection();
+
+                    var connectionEndPoint = connection.Endpoint.ToString();
+                    var modelFactory = modelFactories[connectionEndPoint];
+                    modelFactory.Reconnect(newConnection);
+                }
+                catch (BrokerUnreachableException ex)
+                {
+                    logger.DebugFormat("Reconnect attempt {0} failed: {1}", numTries, connection.Endpoint.ToString());
+
+                    // Increase stand-off time after each retry, but never wait longer than 5 seconds
+                    int standoffTime = Math.Min(5000, numTries * 100);
+                    Thread.Sleep(standoffTime);
+                }
+            }
         }
     }
 }
