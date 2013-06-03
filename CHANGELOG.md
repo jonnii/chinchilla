@@ -1,5 +1,10 @@
 # CHANGELOG
 
+# 0.1.12.5
+
+  * bug fix for per message ttl (https://github.com/jonnii/chinchilla/pull/3)
+  * added contributor cocowalla (https://github.com/cocowalla)
+
 # 0.1.12.4
 
   * update packages

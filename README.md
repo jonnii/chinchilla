@@ -52,3 +52,8 @@ each and every one of them before making a choice. I suggest looking at:
 * RabbitBus (https://github.com/derekgreer/rabbitBus)
 
 Each one is slightly different, and depending on your needs might fit your requirements better.
+
+Contributors
+============
+
+ * cocowalla (https://github.com/cocowalla)
