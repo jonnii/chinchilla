@@ -71,12 +71,12 @@ namespace Chinchilla
 
         private void TryReconnect(IConnection connection)
         {
-            int numTries = 0;
+            var numTries = 0;
 
             while (!connection.IsOpen)
             {
                 // Increase stand-off time after each retry, but never wait longer than 5 seconds
-                int standoffTime = Math.Min(5000, numTries * 100);
+                var standoffTime = Math.Min(5000, numTries * 100);
                 Thread.Sleep(standoffTime);
 
                 logger.DebugFormat(" -> Attempting reconnect");
@@ -87,7 +87,7 @@ namespace Chinchilla
                 {
                     newConnection = CreateConnection();
                 }
-                catch (BrokerUnreachableException ex)
+                catch (BrokerUnreachableException)
                 {
                     logger.DebugFormat("Reconnect attempt {0} failed: {1}", numTries, connection.Endpoint.ToString());
                     numTries++;
