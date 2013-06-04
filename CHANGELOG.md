@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 0.1.12.6
+
+  * [cocowalla] default connection factory will retry connection with a delay if broker cannot be reached
+
 # 0.1.12.5
 
   * bug fix for per message ttl (https://github.com/jonnii/chinchilla/pull/3)
