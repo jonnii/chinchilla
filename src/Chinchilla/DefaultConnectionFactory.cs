@@ -73,15 +73,15 @@ namespace Chinchilla
         {
             var numTries = 0;
 
-            while (!connection.IsOpen)
+            IConnection newConnection = null;
+
+            do
             {
                 // Increase stand-off time after each retry, but never wait longer than 5 seconds
                 var standoffTime = Math.Min(5000, numTries * 100);
                 Thread.Sleep(standoffTime);
 
                 logger.DebugFormat(" -> Attempting reconnect");
-
-                IConnection newConnection;
 
                 try
                 {
@@ -97,7 +97,7 @@ namespace Chinchilla
                 var connectionEndPoint = connection.Endpoint.ToString();
                 var modelFactory = modelFactories[connectionEndPoint];
                 modelFactory.Reconnect(newConnection);
-            }
+            } while (!newConnection.IsOpen);
         }
     }
 }
