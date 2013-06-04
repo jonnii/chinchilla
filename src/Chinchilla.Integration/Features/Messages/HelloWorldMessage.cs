@@ -4,7 +4,7 @@ namespace Chinchilla.Integration.Features.Messages
     {
         public string Message { get; set; }
 
-        public string RoutingKey
+        string IHasRoutingKey.RoutingKey
         {
             get { return "messages." + Message; }
         }
