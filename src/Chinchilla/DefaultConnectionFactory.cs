@@ -75,25 +75,28 @@ namespace Chinchilla
 
             while (!connection.IsOpen)
             {
+                // Increase stand-off time after each retry, but never wait longer than 5 seconds
+                int standoffTime = Math.Min(5000, numTries * 100);
+                Thread.Sleep(standoffTime);
+
+                logger.DebugFormat(" -> Attempting reconnect");
+
+                IConnection newConnection;
+
                 try
                 {
-                    numTries++;
-                    logger.DebugFormat(" -> Attempting reconnect");
-
-                    var newConnection = CreateConnection();
-
-                    var connectionEndPoint = connection.Endpoint.ToString();
-                    var modelFactory = modelFactories[connectionEndPoint];
-                    modelFactory.Reconnect(newConnection);
+                    newConnection = CreateConnection();
                 }
                 catch (BrokerUnreachableException ex)
                 {
                     logger.DebugFormat("Reconnect attempt {0} failed: {1}", numTries, connection.Endpoint.ToString());
-
-                    // Increase stand-off time after each retry, but never wait longer than 5 seconds
-                    int standoffTime = Math.Min(5000, numTries * 100);
-                    Thread.Sleep(standoffTime);
+                    numTries++;
+                    continue;
                 }
+
+                var connectionEndPoint = connection.Endpoint.ToString();
+                var modelFactory = modelFactories[connectionEndPoint];
+                modelFactory.Reconnect(newConnection);
             }
         }
     }
