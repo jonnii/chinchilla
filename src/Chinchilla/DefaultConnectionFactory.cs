@@ -25,7 +25,11 @@ namespace Chinchilla
         public DefaultConnectionFactory(ConnectionFactory connectionFactory)
         {
             this.connectionFactory = connectionFactory;
+
+            MaxRetries = 100;
         }
+
+        public int MaxRetries { get; set; }
 
         public IModelFactory Create(Uri uri)
         {
@@ -39,9 +43,41 @@ namespace Chinchilla
 
         private IConnection CreateConnection()
         {
-            var connection = connectionFactory.CreateConnection();
-            connection.ConnectionShutdown += ConnectionOnConnectionShutdown;
-            return connection;
+            var newConnection = CreateConnectionWithRetries();
+
+            newConnection.ConnectionShutdown += ConnectionOnConnectionShutdown;
+
+            return newConnection;
+        }
+
+        private IConnection CreateConnectionWithRetries()
+        {
+            var numTries = 0;
+
+            while (numTries < MaxRetries)
+            {
+                // Increase stand-off time after each retry, but never wait longer than 5 seconds
+                var standoffTime = Math.Min(5000, numTries * 100);
+
+                Thread.Sleep(standoffTime);
+
+                logger.DebugFormat(" -> Attempting reconnect");
+
+                try
+                {
+                    return connectionFactory.CreateConnection();
+                }
+                catch (BrokerUnreachableException)
+                {
+                    logger.DebugFormat("Reconnect attempt {0} failed.", numTries);
+                    ++numTries;
+                }
+            }
+
+            var message = string.Format(
+                "Could not create connection, the number of retries ({0}) was exceeded", MaxRetries);
+
+            throw new ChinchillaException(message);
         }
 
         private IModelFactory CreateModelFactory(IConnection connection)
@@ -71,33 +107,11 @@ namespace Chinchilla
 
         private void TryReconnect(IConnection connection)
         {
-            var numTries = 0;
+            var newConnection = CreateConnection();
+            var connectionEndPoint = connection.Endpoint.ToString();
 
-            IConnection newConnection = null;
-
-            do
-            {
-                // Increase stand-off time after each retry, but never wait longer than 5 seconds
-                var standoffTime = Math.Min(5000, numTries * 100);
-                Thread.Sleep(standoffTime);
-
-                logger.DebugFormat(" -> Attempting reconnect");
-
-                try
-                {
-                    newConnection = CreateConnection();
-                }
-                catch (BrokerUnreachableException)
-                {
-                    logger.DebugFormat("Reconnect attempt {0} failed: {1}", numTries, connection.Endpoint.ToString());
-                    numTries++;
-                    continue;
-                }
-
-                var connectionEndPoint = connection.Endpoint.ToString();
-                var modelFactory = modelFactories[connectionEndPoint];
-                modelFactory.Reconnect(newConnection);
-            } while (!newConnection.IsOpen);
+            var modelFactory = modelFactories[connectionEndPoint];
+            modelFactory.Reconnect(newConnection);
         }
     }
 }
