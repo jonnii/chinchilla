@@ -13,6 +13,8 @@ namespace Chinchilla
 
         private readonly ConnectionFactory connectionFactory;
 
+        private readonly SslOption sslOptions;
+
         private readonly Dictionary<string, IModelFactory> modelFactories =
             new Dictionary<string, IModelFactory>();
 
@@ -25,6 +27,13 @@ namespace Chinchilla
         public DefaultConnectionFactory(ConnectionFactory connectionFactory)
         {
             this.connectionFactory = connectionFactory;
+            this.sslOptions = this.connectionFactory.Ssl;
+        }
+
+        public DefaultConnectionFactory(SslOption sslOptions)
+            : this(new ConnectionFactory())
+        {
+            this.sslOptions = sslOptions;
         }
 
         public IModelFactory Create(Uri uri)
@@ -32,6 +41,9 @@ namespace Chinchilla
             logger.InfoFormat("Creating connnection for {0}", uri);
 
             connectionFactory.Uri = uri.ToString();
+
+            // Set SSL options *after* the URI, as setting the URI removes the SSL settings
+            connectionFactory.Ssl = this.sslOptions;
 
             var connection = CreateConnection();
             return CreateModelFactory(connection);
