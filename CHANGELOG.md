@@ -3,10 +3,11 @@
 # 0.1.12.6
 
   * [cocowalla] default connection factory will retry connection with a delay if broker cannot be reached
+  * [cocowalla] add support for setting ssl options on default connection factory
 
 # 0.1.12.5
 
-  * bug fix for per message ttl (https://github.com/jonnii/chinchilla/pull/3)
+  * [cocowalla] bug fix for per message ttl
   * added contributor cocowalla (https://github.com/cocowalla)
 
 # 0.1.12.4
