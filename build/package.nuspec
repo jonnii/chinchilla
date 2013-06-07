@@ -15,7 +15,7 @@
     <tags>rabbitmq chinchilla</tags>
     <dependencies>
       <dependency id="Newtonsoft.Json" version="5.0" />
-      <dependency id="RabbitMQ.Client" version="3.0" />
+      <dependency id="RabbitMQ.Client" version="3.1" />
     </dependencies>
   </metadata>
 </package>

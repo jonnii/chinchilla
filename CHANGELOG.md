@@ -2,6 +2,7 @@
 
 # 0.1.12.6
 
+  * update to rabbitmq client 3.1
   * [cocowalla] default connection factory will retry connection with a delay if broker cannot be reached
   * [cocowalla] add support for setting ssl options on default connection factory
 
