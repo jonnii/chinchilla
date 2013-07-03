@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 0.1.12.7
+
+  * [cocowalla] Don't attempt reconnect on auth errors
+
 # 0.1.12.6
 
   * update to rabbitmq client 3.1
