@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Security.Authentication;
 using System.Threading;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Exceptions;
@@ -75,8 +76,14 @@ namespace Chinchilla
                 {
                     return connectionFactory.CreateConnection();
                 }
-                catch (BrokerUnreachableException)
+                catch (BrokerUnreachableException ex)
                 {
+                    if (ex.InnerException is AuthenticationException)
+                    {
+                        logger.Error(ex.InnerException);
+                        throw;
+                    }
+
                     logger.DebugFormat("Reconnect attempt {0} failed.", numTries);
                     ++numTries;
                 }
