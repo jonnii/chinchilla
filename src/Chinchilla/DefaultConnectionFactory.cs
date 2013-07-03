@@ -41,9 +41,9 @@ namespace Chinchilla
             connectionFactory.Uri = uri.ToString();
 
             // Set SSL options *after* the URI, as setting the URI removes the SSL settings
-            if (this.SslOptions != null)
+            if (SslOptions != null)
             {
-                connectionFactory.Ssl = this.SslOptions;
+                connectionFactory.Ssl = SslOptions;
             }
 
             var connection = CreateConnection();
