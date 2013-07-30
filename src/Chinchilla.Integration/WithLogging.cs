@@ -8,7 +8,7 @@ namespace Chinchilla.Integration
         [SetUp]
         public void Setup()
         {
-            Logger.Target = new ConsoleLogger();
+            Logger.Factory = new ConsoleLoggerFactory();
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Chinchilla.Sample.Timeouts
         {
             Console.WriteLine("Starting program");
 
-            Logger.Target = new ConsoleLogger();
+            Logger.Factory = new ConsoleLoggerFactory();
 
             using (var sample = new TimeoutSample())
             {

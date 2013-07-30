@@ -23,6 +23,18 @@ task PreparePackage -depends Test {
 
 	mkdir ..\targets\packages\chinchilla.api\lib\net40
 	cp ..\targets\chinchilla.api\chinchilla.api* ..\targets\packages\chinchilla.api\lib\net40
+	
+	mkdir "$packagesDirectory\chinchilla.logging.log4net"
+	cp ..\build\package.logging.log4net.nuspec ..\targets\packages\chinchilla.logging.log4net
+
+	mkdir ..\targets\packages\chinchilla.logging.log4net\lib\net40
+	cp ..\targets\chinchilla.logging.log4net\chinchilla.logging.log4net* ..\targets\packages\chinchilla.logging.log4net\lib\net40
+
+	mkdir "$packagesDirectory\chinchilla.logging.nlog"
+	cp ..\build\package.logging.nlog.nuspec ..\targets\packages\chinchilla.logging.nlog
+
+	mkdir ..\targets\packages\chinchilla.logging.nlog\lib\net40
+	cp ..\targets\chinchilla.logging.nlog\chinchilla.logging.nlog* ..\targets\packages\chinchilla.logging.nlog\lib\net40
 }
 
 task PackagePre -depends PreparePackage {
@@ -44,6 +56,20 @@ task PackagePre -depends PreparePackage {
 	mv ..\targets\packages\chinchilla.api\package.api.nuspec.tmp ..\targets\packages\chinchilla.api\package.api.nuspec -force
 
 	..\src\.nuget\nuget.exe pack "..\targets\packages\chinchilla.api\package.api.nuspec" -outputdirectory ".\..\targets\packages"
+	
+	get-content ..\targets\packages\chinchilla.logging.log4net\package.logging.log4net.nuspec | 
+        %{$_ -replace '0.0.0.1', $packageVersion } > ..\targets\packages\chinchilla.logging.log4net\package.logging.log4net.nuspec.tmp
+	
+	mv ..\targets\packages\chinchilla.logging.log4net\package.logging.log4net.nuspec.tmp ..\targets\packages\chinchilla.logging.log4net\package.logging.log4net.nuspec -force
+
+	..\src\.nuget\nuget.exe pack "..\targets\packages\chinchilla.logging.log4net\package.logging.log4net.nuspec" -outputdirectory ".\..\targets\packages"
+	
+	get-content ..\targets\packages\chinchilla.logging.nlog\package.logging.nlog.nuspec | 
+        %{$_ -replace '0.0.0.1', $packageVersion } > ..\targets\packages\chinchilla.logging.nlog\package.logging.nlog.nuspec.tmp
+	
+	mv ..\targets\packages\chinchilla.logging.nlog\package.logging.nlog.nuspec.tmp ..\targets\packages\chinchilla.logging.nlog\package.logging.nlog.nuspec -force
+
+	..\src\.nuget\nuget.exe pack "..\targets\packages\chinchilla.logging.nlog\package.logging.nlog.nuspec" -outputdirectory ".\..\targets\packages"
 }
 
 task Package -depends PreparePackage {
@@ -64,6 +90,20 @@ task Package -depends PreparePackage {
 	mv ..\targets\packages\chinchilla.api\package.api.nuspec.tmp ..\targets\packages\chinchilla.api\package.api.nuspec -force
 
 	..\src\.nuget\nuget.exe pack "..\targets\packages\chinchilla.api\package.api.nuspec" -outputdirectory ".\..\targets\packages"	
+	
+	get-content ..\targets\packages\chinchilla.logging.log4net\package.logging.log4net.nuspec | 
+        %{$_ -replace '0.0.0.1', $packageVersion } > ..\targets\packages\chinchilla.logging.log4net\package.logging.log4net.nuspec.tmp
+	
+	mv ..\targets\packages\chinchilla.logging.log4net\package.logging.log4net.nuspec.tmp ..\targets\packages\chinchilla.logging.log4net\package.logging.log4net.nuspec -force
+
+	..\src\.nuget\nuget.exe pack "..\targets\packages\chinchilla.logging.log4net\package.logging.log4net.nuspec" -outputdirectory ".\..\targets\packages"	
+	
+	get-content ..\targets\packages\chinchilla.logging.nlog\package.logging.nlog.nuspec | 
+        %{$_ -replace '0.0.0.1', $packageVersion } > ..\targets\packages\chinchilla.logging.nlog\package.logging.nlog.nuspec.tmp
+	
+	mv ..\targets\packages\chinchilla.logging.nlog\package.logging.nlog.nuspec.tmp ..\targets\packages\chinchilla.logging.nlog\package.logging.nlog.nuspec -force
+
+	..\src\.nuget\nuget.exe pack "..\targets\packages\chinchilla.logging.nlog\package.logging.nlog.nuspec" -outputdirectory ".\..\targets\packages"	
 }
 
 task Publish -depends Package {

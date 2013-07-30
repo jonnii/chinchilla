@@ -9,7 +9,7 @@ namespace Chinchilla.Console
         {
             var running = true;
 
-            Logger.Target = new ConsoleLogger();
+            Logger.Factory = new ConsoleLoggerFactory();
 
             var publisher = new Thread(() =>
             {

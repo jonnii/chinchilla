@@ -7,7 +7,7 @@ namespace Chinchilla.Sample.BasicPublishSubscribe
     {
         public static void Main(string[] args)
         {
-            Logger.Target = new ConsoleLogger();
+            Logger.Factory = new ConsoleLoggerFactory();
 
             using (var depot = Depot.Connect("localhost/samplepubsub"))
             {
