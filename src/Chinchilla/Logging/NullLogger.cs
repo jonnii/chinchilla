@@ -2,6 +2,9 @@ using System;
 
 namespace Chinchilla.Logging
 {
+    /// <summary>
+    /// Default <see cref="ILogger"/> noop implementation
+    /// </summary>
     public class NullLogger : ILogger
     {
         public void Info(string message)

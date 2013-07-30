@@ -9,7 +9,7 @@ namespace Chinchilla.Sample.CastleConsumers
     {
         public static void Main(string[] args)
         {
-            Logger.Target = new ConsoleLogger();
+            Logger.Factory = new ConsoleLoggerFactory();
 
             using (var container = new WindsorContainer())
             {
