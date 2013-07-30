@@ -1,5 +1,11 @@
 # CHANGELOG
 
+# 0.1.12.8
+
+  * [cocowalla] updated logging API to support named loggers
+  * [cocowalla] added logging integration for log4net
+  * [cocowalla] added logging integration for NLog
+
 # 0.1.12.7
 
   * [cocowalla] Don't attempt reconnect on auth errors
