@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
-  <metadata>
-    <id>Chinchilla.Api</id>
-    <version>0.0.0.1</version>
-    <title>Chinchilla.Api</title>
-    <authors>Jonathan Goldman</authors>
-    <owners>Jonathan Goldman</owners>
-    <summary>C# Wrapper for rabbitmq management http api</summary>
-    <description>Need to use the rabbit management http api? Don't jump through hoops.</description>
-    <language>en-US</language>
-    <projectUrl>http://github.com/jonnii/chinchilla</projectUrl>
-    <licenseUrl>https://github.com/jonnii/chinchilla/blob/master/LICENSE.txt</licenseUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <tags>rabbitmq management api http chinchilla</tags>
-    <dependencies>
-      <dependency id="SpeakEasy" version="0.1" />
-    </dependencies>
-  </metadata>
+    <metadata>
+        <id>Chinchilla.Api</id>
+        <version>0.0.0.1</version>
+        <title>Chinchilla.Api</title>
+        <authors>Jonathan Goldman, Colin Anderson</authors>
+        <owners>jonnii, cocowalla</owners>
+        <summary>C# Wrapper for rabbitmq management http api</summary>
+        <description>Need to use the rabbit management http api? Don't jump through hoops.</description>
+        <language>en-US</language>
+        <projectUrl>http://github.com/jonnii/chinchilla</projectUrl>
+        <licenseUrl>https://github.com/jonnii/chinchilla/blob/master/LICENSE.txt</licenseUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <tags>rabbitmq management api http chinchilla</tags>
+        <dependencies>
+            <dependency id="SpeakEasy" version="0.1" />
+        </dependencies>
+    </metadata>
 </package>

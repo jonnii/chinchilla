@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
-  <metadata>
-    <id>Chinchilla.Logging.Log4Net</id>
-    <version>0.0.0.1</version>
-    <title>Chinchilla.Logging.Log4Net</title>
-    <authors>Jonathan Goldman, Colin Anderson</authors>
-    <owners>jonnii, cocowalla</owners>
-    <summary>Log4Net logging integration for Chinchilla, the little library that makes RabbitMQ awesome</summary>
-    <description>Provides Log4Net logging integration for Chinchilla, the little library that makes RabbitMQ awesome.</description>
-    <language>en-US</language>
-    <projectUrl>http://github.com/jonnii/chinchilla</projectUrl>
-    <licenseUrl>https://github.com/jonnii/chinchilla/blob/master/LICENSE.txt</licenseUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <tags>rabbitmq management api http chinchilla</tags>
-    <dependencies>
-      <dependency id="log4net" version="2.0.0" />
-      <dependency id="Chinchilla" version="0.1.12.8" />
-    </dependencies>
-  </metadata>
+    <metadata>
+        <id>Chinchilla.Logging.Log4Net</id>
+        <version>0.0.0.1</version>
+        <title>Chinchilla.Logging.Log4Net</title>
+        <authors>Jonathan Goldman, Colin Anderson</authors>
+        <owners>jonnii, cocowalla</owners>
+        <summary>Log4Net logging integration for Chinchilla, the little library that makes RabbitMQ awesome</summary>
+        <description>Provides Log4Net logging integration for Chinchilla, the little library that makes RabbitMQ awesome.</description>
+        <language>en-US</language>
+        <projectUrl>http://github.com/jonnii/chinchilla</projectUrl>
+        <licenseUrl>https://github.com/jonnii/chinchilla/blob/master/LICENSE.txt</licenseUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <tags>rabbitmq management api http chinchilla</tags>
+        <dependencies>
+            <dependency id="log4net" version="2.0.0" />
+            <dependency id="Chinchilla" version="0.1.12.8" />
+        </dependencies>
+    </metadata>
 </package>
