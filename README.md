@@ -64,8 +64,51 @@ Contributors
 Features
 ========
 
+ * [Custom serializers](README.md#custom-serializers)
  * [Integration with DI Containers](README.md#integration-with-di-containers)
  * [Integration with Logging Libraries](README.md#integration-with-logging-libraries)
+
+## Custom serializers
+
+By default Chinchilla will serialize your messages as json with the content type of `application/json`,
+which is great for inspecting messages on the wire and for interop with other languages. However there
+are situations where you will want to serialize to another format, for example a binary format, to 
+optimize payload size.
+
+You can change the default serializer on the `DepotSettings` you use to create your depot:
+
+````
+var settings = new DepotSettings
+{
+    MessageSerializers =
+    {
+        Default = new MessagePackMessageSerializer()
+    }
+};
+
+var depot = Depot.Connect("connection-string", settings);
+````
+
+It's also possible to create a publisher with a custom serializer:
+
+````
+var settings = new DepotSettings();
+
+// First register the custom serializer
+settings.MessageSerializers.Register(new MessagePackMessageSerializer());
+
+var bus = Depot.Connect("localhost/integration", settings)
+
+// create a publisher with the custom content type
+var publisher = bus.CreatePublisher<TMessage>(
+    p => p.SerializeWith("application/x-msgpack"))
+
+publisher.Publish(...);
+````
+
+Chinchilla decides which serializer to use to deserialize an incoming message based 
+upon the `content-type` of that message. Registering a custom serializer is enough 
+to be able to subscribe to message with that format.
 
 ## Integration with DI Containers
 
