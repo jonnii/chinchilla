@@ -4,8 +4,8 @@
         <id>Chinchilla</id>
         <version>0.0.0.1</version>
         <title>Chinchilla</title>
-        <authors>Jonathan Goldman, Colin Anderson</authors>
-        <owners>jonnii, cocowalla</owners>
+        <authors>Jonathan Goldman,Colin Anderson</authors>
+        <owners>jonnii,cocowalla</owners>
         <summary>Making RabbitMq Awesome</summary>
         <description>Chinchilla is a little library to help make RabbitMq easier to use.</description>
         <language>en-US</language>

@@ -4,8 +4,8 @@
         <id>Chinchilla.Api</id>
         <version>0.0.0.1</version>
         <title>Chinchilla.Api</title>
-        <authors>Jonathan Goldman, Colin Anderson</authors>
-        <owners>jonnii, cocowalla</owners>
+        <authors>Jonathan Goldman,Colin Anderson</authors>
+        <owners>jonnii,cocowalla</owners>
         <summary>C# Wrapper for rabbitmq management http api</summary>
         <description>Need to use the rabbit management http api? Don't jump through hoops.</description>
         <language>en-US</language>
