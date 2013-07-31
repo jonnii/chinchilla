@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Chinchilla.Logging.NLog</id>
+    <version>0.0.0.1</version>
+    <title>Chinchilla.Logging.NLog</title>
+    <authors>Jonathan Goldman, Colin Anderson</authors>
+    <owners>jonnii, cocowalla</owners>
+    <summary>NLog logging integration for Chinchilla, the little library that makes RabbitMQ awesome</summary>
+    <description>Provides NLog logging integration for Chinchilla, the little library that makes RabbitMQ awesome.</description>
+    <language>en-US</language>
+    <projectUrl>http://github.com/jonnii/chinchilla</projectUrl>
+    <licenseUrl>https://github.com/jonnii/chinchilla/blob/master/LICENSE.txt</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <tags>rabbitmq management api http chinchilla</tags>
+    <dependencies>
+      <dependency id="NLog" version="2.0.1.2" />
+      <dependency id="Chinchilla" version="0.1.12.8" />
+    </dependencies>
+  </metadata>
+</package>

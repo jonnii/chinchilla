@@ -56,6 +56,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla.Sample.Workflow"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla.Sample.Timeouts", "Chinchilla.Sample.Timeouts\Chinchilla.Sample.Timeouts.csproj", "{970DBEFB-C9D9-46CF-BFA5-862EBCB43472}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla.Logging.Log4Net", "Chinchilla.Logging.Log4Net\Chinchilla.Logging.Log4Net.csproj", "{DDCAB548-E8DB-4198-B9A5-1A94CD3571BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla.Logging.NLog", "Chinchilla.Logging.NLog\Chinchilla.Logging.NLog.csproj", "{D6665526-00EA-4B89-80F3-B7F2794A966A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -118,6 +122,14 @@ Global
 		{970DBEFB-C9D9-46CF-BFA5-862EBCB43472}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{970DBEFB-C9D9-46CF-BFA5-862EBCB43472}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{970DBEFB-C9D9-46CF-BFA5-862EBCB43472}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDCAB548-E8DB-4198-B9A5-1A94CD3571BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDCAB548-E8DB-4198-B9A5-1A94CD3571BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDCAB548-E8DB-4198-B9A5-1A94CD3571BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDCAB548-E8DB-4198-B9A5-1A94CD3571BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6665526-00EA-4B89-80F3-B7F2794A966A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6665526-00EA-4B89-80F3-B7F2794A966A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6665526-00EA-4B89-80F3-B7F2794A966A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6665526-00EA-4B89-80F3-B7F2794A966A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

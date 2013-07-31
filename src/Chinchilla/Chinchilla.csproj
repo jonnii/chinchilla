@@ -68,6 +68,9 @@
     <Compile Include="IWorker.cs" />
     <Compile Include="IWorkerPoolWorker.cs" />
     <Compile Include="IWorkersController.cs" />
+    <Compile Include="Logging\ConsoleLoggerFactory.cs" />
+    <Compile Include="Logging\NullLoggerFactory.cs" />
+    <Compile Include="Logging\ILoggerFactory.cs" />
     <Compile Include="NullReceipt.cs" />
     <Compile Include="ConfirmReceipt.cs" />
     <Compile Include="NullWorkersController.cs" />
@@ -132,7 +135,6 @@
     <Compile Include="Configuration\ISubscriptionConfiguration.cs" />
     <Compile Include="Configuration\ISubscriptionBuilder.cs" />
     <Compile Include="ISubscriptionFactory.cs" />
-    <Compile Include="Logging\ClassLogger.cs" />
     <Compile Include="Logging\ConsoleLogger.cs" />
     <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Logging\Logger.cs" />

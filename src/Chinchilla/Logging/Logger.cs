@@ -4,14 +4,14 @@ namespace Chinchilla.Logging
     {
         static Logger()
         {
-            Target = new NullLogger();
+            Factory = new NullLoggerFactory();
         }
 
-        public static ILogger Target { get; set; }
+        public static ILoggerFactory Factory { get; set; }
 
         public static ILogger Create<T>()
         {
-            return new ClassLogger<T>();
+            return Factory.GetLogger<T>();
         }
     }
 }
