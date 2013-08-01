@@ -1,5 +1,11 @@
 # CHANGELOG
 
+# 0.1.13.0
+
+  * Published messages will default to being marked as persistent, you can make them transient by marking them as ITransient
+  * Json.NET is now no longer a dependency, serialization is now handled by SimpleJson
+  * Added a new package for serialization with Json.NET
+
 # 0.1.12.8
 
   * [cocowalla] updated logging API to support named loggers
