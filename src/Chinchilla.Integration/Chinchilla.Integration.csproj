@@ -43,11 +43,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\CommonAssemblyInfo.cs">
@@ -73,6 +69,8 @@
     <Compile Include="Features\SubscribeFeature.cs" />
     <Compile Include="Features\SubscriberFaultFeature.cs" />
     <Compile Include="Features\WithApi.cs" />
+    <Compile Include="Serializers\ComplexMessage.cs" />
+    <Compile Include="Serializers\MessageSerializerTests.cs" />
     <Compile Include="WithLogging.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Soak\SoakTest.cs" />
@@ -84,6 +82,10 @@
     <ProjectReference Include="..\Chinchilla.Api\Chinchilla.Api.csproj">
       <Project>{E53D95D3-DB21-4DF6-85DB-557C99E11F67}</Project>
       <Name>Chinchilla.Api</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chinchilla.Serializers.JsonNET\Chinchilla.Serializers.JsonNET.csproj">
+      <Project>{D8D19E61-29EE-4B4D-B683-2004F85C031A}</Project>
+      <Name>Chinchilla.Serializers.JsonNET</Name>
     </ProjectReference>
     <ProjectReference Include="..\Chinchilla.Serializers.MsgPack\Chinchilla.Serializers.MsgPack.csproj">
       <Project>{039882A0-5236-4903-8302-6603330EFE7B}</Project>

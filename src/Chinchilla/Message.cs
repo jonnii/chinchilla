@@ -10,11 +10,13 @@ namespace Chinchilla
 
     public class Message<T> : IMessage<T>
     {
+        public Message() { }
+
         public Message(T body)
         {
             Body = body;
         }
 
-        public T Body { get; private set; }
+        public T Body { get; set; }
     }
 }
