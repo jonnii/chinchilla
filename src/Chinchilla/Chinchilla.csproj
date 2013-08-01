@@ -65,6 +65,7 @@
     <Compile Include="IPublishReceipt.cs" />
     <Compile Include="IRequester.cs" />
     <Compile Include="ConfirmingPublisher.cs" />
+    <Compile Include="ITransient.cs" />
     <Compile Include="IWorker.cs" />
     <Compile Include="IWorkerPoolWorker.cs" />
     <Compile Include="IWorkersController.cs" />
