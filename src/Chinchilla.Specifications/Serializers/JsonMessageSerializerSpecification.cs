@@ -42,6 +42,9 @@ namespace Chinchilla.Specifications.Serializers
             It should_deserialize_enums = () =>
                 deserialized.Body.FactType.ShouldEqual(FactType.Food);
 
+            It should_deserialize_optional_enums = () =>
+                deserialized.Body.OptionalFactType.ShouldEqual(FactType.Book);
+
             static byte[] serialized;
 
             static IMessage<InterestingFact> deserialized;
@@ -63,11 +66,14 @@ namespace Chinchilla.Specifications.Serializers
             {
                 FactBody = body;
                 FactType = factType;
+                OptionalFactType = FactType.Book;
             }
 
             public string FactBody { get; set; }
 
             public FactType FactType { get; set; }
+
+            public FactType? OptionalFactType { get; set; }
         }
     }
 }

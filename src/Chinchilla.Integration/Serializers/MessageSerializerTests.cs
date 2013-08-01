@@ -31,13 +31,19 @@ namespace Chinchilla.Integration.Serializers
         {
             var serializer = new T();
 
-            var expected = new ComplexMessage("simple_string");
+            var expected = ComplexMessage.Default;
 
             var serialized = serializer.Serialize(Message.Create(expected));
             var deserialized = serializer.Deserialize<ComplexMessage>(serialized);
             var actual = deserialized.Body;
 
             Assert.That(actual.SimpleString, Is.EqualTo(expected.SimpleString));
+            Assert.That(actual.SimpleEnum, Is.EqualTo(expected.SimpleEnum));
+            Assert.That(actual.SimpleInteger, Is.EqualTo(expected.SimpleInteger));
+            Assert.That(actual.SimpleDate, Is.EqualTo(expected.SimpleDate));
+
+            Assert.That(actual.NullableEnum, Is.EqualTo(expected.NullableEnum));
+            Assert.That(actual.NullableEnumWithValue, Is.EqualTo(expected.NullableEnumWithValue));
         }
     }
 }
