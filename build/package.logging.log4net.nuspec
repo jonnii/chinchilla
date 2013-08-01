@@ -15,7 +15,7 @@
         <tags>rabbitmq management api http chinchilla</tags>
         <dependencies>
             <dependency id="log4net" version="2.0.0" />
-            <dependency id="Chinchilla" version="0.1.12.8" />
+            <dependency id="Chinchilla" version="0.0.0.1" />
         </dependencies>
     </metadata>
 </package>
