@@ -30,29 +30,44 @@ namespace Chinchilla.Specifications.Serializers
         {
             Establish context = () =>
                 serialized = Subject.Serialize(
-                    Message.Create(new InterestingFact("Disney's Tangled is the 3rd most expensive film ever made...")));
+                    Message.Create(
+                        new InterestingFact("Disney's Tangled is the 3rd most expensive film ever made...", FactType.Food)));
 
             Because of = () =>
                 deserialized = Subject.Deserialize<InterestingFact>(serialized);
 
-            It should_deserialize = () =>
+            It should_deserialize_strings = () =>
                 deserialized.Body.FactBody.ShouldEqual("Disney's Tangled is the 3rd most expensive film ever made...");
+
+            It should_deserialize_enums = () =>
+                deserialized.Body.FactType.ShouldEqual(FactType.Food);
 
             static byte[] serialized;
 
             static IMessage<InterestingFact> deserialized;
         }
 
+        public enum FactType
+        {
+            None,
+            Food,
+            Film,
+            Book
+        }
+
         public class InterestingFact
         {
             public InterestingFact() { }
 
-            public InterestingFact(string body)
+            public InterestingFact(string body, FactType factType)
             {
                 FactBody = body;
+                FactType = factType;
             }
 
             public string FactBody { get; set; }
+
+            public FactType FactType { get; set; }
         }
     }
 }
