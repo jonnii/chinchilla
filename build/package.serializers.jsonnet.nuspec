@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
-        <id>Chinchilla.Serializer.JsonNET</id>
+        <id>Chinchilla.Serializers.JsonNET</id>
         <version>0.0.0.1</version>
-        <title>Chinchilla.Serializer.JsonNET</title>
+        <title>Chinchilla.Serializers.JsonNET</title>
         <authors>Jonathan Goldman,Colin Anderson</authors>
         <owners>jonnii,cocowalla</owners>
         <summary>Json.NET serializer for Chinchilla, the little library that makes RabbitMQ awesome</summary>

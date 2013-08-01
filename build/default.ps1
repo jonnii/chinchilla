@@ -35,6 +35,20 @@ task PreparePackage -depends Test {
 
 	mkdir ..\targets\packages\chinchilla.logging.nlog\lib\net40
 	cp ..\targets\chinchilla.logging.nlog\chinchilla.logging.nlog* ..\targets\packages\chinchilla.logging.nlog\lib\net40
+
+    mkdir "$packagesDirectory\chinchilla.serializers.jsonnet"
+	cp ..\build\package.serializers.jsonnet.nuspec ..\targets\packages\chinchilla.serializers.jsonnet
+
+    mkdir ..\targets\packages\chinchilla.serializers.jsonnet\lib\net40
+	cp ..\targets\chinchilla.serializers.jsonnet\chinchilla.serializers.jsonnet.dll ..\targets\packages\chinchilla.serializers.jsonnet\lib\net40
+    cp ..\targets\chinchilla.serializers.jsonnet\chinchilla.serializers.jsonnet.pdb ..\targets\packages\chinchilla.serializers.jsonnet\lib\net40
+
+    mkdir "$packagesDirectory\chinchilla.serializers.msgpack"
+	cp ..\build\package.serializers.msgpack.nuspec ..\targets\packages\chinchilla.serializers.msgpack
+
+    mkdir ..\targets\packages\chinchilla.serializers.msgpack\lib\net40
+	cp ..\targets\chinchilla.serializers.msgpack\chinchilla.serializers.msgpack.dll ..\targets\packages\chinchilla.serializers.msgpack\lib\net40
+    cp ..\targets\chinchilla.serializers.msgpack\chinchilla.serializers.msgpack.pdb ..\targets\packages\chinchilla.serializers.msgpack\lib\net40
 }
 
 task PackagePre -depends PreparePackage {
@@ -45,31 +59,33 @@ task PackagePre -depends PreparePackage {
 
 	get-content ..\targets\packages\chinchilla\package.nuspec | 
         %{$_ -replace '0.0.0.1', $packageVersion } > ..\targets\packages\chinchilla\package.nuspec.tmp
-	
 	mv ..\targets\packages\chinchilla\package.nuspec.tmp ..\targets\packages\chinchilla\package.nuspec -force
-
 	..\src\.nuget\nuget.exe pack "..\targets\packages\chinchilla\package.nuspec" -outputdirectory ".\..\targets\packages"
 
 	get-content ..\targets\packages\chinchilla.api\package.api.nuspec | 
         %{$_ -replace '0.0.0.1', $packageVersion } > ..\targets\packages\chinchilla.api\package.api.nuspec.tmp
-	
 	mv ..\targets\packages\chinchilla.api\package.api.nuspec.tmp ..\targets\packages\chinchilla.api\package.api.nuspec -force
-
 	..\src\.nuget\nuget.exe pack "..\targets\packages\chinchilla.api\package.api.nuspec" -outputdirectory ".\..\targets\packages"
 	
 	get-content ..\targets\packages\chinchilla.logging.log4net\package.logging.log4net.nuspec | 
         %{$_ -replace '0.0.0.1', $packageVersion } > ..\targets\packages\chinchilla.logging.log4net\package.logging.log4net.nuspec.tmp
-	
 	mv ..\targets\packages\chinchilla.logging.log4net\package.logging.log4net.nuspec.tmp ..\targets\packages\chinchilla.logging.log4net\package.logging.log4net.nuspec -force
-
 	..\src\.nuget\nuget.exe pack "..\targets\packages\chinchilla.logging.log4net\package.logging.log4net.nuspec" -outputdirectory ".\..\targets\packages"
 	
 	get-content ..\targets\packages\chinchilla.logging.nlog\package.logging.nlog.nuspec | 
         %{$_ -replace '0.0.0.1', $packageVersion } > ..\targets\packages\chinchilla.logging.nlog\package.logging.nlog.nuspec.tmp
-	
 	mv ..\targets\packages\chinchilla.logging.nlog\package.logging.nlog.nuspec.tmp ..\targets\packages\chinchilla.logging.nlog\package.logging.nlog.nuspec -force
-
 	..\src\.nuget\nuget.exe pack "..\targets\packages\chinchilla.logging.nlog\package.logging.nlog.nuspec" -outputdirectory ".\..\targets\packages"
+
+    get-content ..\targets\packages\chinchilla.serializers.jsonnet\package.serializers.jsonnet.nuspec | 
+        %{$_ -replace '0.0.0.1', $packageVersion } > ..\targets\packages\chinchilla.serializers.jsonnet\package.serializers.jsonnet.nuspec.tmp
+	mv ..\targets\packages\chinchilla.serializers.jsonnet\package.serializers.jsonnet.nuspec.tmp ..\targets\packages\chinchilla.serializers.jsonnet\package.serializers.jsonnet.nuspec -force
+	..\src\.nuget\nuget.exe pack "..\targets\packages\chinchilla.serializers.jsonnet\package.serializers.jsonnet.nuspec" -outputdirectory ".\..\targets\packages"	
+
+    get-content ..\targets\packages\chinchilla.serializers.msgpack\package.serializers.msgpack.nuspec | 
+        %{$_ -replace '0.0.0.1', $packageVersion } > ..\targets\packages\chinchilla.serializers.msgpack\package.serializers.msgpack.nuspec.tmp
+	mv ..\targets\packages\chinchilla.serializers.msgpack\package.serializers.msgpack.nuspec.tmp ..\targets\packages\chinchilla.serializers.msgpack\package.serializers.msgpack.nuspec -force
+	..\src\.nuget\nuget.exe pack "..\targets\packages\chinchilla.serializers.msgpack\package.serializers.msgpack.nuspec" -outputdirectory ".\..\targets\packages"	
 }
 
 task Package -depends PreparePackage {
@@ -79,31 +95,33 @@ task Package -depends PreparePackage {
 
 	get-content ..\targets\packages\chinchilla\package.nuspec | 
         %{$_ -replace '0.0.0.1', $packageVersion } > ..\targets\packages\chinchilla\package.nuspec.tmp
-	
 	mv ..\targets\packages\chinchilla\package.nuspec.tmp ..\targets\packages\chinchilla\package.nuspec -force
-
 	..\src\.nuget\nuget.exe pack "..\targets\packages\chinchilla\package.nuspec" -outputdirectory ".\..\targets\packages"	
 
 	get-content ..\targets\packages\chinchilla.api\package.api.nuspec | 
         %{$_ -replace '0.0.0.1', $packageVersion } > ..\targets\packages\chinchilla.api\package.api.nuspec.tmp
-	
 	mv ..\targets\packages\chinchilla.api\package.api.nuspec.tmp ..\targets\packages\chinchilla.api\package.api.nuspec -force
-
 	..\src\.nuget\nuget.exe pack "..\targets\packages\chinchilla.api\package.api.nuspec" -outputdirectory ".\..\targets\packages"	
 	
 	get-content ..\targets\packages\chinchilla.logging.log4net\package.logging.log4net.nuspec | 
         %{$_ -replace '0.0.0.1', $packageVersion } > ..\targets\packages\chinchilla.logging.log4net\package.logging.log4net.nuspec.tmp
-	
 	mv ..\targets\packages\chinchilla.logging.log4net\package.logging.log4net.nuspec.tmp ..\targets\packages\chinchilla.logging.log4net\package.logging.log4net.nuspec -force
-
 	..\src\.nuget\nuget.exe pack "..\targets\packages\chinchilla.logging.log4net\package.logging.log4net.nuspec" -outputdirectory ".\..\targets\packages"	
 	
 	get-content ..\targets\packages\chinchilla.logging.nlog\package.logging.nlog.nuspec | 
         %{$_ -replace '0.0.0.1', $packageVersion } > ..\targets\packages\chinchilla.logging.nlog\package.logging.nlog.nuspec.tmp
-	
 	mv ..\targets\packages\chinchilla.logging.nlog\package.logging.nlog.nuspec.tmp ..\targets\packages\chinchilla.logging.nlog\package.logging.nlog.nuspec -force
-
 	..\src\.nuget\nuget.exe pack "..\targets\packages\chinchilla.logging.nlog\package.logging.nlog.nuspec" -outputdirectory ".\..\targets\packages"	
+
+    get-content ..\targets\packages\chinchilla.serializers.jsonnet\package.serializers.jsonnet.nuspec | 
+        %{$_ -replace '0.0.0.1', $packageVersion } > ..\targets\packages\chinchilla.serializers.jsonnet\package.serializers.jsonnet.nuspec.tmp
+	mv ..\targets\packages\chinchilla.serializers.jsonnet\package.serializers.jsonnet.nuspec.tmp ..\targets\packages\chinchilla.serializers.jsonnet\package.serializers.jsonnet.nuspec -force
+	..\src\.nuget\nuget.exe pack "..\targets\packages\chinchilla.serializers.jsonnet\package.serializers.jsonnet.nuspec" -outputdirectory ".\..\targets\packages"	
+
+    get-content ..\targets\packages\chinchilla.serializers.msgpack\package.serializers.msgpack.nuspec | 
+        %{$_ -replace '0.0.0.1', $packageVersion } > ..\targets\packages\chinchilla.serializers.msgpack\package.serializers.msgpack.nuspec.tmp
+	mv ..\targets\packages\chinchilla.serializers.msgpack\package.serializers.msgpack.nuspec.tmp ..\targets\packages\chinchilla.serializers.msgpack\package.serializers.msgpack.nuspec -force
+	..\src\.nuget\nuget.exe pack "..\targets\packages\chinchilla.serializers.msgpack\package.serializers.msgpack.nuspec" -outputdirectory ".\..\targets\packages"	
 }
 
 task Publish -depends Package {
