@@ -106,6 +106,8 @@ namespace Chinchilla
                 defaultProperties.Expiration = formattedExpiration;
             }
 
+            defaultProperties.SetPersistent(!(message is ITransient));
+
             var replyTo = router.ReplyTo();
             if (!string.IsNullOrEmpty(replyTo))
             {

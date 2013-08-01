@@ -110,6 +110,9 @@ namespace Chinchilla.Specifications
             It should_set_reply_to = () =>
                 properties.ReplyTo.ShouldEqual("reply-to");
 
+            It should_set_delivery_mode_to_persistent = () =>
+                properties.DeliveryMode.ShouldEqual((byte)2);
+
             static IBasicProperties properties;
         }
 
@@ -148,6 +151,23 @@ namespace Chinchilla.Specifications
             static IBasicProperties properties;
 
             static TestRequestMessage message;
+        }
+
+        [Subject(typeof(Publisher<>))]
+        public class when_creating_properties_with_transient_message : with_basic_properties<Publisher<TransientMessage>>
+        {
+            Establish context = () =>
+                 message = new TransientMessage();
+
+            Because of = () =>
+                properties = Subject.CreateProperties(message);
+
+            It should_set_delivery_mode_to_not_persistent = () =>
+                properties.DeliveryMode.ShouldEqual((byte)1);
+
+            static IBasicProperties properties;
+
+            static TransientMessage message;
         }
 
         public class with_basic_properties<TSubject> : WithSubject<TSubject>
