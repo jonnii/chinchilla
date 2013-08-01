@@ -37,6 +37,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{5496A96B
 		..\build\package.logging.log4net.nuspec = ..\build\package.logging.log4net.nuspec
 		..\build\package.logging.nlog.nuspec = ..\build\package.logging.nlog.nuspec
 		..\build\package.nuspec = ..\build\package.nuspec
+		..\build\package.serializer.jsonnet.nuspec = ..\build\package.serializer.jsonnet.nuspec
 		..\build\psake.ps1 = ..\build\psake.ps1
 		..\build\psake.psm1 = ..\build\psake.psm1
 		..\VERSION = ..\VERSION
@@ -61,6 +62,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla.Logging.Log4Net", "Chinchilla.Logging.Log4Net\Chinchilla.Logging.Log4Net.csproj", "{DDCAB548-E8DB-4198-B9A5-1A94CD3571BD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla.Logging.NLog", "Chinchilla.Logging.NLog\Chinchilla.Logging.NLog.csproj", "{D6665526-00EA-4B89-80F3-B7F2794A966A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla.Serializers.JsonNET", "Chinchilla.Serializers.JsonNET\Chinchilla.Serializers.JsonNET.csproj", "{D8D19E61-29EE-4B4D-B683-2004F85C031A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla.Serializers.JsonNET.Specifications", "Chinchilla.Serializers.JsonNET.Specifications\Chinchilla.Serializers.JsonNET.Specifications.csproj", "{8F3DA90B-256D-44BF-80C1-8E2DEA2F9287}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -132,6 +137,14 @@ Global
 		{D6665526-00EA-4B89-80F3-B7F2794A966A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6665526-00EA-4B89-80F3-B7F2794A966A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6665526-00EA-4B89-80F3-B7F2794A966A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8D19E61-29EE-4B4D-B683-2004F85C031A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8D19E61-29EE-4B4D-B683-2004F85C031A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8D19E61-29EE-4B4D-B683-2004F85C031A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8D19E61-29EE-4B4D-B683-2004F85C031A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F3DA90B-256D-44BF-80C1-8E2DEA2F9287}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F3DA90B-256D-44BF-80C1-8E2DEA2F9287}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F3DA90B-256D-44BF-80C1-8E2DEA2F9287}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F3DA90B-256D-44BF-80C1-8E2DEA2F9287}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

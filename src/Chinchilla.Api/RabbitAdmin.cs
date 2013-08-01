@@ -34,11 +34,10 @@ namespace Chinchilla.Api
                 Authenticator = new BasicAuthenticator("guest", "guest")
             };
 
-            settings.Configure<JsonDotNetSerializer>(s =>
-                s.ConfigureSettings(c =>
-                {
-                    c.ContractResolver = new RabbitContractResolver();
-                }));
+            settings.Configure<DefaultJsonSerializer>(s =>
+            {
+                s.JsonSerializerStrategy = new RabbitJsonSerializerStrategy();
+            });
 
             var rootWithReplacements = root.FormatWithReplacements();
 
