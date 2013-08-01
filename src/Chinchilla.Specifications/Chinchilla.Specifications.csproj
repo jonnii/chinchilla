@@ -89,6 +89,7 @@
     <Compile Include="Messages\TestRequestMessage.cs" />
     <Compile Include="Messages\TestMessage.cs" />
     <Compile Include="Messages\TestResponseMessage.cs" />
+    <Compile Include="Messages\TransientMessage.cs" />
     <Compile Include="ModelFactorySpecification.cs" />
     <Compile Include="ModelReferenceSpecification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
