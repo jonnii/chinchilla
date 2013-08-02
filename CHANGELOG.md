@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 0.1.13.1
+
+  * Fix a bug when registering a serializer that overwrites an already registered serializer with the same content-type
+
 # 0.1.13.0
 
   * Published messages will default to being marked as persistent, you can make them transient by marking them as ITransient
