@@ -40,6 +40,10 @@ namespace Chinchilla
             {
                 serializersByContentType.Add(contentType, serializer);
             }
+            else
+            {
+                serializersByContentType[contentType] = serializer;
+            }
 
             return serializer;
         }
@@ -49,6 +53,7 @@ namespace Chinchilla
             Guard.NotNull(contentType, "contentType");
 
             IMessageSerializer serializer;
+
             if (!serializersByContentType.TryGetValue(contentType, out serializer))
             {
                 var message = string.Format(
