@@ -252,7 +252,32 @@ public class CustomRouter : DefaultRouter
 
 ## Subscribers
 
-Subscribing to messages is really easy.
+There are a few ways to subscribe to messages using Chinchilla, but the easiest way is to call `Subscribe` on an
+instance of `IBus`, this will create a consumer that subscribes on a queue with a name that matches the type you're
+subscibing to:
+
+````
+// Subscribe to a message using a lambda
+bus.Subscribe((CustomerOrderMessage message) => { 
+    Console.WriteLine("We got an order for table number: {0}", message.TableNumber);
+});
+
+// Subscribe to a message using a handler method
+bus.Subscribe(OnCustomerMessage);
+````
+
+You can also customize a subscription:
+
+````
+// Subscribe on a queue with a custom name
+bus.Subscribe(OnCustomerMessage, o => 
+    o.SubscribeOn("weird-customer-messages"));
+
+// Deliver messages to the subscription using a custom delivery strategy
+bus.Subscribe(OnCustomerMessage, o => 
+    o.DeliverUsing<WorkerPoolDeliveryStrategy>(s => s.NumWorkers = 5));
+````
+
 
 ## Consumers
 
