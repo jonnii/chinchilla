@@ -74,6 +74,7 @@ If you're unsure what any of those terms means then I suggest you read the
  * [Pluggable Topologies](README.md#pluggable-topologies)
  * [Custom Routing](README.md#custom-routing)
  * [Subscribers](README.md#subscribers)
+ * [Error Handling](README.md#error-handling)
  * [Consumers](README.md#consumers)
  * [Custom serializers](README.md#custom-serializers)
  * [Integration with DI Containers](README.md#integration-with-di-containers)
@@ -288,6 +289,22 @@ bus.Subscribe(OnCustaomerMessage, o => o.SubscribeOn("queue-1", "queue-2"));
 This subscription will attempt to take a message off of `queue-1`, and if no messages are available on 
 that queue will then attempt to take to a message off of `queue-2`. This is a useful feature for simulating
 priority queues with RabbitMq.
+
+## Error Handling
+
+If during the course of processing a message your handler throws an exception then out of the box Chinchilla
+will put that message on a queue named `ErrorQueue` along with information about the cause of the problem, such
+as the stack trace. If you want to change the way faults are handled you can change the fault strategy:
+
+````
+// Change the fault strategy on a subscription
+bus.Subscribe(OnCustomerMessage, 
+    o => o.DeliverFaultsUsing<CustomFaultStrategy>());
+    
+// Change the fault strategy on a subscription and configure it
+bus.Subscribe(OnCustomerMessage, 
+    o => o.DeliverFaultsUsing<CustomFaultStrategy>(s => s.NotifyByEmail = true));
+````
 
 ## Consumers
 
