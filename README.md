@@ -278,6 +278,16 @@ bus.Subscribe(OnCustomerMessage, o =>
     o.DeliverUsing<WorkerPoolDeliveryStrategy>(s => s.NumWorkers = 5));
 ````
 
+Chinchilla also lets you subscribe on multiple endpoints, which is an abstraction over having a single
+RabbitMq consumer with multiple consumer queues:
+
+````
+bus.Subscribe(OnCustaomerMessage, o => o.SubscribeOn("queue-1", "queue-2"));
+````
+
+This subscription will attempt to take a message off of `queue-1`, and if no messages are available on 
+that queue will then attempt to take to a message off of `queue-2`. This is a useful feature for simulating
+priority queues with RabbitMq.
 
 ## Consumers
 
