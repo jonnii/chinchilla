@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Chinchilla.Configuration;
 using Chinchilla.Logging;
 
@@ -159,6 +160,18 @@ namespace Chinchilla
                 onResponse(response);
                 requester.Dispose();
             });
+        }
+
+        public Task<TResponse> RequestAsync<TRequest, TResponse>(TRequest message)
+            where TRequest : ICorrelated
+            where TResponse : ICorrelated
+        {
+            var requester = CreateRequester<TRequest, TResponse>();
+            var task = requester.RequestAsync(message);
+
+            task.ContinueWith(c => requester.Dispose());
+
+            return task;
         }
 
         public void Dispose()
