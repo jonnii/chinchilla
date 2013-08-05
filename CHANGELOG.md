@@ -1,10 +1,14 @@
 # CHANGELOG
 
+# 0.1.14
+
+  * Add an async version of Request/Response so you don't have to use the callbacks
+
 # 0.1.13.1
 
   * Fix a bug when registering a serializer that overwrites an already registered serializer with the same content-type
 
-# 0.1.13.0
+# 0.1.13
 
   * Published messages will default to being marked as persistent, you can make them transient by marking them as ITransient
   * Json.NET is now no longer a dependency, serialization is now handled by SimpleJson
