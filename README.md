@@ -75,6 +75,7 @@ If you're unsure what any of those terms means then I suggest you read the
  * [Custom Routing](README.md#custom-routing)
  * [Subscribers](README.md#subscribers)
  * [Error Handling](README.md#error-handling)
+ * [Request Response](README.md#request-response)
  * [Consumers](README.md#consumers)
  * [Custom serializers](README.md#custom-serializers)
  * [Integration with DI Containers](README.md#integration-with-di-containers)
@@ -305,6 +306,32 @@ bus.Subscribe(OnCustomerMessage,
 bus.Subscribe(OnCustomerMessage, 
     o => o.DeliverFaultsUsing<CustomFaultStrategy>(s => s.NotifyByEmail = true));
 ````
+
+## Request Response
+
+Request/Response is one of the more common use cases with RabbitMq, it is used for RPC and can be used to replace
+an unreliable transport like HTTP with a durable queued backed transport. 
+
+The easiest way to do request/response is right off of an instance of `IBus`:
+
+````
+bus.Request<MyRequestMessage, MyResponseMessage>(
+    new MyRequestMessage("where am i?"),
+    (MyResponseMessage response) => { 
+        // I got a response!
+        Console.WriteLine(response);
+    });
+````
+
+Both your Request and Response message must implement `ICorrelated`.
+
+If you plan on sending a lot of request/response messages it might make sense to use a Requester:
+
+````
+var requester = bus.CreateRequester<CapitalizeMessage, CapitalizedMessage>();
+````
+
+Requesters implement `IDisposable` and will need to be disposed of properly for Chinchilla to shutdown cleanly.
 
 ## Consumers
 
