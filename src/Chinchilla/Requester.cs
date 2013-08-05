@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Linq;
+using System.Threading.Tasks;
 using Chinchilla.Topologies;
 
 namespace Chinchilla
@@ -43,6 +44,13 @@ namespace Chinchilla
             {
                 publisher.Publish(message);
             }
+        }
+
+        public Task<TResponse> RequestAsync(TRequest message)
+        {
+            var source = new TaskCompletionSource<TResponse>();
+            Request(message, source.SetResult);
+            return source.Task;
         }
 
         public bool RegisterResponseHandler(string correlationId, Action<TResponse> onResponse)

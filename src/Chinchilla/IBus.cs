@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Chinchilla.Configuration;
 
 namespace Chinchilla
@@ -42,6 +43,18 @@ namespace Chinchilla
         /// <param name="message">The request message</param>
         /// <param name="onResponse">The callback to call when a message is received</param>
         void Request<TRequest, TResponse>(TRequest message, Action<TResponse> onResponse)
+            where TRequest : ICorrelated
+            where TResponse : ICorrelated;
+
+        /// <summary>
+        /// Creates a simple request response and returns a task which will be completed
+        /// with the response to the request
+        /// </summary>
+        /// <typeparam name="TRequest">The type of message to request</typeparam>
+        /// <typeparam name="TResponse">The type of the response message</typeparam>
+        /// <param name="message">The request message</param>
+        /// <returns>A task for the response</returns>
+        Task<TResponse> RequestAsync<TRequest, TResponse>(TRequest message)
             where TRequest : ICorrelated
             where TResponse : ICorrelated;
 
