@@ -8,6 +8,46 @@ namespace Chinchilla.Integration.Features
     public class RequestResponseFeature : WithApi
     {
         [Test]
+        public void ShouldCreateRequestResponseOnBus()
+        {
+            using (var bus = Depot.Connect("localhost/integration"))
+            {
+                bus.Subscribe(new CapitalizeMessageConsumer());
+
+                CapitalizedMessage capitalized = null;
+                bus.Request<CapitalizeMessage, CapitalizedMessage>(
+                    new CapitalizeMessage("where am i?"),
+                    response => { capitalized = response; });
+
+                WaitForDelivery();
+
+                Assert.That(capitalized, Is.Not.Null);
+                Assert.That(capitalized.Result, Is.EqualTo("WHERE AM I?"));
+            }
+        }
+
+        [Test]
+        public void ShouldSupportAsyncForBasicRequestResponse()
+        {
+            using (var bus = Depot.Connect("localhost/integration"))
+            {
+                bus.Subscribe(new CapitalizeMessageConsumer());
+
+                var response = bus.RequestAsync<CapitalizeMessage, CapitalizedMessage>(
+                    new CapitalizeMessage("where am i?"));
+
+                response.Wait();
+
+                var capitalized = response.Result;
+
+                WaitForDelivery();
+
+                Assert.That(capitalized, Is.Not.Null);
+                Assert.That(capitalized.Result, Is.EqualTo("WHERE AM I?"));
+            }
+        }
+
+        [Test]
         public void ShouldCreateRequestResponseWithRequester()
         {
             using (var bus = Depot.Connect("localhost/integration"))
@@ -31,21 +71,26 @@ namespace Chinchilla.Integration.Features
         }
 
         [Test]
-        public void ShouldCreateRequestResponseOnBus()
+        public void ShouldSupportAsyncForRequesterRequestResponse()
         {
             using (var bus = Depot.Connect("localhost/integration"))
             {
-                bus.Subscribe(new CapitalizeMessageConsumer());
+                using (var requester = bus.CreateRequester<CapitalizeMessage, CapitalizedMessage>())
+                {
+                    bus.Subscribe(new CapitalizeMessageConsumer());
 
-                CapitalizedMessage capitalized = null;
-                bus.Request<CapitalizeMessage, CapitalizedMessage>(
-                    new CapitalizeMessage("where am i?"),
-                    response => { capitalized = response; });
+                    var response = requester.RequestAsync(
+                        new CapitalizeMessage("where am i?"));
 
-                WaitForDelivery();
+                    response.Wait();
 
-                Assert.That(capitalized, Is.Not.Null);
-                Assert.That(capitalized.Result, Is.EqualTo("WHERE AM I?"));
+                    var capitalized = response.Result;
+
+                    WaitForDelivery();
+
+                    Assert.That(capitalized, Is.Not.Null);
+                    Assert.That(capitalized.Result, Is.EqualTo("WHERE AM I?"));
+                }
             }
         }
     }
