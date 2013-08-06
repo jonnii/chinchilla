@@ -7,7 +7,7 @@ using Chinchilla.Topologies;
 
 namespace Chinchilla
 {
-    public class Requester<TRequest, TResponse> : IRequester<TRequest, TResponse>
+    public class Requester<TRequest, TResponse> : Trackable, IRequester<TRequest, TResponse>
         where TRequest : ICorrelated
         where TResponse : ICorrelated
     {
@@ -104,7 +104,7 @@ namespace Chinchilla
             handler(response, deliveryContext);
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             logger.Debug("Disposing of requester");
 
@@ -119,6 +119,8 @@ namespace Chinchilla
                 logger.Debug(" -> Disposing of subscription");
                 subscription.Dispose();
             }
+
+            base.Dispose();
         }
     }
 }

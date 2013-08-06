@@ -124,8 +124,7 @@ namespace Chinchilla
             });
         }
 
-        public ISubscription Create(
-            Subscription subscription)
+        public ISubscription Create(Subscription subscription)
         {
             Track(subscription);
             return subscription;

@@ -113,6 +113,9 @@ namespace Chinchilla.Specifications
 
             It should_dispose_of_publisher_factory = () =>
                 The<IPublisherFactory>().WasToldTo(f => f.Dispose());
+
+            It should_dispose_of_requester_factory = () =>
+                The<IRequesterFactory>().WasToldTo(f => f.Dispose());
         }
 
         public class with_bus : WithSubject<Bus>

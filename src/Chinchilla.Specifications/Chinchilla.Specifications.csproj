@@ -96,6 +96,7 @@
     <Compile Include="Configuration\PublisherConfigurationSpecification.cs" />
     <Compile Include="PublisherFactorySpecification.cs" />
     <Compile Include="PublisherSpecification.cs" />
+    <Compile Include="RequesterFactorySpecification.cs" />
     <Compile Include="RequesterSpecification.cs" />
     <Compile Include="Serializers\JsonMessageSerializerSpecification.cs" />
     <Compile Include="Configuration\SubscriptionConfigurationSpecification.cs" />

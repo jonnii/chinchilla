@@ -14,6 +14,8 @@ namespace Chinchilla
 
         private readonly IPublisherFactory publisherFactory;
 
+        private readonly IRequesterFactory requesterFactory;
+
         private readonly ISubscriptionFactory subscriptionFactory;
 
         private readonly IConsumerFactory consumerFactory;
@@ -21,11 +23,13 @@ namespace Chinchilla
         public Bus(
             IModelFactory modelFactory,
             IConsumerFactory consumerFactory,
+            IRequesterFactory requesterFactory,
             IPublisherFactory publisherFactory,
             ISubscriptionFactory subscriptionFactory)
         {
             this.modelFactory = modelFactory;
             this.publisherFactory = publisherFactory;
+            this.requesterFactory = requesterFactory;
             this.subscriptionFactory = subscriptionFactory;
             this.consumerFactory = consumerFactory;
         }
@@ -140,14 +144,7 @@ namespace Chinchilla
             where TRequest : ICorrelated
             where TResponse : ICorrelated
         {
-            logger.InfoFormat(
-                "Creating Requester for {0} responding to {1}",
-                typeof(TRequest).Name,
-                typeof(TResponse).Name);
-
-            var requester = new Requester<TRequest, TResponse>(this);
-            requester.Start();
-            return requester;
+            return requesterFactory.Create<TRequest, TResponse>(this);
         }
 
         public void Request<TRequest, TResponse>(TRequest message, Action<TResponse> onResponse)
@@ -186,8 +183,11 @@ namespace Chinchilla
         public void Dispose()
         {
             consumerFactory.Dispose();
+            requesterFactory.Dispose();
+
             subscriptionFactory.Dispose();
             publisherFactory.Dispose();
+
             modelFactory.Dispose();
         }
     }

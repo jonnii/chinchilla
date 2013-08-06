@@ -40,6 +40,7 @@ namespace Chinchilla
             var bus = new Bus(
                 modelFactory,
                 consumerFactory,
+                new RequesterFactory(),
                 new PublisherFactory(messageSerializers),
                 new SubscriptionFactory(modelFactory, messageSerializers));
 

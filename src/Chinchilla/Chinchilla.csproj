@@ -62,6 +62,7 @@
     <Compile Include="IPublishReceipt.cs" />
     <Compile Include="IRequester.cs" />
     <Compile Include="ConfirmingPublisher.cs" />
+    <Compile Include="IRequesterFactory.cs" />
     <Compile Include="ITransient.cs" />
     <Compile Include="IWorker.cs" />
     <Compile Include="IWorkerPoolWorker.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="NullWorkersController.cs" />
     <Compile Include="PublishStatus.cs" />
     <Compile Include="Requester.cs" />
+    <Compile Include="RequesterFactory.cs" />
     <Compile Include="SimpleJson.cs" />
     <Compile Include="Threading\IThread.cs" />
     <Compile Include="Threading\IThreadFactory.cs" />
