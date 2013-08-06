@@ -57,6 +57,7 @@
     <Compile Include="Features\Consumers\HelloWorldMessageConsumer.cs" />
     <Compile Include="Features\CustomSerializersFeature.cs" />
     <Compile Include="Features\CustomTopologyFeature.cs" />
+    <Compile Include="Features\DeliveryListeners\ActionListener.cs" />
     <Compile Include="Features\Messages\CapitalizedMessage.cs" />
     <Compile Include="Features\Messages\HelloWorldMessage.cs" />
     <Compile Include="Features\Messages\CapitalizeMessage.cs" />

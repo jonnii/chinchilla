@@ -155,11 +155,7 @@ namespace Chinchilla
             where TResponse : ICorrelated
         {
             var requester = CreateRequester<TRequest, TResponse>();
-            requester.Request(message, response =>
-            {
-                onResponse(response);
-                requester.Dispose();
-            });
+            requester.Request(message, onResponse);
         }
 
         public Task<TResponse> RequestAsync<TRequest, TResponse>(TRequest message)
@@ -168,9 +164,6 @@ namespace Chinchilla
         {
             var requester = CreateRequester<TRequest, TResponse>();
             var task = requester.RequestAsync(message);
-
-            task.ContinueWith(c => requester.Dispose());
-
             return task;
         }
 

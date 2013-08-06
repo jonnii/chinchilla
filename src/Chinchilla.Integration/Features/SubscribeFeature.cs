@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Chinchilla.Api;
+using Chinchilla.Integration.Features.DeliveryListeners;
 using Chinchilla.Integration.Features.Messages;
 using NUnit.Framework;
 
@@ -171,6 +172,24 @@ namespace Chinchilla.Integration.Features
                 WaitForDelivery();
 
                 Assert.That(numReceived, Is.EqualTo(100));
+            }
+        }
+
+        [Test]
+        public void ShouldRunAdditionalRegisteredListeners()
+        {
+            using (var bus = Depot.Connect("localhost/integration"))
+            {
+                var didRunAfterAccept = false;
+
+                bus.Subscribe<HelloWorldMessage>((hwm, ctx) =>
+                    ctx.Delivery.RegisterDeliveryListener(new ActionListener(() => didRunAfterAccept = true)));
+
+                bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
+
+                WaitForDelivery();
+
+                Assert.That(didRunAfterAccept, Is.True);
             }
         }
 

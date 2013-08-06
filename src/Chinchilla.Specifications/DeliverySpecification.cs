@@ -14,12 +14,35 @@ namespace Chinchilla.Specifications
         }
 
         [Subject(typeof(Delivery))]
+        public class with_multiple_listeners : with_delivery
+        {
+            Establish context = () =>
+            {
+                anotherListener = An<IDeliveryListener>();
+                delivery.RegisterDeliveryListener(anotherListener);
+            };
+
+            Because of = () =>
+                delivery.Accept();
+
+            It should_notify_all_listeners = () =>
+            {
+                listener.WasToldTo(l => l.OnAccept(Param.IsAny<IDelivery>()));
+                anotherListener.WasToldTo(l => l.OnAccept(Param.IsAny<IDelivery>()));
+            };
+
+            It should_clear_registered_deliveries_after_accept = () =>
+                delivery.HasRegisteredDeliveryListeners.ShouldBeFalse();
+
+            static IDeliveryListener anotherListener;
+        }
+
+        [Subject(typeof(Delivery))]
         public class without_correlation_id : with_delivery
         {
             Establish context = () =>
             {
                 delivery = new Delivery(
-                  listener,
                   1234,
                   new byte[] { 0xd, 0xe, 0xa, 0xd },
                   "routing-key",
@@ -39,7 +62,6 @@ namespace Chinchilla.Specifications
             Establish context = () =>
             {
                 delivery = new Delivery(
-                  listener,
                   1234,
                   new byte[] { 0xd, 0xe, 0xa, 0xd },
                   "routing-key",
@@ -61,6 +83,9 @@ namespace Chinchilla.Specifications
 
             It should_notify_delivery_failure_strategy = () =>
                 listener.WasToldTo(s => s.OnFailed(delivery, Param.IsAny<Exception>()));
+
+            It should_clear_registered_deliveries_after_failed = () =>
+                delivery.HasRegisteredDeliveryListeners.ShouldBeFalse();
         }
 
         public class with_delivery : WithFakes
@@ -70,7 +95,6 @@ namespace Chinchilla.Specifications
                 listener = An<IDeliveryListener>();
 
                 delivery = new Delivery(
-                    listener,
                     1234,
                     new byte[] { 0xd, 0xe, 0xa, 0xd },
                     "routing-key",
@@ -78,6 +102,8 @@ namespace Chinchilla.Specifications
                     "content-type",
                     "correlationId",
                     "reply-to");
+
+                delivery.RegisterDeliveryListener(listener);
             };
 
             protected static Delivery delivery;

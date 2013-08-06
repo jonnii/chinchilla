@@ -59,5 +59,7 @@ namespace Chinchilla
         /// </summary>
         /// <param name="e">The exception which caused this failure</param>
         void Failed(Exception e);
+
+        void RegisterDeliveryListener(IDeliveryListener deliveryListener);
     }
 }

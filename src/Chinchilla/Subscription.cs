@@ -120,7 +120,6 @@ namespace Chinchilla
                     }
 
                     var delivery = new Delivery(
-                        queue,
                         item.DeliveryTag,
                         item.Body,
                         item.RoutingKey,
@@ -129,6 +128,11 @@ namespace Chinchilla
                         item.BasicProperties.CorrelationId,
                         item.BasicProperties.ReplyTo);
 
+                    // register the queue as a delivery listener on the delivery so that 
+                    // we can ack or nack the message depending on whether or not it was processed
+                    delivery.RegisterDeliveryListener(queue);
+
+                    // deliver the message to the delivery strategy
                     deliveryStrategy.Deliver(delivery);
                 }
 

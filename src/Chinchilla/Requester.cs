@@ -28,9 +28,8 @@ namespace Chinchilla
         {
             subscription = bus.Subscribe<TResponse>(
                 DispatchToRegisteredResponseHandler,
-                b => b
-                         .SetTopology<DefaultRequestTopologyBuilder>()
-                         .DeliverUsing<TaskDeliveryStrategy>());
+                    b => b.SetTopology<DefaultRequestTopologyBuilder>()
+                          .DeliverUsing<TaskDeliveryStrategy>());
 
             var queue = subscription.Queues.First();
             publisher = bus.CreatePublisher<TRequest>(p => p.ReplyTo(queue.Name));

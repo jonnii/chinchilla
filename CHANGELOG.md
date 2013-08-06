@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# pending
+
+  * Change delivery to have a list of delivery listeners, so we can hang things a delivery happening.
+
 # 0.1.14
 
   * Add an async version of Request/Response so you don't have to use the callbacks

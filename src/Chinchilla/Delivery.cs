@@ -1,13 +1,13 @@
 using System;
+using System.Collections.Generic;
 
 namespace Chinchilla
 {
     public class Delivery : IDelivery
     {
-        private readonly IDeliveryListener listener;
+        private readonly List<IDeliveryListener> deliveryListeners = new List<IDeliveryListener>();
 
         public Delivery(
-            IDeliveryListener listener,
             ulong tag,
             byte[] body,
             string routingKey,
@@ -16,8 +16,6 @@ namespace Chinchilla
             string correlationId,
             string replyTo)
         {
-            this.listener = listener;
-
             Tag = tag;
             Body = body;
             RoutingKey = routingKey;
@@ -50,14 +48,34 @@ namespace Chinchilla
             }
         }
 
+        public bool HasRegisteredDeliveryListeners
+        {
+            get { return deliveryListeners.Count > 0; }
+        }
+
+        public void RegisterDeliveryListener(IDeliveryListener deliveryListener)
+        {
+            deliveryListeners.Add(deliveryListener);
+        }
+
         public void Accept()
         {
-            listener.OnAccept(this);
+            foreach (var listener in deliveryListeners)
+            {
+                listener.OnAccept(this);
+            }
+
+            deliveryListeners.Clear();
         }
 
         public void Failed(Exception e)
         {
-            listener.OnFailed(this, e);
+            foreach (var listener in deliveryListeners)
+            {
+                listener.OnFailed(this, e);
+            }
+
+            deliveryListeners.Clear();
         }
     }
 }
