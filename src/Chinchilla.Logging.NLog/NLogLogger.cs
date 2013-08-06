@@ -5,7 +5,7 @@ using LogLevel = NLog.LogLevel;
 
 namespace Chinchilla.Logging.NLog
 {
-    public class NLogLogger : Chinchilla.Logging.ILogger
+    public class NLogLogger : ILogger
     {
         /// <summary>NLog logger that this adapter wraps</summary>
         private readonly WrappedLogger logger;
@@ -27,7 +27,7 @@ namespace Chinchilla.Logging.NLog
         /// </summary>
         public void LogInternal(LogLevel level, string message, Exception ex = null)
         {
-            var nlogEntry = new LogEventInfo()
+            var nlogEntry = new LogEventInfo
             {
                 Level = level,
                 TimeStamp = DateTime.UtcNow,
@@ -35,45 +35,45 @@ namespace Chinchilla.Logging.NLog
                 Exception = ex
             };
 
-            this.logger.Log(DeclaringType, nlogEntry);
+            logger.Log(DeclaringType, nlogEntry);
         }
 
         public void Info(string message)
         {
-            this.LogInternal(LogLevel.Info, message);
+            LogInternal(LogLevel.Info, message);
         }
 
         public void InfoFormat(string format, params object[] args)
         {
-            string message = String.Format(format, args);
-            this.LogInternal(LogLevel.Info, message);
+            var message = string.Format(format, args);
+            LogInternal(LogLevel.Info, message);
         }
 
         public void Debug(string message)
         {
-            this.LogInternal(LogLevel.Debug, message);
+            LogInternal(LogLevel.Debug, message);
         }
 
         public void DebugFormat(string format, params object[] args)
         {
-            string message = String.Format(format, args);
-            this.LogInternal(LogLevel.Debug, message);
+            var message = string.Format(format, args);
+            LogInternal(LogLevel.Debug, message);
         }
 
         public void Error(Exception exception)
         {
-            this.LogInternal(LogLevel.Error, exception.Message, exception);
+            LogInternal(LogLevel.Error, exception.Message, exception);
         }
 
         public void Error(Exception exception, string message)
         {
-            this.LogInternal(LogLevel.Error, message, exception);
+            LogInternal(LogLevel.Error, message, exception);
         }
 
         public void ErrorFormat(Exception exception, string format, params object[] args)
         {
-            string message = String.Format(format, args);
-            this.LogInternal(LogLevel.Error, message, exception);
+            var message = string.Format(format, args);
+            LogInternal(LogLevel.Error, message, exception);
         }
     }
 }

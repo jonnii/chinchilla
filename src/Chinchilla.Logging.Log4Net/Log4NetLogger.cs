@@ -4,7 +4,7 @@ using log4net.Core;
 
 namespace Chinchilla.Logging.Log4Net
 {
-    public class Log4NetLogger : Chinchilla.Logging.ILogger
+    public class Log4NetLogger : ILogger
     {
         /// <summary>log4net logger that this adapter wraps</summary>
         private readonly log4net.Core.ILogger logger;
@@ -26,45 +26,45 @@ namespace Chinchilla.Logging.Log4Net
         /// </summary>
         public void LogInternal(Level level, string message, Exception ex = null)
         {
-            this.logger.Log(DeclaringType, level, message, ex);
+            logger.Log(DeclaringType, level, message, ex);
         }
 
         public void Info(string message)
         {
-            this.LogInternal(Level.Info, message);
+            LogInternal(Level.Info, message);
         }
 
         public void InfoFormat(string format, params object[] args)
         {
-            string message = String.Format(format, args);
-            this.LogInternal(Level.Info, message);
+            var message = string.Format(format, args);
+            LogInternal(Level.Info, message);
         }
 
         public void Debug(string message)
         {
-            this.LogInternal(Level.Debug, message);
+            LogInternal(Level.Debug, message);
         }
 
         public void DebugFormat(string format, params object[] args)
         {
-            string message = String.Format(format, args);
-            this.LogInternal(Level.Debug, message);
+            var message = string.Format(format, args);
+            LogInternal(Level.Debug, message);
         }
 
         public void Error(Exception exception)
         {
-            this.LogInternal(Level.Error, exception.Message, exception);
+            LogInternal(Level.Error, exception.Message, exception);
         }
 
         public void Error(Exception exception, string message)
         {
-            this.LogInternal(Level.Error, message, exception);
+            LogInternal(Level.Error, message, exception);
         }
 
         public void ErrorFormat(Exception exception, string format, params object[] args)
         {
-            string message = String.Format(format, args);
-            this.LogInternal(Level.Error, message, exception);
+            var message = string.Format(format, args);
+            LogInternal(Level.Error, message, exception);
         }
     }
 }

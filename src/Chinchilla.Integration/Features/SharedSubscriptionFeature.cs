@@ -17,9 +17,9 @@ namespace Chinchilla.Integration.Features
                 var numReceived = 0;
 
                 bus.Subscribe((HelloWorldMessage hwm) =>
-                {
-                    Interlocked.Increment(ref numReceived);
-                }, o => o.SubscribeOn("queue-1", "queue-2").SetTopology(new SharedSubscriptionTopology()));
+                    Interlocked.Increment(ref numReceived),
+                        o => o.SubscribeOn("queue-1", "queue-2")
+                              .SetTopology(new SharedSubscriptionTopology()));
 
                 using (var first = bus.CreatePublisher<HelloWorldMessage>(o => o.PublishOn("exchange-queue-1")))
                 using (var second = bus.CreatePublisher<HelloWorldMessage>(o => o.PublishOn("exchange-queue-2")))
