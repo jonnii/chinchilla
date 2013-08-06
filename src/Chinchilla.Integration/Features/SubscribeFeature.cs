@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Chinchilla.Api;
-using Chinchilla.Integration.Features.DeliveryListeners;
 using Chinchilla.Integration.Features.Messages;
 using NUnit.Framework;
 
@@ -183,7 +182,7 @@ namespace Chinchilla.Integration.Features
                 var didRunAfterAccept = false;
 
                 bus.Subscribe<HelloWorldMessage>((hwm, ctx) =>
-                    ctx.Delivery.RegisterDeliveryListener(new ActionListener(() => didRunAfterAccept = true)));
+                    ctx.Delivery.RegisterDeliveryListener(new ActionDeliveryListener(() => didRunAfterAccept = true)));
 
                 bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
 

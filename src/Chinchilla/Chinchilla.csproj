@@ -45,6 +45,7 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ActionDeliveryListener.cs" />
     <Compile Include="ActionDeliveryProcessor.cs" />
     <Compile Include="ActionDisposable.cs" />
     <Compile Include="Bus.cs" />

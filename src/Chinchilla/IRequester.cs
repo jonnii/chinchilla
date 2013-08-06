@@ -12,6 +12,12 @@ namespace Chinchilla
         void Request(TRequest message, Action<TResponse> onResponse);
 
         /// <summary>
+        /// Publishes a request message which expects a response
+        /// </summary>
+        /// <typeparam name="TResponse">The type of the response message</typeparam>
+        void Request(TRequest message, Action<TResponse, IDeliveryContext> onResponse);
+
+        /// <summary>
         /// Publishes a request message which expects a response, returns a task which
         /// will be completed with the response
         /// </summary>

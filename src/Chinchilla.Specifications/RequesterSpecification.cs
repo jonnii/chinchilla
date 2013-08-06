@@ -42,7 +42,7 @@ namespace Chinchilla.Specifications
                 called = false;
 
                 delivery.WhenToldTo(d => d.CorrelationId).Return("correlation-id");
-                Subject.RegisterResponseHandler("correlation-id", _ => called = true);
+                Subject.RegisterResponseHandler("correlation-id", (_, __) => called = true);
             };
 
             Because of = () =>
@@ -58,7 +58,7 @@ namespace Chinchilla.Specifications
         public class when_register_response_handler_with_no_correlation_id : with_requester
         {
             Because of = () =>
-                exception = Catch.Exception(() => Subject.RegisterResponseHandler("", _ => { }));
+                exception = Catch.Exception(() => Subject.RegisterResponseHandler("", (_, __) => { }));
 
             It should_throw_exception = () =>
                 exception.ShouldBeOfType<ChinchillaException>();

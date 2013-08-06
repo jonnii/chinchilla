@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
+using Chinchilla.Logging;
 using Chinchilla.Topologies;
 
 namespace Chinchilla
@@ -10,10 +11,12 @@ namespace Chinchilla
         where TRequest : ICorrelated
         where TResponse : ICorrelated
     {
+        private readonly ILogger logger = Logger.Create<Requester<TRequest, TResponse>>();
+
         private readonly IBus bus;
 
-        private readonly ConcurrentDictionary<string, Action<TResponse>> responders =
-            new ConcurrentDictionary<string, Action<TResponse>>();
+        private readonly ConcurrentDictionary<string, Action<TResponse, IDeliveryContext>> responders =
+            new ConcurrentDictionary<string, Action<TResponse, IDeliveryContext>>();
 
         private IPublisher<TRequest> publisher;
 
@@ -37,6 +40,11 @@ namespace Chinchilla
 
         public void Request(TRequest message, Action<TResponse> onResponse)
         {
+            Request(message, (response, context) => onResponse(response));
+        }
+
+        public void Request(TRequest message, Action<TResponse, IDeliveryContext> onResponse)
+        {
             var correlationId = message.CorrelationId.ToString();
 
             if (RegisterResponseHandler(correlationId, onResponse))
@@ -52,7 +60,7 @@ namespace Chinchilla
             return source.Task;
         }
 
-        public bool RegisterResponseHandler(string correlationId, Action<TResponse> onResponse)
+        public bool RegisterResponseHandler(string correlationId, Action<TResponse, IDeliveryContext> onResponse)
         {
             if (string.IsNullOrEmpty(correlationId))
             {
@@ -81,7 +89,7 @@ namespace Chinchilla
                 throw new ChinchillaException(message);
             }
 
-            Action<TResponse> handler;
+            Action<TResponse, IDeliveryContext> handler;
             if (!responders.TryGetValue(correlationId, out handler))
             {
                 var message = string.Format(
@@ -93,18 +101,22 @@ namespace Chinchilla
                 throw new ChinchillaException(message);
             }
 
-            handler(response);
+            handler(response, deliveryContext);
         }
 
         public void Dispose()
         {
+            logger.Debug("Disposing of requester");
+
             if (publisher != null)
             {
+                logger.Debug(" -> Disposing of publisher");
                 publisher.Dispose();
             }
 
             if (subscription != null)
             {
+                logger.Debug(" -> Disposing of subscription");
                 subscription.Dispose();
             }
         }

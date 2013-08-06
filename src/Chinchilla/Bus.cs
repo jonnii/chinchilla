@@ -155,16 +155,32 @@ namespace Chinchilla
             where TResponse : ICorrelated
         {
             var requester = CreateRequester<TRequest, TResponse>();
-            requester.Request(message, onResponse);
+
+            requester.Request(message, (response, context) =>
+            {
+                onResponse(response);
+
+                // Because this is a single use requester we need to dispose of it somehow. Calling dispose
+                // on the requester directly in the callback causes an exception (and ultimately a message on 
+                // the error queue) because the message cannot be acked (since the queues will be disposed).
+                // Use a delivery listener to schedule dispose for _after_ the delivery being delivered, that
+                // way there's no issue with things already being disposed
+                context.Delivery.RegisterDeliveryListener(new ActionDeliveryListener(requester.Dispose));
+            });
         }
 
         public Task<TResponse> RequestAsync<TRequest, TResponse>(TRequest message)
             where TRequest : ICorrelated
             where TResponse : ICorrelated
         {
-            var requester = CreateRequester<TRequest, TResponse>();
-            var task = requester.RequestAsync(message);
-            return task;
+            // We could call the async request method on the requester directly, but reuse the
+            // above logic because a continue with on the async result _could_ be called in the same
+            // context as the response being resolved which would cause the same object disposed exception
+            // as above.
+
+            var source = new TaskCompletionSource<TResponse>();
+            Request<TRequest, TResponse>(message, source.SetResult);
+            return source.Task;
         }
 
         public void Dispose()
