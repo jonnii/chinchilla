@@ -1,6 +1,6 @@
 # CHANGELOG
 
-# pending
+# 0.1.14.1
 
   * Fix a bug with request/response cause message to end up on the error queue incorrectly 
   * Change delivery to have a list of delivery listeners, so we can hang things a delivery happening.
