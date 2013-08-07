@@ -48,7 +48,6 @@ namespace Chinchilla
         {
             var wrappedMessage = Message.Create(message);
             var serializedMessage = serializer.Serialize(wrappedMessage);
-            var defaultProperties = CreateProperties(message);
             var routingKey = router.Route(message);
 
             if (routingKey == null)
@@ -61,12 +60,16 @@ namespace Chinchilla
                 throw new ChinchillaException(exceptionMessage);
             }
 
-            var publishReceipt = ModelReference.Execute(
-                model => PublishWithReceipt(
+            var publishReceipt = ModelReference.Execute(model =>
+            {
+                var defaultProperties = this.CreateProperties(message);
+
+                return this.PublishWithReceipt(
                     model,
                     routingKey,
                     defaultProperties,
-                    serializedMessage));
+                    serializedMessage);
+            });
 
             Interlocked.Increment(ref numPublishedMessages);
 
