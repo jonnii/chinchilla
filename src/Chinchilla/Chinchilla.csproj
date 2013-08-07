@@ -74,6 +74,7 @@
     <Compile Include="ConfirmReceipt.cs" />
     <Compile Include="NullWorkersController.cs" />
     <Compile Include="PublishStatus.cs" />
+    <Compile Include="Receipts.cs" />
     <Compile Include="Requester.cs" />
     <Compile Include="RequesterFactory.cs" />
     <Compile Include="SimpleJson.cs" />

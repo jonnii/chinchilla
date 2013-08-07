@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Linq;
-using Chinchilla.Topologies.Model;
+﻿using Chinchilla.Topologies.Model;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
@@ -9,8 +6,7 @@ namespace Chinchilla
 {
     public class ConfirmingPublisher<TMessage> : Publisher<TMessage>
     {
-        private readonly ConcurrentDictionary<ulong, ConfirmReceipt> receipts
-            = new ConcurrentDictionary<ulong, ConfirmReceipt>();
+        private readonly Receipts receipts = new Receipts();
 
         public ConfirmingPublisher(
             IModelReference modelReference,
@@ -46,7 +42,7 @@ namespace Chinchilla
             IBasicProperties defaultProperties,
             byte[] serializedMessage)
         {
-            var receipt = CreateAndRegisterReceipt(
+            var receipt = receipts.CreateAndRegisterReceipt(
                 model.NextPublishSeqNo);
 
             model.BasicPublish(
@@ -56,6 +52,21 @@ namespace Chinchilla
                 serializedMessage);
 
             return receipt;
+        }
+
+        public bool HasPendingConfirmation(ulong sequenceNumber)
+        {
+            return receipts.HasPendingConfirmation(sequenceNumber);
+        }
+
+        private void OnBasicAcks(IModel model, BasicAckEventArgs args)
+        {
+            receipts.ProcessReceipts(args.Multiple, args.DeliveryTag, r => r.Confirmed());
+        }
+
+        private void OnBasicNacks(IModel model, BasicNackEventArgs args)
+        {
+            receipts.ProcessReceipts(args.Multiple, args.DeliveryTag, r => r.Failed());
         }
 
         public override void Dispose()
@@ -68,69 +79,6 @@ namespace Chinchilla
             ModelReference.Execute(m => m.WaitForConfirmsOrDie());
 
             base.Dispose();
-        }
-
-        private void OnBasicAcks(IModel model, BasicAckEventArgs args)
-        {
-            ProcessReceipts(args.Multiple, args.DeliveryTag, r => r.Confirmed());
-        }
-
-        private void OnBasicNacks(IModel model, BasicNackEventArgs args)
-        {
-            ProcessReceipts(args.Multiple, args.DeliveryTag, r => r.Failed());
-        }
-
-        public ConfirmReceipt CreateAndRegisterReceipt(ulong nextPublishSeqNo)
-        {
-            var receipt = new ConfirmReceipt(nextPublishSeqNo);
-            RegisterReceipt(receipt);
-            return receipt;
-        }
-
-        public ConfirmReceipt RegisterReceipt(ConfirmReceipt receipt)
-        {
-            if (receipts.TryAdd(receipt.Sequence, receipt))
-            {
-                return receipt;
-            }
-
-            var message = string.Format(
-                "Could not register a confirm receipt because a " +
-                "receipt for the sequence number {0} has already been registered",
-                receipt.Sequence);
-
-            throw new DuplicatePublishReceiptException(message);
-        }
-
-        public bool HasPendingConfirmation(ulong sequenceNumber)
-        {
-            return receipts.ContainsKey(sequenceNumber);
-        }
-
-        public void ProcessReceipts(bool multiple, ulong sequenceNumber, Action<ConfirmReceipt> act)
-        {
-            if (multiple)
-            {
-                var affected = receipts.Where(r => r.Key <= sequenceNumber).ToArray();
-
-                foreach (var receipt in affected)
-                {
-                    ProcessReceipt(receipt.Key, act);
-                }
-            }
-            else
-            {
-                ProcessReceipt(sequenceNumber, act);
-            }
-        }
-
-        private void ProcessReceipt(ulong sequenceNumber, Action<ConfirmReceipt> act)
-        {
-            ConfirmReceipt receipt;
-            if (receipts.TryRemove(sequenceNumber, out receipt))
-            {
-                act(receipt);
-            }
         }
     }
 }
