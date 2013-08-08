@@ -13,5 +13,5 @@ env:
 script:
   - xbuild ./src/Chinchilla.sln
 
- notifications:
+notifications:
   email: false
