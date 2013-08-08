@@ -11,4 +11,4 @@ env:
   - EnableNuGetPackageRestore=true
 
 script:
-  - xbuild
+  - xbuild ./src/Chinchilla.sln
