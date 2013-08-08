@@ -62,9 +62,9 @@ namespace Chinchilla
 
             var publishReceipt = ModelReference.Execute(model =>
             {
-                var defaultProperties = this.CreateProperties(message);
+                var defaultProperties = CreateProperties(message);
 
-                return this.PublishWithReceipt(
+                return PublishWithReceipt(
                     model,
                     routingKey,
                     defaultProperties,

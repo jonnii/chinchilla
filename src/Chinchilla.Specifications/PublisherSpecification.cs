@@ -47,8 +47,6 @@ namespace Chinchilla.Specifications
 
                 The<IModelReference>().WhenToldTo(r => r.Execute(Param.IsAny<Func<IModel, IBasicProperties>>()))
                     .Return(properties);
-
-                The<IMessageSerializer>().WhenToldTo(s => s.ContentType).Return("content-type");
             };
 
             Because of = () =>
@@ -56,9 +54,6 @@ namespace Chinchilla.Specifications
 
             It should_serialize_message = () =>
                 The<IMessageSerializer>().WasToldTo(s => s.Serialize(Param.IsAny<IMessage<TestMessage>>()));
-
-            It should_set_content_type_on_properties = () =>
-                properties.ContentType.ShouldEqual("content-type");
 
             It should_route_message = () =>
                 The<IRouter>().WasToldTo(r => r.Route(Param.IsAny<TestMessage>()));
@@ -99,7 +94,10 @@ namespace Chinchilla.Specifications
         public class when_creating_properties : with_basic_properties<Publisher<TestMessage>>
         {
             Establish context = () =>
+            {
                 The<IRouter>().WhenToldTo(r => r.ReplyTo()).Return("reply-to");
+                The<IMessageSerializer>().WhenToldTo(s => s.ContentType).Return("content-type");
+            };
 
             Because of = () =>
                 properties = Subject.CreateProperties(new TestMessage());
@@ -112,6 +110,9 @@ namespace Chinchilla.Specifications
 
             It should_set_delivery_mode_to_persistent = () =>
                 properties.DeliveryMode.ShouldEqual((byte)2);
+
+            It should_set_content_type_on_properties = () =>
+                properties.ContentType.ShouldEqual("content-type");
 
             static IBasicProperties properties;
         }
