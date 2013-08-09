@@ -117,11 +117,44 @@ namespace Chinchilla.Integration.Features
             }
         }
 
+        [Test]
+        public void ShouldHaveCustomPublisherFaultStrategy()
+        {
+            using (var bus = Depot.Connect("localhost/integration"))
+            {
+                using (var publisher = bus.CreatePublisher<HelloWorldMessage>(
+                    o => o.Confirm(true).OnPublishFaults<RetryOnFaults>()))
+                {
+                    // TODO: Find a way to make this nack, so we can test the fault strategy
+                    publisher.Publish(new HelloWorldMessage());
+
+                    WaitForDelivery();
+                }
+            }
+        }
+
         public class CustomRouter : DefaultRouter
         {
             public override string Route<TMessage>(TMessage message)
             {
                 return "#";
+            }
+        }
+
+        public class RetryOnFaults : IPublishFaultStrategy
+        {
+            public IPublishFaultAction<TMessage> OnFailedReceipt<TMessage>(IPublishReceipt receipt)
+            {
+                // decide what to do with the receipt here...
+                return new RetryMessage<TMessage>();
+            }
+        }
+
+        public class RetryMessage<TMessage> : IPublishFaultAction<TMessage>
+        {
+            public void Run(IPublisher<TMessage> publisher, TMessage failedMessage)
+            {
+                publisher.Publish(failedMessage);
             }
         }
     }
