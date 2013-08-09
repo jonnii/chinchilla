@@ -117,20 +117,6 @@ namespace Chinchilla.Integration.Features
             }
         }
 
-        [Test]
-        public void ShouldCreatePublisherWithCustomFaultStrategy()
-        {
-            using (var bus = Depot.Connect("localhost/integration"))
-            {
-                using (bus.CreatePublisher<HelloWorldMessage>(o => o.OnPublishFaults<CustomFaultStrategy>()))
-                {
-
-                }
-            }
-        }
-
-        public class CustomFaultStrategy : IPublishFaultStrategy { }
-
         public class CustomRouter : DefaultRouter
         {
             public override string Route<TMessage>(TMessage message)

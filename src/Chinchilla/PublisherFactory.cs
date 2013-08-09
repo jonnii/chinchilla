@@ -27,6 +27,7 @@ namespace Chinchilla
             }
 
             var router = configuration.BuildRouter();
+            var faultStrategy = configuration.BuildFaultStrategy();
 
             var messageSerializer = messageSerializers.FindOrDefault(
                 configuration.ContentType);
@@ -36,7 +37,8 @@ namespace Chinchilla
                     modelReference,
                     messageSerializer,
                     topology.PublishExchange,
-                    router)
+                    router,
+                    faultStrategy)
                 : new Publisher<TMessage>(
                     modelReference,
                     messageSerializer,

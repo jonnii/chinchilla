@@ -112,7 +112,7 @@ namespace Chinchilla.Configuration
 
         public override string ToString()
         {
-            return string.Format("[PublishConfiguration EndpointName={0}]", EndpointName ?? "<auto>");
+            return string.Format("[PublisherConfiguration EndpointName={0}]", EndpointName ?? "<auto>");
         }
     }
 }

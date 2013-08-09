@@ -54,11 +54,13 @@
     <Compile Include="DefaultConnectionFactory.cs" />
     <Compile Include="ConnectionString.cs" />
     <Compile Include="DefaultConsumerFactory.cs" />
+    <Compile Include="DefaultPublishFaultStrategy.cs" />
     <Compile Include="DeliveryQueue.cs" />
     <Compile Include="DirectRouter.cs" />
     <Compile Include="DuplicatePublishReceiptException.cs" />
     <Compile Include="ICorrelated.cs" />
     <Compile Include="IHasTimeOut.cs" />
+    <Compile Include="IPublishFaultStrategy.cs" />
     <Compile Include="IPublishReceipt.cs" />
     <Compile Include="IRequester.cs" />
     <Compile Include="ConfirmingPublisher.cs" />

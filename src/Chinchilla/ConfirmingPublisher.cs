@@ -6,16 +6,19 @@ namespace Chinchilla
 {
     public class ConfirmingPublisher<TMessage> : Publisher<TMessage>
     {
+        private readonly IPublishFaultStrategy publishFaultStrategy;
+
         private readonly Receipts receipts = new Receipts();
 
         public ConfirmingPublisher(
             IModelReference modelReference,
             IMessageSerializer serializer,
             IExchange exchange,
-            IRouter router)
+            IRouter router,
+            IPublishFaultStrategy publishFaultStrategy)
             : base(modelReference, serializer, exchange, router)
         {
-
+            this.publishFaultStrategy = publishFaultStrategy;
         }
 
         public override void Start()

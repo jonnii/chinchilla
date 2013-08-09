@@ -13,5 +13,7 @@ namespace Chinchilla.Configuration
         bool ShouldConfirm { get; }
 
         IRouter BuildRouter();
+
+        IPublishFaultStrategy BuildFaultStrategy();
     }
 }

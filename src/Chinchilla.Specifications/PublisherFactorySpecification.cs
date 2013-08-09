@@ -16,6 +16,9 @@ namespace Chinchilla.Specifications
 
             It should_build_router = () =>
                 configuration.WasToldTo(c => c.BuildRouter());
+
+            It should_build_fault_strategy = () =>
+                configuration.WasToldTo(c => c.BuildFaultStrategy());
         }
 
         [Subject(typeof(PublisherFactory))]

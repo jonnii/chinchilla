@@ -23,8 +23,8 @@ namespace Chinchilla
             IExchange exchange,
             IRouter router)
         {
-            this.router = Guard.NotNull(router, "router");
             this.serializer = Guard.NotNull(serializer, "serializer");
+            this.router = Guard.NotNull(router, "router");
 
             ModelReference = Guard.NotNull(modelReference, "modelReference");
             Exchange = Guard.NotNull(exchange, "bindable");
