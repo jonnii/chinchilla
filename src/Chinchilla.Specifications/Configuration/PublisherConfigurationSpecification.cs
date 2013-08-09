@@ -71,6 +71,38 @@ namespace Chinchilla.Specifications.Configuration
             static IRouter router;
         }
 
+        [Subject(typeof(PublisherConfiguration))]
+        public class when_building_with_custom_fault_strategy : WithSubject<PublisherConfiguration>
+        {
+            Establish context = () =>
+                Subject.OnPublishFaults<CustomPublishFaultStrategy>(s => s.Property = "foo");
+
+            Because of = () =>
+                strategy = Subject.BuildFaultStrategy();
+
+            It should_build_strategy = () =>
+                ((CustomPublishFaultStrategy)strategy).Property.ShouldEqual("foo");
+
+            static IPublishFaultStrategy strategy;
+        }
+
+        [Subject(typeof(PublisherConfiguration))]
+        public class when_building_with_no_custom_fault_strategy : WithSubject<PublisherConfiguration>
+        {
+            Because of = () =>
+               strategy = Subject.BuildFaultStrategy();
+
+            It should_create_default_publish_fault_strategy = () =>
+                strategy.ShouldBeOfType<DefaultPublishFaultStrategy>();
+
+            static IPublishFaultStrategy strategy;
+        }
+
+        public class CustomPublishFaultStrategy : IPublishFaultStrategy
+        {
+            public string Property { get; set; }
+        }
+
         public class CustomRouter : IRouter
         {
             public string Route<TMessage>(TMessage message)

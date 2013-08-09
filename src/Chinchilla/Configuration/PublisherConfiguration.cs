@@ -5,7 +5,11 @@ namespace Chinchilla.Configuration
 {
     public class PublisherConfiguration : EndpointConfiguration, IPublisherConfiguration, IPublisherBuilder
     {
-        private Func<string, IRouter> routerBuilder = replyTo => new DefaultRouter(replyTo);
+        private Func<string, IRouter> routerBuilder = replyTo =>
+            new DefaultRouter(replyTo);
+
+        private Func<IPublishFaultStrategy> publishFaultStrategyBuilder = () =>
+            new DefaultPublishFaultStrategy();
 
         public PublisherConfiguration()
         {
@@ -67,9 +71,37 @@ namespace Chinchilla.Configuration
             return this;
         }
 
+        public IPublisherBuilder OnPublishFaults<TStrategy>(params Action<TStrategy>[] configurations)
+            where TStrategy : IPublishFaultStrategy, new()
+        {
+            publishFaultStrategyBuilder = () =>
+            {
+                var strategy = new TStrategy();
+                foreach (var builder in configurations)
+                {
+                    builder(strategy);
+                }
+                return strategy;
+            };
+
+            return this;
+        }
+
+        public IPublisherBuilder OnPublishFaults<TStrategy>(TStrategy instance)
+            where TStrategy : IPublishFaultStrategy
+        {
+            publishFaultStrategyBuilder = () => instance;
+            return this;
+        }
+
         public IRouter BuildRouter()
         {
             return routerBuilder(ReplyQueue);
+        }
+
+        public IPublishFaultStrategy BuildFaultStrategy()
+        {
+            return publishFaultStrategyBuilder();
         }
 
         public IPublisherBuilder SetTopology(IMessageTopologyBuilder messageTopologyBuilder)

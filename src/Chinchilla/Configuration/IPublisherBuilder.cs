@@ -1,3 +1,4 @@
+using System;
 using Chinchilla.Topologies;
 
 namespace Chinchilla.Configuration
@@ -48,5 +49,19 @@ namespace Chinchilla.Configuration
         /// Indicates whether or not publisher confirms are enabled on this publisher
         /// </summary>
         IPublisherBuilder Confirm(bool shouldConfirm);
+
+        /// <summary>
+        /// Sets a custom publisher fault strategy which will be called when publishing
+        /// a message fails
+        /// </summary>
+        IPublisherBuilder OnPublishFaults<TStrategy>(params Action<TStrategy>[] configurations)
+            where TStrategy : IPublishFaultStrategy, new();
+
+        /// <summary>
+        /// Sets a custom publisher fault strategy instance which will be called when publishing
+        /// a message fails
+        /// </summary>
+        IPublisherBuilder OnPublishFaults<TStrategy>(TStrategy instance)
+            where TStrategy : IPublishFaultStrategy;
     }
 }
