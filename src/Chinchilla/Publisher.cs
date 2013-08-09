@@ -65,6 +65,7 @@ namespace Chinchilla
                 var defaultProperties = CreateProperties(message);
 
                 return PublishWithReceipt(
+                    message,
                     model,
                     routingKey,
                     defaultProperties,
@@ -77,6 +78,7 @@ namespace Chinchilla
         }
 
         public virtual IPublishReceipt PublishWithReceipt(
+            TMessage originalMessage,
             IModel model,
             string routingKey,
             IBasicProperties defaultProperties,

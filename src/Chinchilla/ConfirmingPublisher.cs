@@ -8,7 +8,7 @@ namespace Chinchilla
     {
         private readonly IPublishFaultStrategy publishFaultStrategy;
 
-        private readonly Receipts receipts = new Receipts();
+        private readonly Receipts<TMessage> receipts = new Receipts<TMessage>();
 
         public ConfirmingPublisher(
             IModelReference modelReference,
@@ -40,13 +40,15 @@ namespace Chinchilla
         }
 
         public override IPublishReceipt PublishWithReceipt(
+            TMessage originalMessage,
             IModel model,
             string routingKey,
             IBasicProperties defaultProperties,
             byte[] serializedMessage)
         {
             var receipt = receipts.CreateAndRegisterReceipt(
-                model.NextPublishSeqNo);
+                model.NextPublishSeqNo,
+                originalMessage);
 
             model.BasicPublish(
                 Exchange.Name,
@@ -62,14 +64,25 @@ namespace Chinchilla
             return receipts.HasPendingConfirmation(sequenceNumber);
         }
 
-        private void OnBasicAcks(IModel model, BasicAckEventArgs args)
+        public void OnBasicAcks(IModel model, BasicAckEventArgs args)
         {
             receipts.ProcessReceipts(args.Multiple, args.DeliveryTag, r => r.Confirmed());
         }
 
-        private void OnBasicNacks(IModel model, BasicNackEventArgs args)
+        public void OnBasicNacks(IModel model, BasicNackEventArgs args)
         {
-            receipts.ProcessReceipts(args.Multiple, args.DeliveryTag, r => r.Failed());
+            receipts.ProcessReceipts(args.Multiple, args.DeliveryTag, r =>
+            {
+                // Extract the failed message
+                var failedMessage = r.Message;
+
+                // Mark this receipt as failed
+                r.Failed();
+
+                // And ask the publish fault strategy what to do with this
+                var action = publishFaultStrategy.OnFailedReceipt<TMessage>(r);
+                action.Run(this, failedMessage);
+            });
         }
 
         public override void Dispose()

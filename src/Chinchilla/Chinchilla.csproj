@@ -72,6 +72,7 @@
     <Compile Include="Logging\ConsoleLoggerFactory.cs" />
     <Compile Include="Logging\NullLoggerFactory.cs" />
     <Compile Include="Logging\ILoggerFactory.cs" />
+    <Compile Include="NullPublishFaultAction.cs" />
     <Compile Include="NullReceipt.cs" />
     <Compile Include="ConfirmReceipt.cs" />
     <Compile Include="NullWorkersController.cs" />

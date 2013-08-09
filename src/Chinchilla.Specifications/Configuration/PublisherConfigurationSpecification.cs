@@ -101,6 +101,11 @@ namespace Chinchilla.Specifications.Configuration
         public class CustomPublishFaultStrategy : IPublishFaultStrategy
         {
             public string Property { get; set; }
+
+            public IPublishFaultAction<TMessage> OnFailedReceipt<TMessage>(IPublishReceipt receipt)
+            {
+                return null;
+            }
         }
 
         public class CustomRouter : IRouter
