@@ -107,7 +107,7 @@
     <Compile Include="ISubscriptionFailureStrategy.cs" />
     <Compile Include="IEndpoint.cs" />
     <Compile Include="Configuration\IEndpointConfiguration.cs" />
-    <Compile Include="IgnoreSubscriptionFailureStrategy.cs" />
+    <Compile Include="IgnoreFaultStrategy.cs" />
     <Compile Include="IHasRoutingKey.cs" />
     <Compile Include="IDeliveryContext.cs" />
     <Compile Include="IMessageSerializers.cs" />
