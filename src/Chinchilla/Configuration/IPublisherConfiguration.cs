@@ -1,6 +1,6 @@
 namespace Chinchilla.Configuration
 {
-    public interface IPublisherConfiguration : IEndpointConfiguration
+    public interface IPublisherConfiguration<TMessage> : IEndpointConfiguration
     {
         string EndpointName { get; }
 
@@ -14,6 +14,6 @@ namespace Chinchilla.Configuration
 
         IRouter BuildRouter();
 
-        IPublishFaultStrategy BuildFaultStrategy();
+        IPublishFaultStrategy<TMessage> BuildFaultStrategy();
     }
 }

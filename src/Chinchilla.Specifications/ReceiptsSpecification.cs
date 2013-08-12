@@ -18,7 +18,7 @@ namespace Chinchilla.Specifications
             It should_be_confirmed = () =>
                 receipt.IsConfirmed.ShouldBeTrue();
 
-            private static ConfirmReceipt<TestMessage> receipt;
+            static ConfirmReceipt<TestMessage> receipt;
         }
 
         [Subject(typeof(Receipts<>))]
@@ -33,7 +33,7 @@ namespace Chinchilla.Specifications
             It should_be_confirmed = () =>
                 receipt.IsFailed.ShouldBeTrue();
 
-            private static ConfirmReceipt<TestMessage> receipt;
+            static ConfirmReceipt<TestMessage> receipt;
         }
 
         [Subject(typeof(Receipts<>))]
@@ -75,13 +75,13 @@ namespace Chinchilla.Specifications
             It should_not_confirm_unaffected_receipts = () =>
                 fourth.IsConfirmed.ShouldBeFalse();
 
-            private static ConfirmReceipt<TestMessage> first;
+            static ConfirmReceipt<TestMessage> first;
 
-            private static ConfirmReceipt<TestMessage> second;
+            static ConfirmReceipt<TestMessage> second;
 
-            private static ConfirmReceipt<TestMessage> third;
+            static ConfirmReceipt<TestMessage> third;
 
-            private static ConfirmReceipt<TestMessage> fourth;
+            static ConfirmReceipt<TestMessage> fourth;
         }
 
         [Subject(typeof(Receipts<>))]

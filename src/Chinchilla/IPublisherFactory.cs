@@ -17,6 +17,6 @@ namespace Chinchilla
         /// <returns>A publisher</returns>
         IPublisher<TMessage> Create<TMessage>(
             IModelReference modelReference,
-            IPublisherConfiguration configuration);
+            IPublisherConfiguration<TMessage> configuration);
     }
 }

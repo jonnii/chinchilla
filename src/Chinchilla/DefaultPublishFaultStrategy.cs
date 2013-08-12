@@ -1,10 +1,10 @@
 ﻿namespace Chinchilla
 {
-    public class DefaultPublishFaultStrategy : IPublishFaultStrategy
+    public class DefaultPublishFaultStrategy<TMessage> : IPublishFaultStrategy<TMessage>
     {
-        public IPublishFaultAction<TMessage> OnFailedReceipt<TMessage>(IPublishReceipt receipt)
+        public void Run(IPublisher<TMessage> publisher, TMessage failedMessage, IPublishReceipt receipt)
         {
-            return new NullPublishFaultAction<TMessage>();
+
         }
     }
 }

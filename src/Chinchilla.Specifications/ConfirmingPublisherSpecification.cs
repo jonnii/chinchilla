@@ -54,22 +54,16 @@ namespace Chinchilla.Specifications
         {
             Establish context = () =>
             {
-                publishFaultAction = An<IPublishFaultAction<TestMessage>>();
                 originalMessage = new TestMessage();
-
                 Subject.PublishWithReceipt(originalMessage, model, "routingkey", An<IBasicProperties>(), new byte[0]);
-
-                The<IPublishFaultStrategy>().WhenToldTo(s => s.OnFailedReceipt<TestMessage>(Param.IsAny<IPublishReceipt>()))
-                    .Return(publishFaultAction);
             };
 
             Because of = () =>
                 Subject.OnBasicNacks(model, new BasicNackEventArgs { DeliveryTag = 300, Multiple = false, Requeue = false });
 
-            It should_ask_strategy_publish_fault = () =>
-                publishFaultAction.WasToldTo(s => s.Run(Param.IsAny<IPublisher<TestMessage>>(), originalMessage));
-
-            static IPublishFaultAction<TestMessage> publishFaultAction;
+            It should_run_publish_fault_strategy = () =>
+                The<IPublishFaultStrategy<TestMessage>>().WasToldTo(
+                    s => s.Run(Subject, originalMessage, Param.IsAny<IPublishReceipt>()));
 
             static TestMessage originalMessage;
         }

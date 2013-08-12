@@ -24,13 +24,13 @@ namespace Chinchilla.Integration.Features
                     b.SetTopology(new CustomSubscribeMessageTopology())
                 );
 
-                var publisherBuilder = new Action<IPublisherBuilder>(b =>
+                var publisherBuilder = new Action<IPublisherBuilder<HelloWorldMessage>>(b =>
                     b.SetTopology(new CustomSubscribeMessageTopology())
                 );
 
                 using (bus.Subscribe(onMessage, subscriptionBuilder))
                 {
-                    using (var publisher = bus.CreatePublisher<HelloWorldMessage>(publisherBuilder))
+                    using (var publisher = bus.CreatePublisher(publisherBuilder))
                     {
                         for (var i = 0; i < 100; ++i)
                         {

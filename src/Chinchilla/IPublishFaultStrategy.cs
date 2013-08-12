@@ -1,12 +1,7 @@
 ﻿namespace Chinchilla
 {
-    public interface IPublishFaultStrategy
+    public interface IPublishFaultStrategy<TMessage>
     {
-        IPublishFaultAction<TMessage> OnFailedReceipt<TMessage>(IPublishReceipt receipt);
-    }
-
-    public interface IPublishFaultAction<TMessage>
-    {
-        void Run(IPublisher<TMessage> publisher, TMessage failedMessage);
+        void Run(IPublisher<TMessage> publisher, TMessage failedMessage, IPublishReceipt receipt);
     }
 }

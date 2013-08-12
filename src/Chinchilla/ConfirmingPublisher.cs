@@ -6,7 +6,7 @@ namespace Chinchilla
 {
     public class ConfirmingPublisher<TMessage> : Publisher<TMessage>
     {
-        private readonly IPublishFaultStrategy publishFaultStrategy;
+        private readonly IPublishFaultStrategy<TMessage> publishFaultStrategy;
 
         private readonly Receipts<TMessage> receipts = new Receipts<TMessage>();
 
@@ -15,7 +15,7 @@ namespace Chinchilla
             IMessageSerializer serializer,
             IExchange exchange,
             IRouter router,
-            IPublishFaultStrategy publishFaultStrategy)
+            IPublishFaultStrategy<TMessage> publishFaultStrategy)
             : base(modelReference, serializer, exchange, router)
         {
             this.publishFaultStrategy = publishFaultStrategy;
@@ -66,22 +66,21 @@ namespace Chinchilla
 
         public void OnBasicAcks(IModel model, BasicAckEventArgs args)
         {
-            receipts.ProcessReceipts(args.Multiple, args.DeliveryTag, r => r.Confirmed());
+            receipts.ProcessReceipts(args.Multiple, args.DeliveryTag, receipt => receipt.Confirmed());
         }
 
         public void OnBasicNacks(IModel model, BasicNackEventArgs args)
         {
-            receipts.ProcessReceipts(args.Multiple, args.DeliveryTag, r =>
+            receipts.ProcessReceipts(args.Multiple, args.DeliveryTag, receipt =>
             {
                 // Extract the failed message
-                var failedMessage = r.Message;
+                var failedMessage = receipt.Message;
 
                 // Mark this receipt as failed
-                r.Failed();
+                receipt.Failed();
 
                 // And ask the publish fault strategy what to do with this
-                var action = publishFaultStrategy.OnFailedReceipt<TMessage>(r);
-                action.Run(this, failedMessage);
+                publishFaultStrategy.Run(this, failedMessage, receipt);
             });
         }
 

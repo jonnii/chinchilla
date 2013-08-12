@@ -14,7 +14,7 @@ namespace Chinchilla
 
         public IPublisher<TMessage> Create<TMessage>(
             IModelReference modelReference,
-            IPublisherConfiguration configuration)
+            IPublisherConfiguration<TMessage> configuration)
         {
             var messageType = typeof(TMessage).Name;
             var endpoint = new Endpoint(configuration.EndpointName ?? messageType, messageType, 0);

@@ -141,18 +141,9 @@ namespace Chinchilla.Integration.Features
             }
         }
 
-        public class RetryOnFaults : IPublishFaultStrategy
+        public class RetryOnFaults : IPublishFaultStrategy<HelloWorldMessage>
         {
-            public IPublishFaultAction<TMessage> OnFailedReceipt<TMessage>(IPublishReceipt receipt)
-            {
-                // decide what to do with the receipt here...
-                return new RetryMessage<TMessage>();
-            }
-        }
-
-        public class RetryMessage<TMessage> : IPublishFaultAction<TMessage>
-        {
-            public void Run(IPublisher<TMessage> publisher, TMessage failedMessage)
+            public void Run(IPublisher<HelloWorldMessage> publisher, HelloWorldMessage failedMessage, IPublishReceipt receipt)
             {
                 publisher.Publish(failedMessage);
             }
