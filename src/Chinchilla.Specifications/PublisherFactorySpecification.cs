@@ -16,6 +16,9 @@ namespace Chinchilla.Specifications
 
             It should_build_router = () =>
                 configuration.WasToldTo(c => c.BuildRouter());
+
+            It should_build_fault_strategy = () =>
+                configuration.WasToldTo(c => c.BuildFaultStrategy());
         }
 
         [Subject(typeof(PublisherFactory))]
@@ -30,7 +33,7 @@ namespace Chinchilla.Specifications
             It should_create_confirming_publisher = () =>
                 publisher.ShouldBeOfType<ConfirmingPublisher<TestMessage>>();
 
-            private static IPublisher<TestMessage> publisher;
+            static IPublisher<TestMessage> publisher;
         }
 
         public class with_publisher_factory : WithSubject<PublisherFactory>
@@ -38,7 +41,7 @@ namespace Chinchilla.Specifications
             Establish context = () =>
             {
                 modelReference = An<IModelReference>();
-                configuration = An<IPublisherConfiguration>();
+                configuration = An<IPublisherConfiguration<TestMessage>>();
 
                 configuration.WhenToldTo(c => c.BuildRouter()).Return(An<IRouter>());
                 configuration.WhenToldTo(c => c.BuildTopology(Param.IsAny<IEndpoint>()))
@@ -48,7 +51,7 @@ namespace Chinchilla.Specifications
                     .Return(An<IMessageSerializer>());
             };
 
-            protected static IPublisherConfiguration configuration;
+            protected static IPublisherConfiguration<TestMessage> configuration;
 
             protected static IModelReference modelReference;
         }

@@ -73,7 +73,12 @@ namespace Chinchilla.Specifications
             };
 
             Because of = () =>
-                receipt = Subject.PublishWithReceipt(model, "key", An<IBasicProperties>(), new byte[0]);
+                receipt = Subject.PublishWithReceipt(
+                    new TestMessage(),
+                    model,
+                    "key",
+                    An<IBasicProperties>(),
+                    new byte[0]);
 
             It should_mark_receipt_as_unknown = () =>
                 receipt.Status.ShouldEqual(PublishStatus.None);

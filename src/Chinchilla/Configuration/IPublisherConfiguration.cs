@@ -1,6 +1,6 @@
 namespace Chinchilla.Configuration
 {
-    public interface IPublisherConfiguration : IEndpointConfiguration
+    public interface IPublisherConfiguration<TMessage> : IEndpointConfiguration
     {
         string EndpointName { get; }
 
@@ -13,5 +13,7 @@ namespace Chinchilla.Configuration
         bool ShouldConfirm { get; }
 
         IRouter BuildRouter();
+
+        IPublisherFailureStrategy<TMessage> BuildFaultStrategy();
     }
 }

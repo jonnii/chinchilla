@@ -15,7 +15,7 @@ namespace Chinchilla.Specifications
                 delivery = An<IDelivery>();
 
             Because of = () =>
-                Subject.ProcessFailedDelivery(delivery, new Exception());
+                Subject.OnFailure(delivery, new Exception());
 
             It should_accept_delivery = () =>
                 delivery.WasToldTo(d => d.Accept());
@@ -64,8 +64,8 @@ namespace Chinchilla.Specifications
                 var publisher = An<IPublisher<Fault>>();
 
                 var bus = An<IBus>();
-                bus.WhenToldTo(b => b.CreatePublisher<Fault>(
-                    Param.IsAny<Action<IPublisherBuilder>>())).Return(publisher);
+                bus.WhenToldTo(b => b.CreatePublisher(
+                    Param.IsAny<Action<IPublisherBuilder<Fault>>>())).Return(publisher);
 
                 Subject = new ErrorQueueFaultStrategy(bus);
             };

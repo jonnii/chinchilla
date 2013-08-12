@@ -6,16 +6,19 @@ namespace Chinchilla
 {
     public class ConfirmingPublisher<TMessage> : Publisher<TMessage>
     {
-        private readonly Receipts receipts = new Receipts();
+        private readonly IPublisherFailureStrategy<TMessage> publisherFailureStrategy;
+
+        private readonly Receipts<TMessage> receipts = new Receipts<TMessage>();
 
         public ConfirmingPublisher(
             IModelReference modelReference,
             IMessageSerializer serializer,
             IExchange exchange,
-            IRouter router)
+            IRouter router,
+            IPublisherFailureStrategy<TMessage> publisherFailureStrategy)
             : base(modelReference, serializer, exchange, router)
         {
-
+            this.publisherFailureStrategy = publisherFailureStrategy;
         }
 
         public override void Start()
@@ -37,13 +40,15 @@ namespace Chinchilla
         }
 
         public override IPublishReceipt PublishWithReceipt(
+            TMessage originalMessage,
             IModel model,
             string routingKey,
             IBasicProperties defaultProperties,
             byte[] serializedMessage)
         {
             var receipt = receipts.CreateAndRegisterReceipt(
-                model.NextPublishSeqNo);
+                model.NextPublishSeqNo,
+                originalMessage);
 
             model.BasicPublish(
                 Exchange.Name,
@@ -59,14 +64,24 @@ namespace Chinchilla
             return receipts.HasPendingConfirmation(sequenceNumber);
         }
 
-        private void OnBasicAcks(IModel model, BasicAckEventArgs args)
+        public void OnBasicAcks(IModel model, BasicAckEventArgs args)
         {
-            receipts.ProcessReceipts(args.Multiple, args.DeliveryTag, r => r.Confirmed());
+            receipts.ProcessReceipts(args.Multiple, args.DeliveryTag, receipt => receipt.Confirmed());
         }
 
-        private void OnBasicNacks(IModel model, BasicNackEventArgs args)
+        public void OnBasicNacks(IModel model, BasicNackEventArgs args)
         {
-            receipts.ProcessReceipts(args.Multiple, args.DeliveryTag, r => r.Failed());
+            receipts.ProcessReceipts(args.Multiple, args.DeliveryTag, receipt =>
+            {
+                // Extract the failed message
+                var failedMessage = receipt.Message;
+
+                // Mark this receipt as failed
+                receipt.Failed();
+
+                // And ask the publisher fault strategy what to do with this
+                publisherFailureStrategy.OnFailure(this, failedMessage, receipt);
+            });
         }
 
         public override void Dispose()

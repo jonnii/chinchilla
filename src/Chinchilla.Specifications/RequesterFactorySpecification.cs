@@ -29,7 +29,7 @@ namespace Chinchilla.Specifications
                 Subject.IsTracking(requester).ShouldBeTrue();
 
             It should_create_publisher_for_request_type = () =>
-                bus.WasToldTo(b => b.CreatePublisher<TestRequestMessage>(Param.IsAny<Action<IPublisherBuilder>>()));
+                bus.WasToldTo(b => b.CreatePublisher(Param.IsAny<Action<IPublisherBuilder<TestRequestMessage>>>()));
 
             static Requester<TestRequestMessage, TestResponseMessage> requester;
 

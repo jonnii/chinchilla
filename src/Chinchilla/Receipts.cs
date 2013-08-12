@@ -4,19 +4,19 @@ using System.Linq;
 
 namespace Chinchilla
 {
-    public class Receipts
+    public class Receipts<TMessage>
     {
-        private readonly ConcurrentDictionary<ulong, ConfirmReceipt> receipts
-            = new ConcurrentDictionary<ulong, ConfirmReceipt>();
+        private readonly ConcurrentDictionary<ulong, ConfirmReceipt<TMessage>> receipts
+            = new ConcurrentDictionary<ulong, ConfirmReceipt<TMessage>>();
 
-        public ConfirmReceipt CreateAndRegisterReceipt(ulong nextPublishSeqNo)
+        public ConfirmReceipt<TMessage> CreateAndRegisterReceipt(ulong nextPublishSeqNo, TMessage message)
         {
-            var receipt = new ConfirmReceipt(nextPublishSeqNo);
+            var receipt = new ConfirmReceipt<TMessage>(nextPublishSeqNo, message);
             RegisterReceipt(receipt);
             return receipt;
         }
 
-        public ConfirmReceipt RegisterReceipt(ConfirmReceipt receipt)
+        public ConfirmReceipt<TMessage> RegisterReceipt(ConfirmReceipt<TMessage> receipt)
         {
             if (receipts.TryAdd(receipt.Sequence, receipt))
             {
@@ -36,7 +36,7 @@ namespace Chinchilla
             return receipts.ContainsKey(sequenceNumber);
         }
 
-        public void ProcessReceipts(bool multiple, ulong sequenceNumber, Action<ConfirmReceipt> act)
+        public void ProcessReceipts(bool multiple, ulong sequenceNumber, Action<ConfirmReceipt<TMessage>> act)
         {
             if (multiple)
             {
@@ -53,9 +53,9 @@ namespace Chinchilla
             }
         }
 
-        private void ProcessReceipt(ulong sequenceNumber, Action<ConfirmReceipt> act)
+        private void ProcessReceipt(ulong sequenceNumber, Action<ConfirmReceipt<TMessage>> act)
         {
-            ConfirmReceipt receipt;
+            ConfirmReceipt<TMessage> receipt;
             if (receipts.TryRemove(sequenceNumber, out receipt))
             {
                 act(receipt);

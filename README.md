@@ -284,7 +284,7 @@ Chinchilla also lets you subscribe on multiple endpoints, which is an abstractio
 RabbitMq consumer with multiple consumer queues:
 
 ````
-bus.Subscribe(OnCustaomerMessage, o => o.SubscribeOn("queue-1", "queue-2"));
+bus.Subscribe(OnCustomerMessage, o => o.SubscribeOn("queue-1", "queue-2"));
 ````
 
 This subscription will attempt to take a message off of `queue-1`, and if no messages are available on 
@@ -293,18 +293,35 @@ priority queues with RabbitMq.
 
 ## Error Handling
 
-If during the course of processing a message your handler throws an exception then out of the box Chinchilla
+If during the course of processing a message your handler throws an exception then Chinchilla
 will put that message on a queue named `ErrorQueue` along with information about the cause of the problem, such
-as the stack trace. If you want to change the way faults are handled you can change the fault strategy:
+as the stack trace. If you want to change the way failures are handled you can change the failure strategy:
 
 ````
 // Change the fault strategy on a subscription
 bus.Subscribe(OnCustomerMessage, 
-    o => o.DeliverFaultsUsing<CustomFaultStrategy>());
+    o => o.OnFailure<CustomFaultStrategy>());
     
 // Change the fault strategy on a subscription and configure it
 bus.Subscribe(OnCustomerMessage, 
-    o => o.DeliverFaultsUsing<CustomFaultStrategy>(s => s.NotifyByEmail = true));
+    o => o.OnFailure<CustomFaultStrategy>(s => s.NotifyByEmail = true));
+````
+
+If you have enabled publisher confirms then it's also possible to change the strategy used for failed 
+publishes. For example:
+
+````
+bus.CreatePublisher<CustomerOrderMessage>(
+	o => o.Confirm(true).OnFailure<RetryOnFailures>())
+
+public class RetryOnFailures : IPublisherFailureStrategy<HelloWorldMessage>
+{
+    public void OnFailure(IPublisher<CustomerOrderMessage> publisher, CustomerOrderMessage failedMessage, IPublishReceipt receipt)
+    {
+		// publish the message again...
+        publisher.Publish(failedMessage);
+    }
+}
 ````
 
 ## Request Response

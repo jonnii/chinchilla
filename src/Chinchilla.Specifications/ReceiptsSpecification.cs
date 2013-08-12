@@ -6,11 +6,11 @@ namespace Chinchilla.Specifications
 {
     public class ReceiptsSpecification
     {
-        [Subject(typeof(Receipts))]
-        public class when_confirming_single_receipt : WithSubject<Receipts>
+        [Subject(typeof(Receipts<>))]
+        public class when_confirming_single_receipt : WithSubject<Receipts<TestMessage>>
         {
             Establish context = () =>
-                 receipt = Subject.RegisterReceipt(new ConfirmReceipt(200));
+                 receipt = Subject.RegisterReceipt(new ConfirmReceipt<TestMessage>(200, new TestMessage()));
 
             Because of = () =>
                 Subject.ProcessReceipts(false, 200, r => r.Confirmed());
@@ -18,14 +18,14 @@ namespace Chinchilla.Specifications
             It should_be_confirmed = () =>
                 receipt.IsConfirmed.ShouldBeTrue();
 
-            private static ConfirmReceipt receipt;
+            static ConfirmReceipt<TestMessage> receipt;
         }
 
-        [Subject(typeof(Receipts))]
-        public class when_confirming_single_failed_receipt : WithSubject<Receipts>
+        [Subject(typeof(Receipts<>))]
+        public class when_confirming_single_failed_receipt : WithSubject<Receipts<TestMessage>>
         {
             Establish context = () =>
-                 receipt = Subject.RegisterReceipt(new ConfirmReceipt(200));
+                 receipt = Subject.RegisterReceipt(ConfirmReceipt.New(200, new TestMessage()));
 
             Because of = () =>
                 Subject.ProcessReceipts(false, 200, r => r.Failed());
@@ -33,17 +33,17 @@ namespace Chinchilla.Specifications
             It should_be_confirmed = () =>
                 receipt.IsFailed.ShouldBeTrue();
 
-            private static ConfirmReceipt receipt;
+            static ConfirmReceipt<TestMessage> receipt;
         }
 
-        [Subject(typeof(Receipts))]
-        public class when_registering_duplicate_receipt : WithSubject<Receipts>
+        [Subject(typeof(Receipts<>))]
+        public class when_registering_duplicate_receipt : WithSubject<Receipts<TestMessage>>
         {
             Establish context = () =>
-                Subject.RegisterReceipt(new ConfirmReceipt(300));
+                Subject.RegisterReceipt(ConfirmReceipt.New(300, new TestMessage()));
 
             Because of = () =>
-                exception = Catch.Exception(() => Subject.RegisterReceipt(new ConfirmReceipt(300)));
+                exception = Catch.Exception(() => Subject.RegisterReceipt(ConfirmReceipt.New(300, new TestMessage())));
 
             It should_throw_exception = () =>
                 exception.ShouldBeOfType<DuplicatePublishReceiptException>();
@@ -51,15 +51,15 @@ namespace Chinchilla.Specifications
             static Exception exception;
         }
 
-        [Subject(typeof(Receipts))]
-        public class when_confirming_multiple_receipts : WithSubject<Receipts>
+        [Subject(typeof(Receipts<>))]
+        public class when_confirming_multiple_receipts : WithSubject<Receipts<TestMessage>>
         {
             Establish context = () =>
             {
-                first = Subject.RegisterReceipt(new ConfirmReceipt(200));
-                second = Subject.RegisterReceipt(new ConfirmReceipt(201));
-                third = Subject.RegisterReceipt(new ConfirmReceipt(202));
-                fourth = Subject.RegisterReceipt(new ConfirmReceipt(203));
+                first = Subject.RegisterReceipt(ConfirmReceipt.New(200, new TestMessage()));
+                second = Subject.RegisterReceipt(ConfirmReceipt.New(201, new TestMessage()));
+                third = Subject.RegisterReceipt(ConfirmReceipt.New(202, new TestMessage()));
+                fourth = Subject.RegisterReceipt(ConfirmReceipt.New(203, new TestMessage()));
             };
 
             Because of = () =>
@@ -75,23 +75,25 @@ namespace Chinchilla.Specifications
             It should_not_confirm_unaffected_receipts = () =>
                 fourth.IsConfirmed.ShouldBeFalse();
 
-            private static ConfirmReceipt first;
+            static ConfirmReceipt<TestMessage> first;
 
-            private static ConfirmReceipt second;
+            static ConfirmReceipt<TestMessage> second;
 
-            private static ConfirmReceipt third;
+            static ConfirmReceipt<TestMessage> third;
 
-            private static ConfirmReceipt fourth;
+            static ConfirmReceipt<TestMessage> fourth;
         }
 
-        [Subject(typeof(Receipts))]
-        public class when_registering_receipt : WithSubject<Receipts>
+        [Subject(typeof(Receipts<>))]
+        public class when_registering_receipt : WithSubject<Receipts<TestMessage>>
         {
             Because of = () =>
-                Subject.RegisterReceipt(new ConfirmReceipt(300));
+                Subject.RegisterReceipt(ConfirmReceipt.New(300, new TestMessage()));
 
             It should_have_receipt_registered_for_receipt = () =>
                 Subject.HasPendingConfirmation(300).ShouldBeTrue();
         }
+
+        public class TestMessage { }
     }
 }
