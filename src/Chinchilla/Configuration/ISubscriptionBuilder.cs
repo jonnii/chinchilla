@@ -27,10 +27,10 @@ namespace Chinchilla.Configuration
             where TStrategy : IDeliveryStrategy, new();
 
         /// <summary>
-        /// Changes the strategy for faulted deliveries
+        /// Changes the strategy for failed deliveries
         /// </summary>
-        ISubscriptionBuilder DeliverFaultsUsing<TStrategy>(params Action<TStrategy>[] configurations)
-            where TStrategy : IFaultStrategy, new();
+        ISubscriptionBuilder OnFailure<TStrategy>(params Action<TStrategy>[] configurations)
+            where TStrategy : ISubscriptionFailureStrategy, new();
 
         /// <summary>
         /// Sets the topology of this subscription

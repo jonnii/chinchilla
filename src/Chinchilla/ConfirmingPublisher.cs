@@ -6,7 +6,7 @@ namespace Chinchilla
 {
     public class ConfirmingPublisher<TMessage> : Publisher<TMessage>
     {
-        private readonly IPublishFaultStrategy<TMessage> publishFaultStrategy;
+        private readonly IPublisherFailureStrategy<TMessage> publisherFailureStrategy;
 
         private readonly Receipts<TMessage> receipts = new Receipts<TMessage>();
 
@@ -15,10 +15,10 @@ namespace Chinchilla
             IMessageSerializer serializer,
             IExchange exchange,
             IRouter router,
-            IPublishFaultStrategy<TMessage> publishFaultStrategy)
+            IPublisherFailureStrategy<TMessage> publisherFailureStrategy)
             : base(modelReference, serializer, exchange, router)
         {
-            this.publishFaultStrategy = publishFaultStrategy;
+            this.publisherFailureStrategy = publisherFailureStrategy;
         }
 
         public override void Start()
@@ -79,8 +79,8 @@ namespace Chinchilla
                 // Mark this receipt as failed
                 receipt.Failed();
 
-                // And ask the publish fault strategy what to do with this
-                publishFaultStrategy.Run(this, failedMessage, receipt);
+                // And ask the publisher fault strategy what to do with this
+                publisherFailureStrategy.OnFailure(this, failedMessage, receipt);
             });
         }
 

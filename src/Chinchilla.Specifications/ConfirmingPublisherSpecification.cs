@@ -61,9 +61,9 @@ namespace Chinchilla.Specifications
             Because of = () =>
                 Subject.OnBasicNacks(model, new BasicNackEventArgs { DeliveryTag = 300, Multiple = false, Requeue = false });
 
-            It should_run_publish_fault_strategy = () =>
-                The<IPublishFaultStrategy<TestMessage>>().WasToldTo(
-                    s => s.Run(Subject, originalMessage, Param.IsAny<IPublishReceipt>()));
+            It should_run_publisher_failure_strategy = () =>
+                The<IPublisherFailureStrategy<TestMessage>>().WasToldTo(
+                    s => s.OnFailure(Subject, originalMessage, Param.IsAny<IPublishReceipt>()));
 
             static TestMessage originalMessage;
         }

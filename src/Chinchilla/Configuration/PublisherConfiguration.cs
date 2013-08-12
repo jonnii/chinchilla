@@ -8,8 +8,8 @@ namespace Chinchilla.Configuration
         private Func<string, IRouter> routerBuilder = replyTo =>
             new DefaultRouter(replyTo);
 
-        private Func<IPublishFaultStrategy<TMessage>> publishFaultStrategyBuilder = () =>
-            new DefaultPublishFaultStrategy<TMessage>();
+        private Func<IPublisherFailureStrategy<TMessage>> publishFaultStrategyBuilder = () =>
+            new DefaultPublisherFailureStrategy<TMessage>();
 
         public PublisherConfiguration()
         {
@@ -71,8 +71,8 @@ namespace Chinchilla.Configuration
             return this;
         }
 
-        public IPublisherBuilder<TMessage> OnPublishFaults<TStrategy>(params Action<TStrategy>[] configurations)
-            where TStrategy : IPublishFaultStrategy<TMessage>, new()
+        public IPublisherBuilder<TMessage> OnFailure<TStrategy>(params Action<TStrategy>[] configurations)
+            where TStrategy : IPublisherFailureStrategy<TMessage>, new()
         {
             publishFaultStrategyBuilder = () =>
             {
@@ -87,8 +87,8 @@ namespace Chinchilla.Configuration
             return this;
         }
 
-        public IPublisherBuilder<TMessage> OnPublishFaults<TStrategy>(TStrategy instance)
-            where TStrategy : IPublishFaultStrategy<TMessage>
+        public IPublisherBuilder<TMessage> OnFailure<TStrategy>(TStrategy instance)
+            where TStrategy : IPublisherFailureStrategy<TMessage>
         {
             publishFaultStrategyBuilder = () => instance;
             return this;
@@ -99,7 +99,7 @@ namespace Chinchilla.Configuration
             return routerBuilder(ReplyQueue);
         }
 
-        public IPublishFaultStrategy<TMessage> BuildFaultStrategy()
+        public IPublisherFailureStrategy<TMessage> BuildFaultStrategy()
         {
             return publishFaultStrategyBuilder();
         }

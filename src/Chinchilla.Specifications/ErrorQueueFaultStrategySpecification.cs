@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Text;
 using Chinchilla.Configuration;
-using Chinchilla.Specifications.Messages;
 using Machine.Fakes;
 using Machine.Specifications;
 
@@ -16,7 +15,7 @@ namespace Chinchilla.Specifications
                 delivery = An<IDelivery>();
 
             Because of = () =>
-                Subject.ProcessFailedDelivery(delivery, new Exception());
+                Subject.OnFailure(delivery, new Exception());
 
             It should_accept_delivery = () =>
                 delivery.WasToldTo(d => d.Accept());

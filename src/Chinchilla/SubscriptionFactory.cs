@@ -106,7 +106,7 @@ namespace Chinchilla
             IModelReference modelReference,
             string messageType,
             IEndpointConfiguration configuration,
-            IFaultStrategy faultStrategy)
+            ISubscriptionFailureStrategy subscriptionFailureStrategy)
         {
             return endpointNames.Select((endpointName, i) =>
             {
@@ -120,7 +120,7 @@ namespace Chinchilla
                 var subscribeQueue = topology.SubscribeQueue;
 
                 return new DeliveryQueue(
-                    subscribeQueue, modelReference, faultStrategy);
+                    subscribeQueue, modelReference, subscriptionFailureStrategy);
             });
         }
 

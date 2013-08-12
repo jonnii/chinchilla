@@ -28,9 +28,9 @@ namespace Chinchilla.Specifications
             Because of = () =>
                 Subject.OnFailed(An<IDelivery>(), new Exception());
 
-            It should_send_failed_delivery_to_fault_strategy = () =>
-                The<IFaultStrategy>().WasToldTo(
-                    s => s.ProcessFailedDelivery(
+            It should_send_failed_delivery_to_failure_strategy = () =>
+                The<ISubscriptionFailureStrategy>().WasToldTo(
+                    s => s.OnFailure(
                         Param.IsAny<IDelivery>(),
                         Param.IsAny<Exception>()));
         }

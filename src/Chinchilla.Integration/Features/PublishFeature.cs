@@ -123,7 +123,7 @@ namespace Chinchilla.Integration.Features
             using (var bus = Depot.Connect("localhost/integration"))
             {
                 using (var publisher = bus.CreatePublisher<HelloWorldMessage>(
-                    o => o.Confirm(true).OnPublishFaults<RetryOnFaults>()))
+                    o => o.Confirm(true).OnFailure<RetryOnFailures>()))
                 {
                     // TODO: Find a way to make this nack, so we can test the fault strategy
                     publisher.Publish(new HelloWorldMessage());
@@ -141,9 +141,9 @@ namespace Chinchilla.Integration.Features
             }
         }
 
-        public class RetryOnFaults : IPublishFaultStrategy<HelloWorldMessage>
+        public class RetryOnFailures : IPublisherFailureStrategy<HelloWorldMessage>
         {
-            public void Run(IPublisher<HelloWorldMessage> publisher, HelloWorldMessage failedMessage, IPublishReceipt receipt)
+            public void OnFailure(IPublisher<HelloWorldMessage> publisher, HelloWorldMessage failedMessage, IPublishReceipt receipt)
             {
                 publisher.Publish(failedMessage);
             }

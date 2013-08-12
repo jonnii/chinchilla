@@ -51,17 +51,17 @@ namespace Chinchilla.Configuration
         IPublisherBuilder<TMessage> Confirm(bool shouldConfirm);
 
         /// <summary>
-        /// Sets a custom publisher fault strategy which will be called when publishing
+        /// Sets a custom publisher failure strategy which will be called when publishing
         /// a message fails
         /// </summary>
-        IPublisherBuilder<TMessage> OnPublishFaults<TStrategy>(params Action<TStrategy>[] configurations)
-            where TStrategy : IPublishFaultStrategy<TMessage>, new();
+        IPublisherBuilder<TMessage> OnFailure<TStrategy>(params Action<TStrategy>[] configurations)
+            where TStrategy : IPublisherFailureStrategy<TMessage>, new();
 
         /// <summary>
-        /// Sets a custom publisher fault strategy instance which will be called when publishing
+        /// Sets a custom publisher failure strategy instance which will be called when publishing
         /// a message fails
         /// </summary>
-        IPublisherBuilder<TMessage> OnPublishFaults<TStrategy>(TStrategy instance)
-            where TStrategy : IPublishFaultStrategy<TMessage>;
+        IPublisherBuilder<TMessage> OnFailure<TStrategy>(TStrategy instance)
+            where TStrategy : IPublisherFailureStrategy<TMessage>;
     }
 }

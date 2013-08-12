@@ -76,15 +76,15 @@ namespace Chinchilla.Specifications.Configuration
         public class when_building_with_custom_fault_strategy : WithSubject<PublisherConfiguration<TestMessage>>
         {
             Establish context = () =>
-                Subject.OnPublishFaults<CustomPublishFaultStrategy>(s => s.Property = "foo");
+                Subject.OnFailure<CustomPublisherFailureStrategy>(s => s.Property = "foo");
 
             Because of = () =>
                 strategy = Subject.BuildFaultStrategy();
 
             It should_build_strategy = () =>
-                ((CustomPublishFaultStrategy)strategy).Property.ShouldEqual("foo");
+                ((CustomPublisherFailureStrategy)strategy).Property.ShouldEqual("foo");
 
-            static IPublishFaultStrategy<TestMessage> strategy;
+            static IPublisherFailureStrategy<TestMessage> strategy;
         }
 
         [Subject(typeof(PublisherConfiguration<>))]
@@ -94,16 +94,16 @@ namespace Chinchilla.Specifications.Configuration
                strategy = Subject.BuildFaultStrategy();
 
             It should_create_default_publish_fault_strategy = () =>
-                strategy.ShouldBeOfType<DefaultPublishFaultStrategy<TestMessage>>();
+                strategy.ShouldBeOfType<DefaultPublisherFailureStrategy<TestMessage>>();
 
-            static IPublishFaultStrategy<TestMessage> strategy;
+            static IPublisherFailureStrategy<TestMessage> strategy;
         }
 
-        public class CustomPublishFaultStrategy : IPublishFaultStrategy<TestMessage>
+        public class CustomPublisherFailureStrategy : IPublisherFailureStrategy<TestMessage>
         {
             public string Property { get; set; }
 
-            public void Run(IPublisher<TestMessage> publisher, TestMessage failedMessage, IPublishReceipt receipt)
+            public void OnFailure(IPublisher<TestMessage> publisher, TestMessage failedMessage, IPublishReceipt receipt)
             {
 
             }
