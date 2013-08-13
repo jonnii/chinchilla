@@ -2,14 +2,14 @@ using System;
 
 namespace Chinchilla
 {
-    public class IgnoreFaultStrategy : IFaultStrategy
+    public class IgnoreFaultStrategy : ISubscriptionFailureStrategy
     {
-        public static IFaultStrategy Build(IBus bus)
+        public static ISubscriptionFailureStrategy Build(IBus bus)
         {
             return new IgnoreFaultStrategy();
         }
 
-        public void ProcessFailedDelivery(IDelivery delivery, Exception exception)
+        public void OnFailure(IDelivery delivery, Exception exception)
         {
             delivery.Accept();
         }

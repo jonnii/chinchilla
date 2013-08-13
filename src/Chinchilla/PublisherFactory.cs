@@ -14,7 +14,7 @@ namespace Chinchilla
 
         public IPublisher<TMessage> Create<TMessage>(
             IModelReference modelReference,
-            IPublisherConfiguration configuration)
+            IPublisherConfiguration<TMessage> configuration)
         {
             var messageType = typeof(TMessage).Name;
             var endpoint = new Endpoint(configuration.EndpointName ?? messageType, messageType, 0);
@@ -27,6 +27,7 @@ namespace Chinchilla
             }
 
             var router = configuration.BuildRouter();
+            var faultStrategy = configuration.BuildFaultStrategy();
 
             var messageSerializer = messageSerializers.FindOrDefault(
                 configuration.ContentType);
@@ -36,7 +37,8 @@ namespace Chinchilla
                     modelReference,
                     messageSerializer,
                     topology.PublishExchange,
-                    router)
+                    router,
+                    faultStrategy)
                 : new Publisher<TMessage>(
                     modelReference,
                     messageSerializer,

@@ -18,7 +18,7 @@ namespace Chinchilla.Integration.Features
 
                 bus.Subscribe(
                     (HelloWorldMessage hwm) => { throw new Exception("ERMAGHERD, EXPLODE!!11"); },
-                    opt => opt.DeliverFaultsUsing<CustomFaultStrategy>(s => s.OnException(() => ++numExceptions)));
+                    opt => opt.OnFailure<CustomSubscriptionFailureStrategy>(s => s.OnException(() => ++numExceptions)));
 
                 bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
 
@@ -46,11 +46,11 @@ namespace Chinchilla.Integration.Features
             }
         }
 
-        public class CustomFaultStrategy : IFaultStrategy
+        public class CustomSubscriptionFailureStrategy : ISubscriptionFailureStrategy
         {
             private Action notifier;
 
-            public void ProcessFailedDelivery(IDelivery delivery, Exception exception)
+            public void OnFailure(IDelivery delivery, Exception exception)
             {
                 notifier();
             }

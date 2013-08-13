@@ -14,6 +14,6 @@ namespace Chinchilla.Configuration
 
         IDeliveryStrategy BuildDeliveryStrategy(IDeliveryProcessor deliveryProcessor);
 
-        IFaultStrategy BuildFaultStrategy(IBus bus);
+        ISubscriptionFailureStrategy BuildFaultStrategy(IBus bus);
     }
 }

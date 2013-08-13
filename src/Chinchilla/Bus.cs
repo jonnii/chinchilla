@@ -109,19 +109,19 @@ namespace Chinchilla
 
         public IPublisher<TMessage> CreatePublisher<TMessage>()
         {
-            return CreatePublisher<TMessage>(new PublisherConfiguration());
+            return CreatePublisher(new PublisherConfiguration<TMessage>());
         }
 
-        public IPublisher<TMessage> CreatePublisher<TMessage>(Action<IPublisherBuilder> builder)
+        public IPublisher<TMessage> CreatePublisher<TMessage>(Action<IPublisherBuilder<TMessage>> builder)
         {
-            var configuration = new PublisherConfiguration();
+            var configuration = new PublisherConfiguration<TMessage>();
 
             builder(configuration);
 
-            return CreatePublisher<TMessage>(configuration);
+            return CreatePublisher(configuration);
         }
 
-        private IPublisher<TMessage> CreatePublisher<TMessage>(IPublisherConfiguration configuration)
+        private IPublisher<TMessage> CreatePublisher<TMessage>(IPublisherConfiguration<TMessage> configuration)
         {
             logger.DebugFormat("Creating publisher for {0} with configuration {1}",
                 typeof(TMessage).Name,
@@ -129,7 +129,7 @@ namespace Chinchilla
 
             var model = modelFactory.CreateModel();
 
-            return publisherFactory.Create<TMessage>(model, configuration);
+            return publisherFactory.Create(model, configuration);
         }
 
         public void Publish<TMessage>(TMessage message)

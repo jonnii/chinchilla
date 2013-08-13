@@ -14,7 +14,7 @@ namespace Chinchilla
 
         private readonly IModelReference modelReference;
 
-        private readonly IFaultStrategy faultStrategy;
+        private readonly ISubscriptionFailureStrategy subscriptionFailureStrategy;
 
         private BlockingCollection<BasicDeliverEventArgs> consumerQueue;
 
@@ -25,11 +25,11 @@ namespace Chinchilla
         public DeliveryQueue(
             IQueue queue,
             IModelReference modelReference,
-            IFaultStrategy faultStrategy)
+            ISubscriptionFailureStrategy subscriptionFailureStrategy)
         {
             this.queue = queue;
             this.modelReference = modelReference;
-            this.faultStrategy = faultStrategy;
+            this.subscriptionFailureStrategy = subscriptionFailureStrategy;
         }
 
         public string Name
@@ -57,7 +57,7 @@ namespace Chinchilla
 
         public void OnFailed(IDelivery delivery, Exception exception)
         {
-            faultStrategy.ProcessFailedDelivery(delivery, exception);
+            subscriptionFailureStrategy.OnFailure(delivery, exception);
 
             Interlocked.Increment(ref numFailedMessages);
         }

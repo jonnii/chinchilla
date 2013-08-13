@@ -9,7 +9,7 @@ namespace Chinchilla.Configuration
     {
         private Func<IDeliveryProcessor, IDeliveryStrategy> strategyBuilder = handler => new TaskDeliveryStrategy();
 
-        private Func<IBus, IFaultStrategy> failureStrategyBuilder = bus => new ErrorQueueFaultStrategy(bus);
+        private Func<IBus, ISubscriptionFailureStrategy> failureStrategyBuilder = bus => new ErrorQueueFaultStrategy(bus);
 
         public SubscriptionConfiguration()
         {
@@ -62,8 +62,8 @@ namespace Chinchilla.Configuration
             return this;
         }
 
-        public ISubscriptionBuilder DeliverFaultsUsing<TStrategy>(params Action<TStrategy>[] configurations)
-            where TStrategy : IFaultStrategy, new()
+        public ISubscriptionBuilder OnFailure<TStrategy>(params Action<TStrategy>[] configurations)
+            where TStrategy : ISubscriptionFailureStrategy, new()
         {
             failureStrategyBuilder = bus =>
             {
@@ -85,7 +85,7 @@ namespace Chinchilla.Configuration
             return consumer;
         }
 
-        public IFaultStrategy BuildFaultStrategy(IBus bus)
+        public ISubscriptionFailureStrategy BuildFaultStrategy(IBus bus)
         {
             return failureStrategyBuilder(bus);
         }

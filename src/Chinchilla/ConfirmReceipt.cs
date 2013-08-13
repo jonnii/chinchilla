@@ -1,12 +1,23 @@
 namespace Chinchilla
 {
-    public class ConfirmReceipt : IPublishReceipt
+    public class ConfirmReceipt
     {
-        public ConfirmReceipt(ulong sequence)
+        public static ConfirmReceipt<TMessage> New<TMessage>(ulong sequence, TMessage message)
         {
+            return new ConfirmReceipt<TMessage>(sequence, message);
+        }
+    }
+
+    public class ConfirmReceipt<TMessage> : IPublishReceipt
+    {
+        public ConfirmReceipt(ulong sequence, TMessage message)
+        {
+            Message = message;
             Status = PublishStatus.Pending;
             Sequence = sequence;
         }
+
+        public TMessage Message { get; private set; }
 
         public PublishStatus Status { get; private set; }
 
@@ -25,11 +36,13 @@ namespace Chinchilla
         public void Confirmed()
         {
             Status = PublishStatus.Confirmed;
+            Message = default(TMessage);
         }
 
         public void Failed()
         {
             Status = PublishStatus.Failed;
+            Message = default(TMessage);
         }
     }
 }

@@ -18,9 +18,9 @@ namespace Chinchilla.Specifications
                 The<IModelFactory>().WasToldTo(c => c.CreateModel());
 
             It should_create_publisher = () =>
-                The<IPublisherFactory>().WasToldTo(f => f.Create<TestMessage>(
+                The<IPublisherFactory>().WasToldTo(f => f.Create(
                     Param.IsAny<IModelReference>(),
-                    Param.IsAny<IPublisherConfiguration>()));
+                    Param.IsAny<IPublisherConfiguration<TestMessage>>()));
 
             static IPublisher<TestMessage> publisher;
         }
@@ -32,9 +32,9 @@ namespace Chinchilla.Specifications
             {
                 publisher = An<IPublisher<TestMessage>>();
 
-                The<IPublisherFactory>().WhenToldTo(f => f.Create<TestMessage>(
+                The<IPublisherFactory>().WhenToldTo(f => f.Create(
                     Param.IsAny<IModelReference>(),
-                    Param.IsAny<IPublisherConfiguration>())).Return(publisher);
+                    Param.IsAny<IPublisherConfiguration<TestMessage>>())).Return(publisher);
             };
 
             Because of = () =>

@@ -6,7 +6,7 @@ using Chinchilla.Topologies.Model;
 
 namespace Chinchilla
 {
-    public class ErrorQueueFaultStrategy : IFaultStrategy, IMessageTopologyBuilder
+    public class ErrorQueueFaultStrategy : ISubscriptionFailureStrategy, IMessageTopologyBuilder
     {
         private readonly ILogger logger = Logger.Create<ErrorQueueFaultStrategy>();
 
@@ -18,7 +18,7 @@ namespace Chinchilla
                 () => bus.CreatePublisher<Fault>(o => o.SetTopology(this)));
         }
 
-        public void ProcessFailedDelivery(IDelivery delivery, Exception exception)
+        public void OnFailure(IDelivery delivery, Exception exception)
         {
             logger.ErrorFormat(exception, "Error Queue is handling exception");
 
