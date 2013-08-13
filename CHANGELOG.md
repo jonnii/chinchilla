@@ -1,5 +1,10 @@
 # CHANGELOG
 
+# Pending
+
+ * Rename subscriber faults => subscriber failure strategy
+ * Add the concept of a publisher failure handler strategy to handle confirmed messages that are nacked 
+
 # 0.1.14.1
 
   * Fix a bug with request/response cause message to end up on the error queue incorrectly 
