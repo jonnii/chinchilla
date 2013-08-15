@@ -13,5 +13,10 @@ namespace Chinchilla
         {
             get { return false; }
         }
+
+        public PublishFailureReason FailureReason
+        {
+            get { return PublishFailureReason.None; }
+        }
     }
 }

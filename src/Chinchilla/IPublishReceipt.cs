@@ -15,5 +15,10 @@ namespace Chinchilla
         /// Indicates when this publish receipt has been confirmed
         /// </summary>
         bool IsConfirmed { get; }
+
+        /// <summary>
+        /// The reason for failure, if the receipt has been marked as failed
+        /// </summary>
+        PublishFailureReason FailureReason { get; }
     }
 }

@@ -21,6 +21,8 @@ namespace Chinchilla
 
         public PublishStatus Status { get; private set; }
 
+        public PublishFailureReason FailureReason { get; private set; }
+
         public ulong Sequence { get; set; }
 
         public bool IsConfirmed
@@ -39,9 +41,10 @@ namespace Chinchilla
             Message = default(TMessage);
         }
 
-        public void Failed()
+        public void Failed(PublishFailureReason reason)
         {
             Status = PublishStatus.Failed;
+            FailureReason = reason;
             Message = default(TMessage);
         }
     }
