@@ -53,6 +53,14 @@ namespace Chinchilla
             }
         }
 
+        public void ProcessAllReceipts(Action<ConfirmReceipt<TMessage>> act)
+        {
+            foreach (var receipt in receipts)
+            {
+                ProcessReceipt(receipt.Key, act);
+            }
+        }
+
         private void ProcessReceipt(ulong sequenceNumber, Action<ConfirmReceipt<TMessage>> act)
         {
             ConfirmReceipt<TMessage> receipt;

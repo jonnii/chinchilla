@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Machine.Fakes;
 using Machine.Specifications;
 
@@ -28,7 +30,7 @@ namespace Chinchilla.Specifications
                  receipt = Subject.RegisterReceipt(ConfirmReceipt.New(200, new TestMessage()));
 
             Because of = () =>
-                Subject.ProcessReceipts(false, 200, r => r.Failed());
+                Subject.ProcessReceipts(false, 200, r => r.Failed(PublishFailureReason.Nack));
 
             It should_be_confirmed = () =>
                 receipt.IsFailed.ShouldBeTrue();
@@ -82,6 +84,33 @@ namespace Chinchilla.Specifications
             static ConfirmReceipt<TestMessage> third;
 
             static ConfirmReceipt<TestMessage> fourth;
+        }
+
+        [Subject(typeof(Receipts<>))]
+        public class when_confirming_all_receipts : WithSubject<Receipts<TestMessage>>
+        {
+            Establish context = () =>
+            {
+                receipts = new List<ConfirmReceipt<TestMessage>>()
+                {
+                    ConfirmReceipt.New(200, new TestMessage()),
+                    ConfirmReceipt.New(201, new TestMessage()),
+                    ConfirmReceipt.New(202, new TestMessage())
+                };
+
+                receipts.ForEach(r => Subject.RegisterReceipt(r));
+            };
+
+            Because of = () =>
+                Subject.ProcessAllReceipts(r => r.Failed(PublishFailureReason.Disconnected));
+
+            It should_fail_all_receipts_with_specified_reason = () =>
+            {
+                receipts.ShouldEachConformTo(r => r.IsFailed);
+                receipts.ShouldEachConformTo(r => r.FailureReason == PublishFailureReason.Disconnected);
+            };
+
+            static List<ConfirmReceipt<TestMessage>> receipts;
         }
 
         [Subject(typeof(Receipts<>))]

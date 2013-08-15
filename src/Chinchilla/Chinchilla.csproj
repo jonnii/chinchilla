@@ -51,6 +51,7 @@
     <Compile Include="Bus.cs" />
     <Compile Include="ChinchillaException.cs" />
     <Compile Include="ConsumerSubscriber.cs" />
+    <Compile Include="PublishFailureReason.cs" />
     <Compile Include="DefaultConnectionFactory.cs" />
     <Compile Include="ConnectionString.cs" />
     <Compile Include="DefaultConsumerFactory.cs" />
