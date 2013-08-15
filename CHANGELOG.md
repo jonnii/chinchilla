@@ -1,7 +1,8 @@
 # CHANGELOG
 
-# Pending
+# 0.1.14.2
 
+ * Fail all receipts on a publisher reconnect with a failure reason
  * Rename subscriber faults => subscriber failure strategy
  * Add the concept of a publisher failure handler strategy to handle confirmed messages that are nacked 
 
