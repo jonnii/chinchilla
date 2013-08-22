@@ -109,6 +109,31 @@ should make sure you dispose of it correctly. This will ensure all your messages
 are published, all your subscribers are done processing any messages they are 
 currently working on and all the resources are cleaned up.
 
+### SSL
+
+You can connect to an [SSL-enabled RabbitMQ server](http://www.rabbitmq.com/ssl.html) by providing the default connection factory with a configured instance of `RabbitMQ.Client.SslOption`:
+
+````
+var sslConfig = new SslOption
+{
+    Enabled = true,
+  
+    // Path to client certificate, if client authentication is required by the server
+    CertPath = "my-cert.p12"
+};
+
+var settings = new DepotSettings()
+{
+    ConnectionFactoryBuilder = () => new DefaultConnectionFactory()
+    {
+        SslOptions = sslConfig     
+    }
+};
+
+IBus bus = Depot.Connect("server-name:5671", settings);
+````
+
+
 ## Publishers
 
 To publish a message you'll first need to create a message type to publish. For example:
