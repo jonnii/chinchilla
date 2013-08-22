@@ -64,7 +64,7 @@ Contributors
 Builds
 ======
 
-Builds are provided by codebetter.
+Builds are run using a [teamcity instance provided by codebetter](http://teamcity.codebetter.com/).
 
 Feature Overview
 ================
