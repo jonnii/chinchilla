@@ -20,6 +20,11 @@ namespace Chinchilla
             action();
         }
 
+        public void OnReject(IDelivery delivery, bool requeue)
+        {
+            action();
+        }
+
         public void OnFailed(IDelivery delivery, Exception exception)
         {
             action();
