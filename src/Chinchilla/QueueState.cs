@@ -5,11 +5,12 @@ namespace Chinchilla
     /// </summary>
     public class QueueState
     {
-        public QueueState(string name, long numAcceptedMessages, long numFailedMessages)
+        public QueueState(string name, long numAcceptedMessages, long numFailedMessages, long numRejectedMessages)
         {
             Name = name;
             NumAcceptedMessages = numAcceptedMessages;
             NumFailedMessages = numFailedMessages;
+            NumRejectedMessages = numRejectedMessages;
         }
 
         /// <summary>
@@ -26,5 +27,10 @@ namespace Chinchilla
         /// The number of failed messages processed by this subscription
         /// </summary>
         public long NumFailedMessages { get; private set; }
+
+        /// <summary>
+        /// The number of rejected messages processed by this subscription
+        /// </summary>
+        public long NumRejectedMessages { get; private set; }
     }
 }

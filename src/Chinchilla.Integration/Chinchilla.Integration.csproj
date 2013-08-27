@@ -55,6 +55,7 @@
     <Compile Include="Features\Consumers\CapitalizeMessageConsumer.cs" />
     <Compile Include="Features\Consumers\CustomConfigurationConsumer.cs" />
     <Compile Include="Features\Consumers\HelloWorldMessageConsumer.cs" />
+    <Compile Include="Features\SubscriberRejectFeature.cs" />
     <Compile Include="Features\CustomSerializersFeature.cs" />
     <Compile Include="Features\CustomTopologyFeature.cs" />
     <Compile Include="Features\Messages\CapitalizedMessage.cs" />

@@ -68,6 +68,16 @@ namespace Chinchilla
             deliveryListeners.Clear();
         }
 
+        public void Reject(bool requeue)
+        {
+            foreach (var listener in deliveryListeners)
+            {
+                listener.OnReject(this, requeue);
+            }
+
+            deliveryListeners.Clear();
+        }
+
         public void Failed(Exception e)
         {
             foreach (var listener in deliveryListeners)

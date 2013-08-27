@@ -22,6 +22,8 @@ namespace Chinchilla
 
         private long numFailedMessages;
 
+        private long numRejectedMessages;
+
         public DeliveryQueue(
             IQueue queue,
             IModelReference modelReference,
@@ -47,12 +49,25 @@ namespace Chinchilla
             get { return numFailedMessages; }
         }
 
+        public long NumRejectedMessages
+        {
+            get { return numRejectedMessages; }
+        }
+
         public void OnAccept(IDelivery delivery)
         {
             Interlocked.Increment(ref numAcceptedMessages);
 
             modelReference.Execute(
                 m => m.BasicAck(delivery.Tag, false));
+        }
+
+        public void OnReject(IDelivery delivery, bool requeue)
+        {
+            Interlocked.Increment(ref numRejectedMessages);
+
+            modelReference.Execute(
+                m => m.BasicNack(delivery.Tag, false, requeue));
         }
 
         public void OnFailed(IDelivery delivery, Exception exception)
@@ -81,7 +96,7 @@ namespace Chinchilla
 
         public QueueState GetState()
         {
-            return new QueueState(Name, NumAcceptedMessages, NumFailedMessages);
+            return new QueueState(Name, NumAcceptedMessages, NumFailedMessages, NumRejectedMessages);
         }
 
         public override string ToString()
