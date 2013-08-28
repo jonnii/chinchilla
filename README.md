@@ -61,6 +61,11 @@ Contributors
  * @jonnii (https://github.com/jonnii) [![endorse](http://api.coderwall.com/jonnii/endorsecount.png)](http://coderwall.com/jonnii)
  * @cocowalla (https://github.com/cocowalla)
 
+Builds
+======
+
+Builds are run using a [teamcity instance provided by codebetter](http://teamcity.codebetter.com/).
+
 Feature Overview
 ================
 
