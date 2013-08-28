@@ -15,40 +15,40 @@ task PreparePackage -depends Test {
 	mkdir "$packagesDirectory\chinchilla"
 	cp ..\build\package.nuspec ..\targets\packages\chinchilla
 
-	mkdir ..\targets\packages\chinchilla\lib\net40
-	cp ..\targets\chinchilla\chinchilla.* ..\targets\packages\chinchilla\lib\net40
+	mkdir ..\targets\packages\chinchilla\lib\net45
+	cp ..\targets\chinchilla\chinchilla.* ..\targets\packages\chinchilla\lib\net45
 
 	mkdir "$packagesDirectory\chinchilla.api"
 	cp ..\build\package.api.nuspec ..\targets\packages\chinchilla.api
 
-	mkdir ..\targets\packages\chinchilla.api\lib\net40
-	cp ..\targets\chinchilla.api\chinchilla.api* ..\targets\packages\chinchilla.api\lib\net40
+	mkdir ..\targets\packages\chinchilla.api\lib\net45
+	cp ..\targets\chinchilla.api\chinchilla.api* ..\targets\packages\chinchilla.api\lib\net45
 	
 	mkdir "$packagesDirectory\chinchilla.logging.log4net"
 	cp ..\build\package.logging.log4net.nuspec ..\targets\packages\chinchilla.logging.log4net
 
-	mkdir ..\targets\packages\chinchilla.logging.log4net\lib\net40
-	cp ..\targets\chinchilla.logging.log4net\chinchilla.logging.log4net* ..\targets\packages\chinchilla.logging.log4net\lib\net40
+	mkdir ..\targets\packages\chinchilla.logging.log4net\lib\net45
+	cp ..\targets\chinchilla.logging.log4net\chinchilla.logging.log4net* ..\targets\packages\chinchilla.logging.log4net\lib\net45
 
 	mkdir "$packagesDirectory\chinchilla.logging.nlog"
 	cp ..\build\package.logging.nlog.nuspec ..\targets\packages\chinchilla.logging.nlog
 
-	mkdir ..\targets\packages\chinchilla.logging.nlog\lib\net40
-	cp ..\targets\chinchilla.logging.nlog\chinchilla.logging.nlog* ..\targets\packages\chinchilla.logging.nlog\lib\net40
+	mkdir ..\targets\packages\chinchilla.logging.nlog\lib\net45
+	cp ..\targets\chinchilla.logging.nlog\chinchilla.logging.nlog* ..\targets\packages\chinchilla.logging.nlog\lib\net45
 
     mkdir "$packagesDirectory\chinchilla.serializers.jsonnet"
 	cp ..\build\package.serializers.jsonnet.nuspec ..\targets\packages\chinchilla.serializers.jsonnet
 
-    mkdir ..\targets\packages\chinchilla.serializers.jsonnet\lib\net40
-	cp ..\targets\chinchilla.serializers.jsonnet\chinchilla.serializers.jsonnet.dll ..\targets\packages\chinchilla.serializers.jsonnet\lib\net40
-    cp ..\targets\chinchilla.serializers.jsonnet\chinchilla.serializers.jsonnet.pdb ..\targets\packages\chinchilla.serializers.jsonnet\lib\net40
+    mkdir ..\targets\packages\chinchilla.serializers.jsonnet\lib\net45
+	cp ..\targets\chinchilla.serializers.jsonnet\chinchilla.serializers.jsonnet.dll ..\targets\packages\chinchilla.serializers.jsonnet\lib\net45
+    cp ..\targets\chinchilla.serializers.jsonnet\chinchilla.serializers.jsonnet.pdb ..\targets\packages\chinchilla.serializers.jsonnet\lib\net45
 
     mkdir "$packagesDirectory\chinchilla.serializers.msgpack"
 	cp ..\build\package.serializers.msgpack.nuspec ..\targets\packages\chinchilla.serializers.msgpack
 
-    mkdir ..\targets\packages\chinchilla.serializers.msgpack\lib\net40
-	cp ..\targets\chinchilla.serializers.msgpack\chinchilla.serializers.msgpack.dll ..\targets\packages\chinchilla.serializers.msgpack\lib\net40
-    cp ..\targets\chinchilla.serializers.msgpack\chinchilla.serializers.msgpack.pdb ..\targets\packages\chinchilla.serializers.msgpack\lib\net40
+    mkdir ..\targets\packages\chinchilla.serializers.msgpack\lib\net45
+	cp ..\targets\chinchilla.serializers.msgpack\chinchilla.serializers.msgpack.dll ..\targets\packages\chinchilla.serializers.msgpack\lib\net45
+    cp ..\targets\chinchilla.serializers.msgpack\chinchilla.serializers.msgpack.pdb ..\targets\packages\chinchilla.serializers.msgpack\lib\net45
 }
 
 task PackagePre -depends PreparePackage {
@@ -162,7 +162,7 @@ task Compile -depends Clean,UpdateAssemblyInfo {
   # /p:TargetFrameworkVersion=4.0
   # /p:TargetFrameworkVersion=Silverlight
 
-  $options = "/p:Configuration=Release"
+  $options = "/p:Configuration=Release /p:TargetFrameworkVersion=4.5"
   $msbuild = "C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
   
   Push-Location ..\src
