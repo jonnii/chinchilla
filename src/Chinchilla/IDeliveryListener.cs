@@ -6,6 +6,8 @@ namespace Chinchilla
     {
         void OnAccept(IDelivery delivery);
 
+        void OnReject(IDelivery delivery, bool requeue);
+
         void OnFailed(IDelivery delivery, Exception exception);
     }
 }
