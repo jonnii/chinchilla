@@ -160,6 +160,24 @@ namespace Chinchilla.Specifications
         }
 
         [Subject(typeof(WorkerPoolWorker))]
+        public class when_delivering_one_message_that_throws_rejection_exception : with_worker_pool_thread
+        {
+            Establish context = () =>
+            {
+                processor.WhenToldTo(p => p.Process(Param.IsAny<IDelivery>())).Throw(new MessageRejectedException());
+                delivery = An<IDelivery>();
+            };
+
+            Because of = () =>
+                Subject.Deliver(delivery);
+
+            It should_reject_message = () =>
+                delivery.WasToldTo(d => d.Reject(true));
+
+            static IDelivery delivery;
+        }
+
+        [Subject(typeof(WorkerPoolWorker))]
         public class when_pausing : with_worker_pool_thread
         {
             Because of = () =>

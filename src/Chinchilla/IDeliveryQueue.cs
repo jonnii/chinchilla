@@ -15,6 +15,11 @@ namespace Chinchilla
         long NumAcceptedMessages { get; }
 
         /// <summary>
+        /// The number of messages rejected by this subscription
+        /// </summary>
+        long NumRejectedMessages { get; }
+
+        /// <summary>
         /// The number of failed messages processed by this subscription
         /// </summary>
         long NumFailedMessages { get; }
