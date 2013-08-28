@@ -68,6 +68,7 @@
     <Compile Include="Features\StateQueryFeature.cs" />
     <Compile Include="Features\SubscribeFeature.cs" />
     <Compile Include="Features\SubscriberFaultFeature.cs" />
+    <Compile Include="Features\SubscriberRejectFeature.cs" />
     <Compile Include="Features\WithApi.cs" />
     <Compile Include="Serializers\ComplexMessage.cs" />
     <Compile Include="Serializers\MessageSerializerTests.cs" />

@@ -88,6 +88,19 @@ namespace Chinchilla.Specifications
                 delivery.HasRegisteredDeliveryListeners.ShouldBeFalse();
         }
 
+        [Subject(typeof(Delivery))]
+        public class when_rejecting_delivery_with_requeue : with_delivery
+        {
+            Because of = () =>
+                delivery.Reject(true);
+
+            It should_notify_delivery_failure_strategy = () =>
+                listener.WasToldTo(s => s.OnReject(delivery, Param.Is(true)));
+
+            It should_clear_registered_deliveries_after_failed = () =>
+                delivery.HasRegisteredDeliveryListeners.ShouldBeFalse();
+        }
+
         public class with_delivery : WithFakes
         {
             Establish context = () =>

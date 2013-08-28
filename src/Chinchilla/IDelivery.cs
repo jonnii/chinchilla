@@ -55,6 +55,11 @@ namespace Chinchilla
         void Accept();
 
         /// <summary>
+        /// Indicates that this delivery has been processed and was rejected
+        /// </summary>
+        void Reject(bool requeue);
+
+        /// <summary>
         /// Called when a delivery fails
         /// </summary>
         /// <param name="e">The exception which caused this failure</param>

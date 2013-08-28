@@ -39,6 +39,10 @@ namespace Chinchilla
                 connectedProcessor.Process(delivery);
                 delivery.Accept();
             }
+            catch (MessageRejectedException e)
+            {
+                delivery.Reject(e.ShouldRequeue);
+            }
             catch (Exception e)
             {
                 delivery.Failed(e);
