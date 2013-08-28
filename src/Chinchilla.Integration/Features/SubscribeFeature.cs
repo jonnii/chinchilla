@@ -2,6 +2,8 @@
 using System.Linq;
 using Chinchilla.Api;
 using Chinchilla.Integration.Features.Messages;
+using Chinchilla.Integration.Features.MessageTypeFactories;
+using Chinchilla.Serializers;
 using NUnit.Framework;
 
 namespace Chinchilla.Integration.Features
@@ -58,6 +60,56 @@ namespace Chinchilla.Integration.Features
                 Assert.That(lastReceived, Is.Not.Null);
                 Assert.That(lastReceived.Message, Is.EqualTo("subscribe!"));
                 Assert.That(numReceived, Is.EqualTo(100));
+            }
+        }
+
+        [Test]
+        public void ShouldSubscribeToMessageInterfaces()
+        {
+            using (var bus = Depot.Connect("localhost/integration"))
+            {
+                IHelloWorldMessage lastReceived = null;
+                bus.Subscribe((IHelloWorldMessage hwm) =>
+                {
+                    lastReceived = hwm;
+                });
+                bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
+
+                WaitForDelivery();
+
+                Assert.That(lastReceived, Is.Not.Null);
+                Assert.That(lastReceived.Message, Is.EqualTo("subscribe!"));
+
+                Assert.That(admin.Exists(IntegrationVHost, new Queue("HelloWorldMessage")), "did not create queue");
+                Assert.That(admin.Exists(IntegrationVHost, new Exchange("HelloWorldMessage")), "did not create exchange");
+            }
+        }
+
+        [Test]
+        public void ShouldSubscribeToMessageInterfacesWithCustomMessageFactory()
+        {
+            var serializer = new JsonMessageSerializer(
+                new CastleMessageTypeFactory());
+
+            var depotSettings = new DepotSettings();
+            depotSettings.MessageSerializers.Register(serializer);
+
+            using (var bus = Depot.Connect("localhost/integration", depotSettings))
+            {
+                IHelloWorldMessage lastReceived = null;
+                bus.Subscribe((IHelloWorldMessage hwm) =>
+                {
+                    lastReceived = hwm;
+                });
+                bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
+
+                WaitForDelivery();
+
+                Assert.That(lastReceived, Is.Not.Null);
+                Assert.That(lastReceived.Message, Is.EqualTo("subscribe!"));
+
+                Assert.That(admin.Exists(IntegrationVHost, new Queue("HelloWorldMessage")), "did not create queue");
+                Assert.That(admin.Exists(IntegrationVHost, new Exchange("HelloWorldMessage")), "did not create exchange");
             }
         }
 

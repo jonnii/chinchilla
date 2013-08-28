@@ -7,6 +7,16 @@ namespace Chinchilla.Specifications
     public class SubscriptionFactorySpecification
     {
         [Subject(typeof(SubscriptionFactory))]
+        public class in_general : WithSubject<SubscriptionFactory>
+        {
+            It should_get_message_type_name_for_class = () =>
+                Subject.GetMessageTypeName(typeof(MyMessage)).ShouldEqual("MyMessage");
+
+            It should_get_message_type_name_for_interface = () =>
+                Subject.GetMessageTypeName(typeof(IMyMessage)).ShouldEqual("MyMessage");
+        }
+
+        [Subject(typeof(SubscriptionFactory))]
         public class when_creating_subscription : WithSubject<SubscriptionFactory>
         {
             Because of = () =>
@@ -62,5 +72,9 @@ namespace Chinchilla.Specifications
 
             static ISubscription subscription;
         }
+
+        public interface IMyMessage { }
+
+        public class MyMessage : IMyMessage { }
     }
 }
