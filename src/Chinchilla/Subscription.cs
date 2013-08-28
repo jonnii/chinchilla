@@ -126,7 +126,8 @@ namespace Chinchilla
                         item.Exchange,
                         item.BasicProperties.ContentType,
                         item.BasicProperties.CorrelationId,
-                        item.BasicProperties.ReplyTo);
+                        item.BasicProperties.ReplyTo,
+                        item.BasicProperties.Headers);
 
                     // register the queue as a delivery listener on the delivery so that 
                     // we can ack or nack the message depending on whether or not it was processed

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 
 namespace Chinchilla
 {
@@ -49,6 +50,11 @@ namespace Chinchilla
         string ReplyTo { get; }
 
         /// <summary>
+        /// The custom headers on this delivery
+        /// </summary>
+        IDictionary Headers { get; }
+
+        /// <summary>
         /// Indicates that this delivery has been processed and can be
         /// removed from the exchange
         /// </summary>
@@ -65,6 +71,9 @@ namespace Chinchilla
         /// <param name="e">The exception which caused this failure</param>
         void Failed(Exception e);
 
+        /// <summary>
+        /// Registers a delivery listener with this delivery
+        /// </summary>
         void RegisterDeliveryListener(IDeliveryListener deliveryListener);
     }
 }

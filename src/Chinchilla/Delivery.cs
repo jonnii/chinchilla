@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Chinchilla
@@ -14,7 +15,8 @@ namespace Chinchilla
             string exchange,
             string contentType,
             string correlationId,
-            string replyTo)
+            string replyTo,
+            IDictionary headers)
         {
             Tag = tag;
             Body = body;
@@ -23,6 +25,7 @@ namespace Chinchilla
             ContentType = contentType;
             CorrelationId = correlationId;
             ReplyTo = replyTo;
+            Headers = headers;
         }
 
         public ulong Tag { get; private set; }
@@ -38,6 +41,8 @@ namespace Chinchilla
         public string CorrelationId { get; private set; }
 
         public string ReplyTo { get; private set; }
+
+        public IDictionary Headers { get; private set; }
 
         public bool IsReplyable
         {

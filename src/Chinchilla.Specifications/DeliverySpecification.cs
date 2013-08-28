@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using Machine.Fakes;
 using Machine.Specifications;
 
@@ -49,7 +51,8 @@ namespace Chinchilla.Specifications
                   "exchange",
                   "content-type",
                   "",
-                  "reply-to");
+                  "reply-to",
+                  new Dictionary<string, string>());
             };
 
             It should_not_be_replyable = () =>
@@ -68,7 +71,8 @@ namespace Chinchilla.Specifications
                   "exchange",
                   "content-type",
                   "correlationId",
-                  "");
+                  "",
+                  new Dictionary<string, string>());
             };
 
             It should_not_be_replyable = () =>
@@ -114,7 +118,8 @@ namespace Chinchilla.Specifications
                     "exchange",
                     "content-type",
                     "correlationId",
-                    "reply-to");
+                    "reply-to",
+                    new Dictionary<string, string>());
 
                 delivery.RegisterDeliveryListener(listener);
             };

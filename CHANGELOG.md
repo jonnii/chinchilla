@@ -1,7 +1,8 @@
 # CHANGELOG
 
 # pending
- 
+
+ * Headers are now exposed on IDelivery 
  * Messages can now be rejected (nack'd) by throwing a MessageRejectedException.
 
 # 0.1.14.2
