@@ -2,6 +2,7 @@
 
 # pending
 
+ * Upgrade to .NET 4.5
  * Headers are now exposed on IDelivery 
  * Messages can now be rejected (nack'd) by throwing a MessageRejectedException.
 
