@@ -1,6 +1,6 @@
 # CHANGELOG
 
-# pending
+# 0.2.0.0
 
  * Upgrade to .NET 4.5
  * Headers are now exposed on IDelivery 
