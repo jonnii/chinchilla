@@ -37,13 +37,13 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Machine.Fakes, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Machine.Fakes, Version=1.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Machine.Fakes.1.6.0\lib\net40\Machine.Fakes.dll</HintPath>
+      <HintPath>..\packages\Machine.Fakes.1.7.0\lib\net40\Machine.Fakes.dll</HintPath>
     </Reference>
-    <Reference Include="Machine.Fakes.Adapters.Moq, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Machine.Fakes.Adapters.Moq, Version=1.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Machine.Fakes.Moq.1.6.0\lib\net40\Machine.Fakes.Adapters.Moq.dll</HintPath>
+      <HintPath>..\packages\Machine.Fakes.Moq.1.7.0\lib\net40\Machine.Fakes.Adapters.Moq.dll</HintPath>
     </Reference>
     <Reference Include="Machine.Specifications, Version=0.5.15.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -57,9 +57,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
     </Reference>
-    <Reference Include="RabbitMQ.Client, Version=3.1.1.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
+    <Reference Include="RabbitMQ.Client, Version=3.1.5.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\RabbitMQ.Client.3.1.1\lib\net30\RabbitMQ.Client.dll</HintPath>
+      <HintPath>..\packages\RabbitMQ.Client.3.1.5\lib\net30\RabbitMQ.Client.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

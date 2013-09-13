@@ -37,13 +37,13 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Machine.Fakes, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Machine.Fakes, Version=1.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Machine.Fakes.1.6.0\lib\net40\Machine.Fakes.dll</HintPath>
+      <HintPath>..\packages\Machine.Fakes.1.7.0\lib\net40\Machine.Fakes.dll</HintPath>
     </Reference>
-    <Reference Include="Machine.Fakes.Adapters.Moq, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Machine.Fakes.Adapters.Moq, Version=1.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Machine.Fakes.Moq.1.6.0\lib\net40\Machine.Fakes.Adapters.Moq.dll</HintPath>
+      <HintPath>..\packages\Machine.Fakes.Moq.1.7.0\lib\net40\Machine.Fakes.Adapters.Moq.dll</HintPath>
     </Reference>
     <Reference Include="Machine.Specifications, Version=0.5.15.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

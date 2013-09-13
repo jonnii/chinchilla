@@ -14,7 +14,7 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <tags>rabbitmq management api http chinchilla</tags>
         <dependencies>
-            <dependency id="SpeakEasy" version="0.1" />
+            <dependency id="SpeakEasy" version="0.2" />
         </dependencies>
     </metadata>
 </package>
