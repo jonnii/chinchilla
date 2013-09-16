@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# pending
+
+ * Interface serializers
+
 # 0.2.0.0
 
  * Upgrade to .NET 4.5
