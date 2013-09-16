@@ -1,5 +1,4 @@
 ﻿using Chinchilla.Serializers;
-using Machine.Fakes;
 using Machine.Specifications;
 
 namespace Chinchilla.Specifications.Serializers
@@ -7,14 +6,14 @@ namespace Chinchilla.Specifications.Serializers
     public class JsonMessageSerializerSpecification
     {
         [Subject(typeof(JsonMessageSerializer))]
-        public class in_general : WithSubject<JsonMessageSerializer>
+        public class in_general : with_serializer
         {
             It should_have_content_type = () =>
                 Subject.ContentType.ShouldEqual("application/json");
         }
 
         [Subject(typeof(JsonMessageSerializer))]
-        public class when_serializing : WithSubject<JsonMessageSerializer>
+        public class when_serializing : with_serializer
         {
             Because of = () =>
                 serialized = Subject.Serialize(Message.Create(new InterestingFact()));
@@ -26,7 +25,7 @@ namespace Chinchilla.Specifications.Serializers
         }
 
         [Subject(typeof(JsonMessageSerializer))]
-        public class when_deserializing : WithSubject<JsonMessageSerializer>
+        public class when_deserializing : with_serializer
         {
             Establish context = () =>
                 serialized = Subject.Serialize(
@@ -50,6 +49,38 @@ namespace Chinchilla.Specifications.Serializers
             static IMessage<InterestingFact> deserialized;
         }
 
+        [Subject(typeof(JsonMessageSerializer))]
+        public class when_deserializing_interface : with_serializer
+        {
+            Establish context = () =>
+                serialized = Subject.Serialize(
+                    Message.Create(
+                        new InterestingFact("Disney's Tangled is the 3rd most expensive film ever made...", FactType.Food)));
+
+            Because of = () =>
+                deserialized = Subject.Deserialize<IInterestingFact>(serialized);
+
+            It should_deserialize_strings = () =>
+                deserialized.Body.FactBody.ShouldEqual("Disney's Tangled is the 3rd most expensive film ever made...");
+
+            It should_deserialize_enums = () =>
+                deserialized.Body.FactType.ShouldEqual(FactType.Food);
+
+            static byte[] serialized;
+
+            static IMessage<IInterestingFact> deserialized;
+        }
+
+        public class with_serializer
+        {
+            Establish context = () =>
+            {
+                Subject = new JsonMessageSerializer();
+            };
+
+            protected static JsonMessageSerializer Subject;
+        }
+
         public enum FactType
         {
             None,
@@ -58,7 +89,14 @@ namespace Chinchilla.Specifications.Serializers
             Book
         }
 
-        public class InterestingFact
+        public interface IInterestingFact
+        {
+            string FactBody { get; set; }
+
+            FactType FactType { get; set; }
+        }
+
+        public class InterestingFact : IInterestingFact
         {
             public InterestingFact() { }
 

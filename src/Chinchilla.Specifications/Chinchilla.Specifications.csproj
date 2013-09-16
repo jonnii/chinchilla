@@ -104,6 +104,7 @@
     <Compile Include="RequesterSpecification.cs" />
     <Compile Include="Serializers\JsonMessageSerializerSpecification.cs" />
     <Compile Include="Configuration\SubscriptionConfigurationSpecification.cs" />
+    <Compile Include="Serializers\DefaultMessageTypeFactorySpecification.cs" />
     <Compile Include="SubscriptionFactorySpecification.cs" />
     <Compile Include="SubscriptionSpecification.cs" />
     <Compile Include="TaskDeliveryStrategySpecification.cs" />

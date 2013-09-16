@@ -1,6 +1,6 @@
 namespace Chinchilla.Integration.Features.Messages
 {
-    public class HelloWorldMessage : IHasRoutingKey
+    public class HelloWorldMessage : IHasRoutingKey, IHelloWorldMessage
     {
         public string Message { get; set; }
 
