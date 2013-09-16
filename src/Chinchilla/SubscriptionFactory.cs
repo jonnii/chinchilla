@@ -28,6 +28,27 @@ namespace Chinchilla
             return Tracked;
         }
 
+        public string GetMessageTypeName(Type type)
+        {
+            var typeName = type.Name;
+
+            if (!type.IsInterface)
+            {
+                return typeName;
+            }
+
+            if (!typeName.StartsWith("I"))
+            {
+                var message = string.Format(
+                    "Cannot use '{0}' as an interface message contract because the message type name doesn't start with 'I'",
+                    typeName);
+
+                throw new NotSupportedException(message);
+            }
+
+            return typeName.Substring(1);
+        }
+
         public ISubscription Create<TMessage>(
             IBus bus,
             ISubscriptionConfiguration configuration,
@@ -40,7 +61,7 @@ namespace Chinchilla
                 messageSerializers,
                 callback);
 
-            var messageType = typeof(TMessage).Name;
+            var messageType = GetMessageTypeName(typeof(TMessage));
 
             var faultStrategy = configuration.BuildFaultStrategy(bus);
 

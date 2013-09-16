@@ -83,6 +83,9 @@
     <Compile Include="Receipts.cs" />
     <Compile Include="Requester.cs" />
     <Compile Include="RequesterFactory.cs" />
+    <Compile Include="Serializers\ChinchillaSerializerStrategy.cs" />
+    <Compile Include="Serializers\DefaultMessageTypeFactory.cs" />
+    <Compile Include="Serializers\IMessageTypeFactory.cs" />
     <Compile Include="SimpleJson.cs" />
     <Compile Include="Threading\IThread.cs" />
     <Compile Include="Threading\IThreadFactory.cs" />
