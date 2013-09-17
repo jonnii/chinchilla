@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Security.Authentication;
 using System.Threading;
 using RabbitMQ.Client;
@@ -28,6 +29,12 @@ namespace Chinchilla
         public DefaultConnectionFactory(ConnectionFactory connectionFactory)
         {
             this.connectionFactory = connectionFactory;
+
+            this.connectionFactory.ClientProperties["MachineName"] = Environment.MachineName;
+            this.connectionFactory.ClientProperties["User"] =
+                string.Concat(Environment.UserDomainName, "\\", Environment.UserName);
+            this.connectionFactory.ClientProperties["ConnectionFactory.CreatedAt"] =
+                DateTime.UtcNow.ToString(CultureInfo.InvariantCulture);
 
             MaxRetries = 100;
         }
@@ -74,7 +81,12 @@ namespace Chinchilla
 
                 try
                 {
-                    return connectionFactory.CreateConnection();
+                    var connection = connectionFactory.CreateConnection();
+
+                    connection.ClientProperties["ConnectionFactory.CreatedAt"] =
+                        DateTime.UtcNow.ToString(CultureInfo.InvariantCulture);
+
+                    return connection;
                 }
                 catch (BrokerUnreachableException ex)
                 {

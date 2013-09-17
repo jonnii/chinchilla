@@ -3,6 +3,7 @@
 # pending
 
  * Interface serializers
+ * Set username/machine on connection properties
 
 # 0.2.0.0
 
