@@ -1,9 +1,10 @@
 # CHANGELOG
 
-# pending
+# 0.2.1.0
 
  * Interface serializers
  * Set username/machine on connection properties
+ * Add an icon for the packages
 
 # 0.2.0.0
 
