@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
 using Chinchilla.Topologies.Model;
@@ -109,6 +110,14 @@ namespace Chinchilla
             {
                 var formattedExpiration = timeout.Timeout.TotalMilliseconds.ToString(CultureInfo.InvariantCulture);
                 defaultProperties.Expiration = formattedExpiration;
+            }
+
+            var hasHeaders = message as IHasHeaders;
+            if (hasHeaders != null)
+            {
+                var headers = new Dictionary<object, object>();
+                hasHeaders.PopulateHeaders(headers);
+                defaultProperties.Headers = headers;
             }
 
             defaultProperties.SetPersistent(!(message is ITransient));

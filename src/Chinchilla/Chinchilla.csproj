@@ -53,6 +53,7 @@
     <Compile Include="Bus.cs" />
     <Compile Include="ChinchillaException.cs" />
     <Compile Include="ConsumerSubscriber.cs" />
+    <Compile Include="IHasHeaders.cs" />
     <Compile Include="MessageRejectedException.cs" />
     <Compile Include="PublishFailureReason.cs" />
     <Compile Include="DefaultConnectionFactory.cs" />

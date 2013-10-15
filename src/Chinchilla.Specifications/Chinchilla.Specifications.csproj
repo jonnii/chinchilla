@@ -89,6 +89,7 @@
     <Compile Include="IgnoreFaultStrategySpecification.cs" />
     <Compile Include="MessageSerializersSpecification.cs" />
     <Compile Include="Messages\AnotherTestMessage.cs" />
+    <Compile Include="Messages\CustomHeadersMessage.cs" />
     <Compile Include="Messages\TestRequestMessage.cs" />
     <Compile Include="Messages\TestMessage.cs" />
     <Compile Include="Messages\TestResponseMessage.cs" />

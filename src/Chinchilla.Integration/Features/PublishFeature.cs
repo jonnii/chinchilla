@@ -133,6 +133,28 @@ namespace Chinchilla.Integration.Features
             }
         }
 
+        [Test]
+        public void ShouldPublishWithCustomHeaders()
+        {
+            int numHeaders = 0;
+
+            using (var bus = Depot.Connect("localhost/integration"))
+            {
+                bus.Subscribe((HelloWorldMessage hwm, IDeliveryContext ctx) =>
+                {
+                    numHeaders = ctx.Delivery.Headers.Count;
+                });
+
+                using (var publisher = bus.CreatePublisher<HelloWorldMessage>())
+                {
+                    publisher.Publish(new HelloWorldMessage());
+                    WaitForDelivery();
+                }
+            }
+
+            Assert.That(numHeaders, Is.EqualTo(3));
+        }
+
         public class CustomRouter : DefaultRouter
         {
             public override string Route<TMessage>(TMessage message)

@@ -160,6 +160,26 @@ namespace Chinchilla.Specifications
         }
 
         [Subject(typeof(Publisher<>))]
+        public class when_creating_properties_with_message_with_custom_headers : with_basic_properties<Publisher<CustomHeadersMessage>>
+        {
+            Establish context = () =>
+                 message = new CustomHeadersMessage();
+
+            Because of = () =>
+                properties = Subject.CreateProperties(message);
+
+            It should_set_add_custom_headers = () =>
+                properties.IsHeadersPresent().ShouldBeTrue();
+
+            It should_have_all_custom_headers = () =>
+                properties.Headers.Count.ShouldEqual(5);
+
+            static IBasicProperties properties;
+
+            static CustomHeadersMessage message;
+        }
+
+        [Subject(typeof(Publisher<>))]
         public class when_creating_properties_with_transient_message : with_basic_properties<Publisher<TransientMessage>>
         {
             Establish context = () =>

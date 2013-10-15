@@ -284,6 +284,26 @@ public class CustomRouter : DefaultRouter
 }
 ````
 
+## Custom Headers
+
+RabbitMQ allows you to add custom headers to messages, this can be used to route messages (using header based routing, 
+a feature that is not yet exposed natively in Chinchilla) and also for meta data on messages which you can use in your
+subscription handlers and consumers.
+
+````
+public class CustomHeadersMessage : IHasHeaders
+{
+    public void PopulateHeaders(IDictionary<object, object> headers)
+    {
+        headers.Add("foo1", "bar");
+        headers.Add("foo2", "bar");
+        headers.Add("foo3", "bar");
+        headers.Add("foo4", "bar");
+        headers.Add("foo5", "bar");
+    }
+}
+````
+
 ## Subscribers
 
 There are a few ways to subscribe to messages using Chinchilla, but the easiest way is to call `Subscribe` on an
