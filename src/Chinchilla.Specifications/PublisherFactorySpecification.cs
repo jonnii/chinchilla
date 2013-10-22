@@ -12,13 +12,16 @@ namespace Chinchilla.Specifications
         public class when_building_publisher : with_publisher_factory
         {
             Because of = () =>
-                Subject.Create<TestMessage>(modelReference, configuration);
+                Subject.Create(modelReference, configuration);
 
             It should_build_router = () =>
                 configuration.WasToldTo(c => c.BuildRouter());
 
             It should_build_fault_strategy = () =>
                 configuration.WasToldTo(c => c.BuildFaultStrategy());
+
+            It should_build_header_strategy = () =>
+                configuration.WasToldTo(c => c.BuildHeaderStrategy());
         }
 
         [Subject(typeof(PublisherFactory))]
@@ -28,7 +31,7 @@ namespace Chinchilla.Specifications
                 configuration.WhenToldTo(c => c.ShouldConfirm).Return(true);
 
             Because of = () =>
-                publisher = Subject.Create<TestMessage>(modelReference, configuration);
+                publisher = Subject.Create(modelReference, configuration);
 
             It should_create_confirming_publisher = () =>
                 publisher.ShouldBeOfType<ConfirmingPublisher<TestMessage>>();
@@ -46,6 +49,7 @@ namespace Chinchilla.Specifications
                 configuration.WhenToldTo(c => c.BuildRouter()).Return(An<IRouter>());
                 configuration.WhenToldTo(c => c.BuildTopology(Param.IsAny<IEndpoint>()))
                     .Return(new MessageTopology { PublishExchange = An<IExchange>() });
+                configuration.WhenToldTo(c => c.BuildHeaderStrategy()).Return(An<IHeadersStrategy<TestMessage>>());
 
                 The<IMessageSerializers>().WhenToldTo(s => s.FindOrDefault(Param.IsAny<string>()))
                     .Return(An<IMessageSerializer>());

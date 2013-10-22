@@ -1,4 +1,5 @@
-﻿using Chinchilla.Configuration;
+﻿using System.Collections.Generic;
+using Chinchilla.Configuration;
 using Chinchilla.Specifications.Messages;
 using Chinchilla.Topologies;
 using Machine.Fakes;
@@ -97,6 +98,40 @@ namespace Chinchilla.Specifications.Configuration
                 strategy.ShouldBeOfType<DefaultPublisherFailureStrategy<TestMessage>>();
 
             static IPublisherFailureStrategy<TestMessage> strategy;
+        }
+
+        [Subject(typeof(PublisherConfiguration<>))]
+        public class when_building_with_no_header_strategy : WithSubject<PublisherConfiguration<TestMessage>>
+        {
+            Because of = () =>
+               strategy = Subject.BuildHeaderStrategy();
+
+            It should_create_null_header_strategy = () =>
+                strategy.ShouldBeOfType<NullHeaderStrategy<TestMessage>>();
+
+            static IHeadersStrategy<TestMessage> strategy;
+        }
+
+        [Subject(typeof(PublisherConfiguration<>))]
+        public class when_building_with_header_strategy_instance : WithSubject<PublisherConfiguration<TestMessage>>
+        {
+            Establish context = () =>
+                Subject.WithHeaders(new CustomHeaderStrategy());
+
+            Because of = () =>
+               strategy = Subject.BuildHeaderStrategy();
+
+            It should_create_custom_header_strategy = () =>
+                strategy.ShouldBeOfType<CustomHeaderStrategy>();
+
+            static IHeadersStrategy<TestMessage> strategy;
+        }
+
+        public class CustomHeaderStrategy : IHeadersStrategy<TestMessage>
+        {
+            public void PopulateHeaders(TestMessage message, IDictionary<object, object> headers)
+            {
+            }
         }
 
         public class CustomPublisherFailureStrategy : IPublisherFailureStrategy<TestMessage>

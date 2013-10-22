@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Chinchilla.Integration.Features.Messages;
 using NUnit.Framework;
@@ -134,9 +135,31 @@ namespace Chinchilla.Integration.Features
         }
 
         [Test]
-        public void ShouldPublishWithCustomHeaders()
+        public void ShouldPublishWithCustomHeadersUsingMessageInterface()
         {
-            int numHeaders = 0;
+            var numHeaders = 0;
+
+            using (var bus = Depot.Connect("localhost/integration"))
+            {
+                bus.Subscribe((CustomHeadersMessage hwm, IDeliveryContext ctx) =>
+                {
+                    numHeaders = ctx.Delivery.Headers.Count;
+                });
+
+                using (var publisher = bus.CreatePublisher<CustomHeadersMessage>())
+                {
+                    publisher.Publish(new CustomHeadersMessage());
+                    WaitForDelivery();
+                }
+            }
+
+            Assert.That(numHeaders, Is.EqualTo(3));
+        }
+
+        [Test]
+        public void ShouldPublishWithCustomHeadersUsingPublisherConfigurationStrategy()
+        {
+            var numHeaders = 0;
 
             using (var bus = Depot.Connect("localhost/integration"))
             {
@@ -145,7 +168,7 @@ namespace Chinchilla.Integration.Features
                     numHeaders = ctx.Delivery.Headers.Count;
                 });
 
-                using (var publisher = bus.CreatePublisher<HelloWorldMessage>())
+                using (var publisher = bus.CreatePublisher<HelloWorldMessage>(p => p.WithHeaders<CustomHeaderStrategy>()))
                 {
                     publisher.Publish(new HelloWorldMessage());
                     WaitForDelivery();
@@ -153,6 +176,16 @@ namespace Chinchilla.Integration.Features
             }
 
             Assert.That(numHeaders, Is.EqualTo(3));
+        }
+
+        public class CustomHeaderStrategy : IHeadersStrategy<HelloWorldMessage>
+        {
+            public void PopulateHeaders(HelloWorldMessage message, IDictionary<object, object> headers)
+            {
+                headers.Add("key1", "foo");
+                headers.Add("key2", "foo");
+                headers.Add("key3", "foo");
+            }
         }
 
         public class CustomRouter : DefaultRouter

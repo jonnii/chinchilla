@@ -11,6 +11,9 @@ namespace Chinchilla.Configuration
         private Func<IPublisherFailureStrategy<TMessage>> publishFaultStrategyBuilder = () =>
             new DefaultPublisherFailureStrategy<TMessage>();
 
+        private Func<IHeadersStrategy<TMessage>> headersStrategyBuilder = () =>
+            new NullHeaderStrategy<TMessage>();
+
         public PublisherConfiguration()
         {
             MessageTopologyBuilder = new DefaultPublishTopologyBuilder();
@@ -87,10 +90,31 @@ namespace Chinchilla.Configuration
             return this;
         }
 
-        public IPublisherBuilder<TMessage> OnFailure<TStrategy>(TStrategy instance)
-            where TStrategy : IPublisherFailureStrategy<TMessage>
+        public IPublisherBuilder<TMessage> OnFailure<TStrategy>(IPublisherFailureStrategy<TMessage> instance)
         {
             publishFaultStrategyBuilder = () => instance;
+            return this;
+        }
+
+        public IPublisherBuilder<TMessage> WithHeaders(IHeadersStrategy<TMessage> instance)
+        {
+            headersStrategyBuilder = () => instance;
+            return this;
+        }
+
+        public IPublisherBuilder<TMessage> WithHeaders<TStrategy>(params Action<TStrategy>[] configurations)
+            where TStrategy : IHeadersStrategy<TMessage>, new()
+        {
+            headersStrategyBuilder = () =>
+            {
+                var strategy = new TStrategy();
+                foreach (var builder in configurations)
+                {
+                    builder(strategy);
+                }
+                return strategy;
+            };
+
             return this;
         }
 
@@ -102,6 +126,11 @@ namespace Chinchilla.Configuration
         public IPublisherFailureStrategy<TMessage> BuildFaultStrategy()
         {
             return publishFaultStrategyBuilder();
+        }
+
+        public IHeadersStrategy<TMessage> BuildHeaderStrategy()
+        {
+            return headersStrategyBuilder();
         }
 
         public IPublisherBuilder<TMessage> SetTopology(IMessageTopologyBuilder messageTopologyBuilder)

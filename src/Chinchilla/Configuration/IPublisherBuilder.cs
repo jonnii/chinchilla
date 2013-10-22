@@ -61,7 +61,17 @@ namespace Chinchilla.Configuration
         /// Sets a custom publisher failure strategy instance which will be called when publishing
         /// a message fails
         /// </summary>
-        IPublisherBuilder<TMessage> OnFailure<TStrategy>(TStrategy instance)
-            where TStrategy : IPublisherFailureStrategy<TMessage>;
+        IPublisherBuilder<TMessage> OnFailure<TStrategy>(IPublisherFailureStrategy<TMessage> instance);
+
+        /// <summary>
+        /// Sets a custom headers strategy which will be used for applying message headers to outgoing
+        /// </summary>
+        IPublisherBuilder<TMessage> WithHeaders(IHeadersStrategy<TMessage> instance);
+
+        /// <summary>
+        /// Sets a custom headers strategy which will be used for applying message headers to outgoing
+        /// </summary>
+        IPublisherBuilder<TMessage> WithHeaders<TStrategy>(params Action<TStrategy>[] configurations)
+            where TStrategy : IHeadersStrategy<TMessage>, new();
     }
 }

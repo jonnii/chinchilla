@@ -15,5 +15,7 @@ namespace Chinchilla.Configuration
         IRouter BuildRouter();
 
         IPublisherFailureStrategy<TMessage> BuildFaultStrategy();
+
+        IHeadersStrategy<TMessage> BuildHeaderStrategy();
     }
 }

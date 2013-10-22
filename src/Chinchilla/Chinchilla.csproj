@@ -54,7 +54,9 @@
     <Compile Include="ChinchillaException.cs" />
     <Compile Include="ConsumerSubscriber.cs" />
     <Compile Include="IHasHeaders.cs" />
+    <Compile Include="IHeadersStrategy.cs" />
     <Compile Include="MessageRejectedException.cs" />
+    <Compile Include="NullHeaderStrategy.cs" />
     <Compile Include="PublishFailureReason.cs" />
     <Compile Include="DefaultConnectionFactory.cs" />
     <Compile Include="ConnectionString.cs" />

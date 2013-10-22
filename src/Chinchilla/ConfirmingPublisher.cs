@@ -15,8 +15,9 @@ namespace Chinchilla
             IMessageSerializer serializer,
             IExchange exchange,
             IRouter router,
+            IHeadersStrategy<TMessage> headerStrategy,
             IPublisherFailureStrategy<TMessage> publisherFailureStrategy)
-            : base(modelReference, serializer, exchange, router)
+            : base(modelReference, serializer, exchange, router, headerStrategy)
         {
             this.publisherFailureStrategy = publisherFailureStrategy;
         }

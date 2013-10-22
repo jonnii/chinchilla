@@ -14,6 +14,8 @@ namespace Chinchilla
 
         private readonly IMessageSerializer serializer;
 
+        private IHeadersStrategy<TMessage> headerStrategy;
+
         protected bool disposed;
 
         private long numPublishedMessages;
@@ -22,10 +24,12 @@ namespace Chinchilla
             IModelReference modelReference,
             IMessageSerializer serializer,
             IExchange exchange,
-            IRouter router)
+            IRouter router,
+            IHeadersStrategy<TMessage> headerStrategy)
         {
             this.serializer = Guard.NotNull(serializer, "serializer");
             this.router = Guard.NotNull(router, "router");
+            this.headerStrategy = Guard.NotNull(headerStrategy, "headerStrategy");
 
             ModelReference = Guard.NotNull(modelReference, "modelReference");
             Exchange = Guard.NotNull(exchange, "bindable");
