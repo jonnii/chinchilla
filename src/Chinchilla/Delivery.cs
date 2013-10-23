@@ -85,11 +85,18 @@ namespace Chinchilla
 
         public void Failed(Exception e)
         {
-            foreach (var listener in deliveryListeners)
+            // we need to take a copy of delivery listeners here because the
+            // fault strategy that is invoked will accept/reject the message, which
+            // will cause an exception because we're iterating this collection
+
+            var listeners = deliveryListeners.ToArray();
+
+            foreach (var listener in listeners)
             {
                 listener.OnFailed(this, e);
             }
 
+            // this list should already be cleared by this point
             deliveryListeners.Clear();
         }
     }
