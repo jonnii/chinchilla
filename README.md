@@ -61,6 +61,7 @@ Contributors
  * @jonnii (https://github.com/jonnii) [![endorse](http://api.coderwall.com/jonnii/endorsecount.png)](http://coderwall.com/jonnii)
  * @cocowalla (https://github.com/cocowalla)
  * @jamescrowley (https://github.com/jamescrowley)
+ * @tanir (https://github.com/tanir)
 
 Builds
 ======

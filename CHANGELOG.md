@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# Pending
+
+ * [BUG-#31] [tanir] Fault strategies cause exception when iterating delivery listeners multiple times
+
 # 0.2.1.0
 
  * Interface serializers
