@@ -180,11 +180,14 @@ namespace Chinchilla.Integration.Features
 
         public class CustomHeaderStrategy : IHeadersStrategy<HelloWorldMessage>
         {
-            public void PopulateHeaders(HelloWorldMessage message, IDictionary<object, object> headers)
+            public Dictionary<object, object> PopulateHeaders(HelloWorldMessage message)
             {
-                headers.Add("key1", "foo");
-                headers.Add("key2", "foo");
-                headers.Add("key3", "foo");
+                return new Dictionary<object, object>
+                {
+                    {"key1", "foo"},
+                    {"key2", "foo"},
+                    {"key3", "foo"}
+                };
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Chinchilla.Specifications.Messages;
 using Machine.Fakes;
 using Machine.Specifications;
@@ -163,7 +164,12 @@ namespace Chinchilla.Specifications
         public class when_creating_properties_with_message_with_custom_headers : with_basic_properties<Publisher<CustomHeadersMessage>>
         {
             Establish context = () =>
-                 message = new CustomHeadersMessage();
+            {
+                message = new CustomHeadersMessage();
+
+                The<IHeadersStrategy<CustomHeadersMessage>>().WhenToldTo(h => h.PopulateHeaders(Param.IsAny<CustomHeadersMessage>()))
+                    .Return(new Dictionary<object, object> { { "foo", "bar" } });
+            };
 
             Because of = () =>
                 properties = Subject.CreateProperties(message);
@@ -172,7 +178,7 @@ namespace Chinchilla.Specifications
                 properties.IsHeadersPresent().ShouldBeTrue();
 
             It should_have_all_custom_headers = () =>
-                properties.Headers.Count.ShouldEqual(5);
+                properties.Headers.Count.ShouldEqual(6);
 
             static IBasicProperties properties;
 

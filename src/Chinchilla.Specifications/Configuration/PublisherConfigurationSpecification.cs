@@ -129,8 +129,9 @@ namespace Chinchilla.Specifications.Configuration
 
         public class CustomHeaderStrategy : IHeadersStrategy<TestMessage>
         {
-            public void PopulateHeaders(TestMessage message, IDictionary<object, object> headers)
+            public Dictionary<object, object> PopulateHeaders(TestMessage message)
             {
+                return null;
             }
         }
 

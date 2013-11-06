@@ -116,11 +116,17 @@ namespace Chinchilla
                 defaultProperties.Expiration = formattedExpiration;
             }
 
+            var headers = headerStrategy.PopulateHeaders(message);
+
             var hasHeaders = message as IHasHeaders;
             if (hasHeaders != null)
             {
-                var headers = new Dictionary<object, object>();
+                headers = headers ?? new Dictionary<object, object>();
                 hasHeaders.PopulateHeaders(headers);
+            }
+
+            if (headers != null)
+            {
                 defaultProperties.Headers = headers;
             }
 
