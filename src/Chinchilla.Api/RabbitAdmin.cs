@@ -2,88 +2,51 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Chinchilla.Api.Extensions;
-using SpeakEasy;
-using SpeakEasy.Authenticators;
-using SpeakEasy.Serializers;
+using RestSharp;
 
 namespace Chinchilla.Api
 {
     public class RabbitAdmin : IRabbitAdmin
     {
-        private readonly string root;
-
-        private IHttpClient httpClient;
+        private readonly HttpClient httpClient;
 
         public RabbitAdmin(string root)
         {
-            this.root = root;
-        }
-
-        public IHttpClient Client
-        {
-            get
-            {
-                return httpClient ?? (httpClient = BuildClient());
-            }
-        }
-
-        private IHttpClient BuildClient()
-        {
-            var settings = new HttpClientSettings
-            {
-                Authenticator = new BasicAuthenticator("guest", "guest")
-            };
-
-            settings.Configure<DefaultJsonSerializer>(s =>
-            {
-                s.JsonSerializerStrategy = new RabbitJsonSerializerStrategy();
-            });
-
-            var rootWithReplacements = root.FormatWithReplacements();
-
-            var client = HttpClient.Create(rootWithReplacements, settings);
-
-            // add an accept header to all requests otherwise the api will complain
-            client.BeforeRequest += (sender, args) =>
-                args.Request.AddHeader("Accept", string.Empty);
-
-            return client;
+            httpClient = new HttpClient(root.FormatWithReplacements());
         }
 
         public IEnumerable<VirtualHost> VirtualHosts
         {
             get
             {
-                return Client.Get("vhosts").OnOk().As<List<VirtualHost>>();
+                return httpClient.Execute<List<VirtualHost>>("vhosts");
             }
         }
 
         public IEnumerable<Connection> Connections()
         {
-            return Client.Get("connections").OnOk().As<List<Connection>>();
+            return httpClient.Execute<List<Connection>>("connections");
         }
 
         public IEnumerable<Exchange> Exchanges(VirtualHost virtualHost)
         {
-            return Client.Get("exchanges/:vhost", new { vhost = virtualHost.Name }).OnOk().As<List<Exchange>>();
+            return httpClient.Execute<List<Exchange>>("exchanges/{vhost}", new Dictionary<string, string> { { "vhost", virtualHost.Name }});
         }
 
         public IEnumerable<Queue> Queues(VirtualHost virtualHost)
         {
-            return Client.Get("queues/:vhost", new { vhost = virtualHost.Name }).OnOk().As<List<Queue>>();
+            return httpClient.Execute<List<Queue>>("queues/{vhost}", new Dictionary<string, string> { { "vhost", virtualHost.Name } });
         }
 
         public IEnumerable<Permissions> Permissions(VirtualHost virtualHost)
         {
-            return Client.Get("vhosts/:name/permissions", new { virtualHost.Name })
-                .OnOk()
-                .As<List<Permissions>>();
+            return httpClient.Execute<List<Permissions>>("vhosts/{name}/permissions", new Dictionary<string, string> { {"name", virtualHost.Name} });
         }
 
         public bool Create(VirtualHost virtualHost)
         {
-            return Client.Put("vhosts/:name", new { name = virtualHost.Name })
-                .Is(HttpStatusCode.NoContent);
+            return httpClient.Execute("vhosts/{name}", new Dictionary<string, string> { {"name", virtualHost.Name} }, Method.PUT)
+                    .StatusCode == HttpStatusCode.NoContent;
         }
 
         public bool Create(VirtualHost virtualHost, Queue queue)
@@ -93,8 +56,12 @@ namespace Chinchilla.Api
 
         public bool Create(VirtualHost virtualHost, Queue queue, QueueOptions options)
         {
-            return Client.Put(options, "queues/:vhost/:name", new { vhost = virtualHost.Name, queue.Name })
-                .Is(HttpStatusCode.NoContent);
+            return httpClient.Execute(
+                "queues/{vhost}/{name}", 
+                new Dictionary<string, string> { { "vhost", virtualHost.Name }, { "name", queue.Name } }, 
+                Method.PUT, 
+                options
+            ).StatusCode == HttpStatusCode.NoContent;
         }
 
         public bool Create(VirtualHost virtualHost, Exchange exchange)
@@ -104,11 +71,12 @@ namespace Chinchilla.Api
 
         public bool Create(VirtualHost virtualHost, Exchange exchange, ExchangeOptions options)
         {
-            return Client.Put(options, "exchanges/:vhost/:name", new
-            {
-                vhost = virtualHost.Name,
-                exchange.Name,
-            }).Is(HttpStatusCode.NoContent);
+            return httpClient.Execute(
+                "exchanges/{vhost}/{name}", 
+                new Dictionary<string, string> { { "vhost", virtualHost.Name }, { "name", exchange.Name} },
+                Method.PUT,
+                options
+            ).StatusCode == HttpStatusCode.NoContent;
         }
 
         public bool Create(VirtualHost virtualHost, Exchange exchange, Queue queue)
@@ -118,32 +86,34 @@ namespace Chinchilla.Api
 
         public bool Create(VirtualHost virtualHost, Exchange exchange, Queue queue, BindingOptions options)
         {
-            return Client.Post(options, "bindings/:vhost/e/:exchange/q/:queue", new
-            {
-                vhost = virtualHost.Name,
-                exchange = exchange.Name,
-                queue = queue.Name
-            }).Is(HttpStatusCode.Created);
+            return httpClient.Execute(
+                "bindings/{vhost}/e/{exchange}/q/{queue}",
+                new Dictionary<string, string> { { "vhost", virtualHost.Name }, { "exchange", exchange.Name }, { "queue", queue.Name } },
+                Method.POST,
+                options
+            ).StatusCode == HttpStatusCode.Created;
         }
 
         public bool Delete(VirtualHost virtualHost)
         {
-            return Client.Delete("vhosts/:name", new { name = virtualHost.Name })
-                .Is(HttpStatusCode.NoContent);
+            return httpClient.Execute("vhosts/{name}", new Dictionary<string, string>{ { "name", virtualHost.Name } }, Method.DELETE).
+                StatusCode == HttpStatusCode.NoContent;
         }
 
         public bool Delete(Connection connection)
         {
-            return Client.Delete("connections/:name", new { name = connection.Name })
-                .Is(HttpStatusCode.NoContent);
+            return httpClient.Execute("connections/{name}", new Dictionary<string, string>{ { "name", connection.Name } }, Method.DELETE).
+                StatusCode == HttpStatusCode.NoContent;
         }
 
         public bool Create(VirtualHost virtualHost, User user, Permission permission)
         {
-            return Client.Put(
-                permission,
-                "permissions/:vhost/:user", new { vhost = virtualHost.Name, user = user.Name })
-            .Is(HttpStatusCode.NoContent);
+            return httpClient.Execute(
+                "permissions/{vhost}/{user}",
+                new Dictionary<string, string> { { "vhost", virtualHost.Name }, { "user", user.Name } },
+                Method.PUT, 
+                permission
+            ).StatusCode == HttpStatusCode.NoContent;
         }
 
         public bool Exists(VirtualHost virtualHost, Queue queue)
@@ -168,11 +138,12 @@ namespace Chinchilla.Api
                 truncate = "50000"
             };
 
-            return Client.Post(options, "queues/:vhost/:queue/get", new
-            {
-                vhost = virtualHost.Name,
-                queue = queue.Name
-            }).OnOk().As<List<Message>>();
+            return httpClient.Execute<List<Message>>(
+                "queues/{vhost}/{queue}/get",
+                new Dictionary<string, string> { { "vhost", virtualHost.Name }, { "queue", queue.Name } },
+                Method.POST,
+                options
+            );
         }
     }
 }

@@ -1,13 +1,51 @@
-using System.Text.RegularExpressions;
-using SpeakEasy.Serializers;
+using System.IO;
+using Newtonsoft.Json;
+using RestSharp.Serializers;
 
 namespace Chinchilla.Api
 {
-    public class RabbitJsonSerializerStrategy : DefaultJsonSerializer.DefaultJsonSerializerStrategy
+    public class RabbitJsonSerializerStrategy : ISerializer
     {
-        protected override string MapClrMemberNameToJsonFieldName(string clrPropertyName)
+        private readonly Newtonsoft.Json.JsonSerializer serializer;
+
+        public RabbitJsonSerializerStrategy()
         {
-            return Regex.Replace(clrPropertyName, "([a-z])([A-Z])", "$1_$2").ToLower();
+            ContentType = "application/json";
+            serializer = new Newtonsoft.Json.JsonSerializer
+            {
+                MissingMemberHandling = MissingMemberHandling.Ignore,
+                NullValueHandling = NullValueHandling.Include,
+                DefaultValueHandling = DefaultValueHandling.Include,
+                ContractResolver = new LowercaseContractResolver()
+            };
         }
+
+        public RabbitJsonSerializerStrategy(Newtonsoft.Json.JsonSerializer serializer)
+        {
+            ContentType = "application/json";
+            this.serializer = serializer;
+        }
+
+        public string Serialize(object obj)
+        {
+            using (var stringWriter = new StringWriter())
+            {
+                using (var jsonTextWriter = new JsonTextWriter(stringWriter))
+                {
+                    jsonTextWriter.Formatting = Formatting.Indented;
+                    jsonTextWriter.QuoteChar = '"';
+
+                    serializer.Serialize(jsonTextWriter, obj);
+
+                    var result = stringWriter.ToString();
+                    return result;
+                }
+            }
+        }
+
+        public string DateFormat { get; set; }
+        public string RootElement { get; set; }
+        public string Namespace { get; set; }
+        public string ContentType { get; set; }
     }
 }
