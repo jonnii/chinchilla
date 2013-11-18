@@ -1,162 +1,162 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Chinchilla.Api.Extensions;
-using SpeakEasy;
-using SpeakEasy.Authenticators;
-using SpeakEasy.Serializers;
 
 namespace Chinchilla.Api
 {
     public class RabbitAdmin : IRabbitAdmin
     {
-        private readonly string root;
-
-        private IHttpClient httpClient;
+        private readonly RabbitHttpClient httpClient;
 
         public RabbitAdmin(string root)
         {
-            this.root = root;
+            httpClient = new RabbitHttpClient(root.FormatWithReplacements());
         }
 
-        public IHttpClient Client
+        public Task<IEnumerable<VirtualHost>> VirtualHostsAsync()
         {
-            get
-            {
-                return httpClient ?? (httpClient = BuildClient());
-            }
+            return httpClient.ExecuteList<VirtualHost>("vhosts");
         }
 
-        private IHttpClient BuildClient()
+        public Task<IEnumerable<Connection>> ConnectionsAsync()
         {
-            var settings = new HttpClientSettings
-            {
-                Authenticator = new BasicAuthenticator("guest", "guest")
-            };
-
-            settings.Configure<DefaultJsonSerializer>(s =>
-            {
-                s.JsonSerializerStrategy = new RabbitJsonSerializerStrategy();
-            });
-
-            var rootWithReplacements = root.FormatWithReplacements();
-
-            var client = HttpClient.Create(rootWithReplacements, settings);
-
-            // add an accept header to all requests otherwise the api will complain
-            client.BeforeRequest += (sender, args) =>
-                args.Request.AddHeader("Accept", string.Empty);
-
-            return client;
+            return httpClient.ExecuteList<Connection>("connections");
         }
 
-        public IEnumerable<VirtualHost> VirtualHosts
+        public Task<IEnumerable<Exchange>> ExchangesAsync(VirtualHost virtualHost)
         {
-            get
-            {
-                return Client.Get("vhosts").OnOk().As<List<VirtualHost>>();
-            }
+            return httpClient.ExecuteList<Exchange>("exchanges/{vhost}", new Dictionary<string, string> { { "vhost", virtualHost.Name } });
         }
 
-        public IEnumerable<Connection> Connections()
+        public Task<IEnumerable<Queue>> QueuesAsync(VirtualHost virtualHost)
         {
-            return Client.Get("connections").OnOk().As<List<Connection>>();
+            return httpClient.ExecuteList<Queue>("queues/{vhost}", new Dictionary<string, string> { { "vhost", virtualHost.Name } });
         }
 
-        public IEnumerable<Exchange> Exchanges(VirtualHost virtualHost)
+        public Task<IEnumerable<Permissions>> PermissionsAsync(VirtualHost virtualHost)
         {
-            return Client.Get("exchanges/:vhost", new { vhost = virtualHost.Name }).OnOk().As<List<Exchange>>();
+            return httpClient.ExecuteList<Permissions>("vhosts/{name}/permissions", new Dictionary<string, string> { { "name", virtualHost.Name } });
         }
 
-        public IEnumerable<Queue> Queues(VirtualHost virtualHost)
+        public async Task<bool> CreateAsync(VirtualHost virtualHost)
         {
-            return Client.Get("queues/:vhost", new { vhost = virtualHost.Name }).OnOk().As<List<Queue>>();
+            var response = await httpClient.Execute(HttpMethod.Put,
+                "vhosts/{name}",
+                new Dictionary<string, string>
+                {
+                    {"name", virtualHost.Name}
+                });
+
+            return response.StatusCode == HttpStatusCode.NoContent;
         }
 
-        public IEnumerable<Permissions> Permissions(VirtualHost virtualHost)
+        public Task<bool> CreateAsync(VirtualHost virtualHost, Queue queue)
         {
-            return Client.Get("vhosts/:name/permissions", new { virtualHost.Name })
-                .OnOk()
-                .As<List<Permissions>>();
+            return CreateAsync(virtualHost, queue, QueueOptions.Default);
         }
 
-        public bool Create(VirtualHost virtualHost)
+        public async Task<bool> CreateAsync(VirtualHost virtualHost, Queue queue, QueueOptions options)
         {
-            return Client.Put("vhosts/:name", new { name = virtualHost.Name })
-                .Is(HttpStatusCode.NoContent);
+            var response = await httpClient.Execute(HttpMethod.Put,
+                "queues/{vhost}/{name}",
+                new Dictionary<string, string>
+                {
+                    {"vhost", virtualHost.Name},
+                    {"name", queue.Name}
+                },
+                options);
+
+            return response.StatusCode == HttpStatusCode.NoContent;
         }
 
-        public bool Create(VirtualHost virtualHost, Queue queue)
+        public Task<bool> CreateAsync(VirtualHost virtualHost, Exchange exchange)
         {
-            return Create(virtualHost, queue, QueueOptions.Default);
+            return CreateAsync(virtualHost, exchange, ExchangeOptions.Default);
         }
 
-        public bool Create(VirtualHost virtualHost, Queue queue, QueueOptions options)
+        public async Task<bool> CreateAsync(VirtualHost virtualHost, Exchange exchange, ExchangeOptions options)
         {
-            return Client.Put(options, "queues/:vhost/:name", new { vhost = virtualHost.Name, queue.Name })
-                .Is(HttpStatusCode.NoContent);
+            var response = await httpClient.Execute(HttpMethod.Put,
+                "exchanges/{vhost}/{name}",
+                new Dictionary<string, string>
+                {
+                    {"vhost", virtualHost.Name},
+                    {"name", exchange.Name}
+                },
+                options);
+
+            return response.StatusCode == HttpStatusCode.NoContent;
         }
 
-        public bool Create(VirtualHost virtualHost, Exchange exchange)
+        public Task<bool> CreateAsync(VirtualHost virtualHost, Exchange exchange, Queue queue)
         {
-            return Create(virtualHost, exchange, ExchangeOptions.Default);
+            return CreateAsync(virtualHost, exchange, queue, BindingOptions.Default);
         }
 
-        public bool Create(VirtualHost virtualHost, Exchange exchange, ExchangeOptions options)
+        public async Task<bool> CreateAsync(VirtualHost virtualHost, Exchange exchange, Queue queue, BindingOptions options)
         {
-            return Client.Put(options, "exchanges/:vhost/:name", new
-            {
-                vhost = virtualHost.Name,
-                exchange.Name,
-            }).Is(HttpStatusCode.NoContent);
+            var response = await httpClient.Execute(
+                HttpMethod.Post,
+                "bindings/{vhost}/e/{exchange}/q/{queue}",
+                new Dictionary<string, string> { { "vhost", virtualHost.Name }, { "exchange", exchange.Name }, { "queue", queue.Name } },
+                options);
+
+            return response.StatusCode == HttpStatusCode.Created;
         }
 
-        public bool Create(VirtualHost virtualHost, Exchange exchange, Queue queue)
+        public async Task<bool> DeleteAsync(VirtualHost virtualHost)
         {
-            return Create(virtualHost, exchange, queue, BindingOptions.Default);
+            var response = await httpClient.Execute(HttpMethod.Delete,
+                "vhosts/{name}",
+                new Dictionary<string, string>
+                {
+                    {"name", virtualHost.Name}
+                });
+
+            return response.StatusCode == HttpStatusCode.NoContent;
         }
 
-        public bool Create(VirtualHost virtualHost, Exchange exchange, Queue queue, BindingOptions options)
+        public async Task<bool> DeleteAsync(Connection connection)
         {
-            return Client.Post(options, "bindings/:vhost/e/:exchange/q/:queue", new
-            {
-                vhost = virtualHost.Name,
-                exchange = exchange.Name,
-                queue = queue.Name
-            }).Is(HttpStatusCode.Created);
+            var response = await httpClient.Execute(HttpMethod.Delete,
+                "connections/{name}",
+                new Dictionary<string, string>
+                {
+                    {"name", connection.Name}
+                });
+
+            return response.StatusCode == HttpStatusCode.NoContent;
         }
 
-        public bool Delete(VirtualHost virtualHost)
+        public async Task<bool> CreateAsync(VirtualHost virtualHost, User user, Permission permission)
         {
-            return Client.Delete("vhosts/:name", new { name = virtualHost.Name })
-                .Is(HttpStatusCode.NoContent);
+            var response = await httpClient.Execute(
+                HttpMethod.Put,
+                "permissions/{vhost}/{user}",
+                new Dictionary<string, string> { { "vhost", virtualHost.Name }, { "user", user.Name } },
+                permission
+            );
+
+            return response.StatusCode == HttpStatusCode.NoContent;
         }
 
-        public bool Delete(Connection connection)
+        public async Task<bool> ExistsAsync(VirtualHost virtualHost, Queue queue)
         {
-            return Client.Delete("connections/:name", new { name = connection.Name })
-                .Is(HttpStatusCode.NoContent);
+            var queues = await QueuesAsync(virtualHost);
+            return queues.Any(q => q.Name == queue.Name);
         }
 
-        public bool Create(VirtualHost virtualHost, User user, Permission permission)
+        public async Task<bool> ExistsAsync(VirtualHost virtualHost, Exchange exchange)
         {
-            return Client.Put(
-                permission,
-                "permissions/:vhost/:user", new { vhost = virtualHost.Name, user = user.Name })
-            .Is(HttpStatusCode.NoContent);
+            var exchanges = await ExchangesAsync(virtualHost);
+
+            return exchanges.Any(e => e.Name == exchange.Name);
         }
 
-        public bool Exists(VirtualHost virtualHost, Queue queue)
-        {
-            return Queues(virtualHost).Any(q => q.Name == queue.Name);
-        }
-
-        public bool Exists(VirtualHost virtualHost, Exchange exchange)
-        {
-            return Exchanges(virtualHost).Any(e => e.Name == exchange.Name);
-        }
-
-        public IEnumerable<Message> Messages(VirtualHost virtualHost, Queue queue)
+        public Task<IEnumerable<Message>> MessagesAsync(VirtualHost virtualHost, Queue queue)
         {
             var options = new
             {
@@ -168,11 +168,102 @@ namespace Chinchilla.Api
                 truncate = "50000"
             };
 
-            return Client.Post(options, "queues/:vhost/:queue/get", new
-            {
-                vhost = virtualHost.Name,
-                queue = queue.Name
-            }).OnOk().As<List<Message>>();
+            return httpClient.ExecuteList<Message>(
+                HttpMethod.Post,
+                "queues/{vhost}/{queue}/get",
+                new Dictionary<string, string> { { "vhost", virtualHost.Name }, { "queue", queue.Name } },
+                options
+            );
+        }
+
+        public IEnumerable<VirtualHost> VirtualHosts()
+        {
+            return VirtualHostsAsync().Result;
+        }
+
+        public IEnumerable<Connection> Connections()
+        {
+            return ConnectionsAsync().Result;
+        }
+
+        public IEnumerable<Exchange> Exchanges(VirtualHost virtualHost)
+        {
+            return ExchangesAsync(virtualHost).Result;
+        }
+
+        public IEnumerable<Queue> Queues(VirtualHost virtualHost)
+        {
+            return QueuesAsync(virtualHost).Result;
+        }
+
+        public IEnumerable<Permissions> Permissions(VirtualHost virtualHost)
+        {
+            return PermissionsAsync(virtualHost).Result;
+        }
+
+        public bool Create(VirtualHost virtualHost)
+        {
+            return CreateAsync(virtualHost).Result;
+        }
+
+        public bool Create(VirtualHost virtualHost, Queue queue)
+        {
+            return CreateAsync(virtualHost, queue).Result;
+        }
+
+        public bool Create(VirtualHost virtualHost, Queue queue, QueueOptions options)
+        {
+            return CreateAsync(virtualHost, queue, options).Result;
+        }
+
+        public bool Create(VirtualHost virtualHost, Exchange exchange)
+        {
+            return CreateAsync(virtualHost, exchange).Result;
+        }
+
+        public bool Create(VirtualHost virtualHost, Exchange exchange, ExchangeOptions options)
+        {
+            return CreateAsync(virtualHost, exchange, options).Result;
+        }
+
+        public bool Create(VirtualHost virtualHost, User user, Permission permission)
+        {
+            return CreateAsync(virtualHost, user, permission).Result;
+        }
+
+        public bool Create(VirtualHost virtualHost, Exchange exchange, Queue queue)
+        {
+            return CreateAsync(virtualHost, exchange, queue).Result;
+        }
+
+        public bool Create(VirtualHost virtualHost, Exchange exchange, Queue queue, BindingOptions options)
+        {
+            return CreateAsync(virtualHost, exchange, queue, options).Result;
+        }
+
+        public bool Exists(VirtualHost virtualHost, Queue queue)
+        {
+            return ExistsAsync(virtualHost, queue).Result;
+        }
+
+        public bool Exists(VirtualHost virtualHost, Exchange exchange)
+        {
+            return ExistsAsync(virtualHost, exchange).Result;
+        }
+
+        public bool Delete(VirtualHost virtualHost)
+        {
+            return DeleteAsync(virtualHost).Result;
+        }
+
+        public bool Delete(Connection connection)
+        {
+            return DeleteAsync(connection).Result;
+        }
+
+        public IEnumerable<Message> Messages(VirtualHost virtualHost, Queue queue)
+        {
+            return MessagesAsync(virtualHost, queue).Result;
         }
     }
 }
