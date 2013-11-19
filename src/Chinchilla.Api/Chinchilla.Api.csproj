@@ -37,9 +37,6 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="RestSharp">
       <HintPath>..\packages\RestSharp.104.3.3\lib\net4\RestSharp.dll</HintPath>
     </Reference>
@@ -59,7 +56,6 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="HttpClient.cs" />
     <Compile Include="IRabbitAdmin.cs" />
-    <Compile Include="LowercaseContractResolver.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="MessageProperties.cs" />
     <Compile Include="Permission.cs" />
@@ -68,6 +64,7 @@
     <Compile Include="Queue.cs" />
     <Compile Include="QueueOptions.cs" />
     <Compile Include="RabbitAdmin.cs" />
+    <Compile Include="RabbitJsonSerializer.cs" />
     <Compile Include="RabbitJsonSerializerStrategy.cs" />
     <Compile Include="User.cs" />
     <Compile Include="VirtualHost.cs" />

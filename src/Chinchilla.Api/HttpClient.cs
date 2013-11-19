@@ -51,7 +51,7 @@ namespace Chinchilla.Api
         {
             var request = new RestRequest(resource, method)
                           {
-                              JsonSerializer = new RabbitJsonSerializerStrategy(),
+                              JsonSerializer = new RabbitJsonSerializer(),
                               RequestFormat = DataFormat.Json
                           };
             request.AddHeader("Accept", string.Empty);
@@ -70,4 +70,6 @@ namespace Chinchilla.Api
             return request;
         }
     }
+
+
 }
