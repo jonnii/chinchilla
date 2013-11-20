@@ -1,73 +1,118 @@
 using System.Collections.Generic;
-using RestSharp;
+using Chinchilla.Api.Extensions;
+using System.Collections;
+using System.Net;
+using System;
+using System.IO;
+using System.Text;
 
 namespace Chinchilla.Api
 {
     public class HttpClient
     {
-        private readonly IRestClient restClient;
+        private readonly string root;
 
         public HttpClient(string root)
         {
-            restClient = new RestClient(root)
-                         {
-                             Authenticator = new HttpBasicAuthenticator("guest", "guest")
-                         };
-            restClient.AddDefaultHeader("Content-Type", "application/json; charset=utf-8");
+            this.root = root;
         }
 
-        public IRestResponse Execute(
-            string resource, 
-            IEnumerable<KeyValuePair<string, string>> parameters = null, 
-            Method method = Method.GET,
+        public HttpWebResponse Execute(
+            string resource,
+            IEnumerable<KeyValuePair<string, string>> parameters = null,
+            string method = "GET",
             object body = null
             )
         {
             var request = CreateRequest(resource, parameters, method, body);
-            var response = restClient.Execute(request);
-
-            return response;
+            try
+            {
+                return (HttpWebResponse)request.GetResponse();
+            }
+            catch (WebException e)
+            {
+                return (HttpWebResponse)e.Response;
+            }
         }
 
         public T Execute<T>(
-            string resource, 
+            string resource,
             IEnumerable<KeyValuePair<string, string>> parameters = null,
-            Method method = Method.GET,
+            string method = "GET",
             object body = null
             ) where T : new()
         {
             var request = CreateRequest(resource, parameters, method, body);
-            var response = restClient.Execute<T>(request);
+            var response = (HttpWebResponse)request.GetResponse();
 
-            return response.Data;
+            return DeserializeResponse<T>(response);
         }
 
-        private static IRestRequest CreateRequest(
-            string resource, 
-            IEnumerable<KeyValuePair<string, string>> parameters = null, 
-            Method method = Method.GET,
-            object body = null
+        private static T DeserializeResponse<T>(HttpWebResponse response)
+        {
+            using (var sr = new StreamReader(response.GetResponseStream()))
+            {
+                SimpleJson.CurrentJsonSerializerStrategy = new RabbitJsonSerializerStrategy();
+                return SimpleJson.DeserializeObject<T>(sr.ReadToEnd());
+            }
+        }
+
+        private HttpWebRequest CreateRequest(
+            string resource,
+            IEnumerable<KeyValuePair<string, string>> parameters,
+            string method,
+            object body
             )
         {
-            var request = new RestRequest(resource, method)
-                          {
-                              JsonSerializer = new RabbitJsonSerializer(),
-                              RequestFormat = DataFormat.Json
-                          };
-            request.AddHeader("Accept", string.Empty);
+            var parametersTable = ParametersToHastable(parameters);
+            var formattedResource = FormatResource(resource, parametersTable);
+            var uri = CombineUri(root, formattedResource);
+
+            var request = WebRequest.CreateHttp(uri);
+            request.Method = method;
+            request.Accept = string.Empty;
+            request.ContentType = "application/json; charset=utf-8";
+
+            SetBasicAuthHeader(request, "guest", "guest");
+
             if (body != null)
             {
-                request.AddBody(body);
+                var serializedBody = SimpleJson.SerializeObject(body, new RabbitJsonSerializerStrategy());
+                var bodyData = Encoding.UTF8.GetBytes(serializedBody);
+                request.GetRequestStream().Write(bodyData, 0, bodyData.Length);
+                request.GetRequestStream().Close();
             }
+            return request;
+        }
+
+        private static Uri CombineUri(string root, string resource)
+        {
+            return new Uri(root + "/" + resource);
+        }
+
+        private static string FormatResource(string resource, Hashtable parameters)
+        {
+            return resource.Inject(parameters);
+        }
+
+        private static Hashtable ParametersToHastable(IEnumerable<KeyValuePair<string, string>> parameters = null)
+        {
+            var result = new Hashtable();
             if (parameters != null)
             {
                 foreach (var parameter in parameters)
                 {
-                    request.AddUrlSegment(parameter.Key, parameter.Value);
+                    result.Add(parameter.Key, parameter.Value);
                 }
             }
+            return result;
+        }
 
-            return request;
+        private static void SetBasicAuthHeader(WebRequest request, string user, string password)
+        {
+            var authInfo = user + ":" + password;
+            authInfo = Convert.ToBase64String(Encoding.Default.GetBytes(authInfo));
+            request.Headers["Authorization"] = "Basic " + authInfo;
         }
     }
 

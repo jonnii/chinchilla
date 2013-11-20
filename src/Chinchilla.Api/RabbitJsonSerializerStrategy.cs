@@ -1,6 +1,4 @@
-using RestSharp;
-
-namespace Chinchilla.Api
+﻿namespace Chinchilla.Api
 {
     public class RabbitJsonSerializerStrategy : PocoJsonSerializerStrategy
     {

@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Chinchilla.Api.Extensions;
-using RestSharp;
 
 namespace Chinchilla.Api
 {
@@ -45,7 +44,7 @@ namespace Chinchilla.Api
 
         public bool Create(VirtualHost virtualHost)
         {
-            return httpClient.Execute("vhosts/{name}", new Dictionary<string, string> { {"name", virtualHost.Name} }, Method.PUT)
+            return httpClient.Execute("vhosts/{name}", new Dictionary<string, string> { {"name", virtualHost.Name} }, "PUT")
                     .StatusCode == HttpStatusCode.NoContent;
         }
 
@@ -59,7 +58,7 @@ namespace Chinchilla.Api
             return httpClient.Execute(
                 "queues/{vhost}/{name}", 
                 new Dictionary<string, string> { { "vhost", virtualHost.Name }, { "name", queue.Name } }, 
-                Method.PUT, 
+                "PUT", 
                 options
             ).StatusCode == HttpStatusCode.NoContent;
         }
@@ -74,7 +73,7 @@ namespace Chinchilla.Api
             return httpClient.Execute(
                 "exchanges/{vhost}/{name}", 
                 new Dictionary<string, string> { { "vhost", virtualHost.Name }, { "name", exchange.Name} },
-                Method.PUT,
+                "PUT",
                 options
             ).StatusCode == HttpStatusCode.NoContent;
         }
@@ -89,20 +88,20 @@ namespace Chinchilla.Api
             return httpClient.Execute(
                 "bindings/{vhost}/e/{exchange}/q/{queue}",
                 new Dictionary<string, string> { { "vhost", virtualHost.Name }, { "exchange", exchange.Name }, { "queue", queue.Name } },
-                Method.POST,
+                "POST",
                 options
             ).StatusCode == HttpStatusCode.Created;
         }
 
         public bool Delete(VirtualHost virtualHost)
         {
-            return httpClient.Execute("vhosts/{name}", new Dictionary<string, string>{ { "name", virtualHost.Name } }, Method.DELETE).
+            return httpClient.Execute("vhosts/{name}", new Dictionary<string, string>{ { "name", virtualHost.Name } }, "DELETE").
                 StatusCode == HttpStatusCode.NoContent;
         }
 
         public bool Delete(Connection connection)
         {
-            return httpClient.Execute("connections/{name}", new Dictionary<string, string>{ { "name", connection.Name } }, Method.DELETE).
+            return httpClient.Execute("connections/{name}", new Dictionary<string, string>{ { "name", connection.Name } }, "DELETE").
                 StatusCode == HttpStatusCode.NoContent;
         }
 
@@ -111,7 +110,7 @@ namespace Chinchilla.Api
             return httpClient.Execute(
                 "permissions/{vhost}/{user}",
                 new Dictionary<string, string> { { "vhost", virtualHost.Name }, { "user", user.Name } },
-                Method.PUT, 
+                "PUT", 
                 permission
             ).StatusCode == HttpStatusCode.NoContent;
         }
@@ -141,7 +140,7 @@ namespace Chinchilla.Api
             return httpClient.Execute<List<Message>>(
                 "queues/{vhost}/{queue}/get",
                 new Dictionary<string, string> { { "vhost", virtualHost.Name }, { "queue", queue.Name } },
-                Method.POST,
+                "POST",
                 options
             );
         }

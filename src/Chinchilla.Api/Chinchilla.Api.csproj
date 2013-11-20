@@ -37,9 +37,6 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="RestSharp">
-      <HintPath>..\packages\RestSharp.104.3.3\lib\net4\RestSharp.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
@@ -54,6 +51,7 @@
     <Compile Include="Exchange.cs" />
     <Compile Include="ExchangeOptions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\StringInjectExtension.cs" />
     <Compile Include="HttpClient.cs" />
     <Compile Include="IRabbitAdmin.cs" />
     <Compile Include="Message.cs" />
@@ -64,13 +62,15 @@
     <Compile Include="Queue.cs" />
     <Compile Include="QueueOptions.cs" />
     <Compile Include="RabbitAdmin.cs" />
-    <Compile Include="RabbitJsonSerializer.cs" />
     <Compile Include="RabbitJsonSerializerStrategy.cs" />
     <Compile Include="User.cs" />
     <Compile Include="VirtualHost.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\Chinchilla\Chinchilla.csproj">
+      <Project>{BF887B21-2A5A-4B52-8254-0B3CB908634B}</Project>
+      <Name>Chinchilla</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" />
