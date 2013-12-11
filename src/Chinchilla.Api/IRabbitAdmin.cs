@@ -1,10 +1,49 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Chinchilla.Api
 {
     public interface IRabbitAdmin
     {
-        IEnumerable<VirtualHost> VirtualHosts { get; }
+        Task<IEnumerable<VirtualHost>> VirtualHostsAsync();
+
+        Task<IEnumerable<Connection>> ConnectionsAsync();
+
+        Task<IEnumerable<Exchange>> ExchangesAsync(VirtualHost virtualHost);
+
+        Task<IEnumerable<Queue>> QueuesAsync(VirtualHost virtualHost);
+
+        Task<IEnumerable<Permissions>> PermissionsAsync(VirtualHost virtualHost);
+
+        Task<bool> CreateAsync(VirtualHost virtualHost);
+
+        Task<bool> CreateAsync(VirtualHost virtualHost, Queue queue);
+
+        Task<bool> CreateAsync(VirtualHost virtualHost, Queue queue, QueueOptions options);
+
+        Task<bool> CreateAsync(VirtualHost virtualHost, Exchange exchange);
+
+        Task<bool> CreateAsync(VirtualHost virtualHost, Exchange exchange, ExchangeOptions options);
+
+        Task<bool> CreateAsync(VirtualHost virtualHost, User user, Permission permission);
+
+        Task<bool> CreateAsync(VirtualHost virtualHost, Exchange exchange, Queue queue);
+
+        Task<bool> CreateAsync(VirtualHost virtualHost, Exchange exchange, Queue queue, BindingOptions options);
+
+        Task<bool> ExistsAsync(VirtualHost virtualHost, Queue queue);
+
+        Task<bool> ExistsAsync(VirtualHost virtualHost, Exchange exchange);
+
+        Task<bool> DeleteAsync(VirtualHost virtualHost);
+
+        Task<bool> DeleteAsync(Connection connection);
+
+        Task<IEnumerable<Message>> MessagesAsync(VirtualHost virtualHost, Queue queue);
+
+
+
+        IEnumerable<VirtualHost> VirtualHosts();
 
         IEnumerable<Connection> Connections();
 

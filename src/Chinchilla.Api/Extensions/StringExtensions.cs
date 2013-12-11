@@ -17,9 +17,6 @@ namespace Chinchilla.Api.Extensions
         public static void ResetReplacements()
         {
             replacements.Clear();
-
-            AddReplacement("{user.username}", () => Environment.UserName.ToLower());
-            AddReplacement("{machine.name}", () => Environment.MachineName.ToLower());
         }
 
         public static void AddReplacement(string replacement, Func<string> replacementFunction)
