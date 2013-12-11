@@ -1,7 +1,8 @@
 # CHANGELOG
 
-# Pending
-
+# 0.3.0.0
+ 
+ * [mzabolotko] Remove speakeasy dependency on api client, and make client a portable library
  * [BUG-#31] [tanir] Fault strategies cause exception when iterating delivery listeners multiple times
 
 # 0.2.1.0
