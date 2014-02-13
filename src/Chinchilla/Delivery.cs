@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace Chinchilla
@@ -16,7 +15,7 @@ namespace Chinchilla
             string contentType,
             string correlationId,
             string replyTo,
-            IDictionary headers)
+            IDictionary<string, object> headers)
         {
             Tag = tag;
             Body = body;
@@ -42,7 +41,7 @@ namespace Chinchilla
 
         public string ReplyTo { get; private set; }
 
-        public IDictionary Headers { get; private set; }
+        public IDictionary<string, object> Headers { get; private set; }
 
         public bool IsReplyable
         {

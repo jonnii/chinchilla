@@ -1,5 +1,5 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
 
 namespace Chinchilla
 {
@@ -52,7 +52,7 @@ namespace Chinchilla
         /// <summary>
         /// The custom headers on this delivery
         /// </summary>
-        IDictionary Headers { get; }
+        IDictionary<string, object> Headers { get; }
 
         /// <summary>
         /// Indicates that this delivery has been processed and can be
