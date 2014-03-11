@@ -439,3 +439,7 @@ creating an instance of IBus. If you are using NLog or log4net then there are al
 
  * [Chinchilla.Logging.NLog](https://www.nuget.org/packages/Chinchilla.Logging.NLog/)
  * [Chinchilla.Logging.Log4Net](https://www.nuget.org/packages/Chinchilla.Logging.Log4Net/)
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/jonnii/chinchilla/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
