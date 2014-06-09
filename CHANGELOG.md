@@ -1,5 +1,11 @@
 # CHANGELOG
 
+# 0.3.1.0
+
+ * Upgrade RabbitMQ Client
+ * Upgrade MsgPack
+ * Upgrade SimpleJson
+
 # 0.3.0.0
  
  * [mzabolotko] Remove speakeasy dependency on api client, and make client a portable library
