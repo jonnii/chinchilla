@@ -155,12 +155,7 @@ namespace Chinchilla
 
             isDisposing = true;
 
-            // 2. tell the channel to stop receiving new messages
-
-            logger.Info("SHUTDOWN: Stopping channel flow");
-            modelReference.Execute(m => m.ChannelFlow(false));
-
-            // 3. we've disposed of the current subscription so wait for the 
+            // 2. we've disposed of the current subscription so wait for the 
             //    listener thread to to finish doing what it's doing, it might
             //    dispatch something to the delivery strategy. once we're done
             //    with this then we'll stop accepting any new messages
@@ -171,13 +166,13 @@ namespace Chinchilla
                 listenerThread.Join();
             }
 
-            // 4. stop the delivery strategy, this will wait for any work currently
+            // 3. stop the delivery strategy, this will wait for any work currently
             //    running to finish
 
             logger.Info("SHUTDOWN: Stopping delivery strategy");
             deliveryStrategy.Stop();
 
-            // 5. finally we can dispose of the model reference, this will close
+            // 4. finally we can dispose of the model reference, this will close
             //    the model and cancel any consumers that are outstanding
 
             logger.Info("SHUTDOWN: disposing of model reference");
