@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 0.3.2.0
+
+ * Upgrade RabbitMQ Client
+
 # 0.3.1.0
 
  * Upgrade RabbitMQ Client
