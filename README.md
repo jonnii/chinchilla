@@ -140,6 +140,20 @@ var settings = new DepotSettings()
 IBus bus = Depot.Connect("server-name:5671", settings);
 ````
 
+### Connecting to a cluster
+
+Sometimes you don't want to setup a load balancer, but want to take advantage of a cluster of RabbitMq hosts, in this case you need to configure Chinchilla to let it know about each host.
+In turn the connection factory will attempt to connect to each host using the supplied balancing strategy (round robin, random or custom).
+
+````
+var settings = new DepotSettings
+{
+    ConnectionStrings = new [] { "hostname/vhost", "otherhost/vhost2" }
+};
+
+IBus bus = Depot.Connect(settings);
+````
+
 
 ## Publishers
 

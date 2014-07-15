@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# PENDING
+ 
+ * Ability to connect to a cluster of rabbitmq hosts
+
 # 0.3.2.0
 
  * Upgrade RabbitMQ Client
