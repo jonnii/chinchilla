@@ -13,7 +13,7 @@ namespace Chinchilla
 
         public DepotSettings()
         {
-            ConnectionFactoryBuilder = () => new DefaultConnectionFactory();
+            ConnectionFactoryBuilder = uris => new DefaultConnectionFactory(uris);
             ConsumerFactoryBuilder = () => new DefaultConsumerFactory();
             MessageSerializers = new MessageSerializers();
         }
@@ -22,7 +22,7 @@ namespace Chinchilla
 
         public IMessageSerializers MessageSerializers { get; set; }
 
-        public Func<IConnectionFactory> ConnectionFactoryBuilder { get; set; }
+        public Func<Uri[], IConnectionFactory> ConnectionFactoryBuilder { get; set; }
 
         public Func<IConsumerFactory> ConsumerFactoryBuilder { get; set; }
 

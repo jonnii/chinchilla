@@ -14,8 +14,8 @@ namespace Chinchilla.Integration.Features
         [Test]
         public void ShouldVisitTopologyWithQueueBoundToExchange()
         {
-            var factory = new DefaultConnectionFactory();
-            using (var connection = factory.Create(new Uri("amqp://localhost/integration")))
+            var factory = new DefaultConnectionFactory(new[] { new Uri("amqp://localhost/integration") });
+            using (var connection = factory.Create())
             {
                 var model = connection.CreateModel();
 
@@ -38,8 +38,8 @@ namespace Chinchilla.Integration.Features
         [Test]
         public void ShouldVisitExclusiveQueue()
         {
-            var factory = new DefaultConnectionFactory();
-            using (var connection = factory.Create(new Uri("amqp://localhost/integration")))
+            var factory = new DefaultConnectionFactory(new[] { new Uri("amqp://localhost/integration") });
+            using (var connection = factory.Create())
             {
                 var model = connection.CreateModel();
 
@@ -58,8 +58,8 @@ namespace Chinchilla.Integration.Features
         [Test]
         public void ShouldVisitTopologyMultipleTimesWithoutExceptions()
         {
-            var factory = new DefaultConnectionFactory();
-            using (var connection = factory.Create(new Uri("amqp://localhost/integration")))
+            var factory = new DefaultConnectionFactory(new[] { new Uri("amqp://localhost/integration") });
+            using (var connection = factory.Create())
             {
                 var model = connection.CreateModel();
 
@@ -76,8 +76,8 @@ namespace Chinchilla.Integration.Features
         [Test]
         public void ShouldVisitTopologyMultipleTimesExclusiveQueue()
         {
-            var factory = new DefaultConnectionFactory();
-            using (var connection = factory.Create(new Uri("amqp://localhost/integration")))
+            var factory = new DefaultConnectionFactory(new[] { new Uri("amqp://localhost/integration") });
+            using (var connection = factory.Create())
             {
                 var model = connection.CreateModel();
 

@@ -1,5 +1,3 @@
-using System;
-
 namespace Chinchilla
 {
     /// <summary>
@@ -10,6 +8,6 @@ namespace Chinchilla
         /// <summary>
         /// Creates a connection for a URI
         /// </summary>
-        IModelFactory Create(Uri uri);
+        IModelFactory Create();
     }
 }

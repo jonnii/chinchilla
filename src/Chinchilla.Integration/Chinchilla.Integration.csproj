@@ -65,6 +65,7 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Features\Api\RabbitAdminFeature.cs" />
+    <Compile Include="Features\ClusterFeature.cs" />
     <Compile Include="Features\ConnectionFeature.cs" />
     <Compile Include="Features\ConsumerFeature.cs" />
     <Compile Include="Features\Consumers\CapitalizeMessageConsumer.cs" />

@@ -11,39 +11,43 @@ namespace Chinchilla
 {
     public class DefaultConnectionFactory : IConnectionFactory
     {
-        private readonly ILogger logger = Logger.Create<DefaultConnectionFactory>();
+        private readonly Uri[] uris;
 
-        private readonly ConnectionFactory connectionFactory;
+        private readonly ILogger logger = Logger.Create<DefaultConnectionFactory>();
 
         private readonly Dictionary<string, IModelFactory> modelFactories =
             new Dictionary<string, IModelFactory>();
 
-        public SslOption SslOptions { get; set; }
-
-        public DefaultConnectionFactory()
-            : this(new ConnectionFactory())
+        public DefaultConnectionFactory(Uri[] uris)
         {
-
-        }
-
-        public DefaultConnectionFactory(ConnectionFactory connectionFactory)
-        {
-            this.connectionFactory = connectionFactory;
-
-            this.connectionFactory.ClientProperties["MachineName"] = Environment.MachineName;
-            this.connectionFactory.ClientProperties["User"] =
-                string.Concat(Environment.UserDomainName, "\\", Environment.UserName);
-            this.connectionFactory.ClientProperties["ConnectionFactory.CreatedAt"] =
-                DateTime.UtcNow.ToString(CultureInfo.InvariantCulture);
+            this.uris = uris;
 
             MaxRetries = 100;
         }
 
         public int MaxRetries { get; set; }
 
-        public IModelFactory Create(Uri uri)
+        public SslOption SslOptions { get; set; }
+
+        public IModelFactory Create()
         {
-            logger.InfoFormat("Creating connnection for {0}", uri);
+            var connectionFactory = CreateConnectionFactory(uris[0]);
+
+            var connection = CreateConnection(connectionFactory);
+            return CreateModelFactory(connection);
+        }
+
+        private ConnectionFactory CreateConnectionFactory(Uri uri)
+        {
+            logger.InfoFormat("Creating connnection factory Uri='{0}'", uri);
+
+            var connectionFactory = new ConnectionFactory();
+
+            connectionFactory.ClientProperties["MachineName"] = Environment.MachineName;
+            connectionFactory.ClientProperties["User"] =
+                string.Concat(Environment.UserDomainName, "\\", Environment.UserName);
+            connectionFactory.ClientProperties["ConnectionFactory.CreatedAt"] =
+                DateTime.UtcNow.ToString(CultureInfo.InvariantCulture);
 
             connectionFactory.Uri = uri.ToString();
 
@@ -53,20 +57,19 @@ namespace Chinchilla
                 connectionFactory.Ssl = SslOptions;
             }
 
-            var connection = CreateConnection();
-            return CreateModelFactory(connection);
+            return connectionFactory;
         }
 
-        private IConnection CreateConnection()
+        private IConnection CreateConnection(ConnectionFactory connectionFactory)
         {
-            var newConnection = CreateConnectionWithRetries();
+            var newConnection = CreateConnectionWithRetries(connectionFactory);
 
             newConnection.ConnectionShutdown += ConnectionOnConnectionShutdown;
 
             return newConnection;
         }
 
-        private IConnection CreateConnectionWithRetries()
+        private IConnection CreateConnectionWithRetries(ConnectionFactory connectionFactory)
         {
             var numTries = 0;
 
@@ -134,7 +137,9 @@ namespace Chinchilla
 
         private void TryReconnect(IConnection connection)
         {
-            var newConnection = CreateConnection();
+            var connectionFactory = CreateConnectionFactory(uris[0]);
+
+            var newConnection = CreateConnection(connectionFactory);
             var connectionEndPoint = connection.Endpoint.ToString();
 
             var modelFactory = modelFactories[connectionEndPoint];

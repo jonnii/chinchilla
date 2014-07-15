@@ -31,10 +31,10 @@ namespace Chinchilla
             settings.Validate();
 
             var connectionString = settings.ConnectionString;
-            var connectionFactory = settings.ConnectionFactoryBuilder();
+            var connectionFactory = settings.ConnectionFactoryBuilder(new[] { new Uri(connectionString) });
             var consumerFactory = settings.ConsumerFactoryBuilder();
 
-            var modelFactory = connectionFactory.Create(new Uri(connectionString));
+            var modelFactory = connectionFactory.Create();
             var messageSerializers = settings.MessageSerializers;
 
             var bus = new Bus(

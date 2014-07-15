@@ -1,4 +1,5 @@
-﻿using Machine.Specifications;
+﻿using System;
+using Machine.Specifications;
 
 namespace Chinchilla.Specifications
 {
@@ -18,7 +19,7 @@ namespace Chinchilla.Specifications
         public class when_building_default_connection_factory : with_settings
         {
             Because of = () =>
-                builder = settings.ConnectionFactoryBuilder();
+                builder = settings.ConnectionFactoryBuilder(new[] { new Uri("amqp://localhost/foo") });
 
             It should_build_default_connection_factory = () =>
                 builder.ShouldBeOfType<DefaultConnectionFactory>();
