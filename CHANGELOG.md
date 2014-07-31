@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 0.3.3.0
+
+ * Remove the PCL redirects from the app.config in the api package to try to appease the PCL gods
+
 # 0.3.2.0
 
  * Upgrade RabbitMQ Client
