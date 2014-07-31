@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 0.3.4
+
+  * Publishing without patch level version
+
 # 0.3.3.0
 
  * Remove the PCL redirects from the app.config in the api package to try to appease the PCL gods
@@ -15,7 +19,7 @@
  * Upgrade SimpleJson
 
 # 0.3.0.0
- 
+
  * [mzabolotko] Remove speakeasy dependency on api client, and make client a portable library
  * [BUG-#31] [tanir] Fault strategies cause exception when iterating delivery listeners multiple times
 
@@ -28,18 +32,18 @@
 # 0.2.0.0
 
  * Upgrade to .NET 4.5
- * Headers are now exposed on IDelivery 
+ * Headers are now exposed on IDelivery
  * Messages can now be rejected (nack'd) by throwing a MessageRejectedException.
 
 # 0.1.14.2
 
  * Fail all receipts on a publisher reconnect with a failure reason
  * Rename subscriber faults => subscriber failure strategy
- * Add the concept of a publisher failure handler strategy to handle confirmed messages that are nacked 
+ * Add the concept of a publisher failure handler strategy to handle confirmed messages that are nacked
 
 # 0.1.14.1
 
-  * Fix a bug with request/response cause message to end up on the error queue incorrectly 
+  * Fix a bug with request/response cause message to end up on the error queue incorrectly
   * Change delivery to have a list of delivery listeners, so we can hang things a delivery happening.
 
 # 0.1.14
@@ -94,7 +98,7 @@
   * add auto delete subscriber topology
 
 # 0.1.12
-  
+
   * ability to get a subscription by name from the bus
 
 # 0.1.11
