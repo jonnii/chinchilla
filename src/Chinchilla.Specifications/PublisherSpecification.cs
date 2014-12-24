@@ -3,7 +3,7 @@ using Chinchilla.Specifications.Messages;
 using Machine.Fakes;
 using Machine.Specifications;
 using RabbitMQ.Client;
-using RabbitMQ.Client.Framing.v0_9_1;
+using RabbitMQ.Client.Framing;
 
 namespace Chinchilla.Specifications
 {
