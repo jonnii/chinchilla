@@ -67,6 +67,12 @@ namespace Chinchilla
         {
             logger.InfoFormat("Starting subscription: {0}", this);
 
+            if (IsStarted)
+            {
+                var message = string.Format("The queue has already been started: {0}", this);
+                throw new ChinchillaException(message);
+            }
+
             logger.Debug(" -> Building listener thread");
             listenerThread = BuildListenerThread();
 

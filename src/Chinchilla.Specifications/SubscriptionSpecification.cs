@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using Chinchilla.Topologies.Model;
 using Machine.Fakes;
 using Machine.Specifications;
@@ -63,6 +64,26 @@ namespace Chinchilla.Specifications
 
             It should_start_delivery_strategy = () =>
                 deliveryStrategy.WasToldTo(d => d.Start());
+        }
+
+        [Subject(typeof(Subscription))]
+        public class when_starting_multiple_times : with_subscription
+        {
+            Establish context = () =>
+            {
+                modelReference.WhenToldTo(r => r.GetConsumerQueue(Param.IsAny<IQueue>()))
+                    .Return(new BlockingCollection<BasicDeliverEventArgs>());
+
+                Subject.Start();
+            };
+
+            Because of = () =>
+                exception = Catch.Exception(() => Subject.Start());
+
+            It should_throw_exception = () =>
+                exception.ShouldBeOfType<ChinchillaException>();
+
+            static Exception exception;
         }
 
         [Subject(typeof(Subscription))]
