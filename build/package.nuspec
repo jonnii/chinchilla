@@ -15,7 +15,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <tags>rabbitmq chinchilla</tags>
     <dependencies>
-      <dependency id="RabbitMQ.Client" version="3.4" />
+      <dependency id="RabbitMQ.Client" version="3.4.3" />
     </dependencies>
   </metadata>
 </package>
