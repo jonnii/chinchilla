@@ -1,5 +1,10 @@
 # CHANGELOG
 
+# 0.3.7
+
+  * [thingylab] Fix nuspec references to rabbitmq client
+  * [thingylab] Throw exception when starting subscription twice
+
 # 0.3.6
 
   * Upgrade RabbitMQ Client
