@@ -39,7 +39,7 @@ namespace Chinchilla.Specifications
                 exception = Catch.Exception(() => Subject.Start());
 
             It should_throw_invalid_operation_exception = () =>
-                exception.ShouldBeOfType<InvalidOperationException>();
+                exception.ShouldBeAssignableTo<InvalidOperationException>();
 
             static Exception exception;
         }
@@ -207,7 +207,7 @@ namespace Chinchilla.Specifications
                 exception = Catch.Exception(() => Subject.Resume());
 
             It should_throw_exception = () =>
-                exception.ShouldBeOfType<InvalidOperationException>();
+                exception.ShouldBeAssignableTo<InvalidOperationException>();
 
             static Exception exception;
         }

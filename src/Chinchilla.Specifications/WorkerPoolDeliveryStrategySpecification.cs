@@ -48,7 +48,7 @@ namespace Chinchilla.Specifications
                 exception = Catch.Exception(() => Subject.Start());
 
             It should_throw_exception = () =>
-                exception.ShouldBeOfType<ChinchillaException>();
+                exception.ShouldBeAssignableTo<ChinchillaException>();
 
             static Exception exception;
         }
@@ -60,7 +60,7 @@ namespace Chinchilla.Specifications
                 exception = Catch.Exception(() => Subject.GetWorkersController());
 
             It should_be_pool_delivery_workers_controller = () =>
-                exception.ShouldBeOfType<ChinchillaException>();
+                exception.ShouldBeAssignableTo<ChinchillaException>();
 
             static Exception exception;
         }
@@ -75,7 +75,7 @@ namespace Chinchilla.Specifications
                 controller = Subject.GetWorkersController();
 
             It should_be_pool_delivery_workers_controller = () =>
-                controller.ShouldBeOfType<WorkerPoolWorkersController>();
+                controller.ShouldBeAssignableTo<WorkerPoolWorkersController>();
 
             static IWorkersController controller;
         }

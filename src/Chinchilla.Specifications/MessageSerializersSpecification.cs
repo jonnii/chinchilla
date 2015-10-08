@@ -10,7 +10,7 @@ namespace Chinchilla.Specifications
         public class in_general : WithSubject<MessageSerializers>
         {
             It should_have_default = () =>
-                Subject.Default.ShouldBeOfType<JsonMessageSerializer>();
+                Subject.Default.ShouldBeAssignableTo<JsonMessageSerializer>();
         }
 
         [Subject(typeof(MessageSerializers))]
@@ -20,7 +20,7 @@ namespace Chinchilla.Specifications
                 Subject.Default = new TestSerializer();
 
             It should_have_default = () =>
-                Subject.Find("test-serializer").ShouldBeOfType<TestSerializer>();
+                Subject.Find("test-serializer").ShouldBeAssignableTo<TestSerializer>();
         }
 
         [Subject(typeof(MessageSerializers))]
@@ -33,7 +33,7 @@ namespace Chinchilla.Specifications
                 Subject.Default = new TestSerializer();
 
             It should_have_default = () =>
-                Subject.Find("test-serializer").ShouldBeOfType<TestSerializer>();
+                Subject.Find("test-serializer").ShouldBeAssignableTo<TestSerializer>();
         }
 
         [Subject(typeof(MessageSerializers))]
@@ -46,10 +46,10 @@ namespace Chinchilla.Specifications
                 Subject.Default = new AlternateTestSerializer();
 
             It should_have_default = () =>
-                Subject.Default.ShouldBeOfType<AlternateTestSerializer>();
+                Subject.Default.ShouldBeAssignableTo<AlternateTestSerializer>();
 
             It should_have_replaced_default_serializer_with_same_content_type = () =>
-                Subject.Find("test-serializer").ShouldBeOfType<AlternateTestSerializer>();
+                Subject.Find("test-serializer").ShouldBeAssignableTo<AlternateTestSerializer>();
         }
 
         public class TestSerializer : IMessageSerializer

@@ -48,7 +48,7 @@ namespace Chinchilla.Specifications
                 exception = Catch.Exception(() => Subject.RegisterReceipt(ConfirmReceipt.New(300, new TestMessage())));
 
             It should_throw_exception = () =>
-                exception.ShouldBeOfType<DuplicatePublishReceiptException>();
+                exception.ShouldBeAssignableTo<DuplicatePublishReceiptException>();
 
             static Exception exception;
         }

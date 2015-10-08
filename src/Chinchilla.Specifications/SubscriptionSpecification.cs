@@ -81,7 +81,7 @@ namespace Chinchilla.Specifications
                 exception = Catch.Exception(() => Subject.Start());
 
             It should_throw_exception = () =>
-                exception.ShouldBeOfType<ChinchillaException>();
+                exception.ShouldBeAssignableTo<ChinchillaException>();
 
             static Exception exception;
         }

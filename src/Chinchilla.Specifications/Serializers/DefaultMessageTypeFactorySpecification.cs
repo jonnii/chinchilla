@@ -20,7 +20,7 @@ namespace Chinchilla.Specifications.Serializers
                 message = (IMagicMessage)Subject.GetTypeFactory(typeof(IMagicMessage))();
 
             It should_create_magic_message_instance = () =>
-                message.ShouldBeOfType<IMagicMessage>();
+                message.ShouldBeAssignableTo<IMagicMessage>();
 
             It should_have_cached_create_delegate_for_message_type = () =>
                 Subject.HasCachedFactory(typeof(IMagicMessage)).ShouldBeTrue();

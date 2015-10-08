@@ -31,7 +31,7 @@ namespace Chinchilla.Specifications
                 publisher = Subject.Create<TestMessage>(modelReference, configuration);
 
             It should_create_confirming_publisher = () =>
-                publisher.ShouldBeOfType<ConfirmingPublisher<TestMessage>>();
+                publisher.ShouldBeAssignableTo<ConfirmingPublisher<TestMessage>>();
 
             static IPublisher<TestMessage> publisher;
         }
