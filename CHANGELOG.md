@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# 0.3.8
+  * Bump RabbitMQ Dependency
+
 # 0.3.7
 
   * [thingylab] Fix nuspec references to rabbitmq client
