@@ -12,8 +12,13 @@ namespace Chinchilla.Api
         private readonly RabbitHttpClient httpClient;
 
         public RabbitAdmin(string root)
+            : this(root, "guest", "guest")
         {
-            httpClient = new RabbitHttpClient(root.FormatWithReplacements());
+        }
+
+        public RabbitAdmin(string root, string username, string password)
+        {
+            httpClient = new RabbitHttpClient(root.FormatWithReplacements(), username, password);
         }
 
         public Task<IEnumerable<VirtualHost>> VirtualHostsAsync()

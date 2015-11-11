@@ -13,11 +13,17 @@ namespace Chinchilla.Api
     {
         private readonly string root;
 
+        private readonly string username;
+
+        private readonly string password;
+
         private readonly HttpClient client;
 
-        public RabbitHttpClient(string root)
+        public RabbitHttpClient(string root, string username, string password)
         {
             this.root = root;
+            this.username = username;
+            this.password = password;
 
             client = new HttpClient();
         }
@@ -105,7 +111,7 @@ namespace Chinchilla.Api
             var request = new HttpRequestMessage(method, uri);
 
             request.Headers.Add("Accept", string.Empty);
-            request.Headers.Add("Authorization", BuildAuthHeader("guest", "guest"));
+            request.Headers.Add("Authorization", BuildAuthHeader(username, password));
 
             if (body != null)
             {
