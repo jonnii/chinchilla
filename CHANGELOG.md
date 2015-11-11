@@ -2,6 +2,7 @@
 
 # 0.3.8
   * Bump RabbitMQ Dependency
+  * Bump All Dependencies!!
 
 # 0.3.7
 
