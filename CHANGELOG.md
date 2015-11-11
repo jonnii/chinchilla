@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 0.3.9
+
+  * Ability to specify username/password in admin client
+
 # 0.3.8
   * Bump RabbitMQ Dependency
   * Bump All Dependencies!!
