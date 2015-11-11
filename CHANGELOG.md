@@ -3,6 +3,7 @@
 # 0.3.8
   * Bump RabbitMQ Dependency
   * Bump All Dependencies!!
+  * Upgrade to .net 4.5.2
 
 # 0.3.7
 
