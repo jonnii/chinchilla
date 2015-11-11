@@ -66,12 +66,12 @@ namespace Chinchilla
             return receipts.HasPendingConfirmation(sequenceNumber);
         }
 
-        public void OnBasicAcks(IModel model, BasicAckEventArgs args)
+        public void OnBasicAcks(object sender, BasicAckEventArgs args)
         {
             receipts.ProcessReceipts(args.Multiple, args.DeliveryTag, receipt => receipt.Confirmed());
         }
 
-        public void OnBasicNacks(IModel model, BasicNackEventArgs args)
+        public void OnBasicNacks(object sender, BasicNackEventArgs args)
         {
             receipts.ProcessReceipts(args.Multiple, args.DeliveryTag, receipt =>
             {

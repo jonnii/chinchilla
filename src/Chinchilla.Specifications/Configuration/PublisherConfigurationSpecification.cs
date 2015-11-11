@@ -37,7 +37,7 @@ namespace Chinchilla.Specifications.Configuration
                 router = Subject.BuildRouter();
 
             It should_build_default_router = () =>
-                router.ShouldBeOfType<DefaultRouter>();
+                router.ShouldBeAssignableTo<DefaultRouter>();
 
             static IRouter router;
         }
@@ -52,7 +52,7 @@ namespace Chinchilla.Specifications.Configuration
                 router = Subject.BuildRouter();
 
             It should_build_custom_router = () =>
-                router.ShouldBeOfType<CustomRouter>();
+                router.ShouldBeAssignableTo<CustomRouter>();
 
             static IRouter router;
         }
@@ -94,7 +94,7 @@ namespace Chinchilla.Specifications.Configuration
                strategy = Subject.BuildFaultStrategy();
 
             It should_create_default_publish_fault_strategy = () =>
-                strategy.ShouldBeOfType<DefaultPublisherFailureStrategy<TestMessage>>();
+                strategy.ShouldBeAssignableTo<DefaultPublisherFailureStrategy<TestMessage>>();
 
             static IPublisherFailureStrategy<TestMessage> strategy;
         }

@@ -21,7 +21,7 @@ namespace Chinchilla.Specifications
                 builder = settings.ConnectionFactoryBuilder();
 
             It should_build_default_connection_factory = () =>
-                builder.ShouldBeOfType<DefaultConnectionFactory>();
+                builder.ShouldBeAssignableTo<DefaultConnectionFactory>();
 
             static IConnectionFactory builder;
         }
@@ -33,7 +33,7 @@ namespace Chinchilla.Specifications
                 builder = settings.ConsumerFactoryBuilder();
 
             It should_build_default_consumer_factory = () =>
-                builder.ShouldBeOfType<DefaultConsumerFactory>();
+                builder.ShouldBeAssignableTo<DefaultConsumerFactory>();
 
             static IConsumerFactory builder;
         }

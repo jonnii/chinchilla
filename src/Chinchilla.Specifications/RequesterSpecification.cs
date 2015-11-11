@@ -14,7 +14,7 @@ namespace Chinchilla.Specifications
                 exception = Catch.Exception(() => Subject.DispatchToRegisteredResponseHandler(new TestResponseMessage(), deliveryContext));
 
             It should_throw_exception = () =>
-                exception.ShouldBeOfType<ChinchillaException>();
+                exception.ShouldBeAssignableTo<ChinchillaException>();
 
             static Exception exception;
         }
@@ -29,7 +29,7 @@ namespace Chinchilla.Specifications
                 exception = Catch.Exception(() => Subject.DispatchToRegisteredResponseHandler(new TestResponseMessage(), deliveryContext));
 
             It should_throw_exception = () =>
-                exception.ShouldBeOfType<ChinchillaException>();
+                exception.ShouldBeAssignableTo<ChinchillaException>();
 
             static Exception exception;
         }
@@ -61,7 +61,7 @@ namespace Chinchilla.Specifications
                 exception = Catch.Exception(() => Subject.RegisterResponseHandler("", (_, __) => { }));
 
             It should_throw_exception = () =>
-                exception.ShouldBeOfType<ChinchillaException>();
+                exception.ShouldBeAssignableTo<ChinchillaException>();
 
             static Exception exception;
         }

@@ -13,7 +13,7 @@ namespace Chinchilla.Specifications
                 exception = Catch.Exception(() => controller.Pause("fribble"));
 
             It should_throw = () =>
-                exception.ShouldBeOfType<ChinchillaException>();
+                exception.ShouldBeAssignableTo<ChinchillaException>();
 
             static Exception exception;
         }

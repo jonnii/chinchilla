@@ -18,7 +18,7 @@ namespace Chinchilla.Specifications
                 exception = Catch.Exception(() => subscriber.Connect());
 
             It should_throw = () =>
-                exception.ShouldBeOfType<ChinchillaException>();
+                exception.ShouldBeAssignableTo<ChinchillaException>();
 
             static ConsumerSubscriber subscriber;
 
@@ -58,7 +58,7 @@ namespace Chinchilla.Specifications
                 exception = Catch.Exception(() => subscriber.Connect());
 
             It should_create_multi_subscription = () =>
-                exception.ShouldBeOfType<ChinchillaException>();
+                exception.ShouldBeAssignableTo<ChinchillaException>();
 
             static IBus bus;
 

@@ -17,7 +17,7 @@ namespace Chinchilla.Specifications
             };
 
             It should_ = () =>
-                exception.ShouldBeOfType<InvalidOperationException>();
+                exception.ShouldBeAssignableTo<InvalidOperationException>();
 
             static Exception exception;
         }

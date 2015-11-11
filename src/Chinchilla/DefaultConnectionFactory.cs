@@ -117,9 +117,11 @@ namespace Chinchilla
         }
 
         private void ConnectionOnConnectionShutdown(
-            IConnection connection,
+            object sender,
             ShutdownEventArgs reason)
         {
+            var connection = (IConnection)sender;
+
             logger.DebugFormat("Connection closed: {0}", connection.Endpoint.ToString());
 
             connection.ConnectionShutdown -= ConnectionOnConnectionShutdown;

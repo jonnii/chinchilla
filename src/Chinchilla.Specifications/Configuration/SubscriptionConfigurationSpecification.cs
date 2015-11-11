@@ -57,7 +57,7 @@ namespace Chinchilla.Specifications.Configuration
                 strategy = Subject.BuildDeliveryStrategy(An<IDeliveryProcessor>());
 
             It should_build_task_delivery_strategy = () =>
-                strategy.ShouldBeOfType<TaskDeliveryStrategy>();
+                strategy.ShouldBeAssignableTo<TaskDeliveryStrategy>();
 
             static IDeliveryStrategy strategy;
         }
@@ -72,7 +72,7 @@ namespace Chinchilla.Specifications.Configuration
                 strategy = Subject.BuildDeliveryStrategy(An<IDeliveryProcessor>());
 
             It should_create_strategy_of_correct_type = () =>
-                strategy.ShouldBeOfType<WorkerPoolDeliveryStrategy>();
+                strategy.ShouldBeAssignableTo<WorkerPoolDeliveryStrategy>();
 
             It should_configured_strategy = () =>
                 ((WorkerPoolDeliveryStrategy)strategy).NumWorkers.ShouldEqual(5);
@@ -87,7 +87,7 @@ namespace Chinchilla.Specifications.Configuration
                 strategy = Subject.BuildFaultStrategy(An<IBus>());
 
             It should_build_immediate_strategy = () =>
-                strategy.ShouldBeOfType<ErrorQueueFaultStrategy>();
+                strategy.ShouldBeAssignableTo<ErrorQueueFaultStrategy>();
 
             static ISubscriptionFailureStrategy strategy;
         }
@@ -102,7 +102,7 @@ namespace Chinchilla.Specifications.Configuration
                 strategy = Subject.BuildFaultStrategy(An<IBus>());
 
             It should_create_strategy_of_correct_type = () =>
-                strategy.ShouldBeOfType<IgnoreFaultStrategy>();
+                strategy.ShouldBeAssignableTo<IgnoreFaultStrategy>();
 
             static ISubscriptionFailureStrategy strategy;
         }
