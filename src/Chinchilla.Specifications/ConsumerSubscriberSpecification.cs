@@ -87,6 +87,26 @@ namespace Chinchilla.Specifications
             static ConsumerSubscriber subscriber;
         }
 
+        [Subject(typeof(ConsumerSubscriber))]
+        public class when_connecting_with_custom_configuration_explicitly_implemented : WithFakes
+        {
+            Establish context = () =>
+            {
+                bus = An<IBus>();
+                subscriber = new ConsumerSubscriber(bus, new ExplicitTestConsumerWithConfiguration());
+            };
+
+            Because of = () =>
+                subscriber.Connect();
+
+            It should_subscribe_with_configuration_builder = () =>
+                bus.WasToldTo(b => b.Subscribe(Param.IsAny<Action<TestMessage, IDeliveryContext>>(), Param.IsAny<Action<ISubscriptionBuilder>>()));
+
+            static IBus bus;
+
+            static ConsumerSubscriber subscriber;
+        }
+
         public class TestConsumer : IConsumer<TestMessage>
         {
             public void Consume(TestMessage message, IDeliveryContext deliveryContext)
@@ -115,6 +135,17 @@ namespace Chinchilla.Specifications
             }
 
             public void ConfigureSubscription(ISubscriptionBuilder builder)
+            {
+            }
+        }
+
+        public class ExplicitTestConsumerWithConfiguration : IConsumer<TestMessage>, IConfigurableConsumer
+        {
+            void IConsumer<TestMessage>.Consume(TestMessage message, IDeliveryContext deliveryContext)
+            {
+            }
+
+            void IConfigurableConsumer.ConfigureSubscription(ISubscriptionBuilder builder)
             {
             }
         }
