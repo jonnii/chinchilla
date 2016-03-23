@@ -15,6 +15,7 @@ namespace Chinchilla.Serializers.Protobuf
             }
 
             internal Func<byte[], object> FromProto { get; }
+
             internal Func<object, byte[]> ToProto { get; }
         }
 
@@ -45,14 +46,12 @@ namespace Chinchilla.Serializers.Protobuf
 
         public IMessage<T> Deserialize<T>(byte[] message)
         {
-            var typeSerializer = _cache[typeof(T)].FromProto; ;
-            return Message.Create((T)typeSerializer(message));
+            return Message.Create((T)_cache[typeof(T)].FromProto(message));
         }
 
         public byte[] Serialize<T>(IMessage<T> message)
         {
-            var typeSerializer = _cache[typeof(T)].ToProto;
-            return typeSerializer(message.Body);
+            return _cache[typeof(T)].ToProto(message.Body);
         }
     }
 }
