@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# NEXT
+
+  * [jonrad] Make consumers subscriber handle explicit interfaces (better F# support!)
+
 # 0.3.10
 
   * Bump RabbitMQ Dependency
