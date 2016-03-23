@@ -20,11 +20,11 @@ namespace Chinchilla.Serializers.Protobuf
             public T Body { get; }
         }
 
-        private ProtobufRegistrar protobufRegistrar;
+        private IProtobufRegistrar _protobufRegistrar;
 
-        public ProtobufMessageSerializer(ProtobufRegistrar protobufRegistrar)
+        public ProtobufMessageSerializer(IProtobufRegistrar protobufRegistrar)
         {
-            this.protobufRegistrar = protobufRegistrar;
+            _protobufRegistrar = protobufRegistrar;
         }
 
         public string ContentType
@@ -37,13 +37,13 @@ namespace Chinchilla.Serializers.Protobuf
 
         public IMessage<T> Deserialize<T>(byte[] message)
         {
-            var typeSerializer = protobufRegistrar.FromProto<T>();
-            return new MessageWrapper<T>( (T) typeSerializer(message));
+            var typeSerializer = _protobufRegistrar.FromProto<T>();
+            return new MessageWrapper<T>((T) typeSerializer(message));
         }
 
         public byte[] Serialize<T>(IMessage<T> message)
         {
-            var typeSerializer = protobufRegistrar.ToProto<T>();
+            var typeSerializer = _protobufRegistrar.ToProto<T>();
             return typeSerializer(message.Body);
         }
     }

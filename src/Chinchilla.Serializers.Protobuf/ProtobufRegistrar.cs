@@ -4,9 +4,16 @@ using Google.Protobuf;
 
 namespace Chinchilla.Serializers.Protobuf
 {
-    public class ProtobufRegistrar
+    public interface IProtobufRegistrar
     {
-        internal class SerializerFunc
+        void Register<T>(MessageParser<T> parser) where T : Google.Protobuf.IMessage<T>, new();
+        Func<byte[], object> FromProto<T>();
+        Func<object, byte[]> ToProto<T>();
+    }
+
+    public class ProtobufRegistrar : IProtobufRegistrar
+    {
+        private class SerializerFunc
         {
             public SerializerFunc(Func<byte[], object> fromProto, Func<object, byte[]> toProto)
             {
@@ -17,7 +24,8 @@ namespace Chinchilla.Serializers.Protobuf
             internal Func<object, byte[]> ToProto { get; }
         }
 
-        private static Dictionary<Type, SerializerFunc> cache = new Dictionary<Type, SerializerFunc>();
+        private Dictionary<Type, SerializerFunc> cache = new Dictionary<Type, SerializerFunc>();
+
         public void Register<T>(MessageParser<T> parser) where T : Google.Protobuf.IMessage<T>, new()
         {
             var toBytes = new Func<byte[], object>(b => parser.ParseFrom(b));

@@ -4,7 +4,7 @@ chinchilla
 ## Protobuf serialization
 
 
-Protobuf serialization requires the registration of the generated classes with the registrar.
+Protobuf serialization requires the registration of the generated classes with the registrar. This class should be registerred with your DI container as a singleton.
 ````
 
 var serializers = new MessageSerializers();
