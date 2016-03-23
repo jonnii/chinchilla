@@ -81,9 +81,8 @@ namespace Chinchilla
 
             if (consumer is IConfigurableConsumer)
             {
-                var configureMethod = consumer
-                    .GetType()
-                    .GetMethod("ConfigureSubscription");
+                var configureMethod = typeof(IConfigurableConsumer)
+                    .GetMethod(nameof(IConfigurableConsumer.ConfigureSubscription));
 
                 var configureAction = Delegate.CreateDelegate(
                     typeof(Action<ISubscriptionBuilder>),
