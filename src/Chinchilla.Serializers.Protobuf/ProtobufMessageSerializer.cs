@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Google.Protobuf;
+using System;
 using System.Collections.Generic;
-using Google.Protobuf;
 
 namespace Chinchilla.Serializers.Protobuf
 {
-    
     public class ProtobufMessageSerializer : IMessageSerializer
     {
         private class SerializerFunc
@@ -14,6 +13,7 @@ namespace Chinchilla.Serializers.Protobuf
                 FromProto = fromProto;
                 ToProto = toProto;
             }
+
             internal Func<byte[], object> FromProto { get; }
             internal Func<object, byte[]> ToProto { get; }
         }
@@ -23,7 +23,7 @@ namespace Chinchilla.Serializers.Protobuf
         private ProtobufMessageSerializer()
         {
         }
-        
+
         public void Register<T>(MessageParser<T> parser) where T : Google.Protobuf.IMessage<T>
         {
             var toBytes = new Func<byte[], object>(b => parser.ParseFrom(b));
@@ -46,7 +46,7 @@ namespace Chinchilla.Serializers.Protobuf
         public IMessage<T> Deserialize<T>(byte[] message)
         {
             var typeSerializer = _cache[typeof(T)].FromProto; ;
-            return Message.Create((T) typeSerializer(message));
+            return Message.Create((T)typeSerializer(message));
         }
 
         public byte[] Serialize<T>(IMessage<T> message)
