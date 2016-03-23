@@ -1,49 +1,57 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Google.Protobuf;
-using Google.Protobuf.Reflection;
 
 namespace Chinchilla.Serializers.Protobuf
 {
     
     public class ProtobufMessageSerializer : IMessageSerializer
     {
-        public class MessageWrapper<T> : IMessage<T>
+        private class SerializerFunc
         {
-            public MessageWrapper(T body)
+            public SerializerFunc(Func<byte[], object> fromProto, Func<object, byte[]> toProto)
             {
-                Body = body;
+                FromProto = fromProto;
+                ToProto = toProto;
             }
-            public T Body { get; }
+            internal Func<byte[], object> FromProto { get; }
+            internal Func<object, byte[]> ToProto { get; }
         }
 
-        private IProtobufRegistrar _protobufRegistrar;
+        private Dictionary<Type, SerializerFunc> _cache = new Dictionary<Type, SerializerFunc>();
 
-        public ProtobufMessageSerializer(IProtobufRegistrar protobufRegistrar)
+        private ProtobufMessageSerializer()
         {
-            _protobufRegistrar = protobufRegistrar;
         }
-
-        public string ContentType
+        
+        public void Register<T>(MessageParser<T> parser) where T : Google.Protobuf.IMessage<T>
         {
-            get
+            var toBytes = new Func<byte[], object>(b => parser.ParseFrom(b));
+            var fromBytes = new Func<object, byte[]>(o => MessageExtensions.ToByteArray((T)o));
+            if (!_cache.ContainsKey(typeof(T)))
             {
-                return "application/x-protobuf";
+                _cache.Add(typeof(T), new SerializerFunc(toBytes, fromBytes));
             }
         }
+
+        public static IMessageSerializer Create(Action<ProtobufMessageSerializer> create)
+        {
+            var s = new ProtobufMessageSerializer();
+            create(s);
+            return s;
+        }
+
+        public string ContentType { get; } = "application/x-protobuf";
 
         public IMessage<T> Deserialize<T>(byte[] message)
         {
-            var typeSerializer = _protobufRegistrar.FromProto<T>();
-            return new MessageWrapper<T>((T) typeSerializer(message));
+            var typeSerializer = _cache[typeof(T)].FromProto; ;
+            return Message.Create((T) typeSerializer(message));
         }
 
         public byte[] Serialize<T>(IMessage<T> message)
         {
-            var typeSerializer = _protobufRegistrar.ToProto<T>();
+            var typeSerializer = _cache[typeof(T)].ToProto;
             return typeSerializer(message.Body);
         }
     }

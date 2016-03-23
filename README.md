@@ -427,6 +427,22 @@ Chinchilla decides which serializer to use to deserialize an incoming message ba
 upon the `content-type` of that message. Registering a custom serializer is enough 
 to be able to subscribe to message with that format.
 
+### Protobuf serialization
+
+
+Protobuf serialization requires the registration of the generated classes with the serializer.
+````
+
+var serializers = new MessageSerializers();
+serializers.Default = ProtobufMessageSerializer.Create(s =>
+{
+	s.Register(PriceMessage.Parser);
+	s.Register(ConnectMessage.Parser);
+});
+
+````
+
+
 ## Integration with DI Containers
 
 Integration with a dependency injection container is the recommended way of working with Chinchilla.
