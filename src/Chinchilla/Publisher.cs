@@ -30,14 +30,11 @@ namespace Chinchilla
             Exchange = Guard.NotNull(exchange, "bindable");
         }
 
-        public IModelReference ModelReference { get; private set; }
+        public IModelReference ModelReference { get; }
 
-        public IExchange Exchange { get; private set; }
+        public IExchange Exchange { get; }
 
-        public long NumPublishedMessages
-        {
-            get { return numPublishedMessages; }
-        }
+        public long NumPublishedMessages => numPublishedMessages;
 
         public virtual void Start()
         {
@@ -111,7 +108,7 @@ namespace Chinchilla
                 defaultProperties.Expiration = formattedExpiration;
             }
 
-            defaultProperties.SetPersistent(!(message is ITransient));
+            defaultProperties.Persistent = !(message is ITransient);
 
             var replyTo = router.ReplyTo();
             if (!string.IsNullOrEmpty(replyTo))
