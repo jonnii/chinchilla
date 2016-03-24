@@ -198,13 +198,15 @@ task Compile -depends Clean,UpdateAssemblyInfo {
   {
     $targetFramework = $framework
   }
-  $options = "/p:Configuration=Release /p:TargetFrameworkVersion=$targetFramework"
-  $msbuild = "C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
   
-  Push-Location ..\src
-  $build = $msbuild + ' "chinchilla.sln" ' + $options + " /t:Build"
 
-  iex $build
+  $options = "/p:Configuration=Release /p:TargetFrameworkVersion=$targetFramework"
+  $build = '"chinchilla.sln" ' + $options + " /t:Build"
+
+  $msbuild = ${Env:ProgramFiles(x86)} + "\MSBuild\14.0\Bin\MSBuild.exe"
+
+  Push-Location ..\src
+  & $msbuild $build
   Pop-Location
 }
 
