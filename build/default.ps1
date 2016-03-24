@@ -60,6 +60,13 @@ task PreparePackage -depends Test {
     mkdir ..\targets\packages\chinchilla.serializers.msgpack\lib\$folder
 	cp ..\targets\chinchilla.serializers.msgpack\chinchilla.serializers.msgpack.dll ..\targets\packages\chinchilla.serializers.msgpack\lib\$folder
     cp ..\targets\chinchilla.serializers.msgpack\chinchilla.serializers.msgpack.pdb ..\targets\packages\chinchilla.serializers.msgpack\lib\$folder
+
+	mkdir "$packagesDirectory\chinchilla.serializers.protobuf"
+	cp ..\build\package.serializers.protobuf.nuspec ..\targets\packages\chinchilla.serializers.protobuf
+
+    mkdir ..\targets\packages\chinchilla.serializers.protobuf\lib\$folder
+	cp ..\targets\chinchilla.serializers.protobuf\chinchilla.serializers.protobuf.dll ..\targets\packages\chinchilla.serializers.protobuf\lib\$folder
+    cp ..\targets\chinchilla.serializers.protobuf\chinchilla.serializers.protobuf.pdb ..\targets\packages\chinchilla.serializers.protobuf\lib\$folder
 }
 
 task PackagePre -depends PreparePackage {
@@ -97,6 +104,11 @@ task PackagePre -depends PreparePackage {
         %{$_ -replace '0.0.0.1', $packageVersion } > ..\targets\packages\chinchilla.serializers.msgpack\package.serializers.msgpack.nuspec.tmp
 	mv ..\targets\packages\chinchilla.serializers.msgpack\package.serializers.msgpack.nuspec.tmp ..\targets\packages\chinchilla.serializers.msgpack\package.serializers.msgpack.nuspec -force
 	..\src\.nuget\nuget.exe pack "..\targets\packages\chinchilla.serializers.msgpack\package.serializers.msgpack.nuspec" -outputdirectory ".\..\targets\packages"	
+
+	get-content ..\targets\packages\chinchilla.serializers.protobuf\package.serializers.protobuf.nuspec | 
+        %{$_ -replace '0.0.0.1', $packageVersion } > ..\targets\packages\chinchilla.serializers.protobuf\package.serializers.protobuf.nuspec.tmp
+	mv ..\targets\packages\chinchilla.serializers.protobuf\package.serializers.protobuf.nuspec.tmp ..\targets\packages\chinchilla.serializers.protobuf\package.serializers.protobuf.nuspec -force
+	..\src\.nuget\nuget.exe pack "..\targets\packages\chinchilla.serializers.protobuf\package.serializers.protobuf.nuspec" -outputdirectory ".\..\targets\packages"	
 }
 
 task Package -depends PreparePackage {
@@ -133,6 +145,11 @@ task Package -depends PreparePackage {
         %{$_ -replace '0.0.0.1', $packageVersion } > ..\targets\packages\chinchilla.serializers.msgpack\package.serializers.msgpack.nuspec.tmp
 	mv ..\targets\packages\chinchilla.serializers.msgpack\package.serializers.msgpack.nuspec.tmp ..\targets\packages\chinchilla.serializers.msgpack\package.serializers.msgpack.nuspec -force
 	..\src\.nuget\nuget.exe pack "..\targets\packages\chinchilla.serializers.msgpack\package.serializers.msgpack.nuspec" -outputdirectory ".\..\targets\packages"	
+
+	get-content ..\targets\packages\chinchilla.serializers.protobuf\package.serializers.protobuf.nuspec | 
+        %{$_ -replace '0.0.0.1', $packageVersion } > ..\targets\packages\chinchilla.serializers.protobuf\package.serializers.protobuf.nuspec.tmp
+	mv ..\targets\packages\chinchilla.serializers.protobuf\package.serializers.protobuf.nuspec.tmp ..\targets\packages\chinchilla.serializers.protobuf\package.serializers.protobuf.nuspec -force
+	..\src\.nuget\nuget.exe pack "..\targets\packages\chinchilla.serializers.protobuf\package.serializers.protobuf.nuspec" -outputdirectory ".\..\targets\packages"	
 }
 
 task Publish -depends Package {

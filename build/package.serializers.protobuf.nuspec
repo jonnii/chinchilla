@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Chinchilla.Serializers.Protobuf</id>
+    <version>0.0.0.1</version>
+    <title>Chinchilla.Serializers.MsgPack</title>
+    <authors>Jonathan Goldman,Colin Anderson,Kevin Bieri</authors>
+    <owners>jonnii,cocowalla,bieri</owners>
+    <summary>Google.ProtocolBuffers serializer for Chinchilla, the little library that makes RabbitMQ awesome</summary>
+    <description>Google.ProtocolBuffers serializer for Chinchilla, the little library that makes RabbitMQ awesome</description>
+    <language>en-US</language>
+    <projectUrl>http://github.com/jonnii/chinchilla</projectUrl>
+    <licenseUrl>https://github.com/jonnii/chinchilla/blob/master/LICENSE.txt</licenseUrl>
+    <iconUrl>https://raw.github.com/jonnii/chinchilla/master/build/chinchilla.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <tags>rabbitmq management api http chinchilla</tags>
+    <dependencies>
+      <dependency id="Google.Protobuf" version="3.0.0-beta2" />
+      <dependency id="Chinchilla" version="0.0.0.1" />
+    </dependencies>
+  </metadata>
+</package>
