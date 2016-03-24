@@ -1,7 +1,8 @@
 # CHANGELOG
 
-# NEXT
+# 0.3.11
 
+  * [bieri] Add a protobuf message serializer
   * [jonrad] Make consumers subscriber handle explicit interfaces (better F# support!)
 
 # 0.3.10

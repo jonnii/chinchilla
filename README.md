@@ -62,6 +62,8 @@ Contributors
  * @cocowalla (https://github.com/cocowalla)
  * @jamescrowley (https://github.com/jamescrowley)
  * @tanir (https://github.com/tanir)
+ * @jonrad (https://github.com/jonrad)
+ * @bieri (https://github.com/bieri)
  
 Builds
 ======
