@@ -427,6 +427,23 @@ Chinchilla decides which serializer to use to deserialize an incoming message ba
 upon the `content-type` of that message. Registering a custom serializer is enough 
 to be able to subscribe to message with that format.
 
+### Alternative Serialization
+The following are alternatives are available on Nuget:
+* [Chinchilla.Serialziers.JsonNET](https://www.nuget.org/packages/Chinchilla.Serializers.JsonNET/)
+* [Chinchilla.Serializers.MsgPack](https://www.nuget.org/packages/Chinchilla.Serializers.MsgPack/)
+* [Chinchilla.Serializers.Protobuf*](https://www.nuget.org/packages/Chinchilla.Serializers.Protobuf/)
+
+*Protobuf serialization requires the registration of the protoc generated classes with the serializer.
+````
+var serializers = new MessageSerializers();
+serializers.Default = ProtobufMessageSerializer.Create(s =>
+{
+	s.Register(PriceMessage.Parser);
+	s.Register(ConnectMessage.Parser);
+});
+````
+
+
 ## Integration with DI Containers
 
 Integration with a dependency injection container is the recommended way of working with Chinchilla.
