@@ -3,33 +3,46 @@ using Machine.Specifications;
 
 namespace Chinchilla.Serializers.Protobuf.Specifications
 {
-    public class ProtobufMessageSerializerSpecification
+    class ProtobufMessageSerializerSpecification
     {
         [Subject(typeof(ProtobufMessageSerializer))]
-        public class when_serializing_deserializing
+        class when_serializing_deserializing
         {
-            private Establish context = () => serializer = ProtobufMessageSerializer.Create(s => s.Register(AddressBook.Parser));
+            Establish context = () =>
+            {
+                book = new AddressBook();
+                var person = new Person
+                {
+                    Id = 1,
+                    Email = "furry@chinchilla.com",
+                    Name = "Peter"
+                };
 
-            private Because of = () =>
-             {
-                 var book = new AddressBook();
-                 var person = new Person() { Id = 1, Email = "furry@chinchilla.com", Name = "Peter" };
-                 book.People.Add(person);
-                 var serialized = serializer.Serialize(Message.Create(book));
-                 deserialized = serializer.Deserialize<AddressBook>(serialized);
-             };
+                book.People.Add(person);
 
-            private It should_deserialize = () => deserialized.ShouldNotBeNull();
+                serializer = ProtobufMessageSerializer.Create(s => s.Register(AddressBook.Parser));
+            };
 
-            private It should_deserialize_body = () =>
+            Because of = () =>
+            {
+                var serialized = serializer.Serialize(Message.Create(book));
+                deserialized = serializer.Deserialize<AddressBook>(serialized);
+            };
+
+            It should_deserialize = () =>
+                deserialized.ShouldNotBeNull();
+
+            It should_deserialize_body = () =>
             {
                 deserialized.Body.People.Count.ShouldEqual(1);
                 deserialized.Body.People[0].Name.ShouldEqual("Peter");
             };
 
-            private static IMessageSerializer serializer;
+            static IMessageSerializer serializer;
 
-            private static IMessage<AddressBook> deserialized;
+            static IMessage<AddressBook> deserialized;
+
+            static AddressBook book;
         }
     }
 }

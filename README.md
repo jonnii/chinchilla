@@ -62,7 +62,7 @@ Contributors
  * @cocowalla (https://github.com/cocowalla)
  * @jamescrowley (https://github.com/jamescrowley)
  * @tanir (https://github.com/tanir)
-
+ 
 Builds
 ======
 
@@ -428,21 +428,23 @@ upon the `content-type` of that message. Registering a custom serializer is enou
 to be able to subscribe to message with that format.
 
 ### Alternative Serialization
+
 The following are alternatives are available on Nuget:
+
 * [Chinchilla.Serialziers.JsonNET](https://www.nuget.org/packages/Chinchilla.Serializers.JsonNET/)
 * [Chinchilla.Serializers.MsgPack](https://www.nuget.org/packages/Chinchilla.Serializers.MsgPack/)
-* [Chinchilla.Serializers.Protobuf*](https://www.nuget.org/packages/Chinchilla.Serializers.Protobuf/)
+* [Chinchilla.Serializers.Protobuf](https://www.nuget.org/packages/Chinchilla.Serializers.Protobuf/)
 
-*Protobuf serialization requires the registration of the protoc generated classes with the serializer.
+Protobuf serialization requires the registration of the protoc generated classes with the serializer.
+
 ````
 var serializers = new MessageSerializers();
 serializers.Default = ProtobufMessageSerializer.Create(s =>
 {
-	s.Register(PriceMessage.Parser);
-	s.Register(ConnectMessage.Parser);
+    s.Register(PriceMessage.Parser);
+    s.Register(ConnectMessage.Parser);
 });
 ````
-
 
 ## Integration with DI Containers
 
