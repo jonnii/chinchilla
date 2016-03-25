@@ -3,7 +3,7 @@
   <metadata>
     <id>Chinchilla.Serializers.Protobuf</id>
     <version>0.0.0.1</version>
-    <title>Chinchilla.Serializers.MsgPack</title>
+    <title>Chinchilla.Serializers.Protobuf</title>
     <authors>Jonathan Goldman,Colin Anderson,Kevin Bieri</authors>
     <owners>jonnii,cocowalla,bieri</owners>
     <summary>Google.ProtocolBuffers serializer for Chinchilla, the little library that makes RabbitMQ awesome</summary>
