@@ -7,27 +7,45 @@ namespace Chinchilla
     public abstract class TrackableFactory<TTrackable> : IDisposable
         where TTrackable : Trackable
     {
+        private readonly object trackLock = new object();
+
         private readonly List<TTrackable> trackables = new List<TTrackable>();
 
         public IEnumerable<TTrackable> Tracked
         {
-            get { return trackables; }
+            get
+            {
+                lock (trackLock)
+                {
+                    return trackables.ToArray();
+                }
+            }
         }
 
         public bool IsTracking(TTrackable trackable)
         {
-            return trackables.Contains(trackable);
+            lock (trackLock)
+            {
+                return trackables.Contains(trackable);
+            }
         }
 
         protected void Track(TTrackable trackable)
         {
             trackable.Disposed += Untrack;
-            trackables.Add(trackable);
+
+            lock (trackLock)
+            {
+                trackables.Add(trackable);
+            }
         }
 
         private void Untrack(TTrackable trackable)
         {
-            trackables.Remove(trackable);
+            lock (trackLock)
+            {
+                trackables.Remove(trackable);
+            }
         }
 
         private void Untrack(object sender, EventArgs eventArgs)
