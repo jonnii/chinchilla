@@ -32,12 +32,12 @@ namespace Chinchilla
 
         protected void Track(TTrackable trackable)
         {
-            trackable.Disposed += Untrack;
-
             lock (trackLock)
             {
                 trackables.Add(trackable);
             }
+
+            trackable.Disposed += Untrack;
         }
 
         private void Untrack(TTrackable trackable)
