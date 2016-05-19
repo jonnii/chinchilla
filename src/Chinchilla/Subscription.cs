@@ -65,6 +65,12 @@ namespace Chinchilla
 
         public void Start()
         {
+            if (IsStarted)
+            {
+                logger.InfoFormat("Subscription already started: {0}", this);
+                return;
+            }
+
             logger.InfoFormat("Starting subscription: {0}", this);
 
             if (IsStarted)
