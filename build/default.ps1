@@ -192,21 +192,21 @@ task Compile -depends Clean,UpdateAssemblyInfo {
 
   if ($framework -eq '')
   {
-    $targetFramework = 'v4.5'
+    $targetFramework = 'v4.5.1'
   }
   else
   {
     $targetFramework = $framework
   }
 
-  $options = "/p:Configuration=Release /p:TargetFrameworkVersion=$targetFramework"
-  $build = '"chinchilla.sln" ' + $options + " /t:Build"
+  #$$options = "/p:Configuration=Release /p:TargetFrameworkVersion=$targetFramework"
+  #$build = '"chinchilla.sln" ' + $options + " /t:Build"
 
   $msbuild = ${Env:ProgramFiles(x86)} + "\MSBuild\14.0\Bin\MSBuild.exe"
 
   Push-Location ..\src
   
-  & $msbuild $build
+  & $msbuild ('Chinchilla.sln', "/p:Configuration=Release", "/p:TargetFrameworkVersion=$targetFramework", "/t:Build")
   Pop-Location
 }
 
