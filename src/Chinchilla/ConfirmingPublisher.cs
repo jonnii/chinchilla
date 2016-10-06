@@ -73,24 +73,6 @@ namespace Chinchilla
             });
         }
 
-        //public void OnReconnect()
-        //{
-        //    // Fail all pending receipts - this is because the client starts issuing receipts 
-        //    // from sequence 1 again after reconnecting, and we might still have pending receipts
-        //    // from the previous connection for which we will not receive a nack/ack
-        //    receipts.ProcessAllReceipts(receipt =>
-        //    {
-        //        // Extract the failed message
-        //        var failedMessage = receipt.Message;
-
-        //        // Mark this receipt as failed
-        //        receipt.Failed(PublishFailureReason.Disconnected);
-
-        //        // And ask the publisher fault strategy what to do with this
-        //        publisherFailureStrategy.OnFailure(this, failedMessage, receipt);
-        //    });
-        //}
-
         public override void Dispose()
         {
             if (disposed)

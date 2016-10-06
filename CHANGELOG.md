@@ -1,5 +1,10 @@
 # CHANGELOG
 
+# 4.1.0
+
+  * Align versioning with rabbitmq client
+  * Upgrade to latest rabbitmq client as precursor to going .net core
+
 # 0.3.11
 
   * [jonrad] Ability to passing settings to the json net serializer
