@@ -14,10 +14,7 @@ namespace Chinchilla
             this.connection = connection;
         }
 
-        public bool IsOpen
-        {
-            get { return connection.IsOpen; }
-        }
+        public bool IsOpen => connection.IsOpen;
 
         public IModelReference CreateModel()
         {

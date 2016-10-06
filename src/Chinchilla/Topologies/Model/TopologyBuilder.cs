@@ -60,7 +60,7 @@ namespace Chinchilla.Topologies.Model
                 }
                 else
                 {
-                    var declared = model.Execute(m => m.QueueDeclare());
+                    var declared = model.Execute(m => m.QueueDeclare(string.Empty, false, true, true, new Dictionary<string, object>()));
                     queue.Name = declared.QueueName;
                 }
             });
@@ -94,7 +94,7 @@ namespace Chinchilla.Topologies.Model
             {
                 model.Execute(m =>
                 {
-                    Action<string, string, string> bindFunction;
+                    Action<string, string, string, IDictionary<string, object>> bindFunction;
                     if (binding.Bindable is IQueue)
                     {
                         bindFunction = m.QueueBind;
@@ -103,19 +103,19 @@ namespace Chinchilla.Topologies.Model
                     {
                         // Reverse from/to for binding exchanges, because the parameters of ExchangeBind
                         // don't match QueueBind
-                        bindFunction = (from, to, keys) => m.ExchangeBind(to, from, keys);
+                        bindFunction = m.ExchangeBind;
                     }
 
                     if (binding.RoutingKeys.Any())
                     {
                         foreach (var key in binding.RoutingKeys)
                         {
-                            bindFunction(binding.Bindable.Name, binding.Exchange.Name, key);
+                            bindFunction(binding.Bindable.Name, binding.Exchange.Name, key, new Dictionary<string, object>());
                         }
                     }
                     else
                     {
-                        bindFunction(binding.Bindable.Name, binding.Exchange.Name, "#");
+                        bindFunction(binding.Bindable.Name, binding.Exchange.Name, "#", new Dictionary<string, object>());
                     }
                 });
 
