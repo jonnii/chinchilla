@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
-using Chinchilla.Integration.Features.Messages;
 using Chinchilla.Topologies.Model;
 using NUnit.Framework;
-using ExchangeType = Chinchilla.Topologies.Model.ExchangeType;
 
 namespace Chinchilla.Integration.Features
 {

@@ -87,6 +87,7 @@ namespace Chinchilla.Specifications
                 model.WasToldTo(m => m.BasicPublish(
                     Param.IsAny<string>(),
                     Param.IsAny<string>(),
+                    Param.IsAny<bool>(),
                     Param.IsAny<IBasicProperties>(),
                     Param.IsAny<byte[]>()));
 
