@@ -30,18 +30,6 @@ namespace Chinchilla
             return reference;
         }
 
-        public void Reconnect(IConnection newConnection)
-        {
-            logger.Debug("Resetting model factory connection");
-
-            connection = newConnection;
-
-            foreach (var reference in Tracked)
-            {
-                reference.Reconnect(connection.CreateModel());
-            }
-        }
-
         public override void Dispose()
         {
             logger.Debug("Disposing model factory");

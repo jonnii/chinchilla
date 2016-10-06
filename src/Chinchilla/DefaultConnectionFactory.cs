@@ -21,7 +21,7 @@ namespace Chinchilla
         public SslOption SslOptions { get; set; }
 
         public DefaultConnectionFactory()
-            : this(new ConnectionFactory())
+            : this(new ConnectionFactory { AutomaticRecoveryEnabled = true })
         {
 
         }
@@ -130,19 +130,6 @@ namespace Chinchilla
             }
 
             logger.Info("Shutdown initiator was not application, attempting reconnect");
-
-            TryReconnect(connection);
-        }
-
-        private void TryReconnect(IConnection connection)
-        {
-            logger.Info("Shutdown initiator was not application, attempting reconnect");
-
-            var newConnection = CreateConnection();
-            var connectionEndPoint = connection.Endpoint.ToString();
-
-            var modelFactory = modelFactories[connectionEndPoint];
-            modelFactory.Reconnect(newConnection);
         }
     }
 }
