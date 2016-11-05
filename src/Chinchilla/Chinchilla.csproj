@@ -1,204 +1,25 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BF887B21-2A5A-4B52-8254-0B3CB908634B}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Chinchilla</RootNamespace>
-    <AssemblyName>Chinchilla</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
-    <TargetFrameworkProfile />
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Version>1.0.0</Version>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\..\targets\chinchilla\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;DEBUG;NETCOREAPP1_1</DefineConstants>
+    <OutputPath>bin\Debug\netcoreapp1.1\</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\targets\chinchilla\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>bin\Release\netcoreapp1.1\</OutputPath>
+    <DefineConstants>TRACE;NETCOREAPP1_1;RELEASE</DefineConstants>
   </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="RabbitMQ.Client, Version=3.6.0.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
-      <HintPath>..\packages\RabbitMQ.Client.3.6.0\lib\net45\RabbitMQ.Client.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="Microsoft.CSharp" />
+    <PackageReference Include="RabbitMq.Client" Version="4.1.1" />
+    <PackageReference Include="SimpleJson" Version="0.38.0" />
+    <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\CommonAssemblyInfo.cs">
-      <Link>CommonAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="ActionDeliveryListener.cs" />
-    <Compile Include="ActionDeliveryProcessor.cs" />
-    <Compile Include="ActionDisposable.cs" />
-    <Compile Include="Bus.cs" />
-    <Compile Include="ChinchillaException.cs" />
-    <Compile Include="ConsumerSubscriber.cs" />
-    <Compile Include="MessageRejectedException.cs" />
-    <Compile Include="PublishFailureReason.cs" />
-    <Compile Include="DefaultConnectionFactory.cs" />
-    <Compile Include="ConnectionString.cs" />
-    <Compile Include="DefaultConsumerFactory.cs" />
-    <Compile Include="DefaultPublisherFailureStrategy.cs" />
-    <Compile Include="DeliveryQueue.cs" />
-    <Compile Include="DirectRouter.cs" />
-    <Compile Include="DuplicatePublishReceiptException.cs" />
-    <Compile Include="ICorrelated.cs" />
-    <Compile Include="IHasTimeOut.cs" />
-    <Compile Include="IPublisherFailureStrategy.cs" />
-    <Compile Include="IPublishReceipt.cs" />
-    <Compile Include="IRequester.cs" />
-    <Compile Include="ConfirmingPublisher.cs" />
-    <Compile Include="IRequesterFactory.cs" />
-    <Compile Include="ITransient.cs" />
-    <Compile Include="IWorker.cs" />
-    <Compile Include="IWorkerPoolWorker.cs" />
-    <Compile Include="IWorkersController.cs" />
-    <Compile Include="Logging\ConsoleLoggerFactory.cs" />
-    <Compile Include="Logging\NullLoggerFactory.cs" />
-    <Compile Include="Logging\ILoggerFactory.cs" />
-    <Compile Include="NullReceipt.cs" />
-    <Compile Include="ConfirmReceipt.cs" />
-    <Compile Include="NullWorkersController.cs" />
-    <Compile Include="PublishStatus.cs" />
-    <Compile Include="Receipts.cs" />
-    <Compile Include="Requester.cs" />
-    <Compile Include="RequesterFactory.cs" />
-    <Compile Include="Serializers\ChinchillaSerializerStrategy.cs" />
-    <Compile Include="Serializers\DefaultMessageTypeFactory.cs" />
-    <Compile Include="Serializers\IMessageTypeFactory.cs" />
-    <Compile Include="SimpleJson.cs" />
-    <Compile Include="Threading\IThread.cs" />
-    <Compile Include="Threading\IThreadFactory.cs" />
-    <Compile Include="Threading\ThreadFactory.cs" />
-    <Compile Include="Threading\ThreadWrapper.cs" />
-    <Compile Include="Topologies\AutoDeleteSubscribeTopologyBuilder.cs" />
-    <Compile Include="Topologies\DefaultRequestTopologyBuilder.cs" />
-    <Compile Include="Topologies\DefaultResponseTopologyBuilder.cs" />
-    <Compile Include="Worker.cs" />
-    <Compile Include="QueueState.cs" />
-    <Compile Include="TaskWorker.cs" />
-    <Compile Include="WorkerPoolWorker.cs" />
-    <Compile Include="WorkerPoolWorkersController.cs" />
-    <Compile Include="WorkerState.cs" />
-    <Compile Include="Fault.cs" />
-    <Compile Include="ErrorQueueFaultStrategy.cs" />
-    <Compile Include="DefaultRouter.cs" />
-    <Compile Include="DepotSettings.cs" />
-    <Compile Include="Endpoint.cs" />
-    <Compile Include="Configuration\EndpointConfiguration.cs" />
-    <Compile Include="FaultException.cs" />
-    <Compile Include="IBusConcern.cs" />
-    <Compile Include="Configuration\IConfigurableConsumer.cs" />
-    <Compile Include="IConsumerFactory.cs" />
-    <Compile Include="IDeliveryQueue.cs" />
-    <Compile Include="ISubscriptionFailureStrategy.cs" />
-    <Compile Include="IEndpoint.cs" />
-    <Compile Include="Configuration\IEndpointConfiguration.cs" />
-    <Compile Include="IgnoreFaultStrategy.cs" />
-    <Compile Include="IHasRoutingKey.cs" />
-    <Compile Include="IDeliveryContext.cs" />
-    <Compile Include="IMessageSerializers.cs" />
-    <Compile Include="IRouter.cs" />
-    <Compile Include="DeliveryContext.cs" />
-    <Compile Include="ISubscriptionState.cs" />
-    <Compile Include="MessageSerializers.cs" />
-    <Compile Include="Topologies\DefaultPublishTopologyBuilder.cs" />
-    <Compile Include="Topologies\DefaultSubscribeTopologyBuilder.cs" />
-    <Compile Include="Delivery.cs" />
-    <Compile Include="DeliveryStrategy.cs" />
-    <Compile Include="Depot.cs" />
-    <Compile Include="Extensions\EventExtensions.cs" />
-    <Compile Include="Guard.cs" />
-    <Compile Include="IConnectionFactory.cs" />
-    <Compile Include="IConsumer.cs" />
-    <Compile Include="IDeliveryStrategy.cs" />
-    <Compile Include="IDelivery.cs" />
-    <Compile Include="IDeliveryListener.cs" />
-    <Compile Include="IMessage.cs" />
-    <Compile Include="IDeliveryProcessor.cs" />
-    <Compile Include="IMessageSerializer.cs" />
-    <Compile Include="IModelFactory.cs" />
-    <Compile Include="IModelReference.cs" />
-    <Compile Include="IPublisher.cs" />
-    <Compile Include="Configuration\IPublisherBuilder.cs" />
-    <Compile Include="Configuration\IPublisherConfiguration.cs" />
-    <Compile Include="IPublisherFactory.cs" />
-    <Compile Include="Configuration\ISubscriptionConfiguration.cs" />
-    <Compile Include="Configuration\ISubscriptionBuilder.cs" />
-    <Compile Include="ISubscriptionFactory.cs" />
-    <Compile Include="Logging\ConsoleLogger.cs" />
-    <Compile Include="Logging\ILogger.cs" />
-    <Compile Include="Logging\Logger.cs" />
-    <Compile Include="Logging\NullLogger.cs" />
-    <Compile Include="Message.cs" />
-    <Compile Include="ModelFactory.cs" />
-    <Compile Include="ModelReference.cs" />
-    <Compile Include="Publisher.cs" />
-    <Compile Include="Configuration\PublisherConfiguration.cs" />
-    <Compile Include="PublisherFactory.cs" />
-    <Compile Include="Serializers\JsonMessageSerializer.cs" />
-    <Compile Include="SharedBlockingCollectionBasicConsumer.cs" />
-    <Compile Include="Subscription.cs" />
-    <Compile Include="Configuration\SubscriptionConfiguration.cs" />
-    <Compile Include="SubscriptionFactory.cs" />
-    <Compile Include="TaskDeliveryStrategy.cs" />
-    <Compile Include="Topologies\IMessageTopology.cs" />
-    <Compile Include="Topologies\IMessageTopologyBuilder.cs" />
-    <Compile Include="Topologies\Model\Bindable.cs" />
-    <Compile Include="Topologies\Model\Binding.cs" />
-    <Compile Include="Topologies\Model\Durability.cs" />
-    <Compile Include="Topologies\Model\ExchangeType.cs" />
-    <Compile Include="Topologies\Model\IBindable.cs" />
-    <Compile Include="Topologies\Model\IBinding.cs" />
-    <Compile Include="Topologies\Model\IQueue.cs" />
-    <Compile Include="Topologies\Model\ITopology.cs" />
-    <Compile Include="Topologies\Model\ITopologyVisitor.cs" />
-    <Compile Include="Topologies\Model\Queue.cs" />
-    <Compile Include="Topologies\Model\Exchange.cs" />
-    <Compile Include="IBus.cs" />
-    <Compile Include="ISubscription.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Topologies\Model\Topology.cs" />
-    <Compile Include="Topologies\Model\TopologyBuilder.cs" />
-    <Compile Include="Topologies\Model\IExchange.cs" />
-    <Compile Include="Topologies\Model\TopologyWriter.cs" />
-    <Compile Include="Topologies\MessageTopology.cs" />
-    <Compile Include="Trackable.cs" />
-    <Compile Include="TrackableFactory.cs" />
-    <Compile Include="UriConnectionString.cs" />
-    <Compile Include="WorkerPoolDeliveryStrategy.cs" />
-    <Compile Include="WorkerStatus.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

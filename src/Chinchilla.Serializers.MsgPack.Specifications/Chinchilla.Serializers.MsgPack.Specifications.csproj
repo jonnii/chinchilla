@@ -61,16 +61,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Chinchilla.Serializers.MsgPack\Chinchilla.Serializers.MsgPack.csproj">
-      <Project>{039882A0-5236-4903-8302-6603330EFE7B}</Project>
-      <Name>Chinchilla.Serializers.MsgPack</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Chinchilla\Chinchilla.csproj">
-      <Project>{BF887B21-2A5A-4B52-8254-0B3CB908634B}</Project>
-      <Name>Chinchilla</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

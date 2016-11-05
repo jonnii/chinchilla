@@ -31,7 +31,7 @@ namespace Chinchilla.Specifications
                 delivery = An<IDelivery>();
                 delivery.WhenToldTo(d => d.RoutingKey).Return("delivery-routing-key");
                 delivery.WhenToldTo(d => d.Exchange).Return("delivery-exchange");
-                delivery.WhenToldTo(d => d.Body).Return(Encoding.Default.GetBytes("omg-failed"));
+                delivery.WhenToldTo(d => d.Body).Return(Encoding.UTF8.GetBytes("omg-failed"));
             };
 
             Because of = () =>
