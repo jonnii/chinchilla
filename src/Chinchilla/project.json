@@ -14,12 +14,12 @@
         //         "System.Xml": "4.0.0.0"
         //     }
         // },
-        "netstandard1.5": {
+        "netstandard1.6": {
             "imports": "dnxcore50",
             "buildOptions": {
               "define": [
                 "LIBLOG_PORTABLE",
-                "NETSTANDARD1_5"
+                "CORE"
               ]
             },
           "dependencies": {
