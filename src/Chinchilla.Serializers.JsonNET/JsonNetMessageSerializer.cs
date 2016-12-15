@@ -16,21 +16,19 @@ namespace Chinchilla.Serializers.JsonNET
             this.serializerSettings = serializerSettings;
         }
 
-        public string ContentType
-        {
-            get { return "application/json"; }
-        }
+        public string ContentType { get; } = "application/json";
 
         public byte[] Serialize<T>(IMessage<T> message)
         {
-            var serialized = JsonConvert.SerializeObject(message, serializerSettings);
+            var serialized = JsonConvert.SerializeObject(message.Body, serializerSettings);
             return Encoding.UTF8.GetBytes(serialized);
         }
 
         public IMessage<T> Deserialize<T>(byte[] message)
         {
             var decoded = Encoding.UTF8.GetString(message);
-            return JsonConvert.DeserializeObject<Message<T>>(decoded, serializerSettings);
+            var deserialized = JsonConvert.DeserializeObject<T>(decoded, serializerSettings);
+            return Message.Create(deserialized);
         }
     }
 }
