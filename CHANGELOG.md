@@ -1,6 +1,6 @@
 # CHANGELOG
 
-# 0.3.11
+# 0.3.12
 
   * Change json serializers to not wrap messages in a Message envelope
 
