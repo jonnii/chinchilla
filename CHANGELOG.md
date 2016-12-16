@@ -2,6 +2,10 @@
 
 # 0.3.11
 
+  * Change json serializers to not wrap messages in a Message envelope
+
+# 0.3.11
+
   * [jonrad] Ability to passing settings to the json net serializer
   * [bieri] Add a protobuf message serializer
   * [jonrad] Make consumers subscriber handle explicit interfaces (better F# support!)
