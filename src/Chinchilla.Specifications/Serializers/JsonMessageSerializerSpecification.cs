@@ -1,39 +1,46 @@
-﻿using Chinchilla.Serializers;
+﻿using System.Text;
+using Chinchilla.Serializers;
 using Machine.Specifications;
 
 namespace Chinchilla.Specifications.Serializers
 {
+    [Subject(typeof(JsonMessageSerializer))]
     public class JsonMessageSerializerSpecification
     {
-        [Subject(typeof(JsonMessageSerializer))]
-        public class in_general : with_serializer
+        static JsonMessageSerializer serializer;
+
+        Establish context = () =>
+            serializer = new JsonMessageSerializer();
+
+        class in_general
         {
             It should_have_content_type = () =>
-                Subject.ContentType.ShouldEqual("application/json");
+                serializer.ContentType.ShouldEqual("application/json");
         }
 
-        [Subject(typeof(JsonMessageSerializer))]
-        public class when_serializing : with_serializer
+        class when_serializing
         {
             Because of = () =>
-                serialized = Subject.Serialize(Message.Create(new InterestingFact()));
+                serialized = serializer.Serialize(Message.Create(new InterestingFact()));
 
             It should_serialize = () =>
                 serialized.Length.ShouldBeGreaterThan(0);
 
+            It should_not_serialize_body = () =>
+                Encoding.Default.GetString(serialized).ShouldNotContain("\"Body\"");
+
             static byte[] serialized;
         }
 
-        [Subject(typeof(JsonMessageSerializer))]
-        public class when_deserializing : with_serializer
+        class when_deserializing
         {
             Establish context = () =>
-                serialized = Subject.Serialize(
+                serialized = serializer.Serialize(
                     Message.Create(
                         new InterestingFact("Disney's Tangled is the 3rd most expensive film ever made...", FactType.Food)));
 
             Because of = () =>
-                deserialized = Subject.Deserialize<InterestingFact>(serialized);
+                deserialized = serializer.Deserialize<InterestingFact>(serialized);
 
             It should_deserialize_strings = () =>
                 deserialized.Body.FactBody.ShouldEqual("Disney's Tangled is the 3rd most expensive film ever made...");
@@ -49,16 +56,15 @@ namespace Chinchilla.Specifications.Serializers
             static IMessage<InterestingFact> deserialized;
         }
 
-        [Subject(typeof(JsonMessageSerializer))]
-        public class when_deserializing_interface : with_serializer
+        class when_deserializing_interface
         {
             Establish context = () =>
-                serialized = Subject.Serialize(
+                serialized = serializer.Serialize(
                     Message.Create(
                         new InterestingFact("Disney's Tangled is the 3rd most expensive film ever made...", FactType.Food)));
 
             Because of = () =>
-                deserialized = Subject.Deserialize<IInterestingFact>(serialized);
+                deserialized = serializer.Deserialize<IInterestingFact>(serialized);
 
             It should_deserialize_strings = () =>
                 deserialized.Body.FactBody.ShouldEqual("Disney's Tangled is the 3rd most expensive film ever made...");
@@ -69,16 +75,6 @@ namespace Chinchilla.Specifications.Serializers
             static byte[] serialized;
 
             static IMessage<IInterestingFact> deserialized;
-        }
-
-        public class with_serializer
-        {
-            Establish context = () =>
-            {
-                Subject = new JsonMessageSerializer();
-            };
-
-            protected static JsonMessageSerializer Subject;
         }
 
         public enum FactType
