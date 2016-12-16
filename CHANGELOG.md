@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 0.3.12
+
+  * Change json serializers to not wrap messages in a Message envelope
+
 # 0.3.11
 
   * [jonrad] Ability to passing settings to the json net serializer

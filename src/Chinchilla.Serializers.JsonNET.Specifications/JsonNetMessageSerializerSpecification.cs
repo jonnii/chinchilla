@@ -1,21 +1,21 @@
 ﻿using System;
+using System.Text;
 using Machine.Fakes;
 using Machine.Specifications;
 using Newtonsoft.Json;
 
 namespace Chinchilla.Serializers.JsonNET.Specifications
 {
-    public class JsonNetMessageSerializerSpecification
+    [Subject(typeof(JsonNetMessageSerializer))]
+    public class JsonNetMessageSerializerSpecification : WithSubject<JsonNetMessageSerializer>
     {
-        [Subject(typeof(JsonNetMessageSerializer))]
-        public class in_general : WithSubject<JsonNetMessageSerializer>
+        class in_general
         {
             It should_have_content_type = () =>
                 Subject.ContentType.ShouldEqual("application/json");
         }
 
-        [Subject(typeof(JsonNetMessageSerializer))]
-        public class when_serializing : WithSubject<JsonNetMessageSerializer>
+        class when_serializing
         {
             Because of = () =>
                 serialized = Subject.Serialize(Message.Create(new InterestingFact()));
@@ -23,11 +23,13 @@ namespace Chinchilla.Serializers.JsonNET.Specifications
             It should_serialize = () =>
                 serialized.Length.ShouldBeGreaterThan(0);
 
+            It should_not_serialize_body = () =>
+                Encoding.Default.GetString(serialized).ShouldNotContain("\"Body\"");
+
             static byte[] serialized;
         }
 
-        [Subject(typeof(JsonNetMessageSerializer))]
-        public class when_deserializing : WithSubject<JsonNetMessageSerializer>
+        class when_deserializing
         {
             Establish context = () =>
                 serialized = Subject.Serialize(
@@ -44,8 +46,7 @@ namespace Chinchilla.Serializers.JsonNET.Specifications
             static IMessage<InterestingFact> deserialized;
         }
 
-        [Subject(typeof(JsonNetMessageSerializer))]
-        public class when_deserializing_with_settings
+        class when_deserializing_with_settings
         {
             Establish context = () =>
             {
@@ -98,5 +99,4 @@ namespace Chinchilla.Serializers.JsonNET.Specifications
             public string FactBody { get; set; }
         }
     }
-
 }
