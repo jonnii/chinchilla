@@ -200,13 +200,12 @@ task Compile -depends Clean,UpdateAssemblyInfo {
   }
   
 
-  $options = "/p:Configuration=Release /p:TargetFrameworkVersion=$targetFramework"
-  $build = '"chinchilla.sln" ' + $options + " /t:Build"
+  $collectionOfArgs = @('chinchilla.sln', "/p:Configuration=Release", "/p:TargetFrameworkVersion=$targetFramework")
 
   $msbuild = ${Env:ProgramFiles(x86)} + "\MSBuild\14.0\Bin\MSBuild.exe"
 
   Push-Location ..\src
-  & $msbuild $build
+  & $msbuild $collectionOfArgs
   Pop-Location
 }
 
