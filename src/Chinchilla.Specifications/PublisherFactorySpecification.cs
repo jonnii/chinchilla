@@ -6,13 +6,32 @@ using Machine.Specifications;
 
 namespace Chinchilla.Specifications
 {
-    public class PublisherFactorySpecification
+    [Subject(typeof(PublisherFactory))]
+    class PublisherFactorySpecification : WithSubject<PublisherFactory>
     {
-        [Subject(typeof(PublisherFactory))]
-        public class when_building_publisher : with_publisher_factory
+        static IPublisherConfiguration<TestMessage> configuration;
+
+        static IModelReference reference;
+
+        static IPublisher<TestMessage> publisher;
+
+        Establish context = () =>
+        {
+            reference = An<IModelReference>();
+            configuration = An<IPublisherConfiguration<TestMessage>>();
+
+            configuration.WhenToldTo(c => c.BuildRouter()).Return(An<IRouter>());
+            configuration.WhenToldTo(c => c.BuildTopology(Param.IsAny<IEndpoint>()))
+                .Return(new MessageTopology { PublishExchange = An<IExchange>() });
+
+            The<IMessageSerializers>().WhenToldTo(s => s.FindOrDefault(Param.IsAny<string>()))
+                .Return(An<IMessageSerializer>());
+        };
+
+        class when_building_publisher
         {
             Because of = () =>
-                Subject.Create<TestMessage>(modelReference, configuration);
+                Subject.Create(reference, configuration);
 
             It should_build_router = () =>
                 configuration.WasToldTo(c => c.BuildRouter());
@@ -21,39 +40,26 @@ namespace Chinchilla.Specifications
                 configuration.WasToldTo(c => c.BuildFaultStrategy());
         }
 
-        [Subject(typeof(PublisherFactory))]
-        public class when_building_publisher_with_confirms : with_publisher_factory
+        class when_building_publisher_with_confirms
         {
             Establish context = () =>
                 configuration.WhenToldTo(c => c.ShouldConfirm).Return(true);
 
             Because of = () =>
-                publisher = Subject.Create<TestMessage>(modelReference, configuration);
+                publisher = Subject.Create<TestMessage>(reference, configuration);
 
             It should_create_confirming_publisher = () =>
                 publisher.ShouldBeAssignableTo<ConfirmingPublisher<TestMessage>>();
 
-            static IPublisher<TestMessage> publisher;
         }
 
-        public class with_publisher_factory : WithSubject<PublisherFactory>
+        class when_disposing_of_publisher
         {
-            Establish context = () =>
-            {
-                modelReference = An<IModelReference>();
-                configuration = An<IPublisherConfiguration<TestMessage>>();
+            Because of = () =>
+                Subject.Create(reference, configuration).Dispose();
 
-                configuration.WhenToldTo(c => c.BuildRouter()).Return(An<IRouter>());
-                configuration.WhenToldTo(c => c.BuildTopology(Param.IsAny<IEndpoint>()))
-                    .Return(new MessageTopology { PublishExchange = An<IExchange>() });
-
-                The<IMessageSerializers>().WhenToldTo(s => s.FindOrDefault(Param.IsAny<string>()))
-                    .Return(An<IMessageSerializer>());
-            };
-
-            protected static IPublisherConfiguration<TestMessage> configuration;
-
-            protected static IModelReference modelReference;
+            It should_do = () =>
+                Subject.Tracked.ShouldBeEmpty();
         }
 
         public class TestMessage { }

@@ -128,6 +128,7 @@ namespace Chinchilla
 
             ModelReference.Dispose();
             disposed = true;
+            base.Dispose();
         }
     }
 }
