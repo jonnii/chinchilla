@@ -58,7 +58,7 @@ namespace Chinchilla.Specifications
             Because of = () =>
                 Subject.Create(reference, configuration).Dispose();
 
-            It should_do = () =>
+            It should_not_be_tracking_publishers = () =>
                 Subject.Tracked.ShouldBeEmpty();
         }
 
