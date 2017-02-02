@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# Next
+
+  * Bug fix for memory leak with ad-hoc publishing
+
 # 0.3.12
 
   * Change json serializers to not wrap messages in a Message envelope

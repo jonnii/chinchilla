@@ -13,8 +13,7 @@ namespace Chinchilla
         {
             if (isDisposed)
             {
-                var message = string.Format("Object already disposed: {0}", this);
-                throw new ObjectDisposedException(message);
+                throw new ObjectDisposedException($"Object already disposed: {this}");
             }
 
             isDisposed = true;

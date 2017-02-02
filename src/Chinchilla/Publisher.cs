@@ -38,7 +38,6 @@ namespace Chinchilla
 
         public virtual void Start()
         {
-
         }
 
         public IPublishReceipt Publish(TMessage message)
@@ -49,12 +48,10 @@ namespace Chinchilla
 
             if (routingKey == null)
             {
-                var exceptionMessage = string.Format(
-                    "An error occured while trying to publish a message of type {0} because it has a null " +
+                throw new ChinchillaException(
+                    $"An error occured while trying to publish a message of type {typeof(TMessage).Name} because it has a null " +
                     "routing key, this could be because IHasRoutingKey implemented, but the RoutingKey property " +
-                    "returned null.", typeof(TMessage).Name);
-
-                throw new ChinchillaException(exceptionMessage);
+                    "returned null.");
             }
 
             var publishReceipt = ModelReference.Execute(model =>
@@ -127,6 +124,7 @@ namespace Chinchilla
             }
 
             ModelReference.Dispose();
+            base.Dispose();
             disposed = true;
         }
     }
