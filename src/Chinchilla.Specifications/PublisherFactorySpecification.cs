@@ -7,7 +7,7 @@ using Machine.Specifications;
 namespace Chinchilla.Specifications
 {
     [Subject(typeof(PublisherFactory))]
-    class PublisherFactorySpecification : WithSubject<PublisherFactory>
+    public class PublisherFactorySpecification : WithSubject<PublisherFactory>
     {
         static IPublisherConfiguration<TestMessage> configuration;
 
