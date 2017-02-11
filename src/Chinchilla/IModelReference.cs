@@ -33,16 +33,5 @@ namespace Chinchilla
         /// <param name="queue">The queue to consume</param>
         /// <returns>A blocking collection of basic deliver event args</returns>
         BlockingCollection<BasicDeliverEventArgs> GetConsumerQueue(IQueue queue);
-
-        /// <summary>
-        /// Changes the underlying model of this model references, only to be used
-        /// when a connection is reset
-        /// </summary>
-        void Reconnect(IModel newModel);
-
-        /// <summary>
-        /// Register a reconnect handler
-        /// </summary>
-        void OnReconnect(Action<IModel, IModel> reconnectionHandler);
     }
 }

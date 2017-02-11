@@ -1,5 +1,4 @@
-﻿
-namespace Chinchilla.Logging
+﻿namespace Chinchilla.Logging
 {
     public interface ILoggerFactory
     {

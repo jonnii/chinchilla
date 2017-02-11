@@ -1,7 +1,9 @@
 # CHANGELOG
 
-# Next
+# 4.1.0
 
+  * Align versioning with rabbitmq client
+  * Upgrade to latest rabbitmq client as precursor to going .net core
   * Bug fix for memory leak with ad-hoc publishing
 
 # 0.3.12

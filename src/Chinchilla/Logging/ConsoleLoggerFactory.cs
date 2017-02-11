@@ -1,4 +1,3 @@
-
 namespace Chinchilla.Logging
 {
     public class ConsoleLoggerFactory : ILoggerFactory

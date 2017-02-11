@@ -1,5 +1,4 @@
 using System;
-using RabbitMQ.Client;
 
 namespace Chinchilla
 {
@@ -17,11 +16,5 @@ namespace Chinchilla
         /// Creates a model reference with a tag
         /// </summary>
         IModelReference CreateModel(string tag);
-
-        /// <summary>
-        /// Reconnects all the model references tracked by this model factory with a new
-        /// connection
-        /// </summary>
-        void Reconnect(IConnection newConnection);
     }
 }

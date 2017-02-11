@@ -68,30 +68,6 @@ namespace Chinchilla.Specifications
             static TestMessage originalMessage;
         }
 
-        [Subject(typeof(ConfirmingPublisher<>))]
-        public class when_reconnected : with_model_reference
-        {
-            Establish context = () =>
-            {
-                originalMessage = new TestMessage();
-                receipt = (ConfirmReceipt<TestMessage>)Subject.PublishWithReceipt(originalMessage, model, "routingkey", 
-                    An<IBasicProperties>(), new byte[0]);
-            };
-
-            Because of = () =>
-                Subject.OnReconnect();
-
-            It should_set_failure_reason = () =>
-                receipt.FailureReason.ShouldEqual(PublishFailureReason.Disconnected);
-
-            It should_run_publisher_failure_strategy = () =>
-                The<IPublisherFailureStrategy<TestMessage>>().WasToldTo(
-                    s => s.OnFailure(Subject, originalMessage, Param.IsAny<IPublishReceipt>()));
-
-            static TestMessage originalMessage;
-            static ConfirmReceipt<TestMessage> receipt;
-        }
-
         public class with_model_reference : WithSubject<ConfirmingPublisher<TestMessage>>
         {
             Establish context = () =>

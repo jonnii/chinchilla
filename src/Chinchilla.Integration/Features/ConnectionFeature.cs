@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
-using Chinchilla.Integration.Features.Messages;
 using Chinchilla.Topologies.Model;
 using NUnit.Framework;
-using ExchangeType = Chinchilla.Topologies.Model.ExchangeType;
 
 namespace Chinchilla.Integration.Features
 {
@@ -87,42 +84,6 @@ namespace Chinchilla.Integration.Features
                 var builder = new TopologyBuilder(model);
                 topology.Visit(builder);
                 topology.Visit(builder);
-            }
-        }
-
-        [Test]
-        public void ShouldSurviveBeingDisconnected()
-        {
-            using (var bus = Depot.Connect("localhost/integration"))
-            {
-                var numReceived = 0;
-                var handler = new Action<HelloWorldMessage>(hwm =>
-                {
-                    Interlocked.Increment(ref numReceived);
-
-                    if (numReceived == 50)
-                    {
-                        Console.WriteLine("Disconnecting with a vengeance");
-                        var connections = admin.Connections();
-                        admin.Delete(connections.First());
-                    }
-                });
-
-                var subscription = bus.Subscribe(handler);
-
-                using (subscription)
-                {
-                    Console.WriteLine("Publishing 100 messages");
-                    var publisher = bus.CreatePublisher<HelloWorldMessage>();
-                    for (var i = 0; i < 100; ++i)
-                    {
-                        publisher.Publish(new HelloWorldMessage { Message = "subscribe!" });
-                    }
-
-                    WaitForDelivery();
-                }
-
-                Assert.That(numReceived, Is.GreaterThanOrEqualTo(100));
             }
         }
     }

@@ -21,7 +21,7 @@ namespace Chinchilla
         public SslOption SslOptions { get; set; }
 
         public DefaultConnectionFactory()
-            : this(new ConnectionFactory())
+            : this(new ConnectionFactory { AutomaticRecoveryEnabled = true })
         {
 
         }
@@ -101,10 +101,7 @@ namespace Chinchilla
                 }
             }
 
-            var message = string.Format(
-                "Could not create connection, the number of retries ({0}) was exceeded", MaxRetries);
-
-            throw new ChinchillaException(message);
+            throw new ChinchillaException($"Could not create connection, the number of retries ({MaxRetries}) was exceeded");
         }
 
         private IModelFactory CreateModelFactory(IConnection connection)
@@ -128,19 +125,11 @@ namespace Chinchilla
 
             if (reason.Initiator == ShutdownInitiator.Application)
             {
+                logger.Info("Shutdown initiator was application, not attempting reconnect");
                 return;
             }
 
-            TryReconnect(connection);
-        }
-
-        private void TryReconnect(IConnection connection)
-        {
-            var newConnection = CreateConnection();
-            var connectionEndPoint = connection.Endpoint.ToString();
-
-            var modelFactory = modelFactories[connectionEndPoint];
-            modelFactory.Reconnect(newConnection);
+            logger.Info("Shutdown initiator was not application, attempting reconnect");
         }
     }
 }

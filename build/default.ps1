@@ -192,13 +192,12 @@ task Compile -depends Clean,UpdateAssemblyInfo {
 
   if ($framework -eq '')
   {
-    $targetFramework = 'v4.5'
+    $targetFramework = 'v4.5.1'
   }
   else
   {
     $targetFramework = $framework
   }
-  
 
   $collectionOfArgs = @('chinchilla.sln', "/p:Configuration=Release", "/p:TargetFrameworkVersion=$targetFramework")
 
