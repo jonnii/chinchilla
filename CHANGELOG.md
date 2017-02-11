@@ -4,6 +4,11 @@
 
   * Align versioning with rabbitmq client
   * Upgrade to latest rabbitmq client as precursor to going .net core
+  * Bug fix for memory leak with ad-hoc publishing
+
+# 0.3.12
+
+  * Change json serializers to not wrap messages in a Message envelope
 
 # 0.3.11
 

@@ -16,21 +16,19 @@ namespace Chinchilla.Serializers
             strategy = new ChinchillaSerializerStrategy(messageTypeFactory);
         }
 
-        public string ContentType
-        {
-            get { return "application/json"; }
-        }
+        public string ContentType { get; } = "application/json";
 
         public byte[] Serialize<T>(IMessage<T> message)
         {
-            var serialized = SimpleJson.SerializeObject(message, strategy);
+            var serialized = SimpleJson.SerializeObject(message.Body, strategy);
             return Encoding.UTF8.GetBytes(serialized);
         }
 
         public IMessage<T> Deserialize<T>(byte[] message)
         {
             var decoded = Encoding.UTF8.GetString(message);
-            return SimpleJson.DeserializeObject<Message<T>>(decoded, strategy);
+            var deserialized = SimpleJson.DeserializeObject<T>(decoded, strategy);
+            return Message.Create(deserialized);
         }
     }
 }

@@ -15,10 +15,7 @@ namespace Chinchilla.Serializers.MsgPack
             public T Body { get; set; }
         }
 
-        public string ContentType
-        {
-            get { return "application/x-msgpack"; }
-        }
+        public string ContentType => "application/x-msgpack";
 
         public byte[] Serialize<T>(IMessage<T> message)
         {
