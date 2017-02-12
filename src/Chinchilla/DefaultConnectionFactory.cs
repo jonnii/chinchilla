@@ -32,7 +32,7 @@ namespace Chinchilla
 
             this.connectionFactory.ClientProperties["MachineName"] = Environment.MachineName;
 
-#if !NETCOREAPP1_1
+#if !NETSTANDARD1_6
             this.connectionFactory.ClientProperties["User"] =
                 string.Concat(Environment.UserDomainName, "\\", Environment.UserName);
 #endif

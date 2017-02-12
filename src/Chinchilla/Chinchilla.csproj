@@ -1,19 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <TargetFramework>netstandard1.6</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Version>1.0.0</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>TRACE;DEBUG;NETCOREAPP1_1</DefineConstants>
-    <OutputPath>bin\Debug\netcoreapp1.1\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NETSTANDARD1_6</DefineConstants>
+    <OutputPath>bin\Debug\netstandard1.6\</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>bin\Release\netcoreapp1.1\</OutputPath>
-    <DefineConstants>TRACE;NETCOREAPP1_1;RELEASE</DefineConstants>
+    <OutputPath>bin\Release\netstandard1.6\</OutputPath>
+    <DefineConstants>TRACE;RELEASE;NETSTANDARD1_6</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
