@@ -31,38 +31,30 @@ namespace Chinchilla.Topologies.Model
         {
             VisitOnce(queue, () =>
             {
-                if (queue.HasName)
+                var args = new Dictionary<string, object>();
+
+                if (queue.QueueAutoExpire.HasValue)
                 {
-                    var args = new Dictionary<string, object>();
-
-                    if (queue.QueueAutoExpire.HasValue)
-                    {
-                        args.Add("x-expires", queue.QueueAutoExpire.Value.TotalMilliseconds);
-                    }
-
-                    if (!string.IsNullOrEmpty(queue.DeadLetterExchange))
-                    {
-                        args.Add("x-dead-letter-exchange", queue.DeadLetterExchange);
-                    }
-
-                    if (queue.MessageTimeToLive.HasValue)
-                    {
-                        args.Add("x-message-ttl", (int)queue.MessageTimeToLive.Value.TotalMilliseconds);
-                    }
-
-                    model.Execute(m =>
-                        m.QueueDeclare(
-                            queue.Name,
-                            queue.Durability == Durability.Durable,   // durable
-                            queue.IsExclusive,  // exclusive
-                            queue.IsAutoDelete,  // auto-delete
-                            args));
+                    args.Add("x-expires", queue.QueueAutoExpire.Value.TotalMilliseconds);
                 }
-                else
+
+                if (!string.IsNullOrEmpty(queue.DeadLetterExchange))
                 {
-                    var declared = model.Execute(m => m.QueueDeclare());
-                    queue.Name = declared.QueueName;
+                    args.Add("x-dead-letter-exchange", queue.DeadLetterExchange);
                 }
+
+                if (queue.MessageTimeToLive.HasValue)
+                {
+                    args.Add("x-message-ttl", (int)queue.MessageTimeToLive.Value.TotalMilliseconds);
+                }
+
+                model.Execute(m =>
+                    m.QueueDeclare(
+                        queue.HasName ? queue.Name : "",
+                        queue.Durability == Durability.Durable,   // durable
+                        queue.IsExclusive,  // exclusive
+                        queue.IsAutoDelete,  // auto-delete
+                        args));
             });
         }
 
@@ -94,7 +86,8 @@ namespace Chinchilla.Topologies.Model
             {
                 model.Execute(m =>
                 {
-                    Action<string, string, string> bindFunction;
+                    Action<string, string, string, IDictionary<string, object>> bindFunction;
+
                     if (binding.Bindable is IQueue)
                     {
                         bindFunction = m.QueueBind;
@@ -103,19 +96,19 @@ namespace Chinchilla.Topologies.Model
                     {
                         // Reverse from/to for binding exchanges, because the parameters of ExchangeBind
                         // don't match QueueBind
-                        bindFunction = (from, to, keys) => m.ExchangeBind(to, from, keys);
+                        bindFunction = (from, to, keys, args) => m.ExchangeBind(to, from, keys, args);
                     }
 
                     if (binding.RoutingKeys.Any())
                     {
                         foreach (var key in binding.RoutingKeys)
                         {
-                            bindFunction(binding.Bindable.Name, binding.Exchange.Name, key);
+                            bindFunction(binding.Bindable.Name, binding.Exchange.Name, key, null);
                         }
                     }
                     else
                     {
-                        bindFunction(binding.Bindable.Name, binding.Exchange.Name, "#");
+                        bindFunction(binding.Bindable.Name, binding.Exchange.Name, "#", null);
                     }
                 });
 
