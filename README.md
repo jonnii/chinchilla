@@ -433,7 +433,7 @@ to be able to subscribe to message with that format.
 
 The following are alternatives are available on Nuget:
 
-* [Chinchilla.Serialziers.JsonNET](https://www.nuget.org/packages/Chinchilla.Serializers.JsonNET/)
+* [Chinchilla.Serializers.JsonNET](https://www.nuget.org/packages/Chinchilla.Serializers.JsonNET/)
 * [Chinchilla.Serializers.MsgPack](https://www.nuget.org/packages/Chinchilla.Serializers.MsgPack/)
 * [Chinchilla.Serializers.Protobuf](https://www.nuget.org/packages/Chinchilla.Serializers.Protobuf/)
 
