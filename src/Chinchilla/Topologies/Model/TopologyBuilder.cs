@@ -103,12 +103,12 @@ namespace Chinchilla.Topologies.Model
                     {
                         foreach (var key in binding.RoutingKeys)
                         {
-                            bindFunction(binding.Bindable.Name, binding.Exchange.Name, key, new Dictionary<string, object>());
+                            bindFunction(binding.Bindable.Name, binding.Exchange.Name, key, null);
                         }
                     }
                     else
                     {
-                        bindFunction(binding.Bindable.Name, binding.Exchange.Name, "#", new Dictionary<string, object>());
+                        bindFunction(binding.Bindable.Name, binding.Exchange.Name, "#", null);
                     }
                 });
 
