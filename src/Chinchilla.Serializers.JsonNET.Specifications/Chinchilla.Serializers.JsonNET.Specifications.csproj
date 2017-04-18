@@ -81,16 +81,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Chinchilla.Serializers.JsonNET\Chinchilla.Serializers.JsonNET.csproj">
-      <Project>{D8D19E61-29EE-4B4D-B683-2004F85C031A}</Project>
-      <Name>Chinchilla.Serializers.JsonNET</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Chinchilla\Chinchilla.csproj">
-      <Project>{BF887B21-2A5A-4B52-8254-0B3CB908634B}</Project>
-      <Name>Chinchilla</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>

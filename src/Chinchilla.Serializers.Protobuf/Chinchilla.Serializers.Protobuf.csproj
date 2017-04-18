@@ -46,12 +46,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Chinchilla\Chinchilla.csproj">
-      <Project>{bf887b21-2a5a-4b52-8254-0b3cb908634b}</Project>
-      <Name>Chinchilla</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

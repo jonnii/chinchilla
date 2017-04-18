@@ -31,8 +31,12 @@ namespace Chinchilla
             this.connectionFactory = connectionFactory;
 
             this.connectionFactory.ClientProperties["MachineName"] = Environment.MachineName;
+
+#if !NETSTANDARD1_6
             this.connectionFactory.ClientProperties["User"] =
                 string.Concat(Environment.UserDomainName, "\\", Environment.UserName);
+#endif
+
             this.connectionFactory.ClientProperties["ConnectionFactory.CreatedAt"] =
                 DateTime.UtcNow.ToString(CultureInfo.InvariantCulture);
 

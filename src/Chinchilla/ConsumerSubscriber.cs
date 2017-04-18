@@ -77,17 +77,17 @@ namespace Chinchilla
                 .ParameterType;
 
             var actionType = typeof(Action<,>).MakeGenericType(messageType, typeof(IDeliveryContext));
-            var consumeAction = Delegate.CreateDelegate(actionType, consumer, method);
+            
+            var consumeAction = method.CreateDelegate(actionType, consumer);
 
             if (consumer is IConfigurableConsumer)
             {
                 var configureMethod = typeof(IConfigurableConsumer)
                     .GetMethod(nameof(IConfigurableConsumer.ConfigureSubscription));
 
-                var configureAction = Delegate.CreateDelegate(
+                var configureAction = configureMethod.CreateDelegate(
                     typeof(Action<ISubscriptionBuilder>),
-                    consumer,
-                    configureMethod);
+                    consumer);
 
                 var genericSubscribeMethod = subscribeMethodWithConfiguration.MakeGenericMethod(messageType);
 

@@ -17,7 +17,7 @@
 // <website>https://github.com/facebook-csharp-sdk/simple-json</website>
 //-----------------------------------------------------------------------
 
-// VERSION: 0.38.0
+// VERSION:
 
 // NOTE: uncomment the following line to make SimpleJson class internal.
 //#define SIMPLE_JSON_INTERNAL
@@ -46,7 +46,7 @@
 
 // original json parsing code from http://techblog.procurios.nl/k/618/news/view/14605/14863/How-do-I-write-my-own-parser-for-JSON.html
 
-#if NETFX_CORE
+#if NETFX_CORE || NETSTANDARD1_6
 #define SIMPLE_JSON_TYPEINFO
 #endif
 
@@ -66,6 +66,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
+
 using Chinchilla.Reflection;
 
 // ReSharper disable LoopCanBeConvertedToQuery
@@ -522,7 +523,7 @@ namespace Chinchilla
         static SimpleJson()
         {
             EscapeTable = new char[93];
-            EscapeTable['"']  = '"';
+            EscapeTable['"'] = '"';
             EscapeTable['\\'] = '\\';
             EscapeTable['\b'] = 'b';
             EscapeTable['\f'] = 'f';
@@ -556,7 +557,7 @@ namespace Chinchilla
         /// <returns>
         /// Returns true if successfull otherwise false.
         /// </returns>
-        [SuppressMessage("Microsoft.Design", "CA1007:UseGenericsWhereAppropriate", Justification="Need to support .NET 2")]
+        [SuppressMessage("Microsoft.Design", "CA1007:UseGenericsWhereAppropriate", Justification = "Need to support .NET 2")]
         public static bool TryDeserializeObject(string json, out object obj)
         {
             bool success = true;
@@ -621,7 +622,7 @@ namespace Chinchilla
             StringBuilder sb = new StringBuilder();
             char c;
 
-            for (int i = 0; i < jsonString.Length; )
+            for (int i = 0; i < jsonString.Length;)
             {
                 c = jsonString[i++];
 
@@ -1222,7 +1223,7 @@ namespace Chinchilla
 
 #endif
     }
-    
+
     [GeneratedCode("simple-json", "1.0.0")]
 #if SIMPLE_JSON_INTERNAL
     internal
@@ -1231,7 +1232,7 @@ namespace Chinchilla
 #endif
  interface IJsonSerializerStrategy
     {
-        [SuppressMessage("Microsoft.Design", "CA1007:UseGenericsWhereAppropriate", Justification="Need to support .NET 2")]
+        [SuppressMessage("Microsoft.Design", "CA1007:UseGenericsWhereAppropriate", Justification = "Need to support .NET 2")]
         bool TrySerializeNonPrimitiveObject(object input, out object output);
         object DeserializeObject(object value, Type type);
     }
@@ -1330,12 +1331,12 @@ namespace Chinchilla
             if (type == null) throw new ArgumentNullException("type");
             string str = value as string;
 
-            if (type == typeof (Guid) && string.IsNullOrEmpty(str))
+            if (type == typeof(Guid) && string.IsNullOrEmpty(str))
                 return default(Guid);
 
             if (value == null)
                 return null;
-            
+
             object obj = null;
 
             if (str != null)
@@ -1350,19 +1351,19 @@ namespace Chinchilla
                         return new Guid(str);
                     if (type == typeof(Uri))
                     {
-                        bool isValid =  Uri.IsWellFormedUriString(str, UriKind.RelativeOrAbsolute);
+                        bool isValid = Uri.IsWellFormedUriString(str, UriKind.RelativeOrAbsolute);
 
                         Uri result;
                         if (isValid && Uri.TryCreate(str, UriKind.RelativeOrAbsolute, out result))
                             return result;
 
-												return null;
+                        return null;
                     }
-                  
-									if (type == typeof(string))  
-										return str;
 
-									return Convert.ChangeType(str, type, CultureInfo.InvariantCulture);
+                    if (type == typeof(string))
+                        return str;
+
+                    return Convert.ChangeType(str, type, CultureInfo.InvariantCulture);
                 }
                 else
                 {
@@ -1379,7 +1380,7 @@ namespace Chinchilla
             }
             else if (value is bool)
                 return value;
-            
+
             bool valueIsLong = value is long;
             bool valueIsDouble = value is double;
             if ((valueIsLong && type == typeof(long)) || (valueIsDouble && type == typeof(double)))
@@ -1469,7 +1470,7 @@ namespace Chinchilla
             return Convert.ToDouble(p, CultureInfo.InvariantCulture);
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1007:UseGenericsWhereAppropriate", Justification="Need to support .NET 2")]
+        [SuppressMessage("Microsoft.Design", "CA1007:UseGenericsWhereAppropriate", Justification = "Need to support .NET 2")]
         protected virtual bool TrySerializeKnownTypes(object input, out object output)
         {
             bool returnValue = true;
@@ -1494,7 +1495,7 @@ namespace Chinchilla
             }
             return returnValue;
         }
-        [SuppressMessage("Microsoft.Design", "CA1007:UseGenericsWhereAppropriate", Justification="Need to support .NET 2")]
+        [SuppressMessage("Microsoft.Design", "CA1007:UseGenericsWhereAppropriate", Justification = "Need to support .NET 2")]
         protected virtual bool TrySerializeUnknownTypes(object input, out object output)
         {
             if (input == null) throw new ArgumentNullException("input");
@@ -1596,7 +1597,7 @@ namespace Chinchilla
     namespace Reflection
     {
         // This class is meant to be copied into other libraries. So we want to exclude it from Code Analysis rules
- 	    // that might be in place in the target project.
+        // that might be in place in the target project.
         [GeneratedCode("reflection-utils", "1.0.0")]
 #if SIMPLE_JSON_REFLECTION_UTILS_PUBLIC
         public
@@ -1649,7 +1650,7 @@ namespace Chinchilla
                 foreach (Type implementedInterface in interfaces)
                 {
                     if (IsTypeGeneric(implementedInterface) &&
-                        implementedInterface.GetGenericTypeDefinition() == typeof (IList<>))
+                        implementedInterface.GetGenericTypeDefinition() == typeof(IList<>))
                     {
                         return GetGenericTypeArguments(implementedInterface)[0];
                     }
@@ -1832,7 +1833,7 @@ namespace Chinchilla
 
             public static ConstructorDelegate GetConstructorByReflection(ConstructorInfo constructorInfo)
             {
-                return delegate(object[] args) { return constructorInfo.Invoke(args); };
+                return delegate (object[] args) { return constructorInfo.Invoke(args); };
             }
 
             public static ConstructorDelegate GetConstructorByReflection(Type type, params Type[] argsType)
@@ -1859,7 +1860,7 @@ namespace Chinchilla
                 NewExpression newExp = Expression.New(constructorInfo, argsExp);
                 Expression<Func<object[], object>> lambda = Expression.Lambda<Func<object[], object>>(newExp, param);
                 Func<object[], object> compiledLambda = lambda.Compile();
-                return delegate(object[] args) { return compiledLambda(args); };
+                return delegate (object[] args) { return compiledLambda(args); };
             }
 
             public static ConstructorDelegate GetConstructorByExpression(Type type, params Type[] argsType)
@@ -1891,12 +1892,12 @@ namespace Chinchilla
             public static GetDelegate GetGetMethodByReflection(PropertyInfo propertyInfo)
             {
                 MethodInfo methodInfo = GetGetterMethodInfo(propertyInfo);
-                return delegate(object source) { return methodInfo.Invoke(source, EmptyObjects); };
+                return delegate (object source) { return methodInfo.Invoke(source, EmptyObjects); };
             }
 
             public static GetDelegate GetGetMethodByReflection(FieldInfo fieldInfo)
             {
-                return delegate(object source) { return fieldInfo.GetValue(source); };
+                return delegate (object source) { return fieldInfo.GetValue(source); };
             }
 
 #if !SIMPLE_JSON_NO_LINQ_EXPRESSION
@@ -1907,7 +1908,7 @@ namespace Chinchilla
                 ParameterExpression instance = Expression.Parameter(typeof(object), "instance");
                 UnaryExpression instanceCast = (!IsValueType(propertyInfo.DeclaringType)) ? Expression.TypeAs(instance, propertyInfo.DeclaringType) : Expression.Convert(instance, propertyInfo.DeclaringType);
                 Func<object, object> compiled = Expression.Lambda<Func<object, object>>(Expression.TypeAs(Expression.Call(instanceCast, getMethodInfo), typeof(object)), instance).Compile();
-                return delegate(object source) { return compiled(source); };
+                return delegate (object source) { return compiled(source); };
             }
 
             public static GetDelegate GetGetMethodByExpression(FieldInfo fieldInfo)
@@ -1915,7 +1916,7 @@ namespace Chinchilla
                 ParameterExpression instance = Expression.Parameter(typeof(object), "instance");
                 MemberExpression member = Expression.Field(Expression.Convert(instance, fieldInfo.DeclaringType), fieldInfo);
                 GetDelegate compiled = Expression.Lambda<GetDelegate>(Expression.Convert(member, typeof(object)), instance).Compile();
-                return delegate(object source) { return compiled(source); };
+                return delegate (object source) { return compiled(source); };
             }
 
 #endif
@@ -1941,12 +1942,12 @@ namespace Chinchilla
             public static SetDelegate GetSetMethodByReflection(PropertyInfo propertyInfo)
             {
                 MethodInfo methodInfo = GetSetterMethodInfo(propertyInfo);
-                return delegate(object source, object value) { methodInfo.Invoke(source, new object[] { value }); };
+                return delegate (object source, object value) { methodInfo.Invoke(source, new object[] { value }); };
             }
 
             public static SetDelegate GetSetMethodByReflection(FieldInfo fieldInfo)
             {
-                return delegate(object source, object value) { fieldInfo.SetValue(source, value); };
+                return delegate (object source, object value) { fieldInfo.SetValue(source, value); };
             }
 
 #if !SIMPLE_JSON_NO_LINQ_EXPRESSION
@@ -1959,7 +1960,7 @@ namespace Chinchilla
                 UnaryExpression instanceCast = (!IsValueType(propertyInfo.DeclaringType)) ? Expression.TypeAs(instance, propertyInfo.DeclaringType) : Expression.Convert(instance, propertyInfo.DeclaringType);
                 UnaryExpression valueCast = (!IsValueType(propertyInfo.PropertyType)) ? Expression.TypeAs(value, propertyInfo.PropertyType) : Expression.Convert(value, propertyInfo.PropertyType);
                 Action<object, object> compiled = Expression.Lambda<Action<object, object>>(Expression.Call(instanceCast, setMethodInfo, valueCast), new ParameterExpression[] { instance, value }).Compile();
-                return delegate(object source, object val) { compiled(source, val); };
+                return delegate (object source, object val) { compiled(source, val); };
             }
 
             public static SetDelegate GetSetMethodByExpression(FieldInfo fieldInfo)
@@ -1968,7 +1969,7 @@ namespace Chinchilla
                 ParameterExpression value = Expression.Parameter(typeof(object), "value");
                 Action<object, object> compiled = Expression.Lambda<Action<object, object>>(
                     Assign(Expression.Field(Expression.Convert(instance, fieldInfo.DeclaringType), fieldInfo), Expression.Convert(value, fieldInfo.FieldType)), instance, value).Compile();
-                return delegate(object source, object val) { compiled(source, val); };
+                return delegate (object source, object val) { compiled(source, val); };
             }
 
             public static BinaryExpression Assign(Expression left, Expression right)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using RabbitMQ.Client;
 
 namespace Chinchilla.Topologies.Model
 {
@@ -94,7 +95,7 @@ namespace Chinchilla.Topologies.Model
             {
                 model.Execute(m =>
                 {
-                    Action<string, string, string> bindFunction;
+                    Action<string, string, string, IDictionary<string, object>> bindFunction;
                     if (binding.Bindable is IQueue)
                     {
                         bindFunction = m.QueueBind;
@@ -103,19 +104,19 @@ namespace Chinchilla.Topologies.Model
                     {
                         // Reverse from/to for binding exchanges, because the parameters of ExchangeBind
                         // don't match QueueBind
-                        bindFunction = (from, to, keys) => m.ExchangeBind(to, from, keys);
+                        bindFunction = (from, to, keys, args) => m.ExchangeBind(to, from, keys, args);
                     }
 
                     if (binding.RoutingKeys.Any())
                     {
                         foreach (var key in binding.RoutingKeys)
                         {
-                            bindFunction(binding.Bindable.Name, binding.Exchange.Name, key);
+                            bindFunction(binding.Bindable.Name, binding.Exchange.Name, key, null);
                         }
                     }
                     else
                     {
-                        bindFunction(binding.Bindable.Name, binding.Exchange.Name, "#");
+                        bindFunction(binding.Bindable.Name, binding.Exchange.Name, "#", null);
                     }
                 });
 

@@ -63,7 +63,7 @@ namespace Chinchilla.Specifications
             static IBasicProperties properties;
         }
 
-        [Subject(typeof(ConfirmingPublisher<>))]
+        [Subject(typeof(Publisher<>))]
         public class when_publishing_with_receipt : WithSubject<Publisher<TestMessage>>
         {
             Establish context = () =>

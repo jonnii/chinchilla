@@ -17,45 +17,45 @@ namespace Chinchilla.Serializers
             return p.ToString();
         }
 
-        public override object DeserializeObject(object value, Type type)
-        {
-            var stringValue = value as string;
+        // public override object DeserializeObject(object value, Type type)
+        // {
+        //     var stringValue = value as string;
 
-            if (stringValue != null)
-            {
-                if (type.IsEnum)
-                {
-                    return Enum.Parse(type, stringValue);
-                }
+        //     if (stringValue != null)
+        //     {
+        //         if (type.IsEnum)
+        //         {
+        //             return Enum.Parse(type, stringValue);
+        //         }
 
-                if (ReflectionUtils.IsNullableType(type))
-                {
-                    var underlyingType = Nullable.GetUnderlyingType(type);
-                    if (underlyingType.IsEnum)
-                    {
-                        return Enum.Parse(underlyingType, stringValue);
-                    }
-                }
-            }
+        //         if (ReflectionUtils.IsNullableType(type))
+        //         {
+        //             var underlyingType = Nullable.GetUnderlyingType(type);
+        //             if (underlyingType.IsEnum)
+        //             {
+        //                 return Enum.Parse(underlyingType, stringValue);
+        //             }
+        //         }
+        //     }
 
-            return base.DeserializeObject(value, type);
-        }
+        //     return base.DeserializeObject(value, type);
+        // }
 
-        internal override ReflectionUtils.ConstructorDelegate ContructorDelegateFactory(Type key)
-        {
-            if (!key.IsInterface)
-            {
-                return base.ContructorDelegateFactory(key);
-            }
+        // internal override ReflectionUtils.ConstructorDelegate ContructorDelegateFactory(Type key)
+        // {
+        //     if (!key.IsInterface)
+        //     {
+        //         return base.ContructorDelegateFactory(key);
+        //     }
 
-            var factory = messageTypeFactory.GetTypeFactory(key);
+        //     var factory = messageTypeFactory.GetTypeFactory(key);
 
-            ReflectionUtils.ConstructorDelegate constructorDelegate = delegate
-            {
-                return factory();
-            };
+        //     ReflectionUtils.ConstructorDelegate constructorDelegate = delegate
+        //     {
+        //         return factory();
+        //     };
 
-            return constructorDelegate;
-        }
+        //     return constructorDelegate;
+        // }
     }
 }
