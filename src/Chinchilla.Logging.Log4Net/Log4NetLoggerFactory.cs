@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using System.Reflection;
+using log4net;
 using log4net.Config;
 
 namespace Chinchilla.Logging.Log4Net
@@ -10,12 +11,12 @@ namespace Chinchilla.Logging.Log4Net
         /// </summary>
         public Log4NetLoggerFactory()
         {
-            XmlConfigurator.Configure();
+            XmlConfigurator.Configure(LogManager.GetRepository(Assembly.GetEntryAssembly()));
         }
 
         public ILogger GetLogger<T>()
         {
-            return new Log4NetLogger(LogManager.GetLogger(typeof(T).FullName));
+            return new Log4NetLogger(LogManager.GetLogger(typeof(T)));
         }
     }
 }
