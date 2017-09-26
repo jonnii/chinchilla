@@ -49,7 +49,7 @@ namespace Chinchilla
         {
             logger.InfoFormat("Creating connnection for {0}", uri);
 
-            connectionFactory.Uri = uri.ToString();
+            connectionFactory.Uri = uri;
 
             // Set SSL options *after* the URI, as setting the URI removes the SSL settings
             if (SslOptions != null)

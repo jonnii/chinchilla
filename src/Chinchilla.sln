@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{BAC27513-29CF-4CB9-85B8-58F6D52A417B}"
 EndProject
@@ -17,7 +17,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{5496A96B
 		CommonAssemblyInfo.cs = CommonAssemblyInfo.cs
 		..\CONTRIBUTING.md = ..\CONTRIBUTING.md
 		..\build\default.ps1 = ..\build\default.ps1
-		..\global.json = ..\global.json
 		..\build\package.api.nuspec = ..\build\package.api.nuspec
 		..\build\package.logging.log4net.nuspec = ..\build\package.logging.log4net.nuspec
 		..\build\package.logging.nlog.nuspec = ..\build\package.logging.nlog.nuspec
@@ -141,5 +140,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0FE7027D-61E8-4325-921F-9943111A343A}
 	EndGlobalSection
 EndGlobal

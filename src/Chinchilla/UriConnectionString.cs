@@ -1,3 +1,4 @@
+using System;
 using RabbitMQ.Client;
 
 namespace Chinchilla
@@ -13,7 +14,7 @@ namespace Chinchilla
 
         public override void Apply(ConnectionFactory connection)
         {
-            connection.Uri = uri;
+            connection.Uri = new Uri(uri);
         }
     }
 }

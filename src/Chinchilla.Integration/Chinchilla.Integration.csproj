@@ -17,9 +17,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Castle.Core" Version="4.0.0" />
-    <PackageReference Include="nunit" Version="3.6.0" />
-    <PackageReference Include="RabbitMq.Client" Version="4.1.1" />
+    <PackageReference Include="Castle.Core" Version="4.1.1" />
+    <PackageReference Include="nunit" Version="3.8.1" />
+    <PackageReference Include="RabbitMq.Client" Version="5.0.1" />
     <PackageReference Include="SimpleJson" Version="0.38.0" />
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
   </ItemGroup>
