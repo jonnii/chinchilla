@@ -42,16 +42,16 @@ namespace Chinchilla.Specifications.Serializers
             Because of = () =>
                 deserialized = serializer.Deserialize<InterestingFact>(serialized);
 
-        //     It should_deserialize_strings = () =>
-        //         deserialized.Body.FactBody.ShouldEqual("Disney's Tangled is the 3rd most expensive film ever made...");
+            It should_deserialize_strings = () =>
+                deserialized.Body.FactBody.ShouldEqual("Disney's Tangled is the 3rd most expensive film ever made...");
 
-        //     It should_deserialize_enums = () =>
-        //         deserialized.Body.FactType.ShouldEqual(FactType.Food);
+            It should_deserialize_enums = () =>
+                deserialized.Body.FactType.ShouldEqual(FactType.Food);
 
-        //     It should_deserialize_optional_enums = () =>
-        //         deserialized.Body.OptionalFactType.ShouldEqual(FactType.Book);
+            It should_deserialize_optional_enums = () =>
+                deserialized.Body.OptionalFactType.ShouldEqual(FactType.Book);
 
-             static byte[] serialized;
+            static byte[] serialized;
 
              static IMessage<InterestingFact> deserialized;
         }
@@ -66,13 +66,13 @@ namespace Chinchilla.Specifications.Serializers
             Because of = () =>
                 deserialized = serializer.Deserialize<IInterestingFact>(serialized);
 
-        //     It should_deserialize_strings = () =>
-        //         deserialized.Body.FactBody.ShouldEqual("Disney's Tangled is the 3rd most expensive film ever made...");
+            It should_deserialize_strings = () =>
+                deserialized.Body.FactBody.ShouldEqual("Disney's Tangled is the 3rd most expensive film ever made...");
 
-        //     It should_deserialize_enums = () =>
-        //         deserialized.Body.FactType.ShouldEqual(FactType.Food);
+            It should_deserialize_enums = () =>
+                deserialized.Body.FactType.ShouldEqual(FactType.Food);
 
-             static byte[] serialized;
+            static byte[] serialized;
 
              static IMessage<IInterestingFact> deserialized;
         }
