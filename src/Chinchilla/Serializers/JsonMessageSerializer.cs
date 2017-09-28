@@ -7,7 +7,7 @@ namespace Chinchilla.Serializers
         private readonly IJsonSerializerStrategy strategy;
 
         public JsonMessageSerializer()
-            : this(new NullMessageTypeFactory())
+            : this(new DefaultMessageTypeFactory())
         {
         }
 

@@ -17,7 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Castle.Core" Version="4.1.1" />
+    <PackageReference Include="Castle.Core" Version="4.2.0" />
     <PackageReference Include="nunit" Version="3.8.1" />
     <PackageReference Include="RabbitMq.Client" Version="5.0.1" />
     <PackageReference Include="SimpleJson" Version="0.38.0" />

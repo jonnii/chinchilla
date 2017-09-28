@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <PackageReference Include="RabbitMq.Client" Version="5.0.1" />
-    <PackageReference Include="SimpleJson" Version="0.38.0" />
+    <PackageReference Include="System.Reflection.Emit" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
   </ItemGroup>
 
