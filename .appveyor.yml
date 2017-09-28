@@ -12,6 +12,3 @@ test:
   assemblies:
     only:
       - 'targets\specifications\**\*.Specifications.dll'
-
-test_script:
-  - cmd: dotnet test
