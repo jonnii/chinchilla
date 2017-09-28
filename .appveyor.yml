@@ -2,6 +2,9 @@ image: Visual Studio 2017
 
 configuration: Release
 
+before_build:
+  - cmd: dotnet restore src\Chinchilla.sln
+  
 build:
   project: src\Chinchilla.sln
   
@@ -9,3 +12,6 @@ test:
   assemblies:
     only:
       - 'targets\specifications\**\*.Specifications.dll'
+
+test_script:
+  - cmd: dotnet test
