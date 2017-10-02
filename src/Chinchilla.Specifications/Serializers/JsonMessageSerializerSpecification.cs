@@ -27,7 +27,7 @@ namespace Chinchilla.Specifications.Serializers
                 serialized.Length.ShouldBeGreaterThan(0);
 
             It should_not_serialize_body = () =>
-                Encoding.Default.GetString(serialized).ShouldNotContain("\"Body\"");
+                Encoding.ASCII.GetString(serialized).ShouldNotContain("\"Body\"");
 
             static byte[] serialized;
         }
@@ -53,7 +53,7 @@ namespace Chinchilla.Specifications.Serializers
 
             static byte[] serialized;
 
-            static IMessage<InterestingFact> deserialized;
+             static IMessage<InterestingFact> deserialized;
         }
 
         class when_deserializing_interface
@@ -74,7 +74,7 @@ namespace Chinchilla.Specifications.Serializers
 
             static byte[] serialized;
 
-            static IMessage<IInterestingFact> deserialized;
+             static IMessage<IInterestingFact> deserialized;
         }
 
         public enum FactType

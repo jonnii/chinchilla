@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Chinchilla.Reflection;
 
 namespace Chinchilla.Serializers
@@ -23,7 +24,7 @@ namespace Chinchilla.Serializers
 
             if (stringValue != null)
             {
-                if (type.IsEnum)
+                if (type.GetTypeInfo().IsEnum)
                 {
                     return Enum.Parse(type, stringValue);
                 }
@@ -31,7 +32,7 @@ namespace Chinchilla.Serializers
                 if (ReflectionUtils.IsNullableType(type))
                 {
                     var underlyingType = Nullable.GetUnderlyingType(type);
-                    if (underlyingType.IsEnum)
+                    if (underlyingType.GetTypeInfo().IsEnum)
                     {
                         return Enum.Parse(underlyingType, stringValue);
                     }
@@ -43,7 +44,7 @@ namespace Chinchilla.Serializers
 
         internal override ReflectionUtils.ConstructorDelegate ContructorDelegateFactory(Type key)
         {
-            if (!key.IsInterface)
+            if (!key.GetTypeInfo().IsInterface)
             {
                 return base.ContructorDelegateFactory(key);
             }

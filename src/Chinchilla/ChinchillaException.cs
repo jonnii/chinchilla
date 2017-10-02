@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.Serialization;
 
 namespace Chinchilla
 {
@@ -10,8 +9,5 @@ namespace Chinchilla
         public ChinchillaException(string message) : base(message) { }
 
         public ChinchillaException(string message, Exception inner) : base(message, inner) { }
-
-        protected ChinchillaException(SerializationInfo info, StreamingContext context)
-            : base(info, context) { }
     }
 }

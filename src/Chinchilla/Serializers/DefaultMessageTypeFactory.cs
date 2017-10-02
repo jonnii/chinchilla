@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Threading;
 
 namespace Chinchilla.Serializers
 {
@@ -34,7 +33,7 @@ namespace Chinchilla.Serializers
         private ModuleBuilder GetModuleBuilder()
         {
             var assemblyName = new AssemblyName { Name = "Chinchilla_DynamicTypes" };
-            var assemblyBuilder = Thread.GetDomain().DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
+            var assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
             return assemblyBuilder.DefineDynamicModule("Chinchilla_DynamicTypes");
         }
 
@@ -51,9 +50,9 @@ namespace Chinchilla.Serializers
                 CreateProperty(typeBuilder, interfaceProperty);
             }
 
-            var generatedType = typeBuilder.CreateType();
+            var generatedType = typeBuilder.CreateTypeInfo();
 
-            var newExpression = Expression.New(generatedType);
+            var newExpression = Expression.New(generatedType.AsType());
             var lambda = Expression.Lambda(newExpression);
             return (Func<object>)lambda.Compile();
         }

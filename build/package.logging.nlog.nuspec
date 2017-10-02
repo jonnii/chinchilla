@@ -15,7 +15,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <tags>rabbitmq management api http chinchilla</tags>
     <dependencies>
-      <dependency id="NLog" version="4.2.0" />
+      <dependency id="NLog" version="5.0.0-beta10" />
       <dependency id="Chinchilla" version="0.0.0.1" />
     </dependencies>
   </metadata>

@@ -24,7 +24,7 @@ namespace Chinchilla.Serializers.JsonNET.Specifications
                 serialized.Length.ShouldBeGreaterThan(0);
 
             It should_not_serialize_body = () =>
-                Encoding.Default.GetString(serialized).ShouldNotContain("\"Body\"");
+                Encoding.ASCII.GetString(serialized).ShouldNotContain("\"Body\"");
 
             static byte[] serialized;
         }

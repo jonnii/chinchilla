@@ -1,131 +1,34 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6CE4680B-EDE9-4D98-B751-98C0DF9DB01A}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Chinchilla.Integration</RootNamespace>
-    <AssemblyName>Chinchilla.Integration</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
-    <TargetFrameworkProfile />
+    <TargetFramework>netstandard1.6</TargetFramework>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Version>1.0.0</Version>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;DEBUG;NETSTANDARD1_6</DefineConstants>
+    <OutputPath>bin\Debug\netstandard1.6\</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>bin\Release\netstandard1.6\</OutputPath>
+    <DefineConstants>TRACE;RELEASE;NETSTANDARD1_6</DefineConstants>
   </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Castle.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="nunit.framework, Version=3.5.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="RabbitMQ.Client, Version=3.6.0.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
-      <HintPath>..\packages\RabbitMQ.Client.3.6.0\lib\net45\RabbitMQ.Client.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Net" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Net.Http.Extensions">
-      <HintPath>..\packages\Microsoft.Net.Http.2.2.18\lib\net45\System.Net.Http.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http.Primitives">
-      <HintPath>..\packages\Microsoft.Net.Http.2.2.18\lib\net45\System.Net.Http.Primitives.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http.WebRequest" />
+    <PackageReference Include="Castle.Core" Version="4.2.0" />
+    <PackageReference Include="nunit" Version="3.8.1" />
+    <PackageReference Include="RabbitMq.Client" Version="5.0.1" />
+    <PackageReference Include="SimpleJson" Version="0.38.0" />
+    <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="..\CommonAssemblyInfo.cs">
-      <Link>CommonAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="Features\Api\RabbitAdminFeature.cs" />
-    <Compile Include="Features\ConnectionFeature.cs" />
-    <Compile Include="Features\ConsumerFeature.cs" />
-    <Compile Include="Features\Consumers\CapitalizeMessageConsumer.cs" />
-    <Compile Include="Features\Consumers\CustomConfigurationConsumer.cs" />
-    <Compile Include="Features\Consumers\HelloWorldMessageConsumer.cs" />
-    <Compile Include="Features\CustomSerializersFeature.cs" />
-    <Compile Include="Features\CustomTopologyFeature.cs" />
-    <Compile Include="Features\Messages\CapitalizedMessage.cs" />
-    <Compile Include="Features\Messages\HelloWorldMessage.cs" />
-    <Compile Include="Features\Messages\CapitalizeMessage.cs" />
-    <Compile Include="Features\Messages\IHelloWorldMessage.cs" />
-    <Compile Include="Features\PausableWorkersFeature.cs" />
-    <Compile Include="Features\PublisherConfirmsFeature.cs" />
-    <Compile Include="Features\PublishFeature.cs" />
-    <Compile Include="Features\RequestResponseFeature.cs" />
-    <Compile Include="Features\SharedSubscriptionFeature.cs" />
-    <Compile Include="Features\StateQueryFeature.cs" />
-    <Compile Include="Features\SubscribeFeature.cs" />
-    <Compile Include="Features\SubscriberFaultFeature.cs" />
-    <Compile Include="Features\SubscriberRejectFeature.cs" />
-    <Compile Include="Features\WithApi.cs" />
-    <Compile Include="Features\MessageTypeFactories\CastleMessageTypeFactory.cs" />
-    <Compile Include="Serializers\ComplexMessage.cs" />
-    <Compile Include="Serializers\MessageSerializerTests.cs" />
-    <Compile Include="WithLogging.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Soak\SoakTest.cs" />
+    <ProjectReference Include="..\Chinchilla.Api\Chinchilla.Api.csproj" />
+    <ProjectReference Include="..\Chinchilla.Serializers.JsonNET\Chinchilla.Serializers.JsonNET.csproj" />
+    <ProjectReference Include="..\Chinchilla.Serializers.MsgPack\Chinchilla.Serializers.MsgPack.csproj" />
+    <ProjectReference Include="..\Chinchilla\Chinchilla.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Chinchilla.Api\Chinchilla.Api.csproj">
-      <Project>{a287b9dd-058c-4b1f-943d-2f49da049c37}</Project>
-      <Name>Chinchilla.Api</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Chinchilla.Serializers.JsonNET\Chinchilla.Serializers.JsonNET.csproj">
-      <Project>{D8D19E61-29EE-4B4D-B683-2004F85C031A}</Project>
-      <Name>Chinchilla.Serializers.JsonNET</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Chinchilla.Serializers.MsgPack\Chinchilla.Serializers.MsgPack.csproj">
-      <Project>{039882A0-5236-4903-8302-6603330EFE7B}</Project>
-      <Name>Chinchilla.Serializers.MsgPack</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Chinchilla\Chinchilla.csproj">
-      <Project>{BF887B21-2A5A-4B52-8254-0B3CB908634B}</Project>
-      <Name>Chinchilla</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" />
-  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.13\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.13\tools\Microsoft.Bcl.Build.targets')" />
-  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
-    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.13\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
-    <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.13\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
-  </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

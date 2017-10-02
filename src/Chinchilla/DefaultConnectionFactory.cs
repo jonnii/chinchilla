@@ -31,8 +31,12 @@ namespace Chinchilla
             this.connectionFactory = connectionFactory;
 
             this.connectionFactory.ClientProperties["MachineName"] = Environment.MachineName;
+
+#if !NETSTANDARD1_6
             this.connectionFactory.ClientProperties["User"] =
                 string.Concat(Environment.UserDomainName, "\\", Environment.UserName);
+#endif
+
             this.connectionFactory.ClientProperties["ConnectionFactory.CreatedAt"] =
                 DateTime.UtcNow.ToString(CultureInfo.InvariantCulture);
 
@@ -45,7 +49,7 @@ namespace Chinchilla
         {
             logger.InfoFormat("Creating connnection for {0}", uri);
 
-            connectionFactory.Uri = uri.ToString();
+            connectionFactory.Uri = uri;
 
             // Set SSL options *after* the URI, as setting the URI removes the SSL settings
             if (SslOptions != null)

@@ -1,6 +1,7 @@
 #OS junk files
 [Tt]humbs.db
 *.DS_Store
+.vs/
 
 #Visual Studio files
 *.[Oo]bj
@@ -53,6 +54,8 @@ packages/
 #resticle
 targets
 ..\src\CommonAssemblyInfo.cs
+.vscode
+project.lock.json
 
 # Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
 bin

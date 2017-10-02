@@ -16,7 +16,7 @@ namespace Chinchilla.Sample.CastleConsumers
                 var currentContainer = container;
 
                 container.Register(
-                    Classes.FromThisAssembly().BasedOn(typeof(IConsumer)).WithServiceAllInterfaces(),
+                    Classes.FromAssemblyContaining(typeof(Program)).BasedOn(typeof(IConsumer)).WithServiceAllInterfaces(),
                     Component.For<IBus>().UsingFactoryMethod(() =>
                     {
                         var settings = new DepotSettings
