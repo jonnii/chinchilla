@@ -18,11 +18,8 @@ build:
 test:
   assemblies:
     only:
-      - 'targets\specifications\**\*.Specifications.dll'
-      - 'targets\integration\**\*.Integration.dll'
-
-test_script:
-  - dotnet test src\Chinchilla.sln
+      - targets\specifications\**\*.Specifications.dll
+      - targets\integration\**\*.Integration.dll
 
 artifacts:
   - path: targets\**\*.nupkg
