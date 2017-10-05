@@ -12,3 +12,15 @@ test:
   assemblies:
     only:
       - 'targets\specifications\**\*.Specifications.dll'
+
+artifacts:
+  - path: targets\**\*.nupkg
+
+deploy:
+  provider: NuGet
+  skip_symbols: true
+  api_key:
+    secure: token_etc
+  artifact: targets\**\*.nupkg
+  on:
+    appveyor_repo_tag: true
