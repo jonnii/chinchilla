@@ -5,6 +5,13 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Version>1.0.0</Version>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+    <Authors>Jonathan Goldman,Colin Anderson</Authors>
+    <Description>Chinchilla is a little library to help make RabbitMq easier to use.</Description>
+    <PackageProjectUrl>http://github.com/jonnii/chinchilla</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/jonnii/chinchilla/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageIconUrl>https://raw.github.com/jonnii/chinchilla/master/build/chinchilla.png</PackageIconUrl>
+    <PackageTags>rabbitmq chinchilla</PackageTags>
+    <Company />
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

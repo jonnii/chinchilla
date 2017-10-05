@@ -5,6 +5,13 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Version>1.0.0</Version>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+    <Authors>Jonathan Goldman,Colin Anderson</Authors>
+    <Company />
+    <Description>Need to use the rabbit management http api? Don't jump through hoops.</Description>
+    <PackageProjectUrl>http://github.com/jonnii/chinchilla</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/jonnii/chinchilla/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageIconUrl>https://raw.github.com/jonnii/chinchilla/master/build/chinchilla.png</PackageIconUrl>
+    <PackageTags>rabbitmq management api http chinchilla</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

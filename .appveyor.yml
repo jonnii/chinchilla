@@ -2,11 +2,18 @@ image: Visual Studio 2017
 
 configuration: Release
 
-before_build:
+install:
   - cmd: dotnet restore src\Chinchilla.sln
-  
+
+dotnet_csproj:
+  patch: true
+  file: 'src\**\*.csproj'
+  version: $(appveyor_build_version)
+  package_version: $(appveyor_build_version)
+
 build:
   project: src\Chinchilla.sln
+  publish_nuget: true
   
 test:
   assemblies:
