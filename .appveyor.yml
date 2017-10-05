@@ -22,7 +22,7 @@ test:
       - 'targets\integration\**\*.Integration.dll'
 
 test_script:
-  - dotnet test
+  - dotnet test src\Chinchilla.sln
 
 artifacts:
   - path: targets\**\*.nupkg
@@ -32,6 +32,6 @@ deploy:
   skip_symbols: true
   api_key:
     secure: token_etc
-  artifact: .\**\*.nupkg
+  artifact: '**\*.nupkg'
   on:
     appveyor_repo_tag: true
