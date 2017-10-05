@@ -14,12 +14,9 @@ dotnet_csproj:
 build:
   project: src\Chinchilla.sln
   publish_nuget: true
-  
-test:
-  assemblies:
-    only:
-      - targets\specifications\**\*.Specifications.dll
-      - targets\integration\**\*.Integration.dll
+
+test_script:
+  - ps: .\build\run-tests.ps1
 
 artifacts:
   - path: targets\**\*.nupkg
