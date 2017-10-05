@@ -19,6 +19,10 @@ test:
   assemblies:
     only:
       - 'targets\specifications\**\*.Specifications.dll'
+      - 'targets\integration\**\*.Integration.dll'
+
+test_script:
+  - dotnet test
 
 artifacts:
   - path: targets\**\*.nupkg
@@ -28,6 +32,6 @@ deploy:
   skip_symbols: true
   api_key:
     secure: token_etc
-  artifact: targets\**\*.nupkg
+  artifact: .\**\*.nupkg
   on:
     appveyor_repo_tag: true
