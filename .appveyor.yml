@@ -1,6 +1,9 @@
 image: Visual Studio 2017
 
-version: 0.4.0
+environment:
+  nuget_version: '0.4.0'
+
+version: '$(nuget_version)+{build}'
 
 configuration: Release
 
@@ -11,7 +14,7 @@ dotnet_csproj:
   patch: true
   file: 'src\**\*.csproj'
   version: $(appveyor_build_version)
-  package_version: $(appveyor_build_version)
+  package_version: $(nuget_version)
 
 build:
   project: src\Chinchilla.sln
