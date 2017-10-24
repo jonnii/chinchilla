@@ -13,7 +13,7 @@ install:
 dotnet_csproj:
   patch: true
   file: 'src\**\*.csproj'
-  version: $(appveyor_build_version)
+  version: $(nuget_version)
   package_version: $(nuget_version)
 
 build:
@@ -28,6 +28,5 @@ deploy:
   skip_symbols: true
   api_key:
     secure: T5DAebGxPV1QtMqIYRQyPYhFr3yfKzlkOB2rtVl8SQkJD7nTLEPBPPtcI8MgbHj3
-  artifact: '**\*.nupkg'
   on:
     appveyor_repo_tag: true
