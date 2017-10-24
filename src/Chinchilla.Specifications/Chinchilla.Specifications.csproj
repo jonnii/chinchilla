@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Version>1.0.0</Version>
+    <IncludeBuildOutput>False</IncludeBuildOutput>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -20,7 +21,9 @@
     <PackageReference Include="Machine.Fakes" Version="2.8.0" />
     <PackageReference Include="Machine.Fakes.Moq" Version="2.8.0" />
     <PackageReference Include="Machine.Specifications" Version="0.11.1" />
+    <PackageReference Include="Machine.Specifications.Runner.VisualStudio" Version="2.3.0" />
     <PackageReference Include="Machine.Specifications.Should" Version="0.11.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
   </ItemGroup>
 
   <ItemGroup>

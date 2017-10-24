@@ -1,14 +1,33 @@
 image: Visual Studio 2017
 
+environment:
+  nuget_version: '0.4.0'
+
+version: '$(nuget_version)+{build}'
+
 configuration: Release
 
-before_build:
+install:
   - cmd: dotnet restore src\Chinchilla.sln
-  
+
+dotnet_csproj:
+  patch: true
+  file: 'src\**\*.csproj'
+  version: $(appveyor_build_version)
+  package_version: $(nuget_version)
+
 build:
   project: src\Chinchilla.sln
-  
-test:
-  assemblies:
-    only:
-      - 'targets\specifications\**\*.Specifications.dll'
+  publish_nuget: true
+
+test_script:
+  - ps: .\build\run-tests.ps1
+
+deploy:
+  provider: NuGet
+  skip_symbols: true
+  api_key:
+    secure: token_etc
+  artifact: '**\*.nupkg'
+  on:
+    appveyor_repo_tag: true
