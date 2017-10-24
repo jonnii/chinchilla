@@ -48,8 +48,6 @@ namespace Chinchilla.Specifications
 
             static IDelivery delivery;
 
-            static Task task;
-
             static IDeliveryProcessor processor;
         }
 
@@ -76,8 +74,6 @@ namespace Chinchilla.Specifications
                 delivery.WasToldTo(d => d.Failed(Param.IsAny<Exception>()));
 
             static IDelivery delivery;
-
-            static Task task;
         }
 
         [Subject(typeof(TaskDeliveryStrategy))]

@@ -21,8 +21,6 @@ namespace Chinchilla.Specifications
                 The<IPublisherFactory>().WasToldTo(f => f.Create(
                     Param.IsAny<IModelReference>(),
                     Param.IsAny<IPublisherConfiguration<TestMessage>>()));
-
-            static IPublisher<TestMessage> publisher;
         }
 
         [Subject(typeof(Bus))]
