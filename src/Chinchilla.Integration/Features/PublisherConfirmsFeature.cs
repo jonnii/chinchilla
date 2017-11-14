@@ -1,44 +1,55 @@
-﻿// using System.Linq;
-// using Chinchilla.Integration.Features.Messages;
-// using NUnit.Framework;
+﻿using System.Linq;
+using Chinchilla.Api;
+using Chinchilla.Integration.Features.Messages;
+using Xunit;
 
-// namespace Chinchilla.Integration.Features
-// {
-//     [TestFixture]
-//     public class PublisherConfirmsFeature : WithApi
-//     {
-//         [Test]
-//         public void ShouldCreatePublisherWithoutConfirms()
-//         {
-//             using (var bus = Depot.Connect("localhost/integration"))
-//             {
-//                 var publisher = bus.CreatePublisher<HelloWorldMessage>(p => p.Confirm(false));
+namespace Chinchilla.Integration.Features
+{
+    [Collection("Api collection")]
+    public class PublisherConfirmsFeature
+    {
+        private readonly IRabbitAdmin admin;
 
-//                 var receipts = Enumerable.Range(0, 100)
-//                     .Select(_ => publisher.Publish(new HelloWorldMessage()))
-//                     .ToArray();
+        private readonly VirtualHost vhost;
 
-//                 publisher.Dispose();
+        public PublisherConfirmsFeature(ApiFixture fixture)
+        {
+            admin = fixture.Admin;
+            vhost = fixture.IntegrationVHost;
+        }
 
-//                 Assert.That(receipts.All(r => r.Status == PublishStatus.None));
-//             }
-//         }
+        [Fact]
+        public void ShouldCreatePublisherWithoutConfirms()
+        {
+            using (var bus = Depot.Connect("localhost/integration"))
+            {
+                var publisher = bus.CreatePublisher<HelloWorldMessage>(p => p.Confirm(false));
 
-//         [Test]
-//         public void ShouldWaitForAllMessagesToBeConfirmedWhenDisposing()
-//         {
-//             using (var bus = Depot.Connect("localhost/integration"))
-//             {
-//                 var publisher = bus.CreatePublisher<HelloWorldMessage>(p => p.Confirm(true));
+                var receipts = Enumerable.Range(0, 100)
+                    .Select(_ => publisher.Publish(new HelloWorldMessage()))
+                    .ToArray();
 
-//                 var receipts = Enumerable.Range(0, 100)
-//                     .Select(_ => publisher.Publish(new HelloWorldMessage()))
-//                     .ToArray();
+                publisher.Dispose();
 
-//                 publisher.Dispose();
+                Assert.True(receipts.All(r => r.Status == PublishStatus.None));
+            }
+        }
 
-//                 Assert.That(receipts.All(r => r.IsConfirmed));
-//             }
-//         }
-//     }
-// }
+        [Fact]
+        public void ShouldWaitForAllMessagesToBeConfirmedWhenDisposing()
+        {
+            using (var bus = Depot.Connect("localhost/integration"))
+            {
+                var publisher = bus.CreatePublisher<HelloWorldMessage>(p => p.Confirm(true));
+
+                var receipts = Enumerable.Range(0, 100)
+                    .Select(_ => publisher.Publish(new HelloWorldMessage()))
+                    .ToArray();
+
+                publisher.Dispose();
+
+                Assert.True(receipts.All(r => r.IsConfirmed));
+            }
+        }
+    }
+}
