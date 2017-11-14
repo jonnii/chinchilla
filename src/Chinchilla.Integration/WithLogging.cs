@@ -30,19 +30,16 @@ namespace Chinchilla.Integration
 
             Admin = new RabbitAdmin("http://localhost:15672/api");
 
-            Task.Run(async () =>
-            {
-                await Admin.DeleteAsync(IntegrationVHost);
-                await Admin.CreateAsync(IntegrationVHost);
-                await Admin.CreateAsync(IntegrationVHost, new User("guest"), Permission.All);
-            });
+            Admin.DeleteAsync(IntegrationVHost).Wait();
+            Admin.CreateAsync(IntegrationVHost).Wait();
+            Admin.CreateAsync(IntegrationVHost, new User("guest"), Permission.All).Wait();
         }
 
         public IRabbitAdmin Admin { get; }
 
         public void Dispose()
         {
-            Task.Run(async () => await Admin.DeleteAsync(IntegrationVHost));
+            Admin.DeleteAsync(IntegrationVHost).Wait();
         }
     }
 }
