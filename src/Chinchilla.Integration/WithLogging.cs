@@ -21,8 +21,7 @@ namespace Chinchilla.Integration
     public class ApiFixture : IDisposable
     {
         public void Dispose()
-        {
-            
+        {  
         }
     }
 }
