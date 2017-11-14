@@ -1,128 +1,140 @@
-﻿// using System;
-// using System.Linq;
-// using System.Threading;
-// using Chinchilla.Integration.Features.Messages;
-// using Chinchilla.Topologies.Model;
-// using ExchangeType = Chinchilla.Topologies.Model.ExchangeType;
+﻿using System;
+using System.Linq;
+using System.Threading;
+using Chinchilla.Api;
+using Chinchilla.Integration.Features.Messages;
+using Chinchilla.Topologies.Model;
+using Xunit;
+using ExchangeType = Chinchilla.Topologies.Model.ExchangeType;
 
-// namespace Chinchilla.Integration.Features
-// {
-//     [TestFixture]
-//     public class ConnectionFeature : WithApi
-//     {
-//         [Test]
-//         public void ShouldVisitTopologyWithQueueBoundToExchange()
-//         {
-//             var factory = new DefaultConnectionFactory();
-//             using (var connection = factory.Create(new Uri("amqp://localhost/integration")))
-//             {
-//                 var model = connection.CreateModel();
+namespace Chinchilla.Integration.Features
+{
+    [Collection("Api collection")]
+    public class ConnectionFeature
+    {
+        private readonly IRabbitAdmin admin;
 
-//                 var topology = new Topology();
-//                 var e1 = topology.DefineExchange("exchange1", ExchangeType.Topic);
-//                 var q1 = topology.DefineQueue("queue");
+        private readonly VirtualHost vhost;
 
-//                 q1.BindTo(e1);
+        public ConnectionFeature(ApiFixture fixture)
+        {
+            admin = fixture.Admin;
+            vhost = fixture.IntegrationVHost;
+        }
 
-//                 topology.Visit(new TopologyBuilder(model));
+        [Fact]
+        public void ShouldVisitTopologyWithQueueBoundToExchange()
+        {
+            var factory = new DefaultConnectionFactory();
+            using (var connection = factory.Create(new Uri("amqp://localhost/integration")))
+            {
+                var model = connection.CreateModel();
 
-//                 var exchanges = admin.Exchanges(IntegrationVHost);
-//                 Assert.That(exchanges.Any(e => e.Name == e1.Name));
+                var topology = new Topology();
+                var e1 = topology.DefineExchange("exchange1", ExchangeType.Topic);
+                var q1 = topology.DefineQueue("queue");
 
-//                 var queues = admin.Queues(IntegrationVHost);
-//                 Assert.That(queues.Any(e => e.Name == q1.Name));
-//             }
-//         }
+                q1.BindTo(e1);
 
-//         [Test]
-//         public void ShouldVisitExclusiveQueue()
-//         {
-//             var factory = new DefaultConnectionFactory();
-//             using (var connection = factory.Create(new Uri("amqp://localhost/integration")))
-//             {
-//                 var model = connection.CreateModel();
+                topology.Visit(new TopologyBuilder(model));
 
-//                 var topology = new Topology();
-//                 var q1 = topology.DefineQueue();
+                var exchanges = admin.Exchanges(vhost);
+                Assert.Contains(e1.Name, exchanges.Select(e => e.Name));
 
-//                 topology.Visit(new TopologyBuilder(model));
+                var queues = admin.Queues(vhost);
+                Assert.Contains(q1.Name, queues.Select(e => e.Name));
+            }
+        }
 
-//                 Assert.That(q1.HasName);
+        [Fact]
+        public void ShouldVisitExclusiveQueue()
+        {
+            var factory = new DefaultConnectionFactory();
+            using (var connection = factory.Create(new Uri("amqp://localhost/integration")))
+            {
+                var model = connection.CreateModel();
 
-//                 var queues = admin.Queues(IntegrationVHost);
-//                 Assert.That(queues.Any(e => e.Name == q1.Name));
-//             }
-//         }
+                var topology = new Topology();
+                var q1 = topology.DefineQueue();
 
-//         [Test]
-//         public void ShouldVisitTopologyMultipleTimesWithoutExceptions()
-//         {
-//             var factory = new DefaultConnectionFactory();
-//             using (var connection = factory.Create(new Uri("amqp://localhost/integration")))
-//             {
-//                 var model = connection.CreateModel();
+                topology.Visit(new TopologyBuilder(model));
 
-//                 var topology = new Topology();
-//                 topology.DefineQueue("test-queue");
+                Assert.True(q1.HasName);
 
-//                 var builder = new TopologyBuilder(model);
+                var queues = admin.Queues(vhost);
+                Assert.Contains(q1.Name, queues.Select(e => e.Name));
+            }
+        }
 
-//                 topology.Visit(builder);
-//                 topology.Visit(builder);
-//             }
-//         }
+        [Fact]
+        public void ShouldVisitTopologyMultipleTimesWithoutExceptions()
+        {
+            var factory = new DefaultConnectionFactory();
+            using (var connection = factory.Create(new Uri("amqp://localhost/integration")))
+            {
+                var model = connection.CreateModel();
 
-//         [Test]
-//         public void ShouldVisitTopologyMultipleTimesExclusiveQueue()
-//         {
-//             var factory = new DefaultConnectionFactory();
-//             using (var connection = factory.Create(new Uri("amqp://localhost/integration")))
-//             {
-//                 var model = connection.CreateModel();
+                var topology = new Topology();
+                topology.DefineQueue("test-queue");
 
-//                 var topology = new Topology();
-//                 topology.DefineQueue();
+                var builder = new TopologyBuilder(model);
 
-//                 var builder = new TopologyBuilder(model);
-//                 topology.Visit(builder);
-//                 topology.Visit(builder);
-//             }
-//         }
+                topology.Visit(builder);
+                topology.Visit(builder);
+            }
+        }
 
-//         [Test]
-//         public void ShouldSurviveBeingDisconnected()
-//         {
-//             using (var bus = Depot.Connect("localhost/integration"))
-//             {
-//                 var numReceived = 0;
-//                 var handler = new Action<HelloWorldMessage>(hwm =>
-//                 {
-//                     Interlocked.Increment(ref numReceived);
+        [Fact]
+        public void ShouldVisitTopologyMultipleTimesExclusiveQueue()
+        {
+            var factory = new DefaultConnectionFactory();
+            using (var connection = factory.Create(new Uri("amqp://localhost/integration")))
+            {
+                var model = connection.CreateModel();
 
-//                     if (numReceived == 50)
-//                     {
-//                         Console.WriteLine("Disconnecting with a vengeance");
-//                         var connections = admin.Connections();
-//                         admin.Delete(connections.First());
-//                     }
-//                 });
+                var topology = new Topology();
+                topology.DefineQueue();
 
-//                 var subscription = bus.Subscribe(handler);
+                var builder = new TopologyBuilder(model);
+                topology.Visit(builder);
+                topology.Visit(builder);
+            }
+        }
 
-//                 using (subscription)
-//                 {
-//                     Console.WriteLine("Publishing 100 messages");
-//                     var publisher = bus.CreatePublisher<HelloWorldMessage>();
-//                     for (var i = 0; i < 100; ++i)
-//                     {
-//                         publisher.Publish(new HelloWorldMessage { Message = "subscribe!" });
-//                     }
+        // [Test]
+        // public void ShouldSurviveBeingDisconnected()
+        // {
+        //     using (var bus = Depot.Connect("localhost/integration"))
+        //     {
+        //         var numReceived = 0;
+        //         var handler = new Action<HelloWorldMessage>(hwm =>
+        //         {
+        //             Interlocked.Increment(ref numReceived);
 
-//                     WaitForDelivery();
-//                 }
+        //             if (numReceived == 50)
+        //             {
+        //                 Console.WriteLine("Disconnecting with a vengeance");
+        //                 var connections = admin.Connections();
+        //                 admin.Delete(connections.First());
+        //             }
+        //         });
 
-//                 Assert.That(numReceived, Is.GreaterThanOrEqualTo(100));
-//             }
-//         }
-//     }
-// }
+        //         var subscription = bus.Subscribe(handler);
+
+        //         using (subscription)
+        //         {
+        //             Console.WriteLine("Publishing 100 messages");
+        //             var publisher = bus.CreatePublisher<HelloWorldMessage>();
+        //             for (var i = 0; i < 100; ++i)
+        //             {
+        //                 publisher.Publish(new HelloWorldMessage { Message = "subscribe!" });
+        //             }
+
+        //             WaitForDelivery();
+        //         }
+
+        //         Assert.That(numReceived, Is.GreaterThanOrEqualTo(100));
+        //     }
+        // }
+    }
+}
