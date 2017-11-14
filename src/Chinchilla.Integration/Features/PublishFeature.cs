@@ -45,37 +45,37 @@ namespace Chinchilla.Integration.Features
             Assert.Contains("HelloWorldMessage", admin.Exchanges(vhost).Select(e => e.Name));
         }
 
-        // [Test]
-        // public void ShouldCreatePublisherWithCustomPublishExchange()
-        // {
-        //     using (var bus = Depot.Connect("localhost/integration"))
-        //     {
-        //         using (var publisher = bus.CreatePublisher<HelloWorldMessage>(o => o.PublishOn("custom-exchange-name")))
-        //         {
-        //             publisher.Publish(new HelloWorldMessage());
-        //             Assert.That(publisher.NumPublishedMessages, Is.EqualTo(1));
-        //         }
-        //     }
+        [Fact]
+        public void ShouldCreatePublisherWithCustomPublishExchange()
+        {
+            using (var bus = Depot.Connect("localhost/integration"))
+            {
+                using (var publisher = bus.CreatePublisher<HelloWorldMessage>(o => o.PublishOn("custom-exchange-name")))
+                {
+                    publisher.Publish(new HelloWorldMessage());
+                    Assert.Equal(1, publisher.NumPublishedMessages);
+                }
+            }
 
-        //     Assert.That(admin.Exchanges(IntegrationVHost).Any(e => e.Name == "custom-exchange-name"));
-        // }
+            Assert.Contains("custom-exchange-name", admin.Exchanges(vhost).Select(e => e.Name));
+        }
 
-        // [Test]
-        // public void ShouldPublishMultipleMessages()
-        // {
-        //     using (var bus = Depot.Connect("localhost/integration"))
-        //     {
-        //         using (var publisher = bus.CreatePublisher<HelloWorldMessage>())
-        //         {
-        //             for (var i = 0; i < 100; ++i)
-        //             {
-        //                 publisher.Publish(new HelloWorldMessage());
-        //             }
+        [Fact]
+        public void ShouldPublishMultipleMessages()
+        {
+            using (var bus = Depot.Connect("localhost/integration"))
+            {
+                using (var publisher = bus.CreatePublisher<HelloWorldMessage>())
+                {
+                    for (var i = 0; i < 100; ++i)
+                    {
+                        publisher.Publish(new HelloWorldMessage());
+                    }
 
-        //             Assert.That(publisher.NumPublishedMessages, Is.EqualTo(100));
-        //         }
-        //     }
-        // }
+                    Assert.Equal(100, publisher.NumPublishedMessages);
+                }
+            }
+        }
 
         // [Test]
         // public void ShouldPublishWithCustomRouter()
