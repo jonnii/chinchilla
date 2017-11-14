@@ -1,22 +1,29 @@
+skip_branch_with_pr: true
+
+# build cache to preserve files/folders between builds
+cache:
+  - '%LocalAppData%\NuGet\v3-cache'
+
 image: Visual Studio 2017
-
-environment:
-  nuget_version: '0.4.0'
-
-version: '$(nuget_version)+{build}'
-
 configuration: Release
 
 install:
+  - choco install gitversion.portable -pre -y
   - cmd: dotnet restore src\Chinchilla.sln
+  - ps: gitversion /l console /output buildserver
+
 
 dotnet_csproj:
   patch: true
   file: 'src\**\*.csproj'
-  version: $(nuget_version)
-  package_version: $(nuget_version)
+  version: $(GitVersion_NuGetVersion)
+  package_version: $(GitVersion_NuGetVersion)
+  assembly_version: $(GitVersion_MajorMinorPatch)
+  file_version: $(GitVersion_MajorMinorPatch)
+  informational_version: $(GitVersion_MajorMinorPatch)
 
 build:
+  parallel: true
   project: src\Chinchilla.sln
   publish_nuget: true
 
