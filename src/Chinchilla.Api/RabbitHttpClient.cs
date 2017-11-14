@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Chinchilla.Api.Extensions;
 using System;
 using System.IO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Chinchilla.Api
 {
@@ -91,10 +93,23 @@ namespace Chinchilla.Api
 
             using (var sr = new StreamReader(content))
             {
-                var body = await sr.ReadToEndAsync();
+                var serializer = new JsonSerializer
+                {
+                    ContractResolver = new RabbitJsonSerializerStrategy()
+                };
 
-                SimpleJson.CurrentJsonSerializerStrategy = new RabbitJsonSerializerStrategy();
-                return SimpleJson.DeserializeObject<T>(body);
+                using (var thing = new JsonTextReader(sr))
+                {
+                    return serializer.Deserialize<T>(thing);
+                }
+            }
+        }
+
+        public class RabbitJsonSerializerStrategy : DefaultContractResolver
+        {
+            protected override string ResolvePropertyName(string propertyName)
+            {
+                return propertyName.ToLowerInvariant();
             }
         }
 
@@ -115,7 +130,12 @@ namespace Chinchilla.Api
 
             if (body != null)
             {
-                var serializedBody = SimpleJson.SerializeObject(body, new RabbitJsonSerializerStrategy());
+                var serializedBody = JsonConvert.SerializeObject(body,
+                    new JsonSerializerSettings
+                    {
+                        ContractResolver = new RabbitJsonSerializerStrategy()
+                    });
+
                 request.Content = new StringContent(serializedBody, Encoding.UTF8, "application/json");
             }
             else if (method != HttpMethod.Get)
