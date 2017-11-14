@@ -2,6 +2,7 @@
 
 # Next
 
+  * Align version with rabbitmq client
   * Bug fix for memory leak with ad-hoc publishing
   * Move to netstandard 1.6
   * Chinchilla and Chinchilla.Api now takes a dependency on Newtonsoft.Json
