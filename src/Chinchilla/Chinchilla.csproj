@@ -27,7 +27,7 @@
   <ItemGroup>
     <PackageReference Include="RabbitMq.Client" Version="5.0.1" />
     <PackageReference Include="System.Reflection.Emit" Version="4.3.0" />
-    <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
 
 </Project>

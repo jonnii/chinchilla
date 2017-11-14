@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Chinchilla.Api.Extensions;
 using System;
 using System.IO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Chinchilla.Api
 {
@@ -19,6 +21,8 @@ namespace Chinchilla.Api
 
         private readonly HttpClient client;
 
+        private readonly JsonSerializer serializer;
+
         public RabbitHttpClient(string root, string username, string password)
         {
             this.root = root;
@@ -26,6 +30,11 @@ namespace Chinchilla.Api
             this.password = password;
 
             client = new HttpClient();
+
+            serializer = new JsonSerializer
+            {
+                ContractResolver = LowercasePropertyContractResolver.Instance
+            };
         }
 
         public Task<HttpResponseMessage> Execute(
@@ -89,12 +98,12 @@ namespace Chinchilla.Api
         {
             var content = await response.Content.ReadAsStreamAsync();
 
-            using (var sr = new StreamReader(content))
+            using (var streamReader = new StreamReader(content))
             {
-                var body = await sr.ReadToEndAsync();
-
-                SimpleJson.CurrentJsonSerializerStrategy = new RabbitJsonSerializerStrategy();
-                return SimpleJson.DeserializeObject<T>(body);
+                using (var jsonTextReader = new JsonTextReader(streamReader))
+                {
+                    return serializer.Deserialize<T>(jsonTextReader);
+                }
             }
         }
 
@@ -115,7 +124,12 @@ namespace Chinchilla.Api
 
             if (body != null)
             {
-                var serializedBody = SimpleJson.SerializeObject(body, new RabbitJsonSerializerStrategy());
+                var serializedBody = JsonConvert.SerializeObject(body,
+                    new JsonSerializerSettings
+                    {
+                        ContractResolver = LowercasePropertyContractResolver.Instance
+                    });
+
                 request.Content = new StringContent(serializedBody, Encoding.UTF8, "application/json");
             }
             else if (method != HttpMethod.Get)
@@ -149,6 +163,16 @@ namespace Chinchilla.Api
             var authInfo = user + ":" + password;
             authInfo = Convert.ToBase64String(Encoding.UTF8.GetBytes(authInfo));
             return "Basic " + authInfo;
+        }
+
+        public class LowercasePropertyContractResolver : DefaultContractResolver
+        {
+            public static readonly LowercasePropertyContractResolver Instance = new LowercasePropertyContractResolver();
+
+            protected override string ResolvePropertyName(string propertyName)
+            {
+                return propertyName.ToLowerInvariant();
+            }
         }
     }
 }

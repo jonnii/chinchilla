@@ -55,7 +55,7 @@ namespace Chinchilla.Api
                     {"name", virtualHost.Name}
                 });
 
-            return response.StatusCode == HttpStatusCode.NoContent;
+            return response.StatusCode == HttpStatusCode.Created;
         }
 
         public Task<bool> CreateAsync(VirtualHost virtualHost, Queue queue)

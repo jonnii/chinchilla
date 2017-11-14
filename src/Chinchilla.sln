@@ -21,7 +21,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{5496A96B
 		..\build\package.logging.log4net.nuspec = ..\build\package.logging.log4net.nuspec
 		..\build\package.logging.nlog.nuspec = ..\build\package.logging.nlog.nuspec
 		..\build\package.nuspec = ..\build\package.nuspec
-		..\build\package.serializers.jsonnet.nuspec = ..\build\package.serializers.jsonnet.nuspec
 		..\build\package.serializers.msgpack.nuspec = ..\build\package.serializers.msgpack.nuspec
 		..\build\package.serializers.protobuf.nuspec = ..\build\package.serializers.protobuf.nuspec
 		..\build\psake.ps1 = ..\build\psake.ps1
@@ -38,8 +37,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chinchilla.Api.Specifications", "Chinchilla.Api.Specifications\Chinchilla.Api.Specifications.csproj", "{DAC47CDB-351B-46B3-9602-480B0FEC706A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chinchilla.Integration", "Chinchilla.Integration\Chinchilla.Integration.csproj", "{966F91FA-C90A-410C-8FE5-0DF3A016BD25}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chinchilla.Serializers.JsonNET", "Chinchilla.Serializers.JsonNET\Chinchilla.Serializers.JsonNET.csproj", "{34934D8D-DC04-41D6-963E-699DEF4F31A6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chinchilla.Serializers.MsgPack", "Chinchilla.Serializers.MsgPack\Chinchilla.Serializers.MsgPack.csproj", "{9E008785-47C1-46D4-9A6B-C80E34B28C9C}"
 EndProject
@@ -58,8 +55,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chinchilla.Sample.Timeouts", "Chinchilla.Sample.Timeouts\Chinchilla.Sample.Timeouts.csproj", "{EB6FC1D4-D1C4-4189-8E08-53DE64ABD2FA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chinchilla.Sample.Workflow", "Chinchilla.Sample.Workflow\Chinchilla.Sample.Workflow.csproj", "{77756413-6793-4AED-BED9-129CB4629B14}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chinchilla.Serializers.JsonNET.Specifications", "Chinchilla.Serializers.JsonNET.Specifications\Chinchilla.Serializers.JsonNET.Specifications.csproj", "{8F3DA90B-256D-44BF-80C1-8E2DEA2F9287}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chinchilla.Serializers.MsgPack.Specifications", "Chinchilla.Serializers.MsgPack.Specifications\Chinchilla.Serializers.MsgPack.Specifications.csproj", "{349D461A-15EB-4FB1-80CC-34ADD58FD955}"
 EndProject
