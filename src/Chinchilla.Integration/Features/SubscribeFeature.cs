@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using Chinchilla.Api;
 using Chinchilla.Integration.Features.Messages;
 using Chinchilla.Integration.Features.MessageTypeFactories;
@@ -47,7 +48,7 @@ namespace Chinchilla.Integration.Features
                 bus.Subscribe((HelloWorldMessage hwm) =>
                 {
                     lastReceived = hwm;
-                    ++numReceived;
+                    Interlocked.Increment(ref numReceived);
                 });
 
                 for (var i = 0; i < 100; ++i)
