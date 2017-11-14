@@ -1,68 +1,78 @@
-﻿// using Chinchilla.Api;
-// using Chinchilla.Integration.Features.Consumers;
-// using Chinchilla.Integration.Features.Messages;
-// using NUnit.Framework;
+﻿using Chinchilla.Api;
+using Chinchilla.Integration.Features.Consumers;
+using Chinchilla.Integration.Features.Messages;
+using Xunit;
 
-// namespace Chinchilla.Integration.Features
-// {
-//     [TestFixture]
-//     public class ConsumerFeature : WithApi
-//     {
-//         [Test]
-//         public void ShouldSubscribeWithConsumerInstance()
-//         {
-//             using (var bus = Depot.Connect("localhost/integration"))
-//             {
-//                 using (var subscriber = bus.Subscribe(new HelloWorldMessageConsumer()))
-//                 {
-//                     for (var i = 0; i < 100; ++i)
-//                     {
-//                         bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
-//                     }
+namespace Chinchilla.Integration.Features
+{
+    [Collection("Api collection")]
+    public class ConsumerFeature : Feature
+    {
+        private readonly IRabbitAdmin admin;
 
-//                     WaitForDelivery();
+        private readonly VirtualHost vhost;
 
-//                     Assert.That(subscriber.State.TotalAcceptedMessages(), Is.EqualTo(100));
-//                 }
-//             }
-//         }
+        public ConsumerFeature(ApiFixture fixture)
+        {
+            admin = fixture.Admin;
+            vhost = fixture.IntegrationVHost;
+        }
 
-//         [Test]
-//         public void ShouldSubscribeWithConsumerType()
-//         {
-//             using (var bus = Depot.Connect("localhost/integration"))
-//             {
-//                 using (var subscriber = bus.Subscribe<HelloWorldMessageConsumer>())
-//                 {
-//                     for (var i = 0; i < 100; ++i)
-//                     {
-//                         bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
-//                     }
+        // [Fact]
+        // public void ShouldSubscribeWithConsumerInstance()
+        // {
+        //     using (var bus = Depot.Connect("localhost/integration"))
+        //     {
+        //         using (var subscriber = bus.Subscribe(new HelloWorldMessageConsumer()))
+        //         {
+        //             for (var i = 0; i < 100; ++i)
+        //             {
+        //                 bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
+        //             }
 
-//                     WaitForDelivery();
+        //             WaitFor(() => subscriber.State.TotalAcceptedMessages() == 100);
 
-//                     Assert.That(subscriber.State.TotalAcceptedMessages(), Is.EqualTo(100));
-//                 }
-//             }
-//         }
+        //             Assert.Equal(100, subscriber.State.TotalAcceptedMessages());
+        //         }
+        //     }
+        // }
 
-//         [Test]
-//         public void ShouldSubscribeWithConsumerWithCustomConfiguration()
-//         {
-//             using (var bus = Depot.Connect("localhost/integration"))
-//             {
-//                 using (bus.Subscribe<CustomConfigurationConsumer>())
-//                 {
-//                     for (var i = 0; i < 1; ++i)
-//                     {
-//                         bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
-//                     }
+        // [Fact]
+        // public void ShouldSubscribeWithConsumerType()
+        // {
+        //     using (var bus = Depot.Connect("localhost/integration"))
+        //     {
+        //         using (var subscriber = bus.Subscribe<HelloWorldMessageConsumer>())
+        //         {
+        //             for (var i = 0; i < 100; ++i)
+        //             {
+        //                 bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
+        //             }
 
-//                     WaitForDelivery();
+        //             WaitFor(() => subscriber.State.TotalAcceptedMessages() > 100);
 
-//                     Assert.That(admin.Exists(IntegrationVHost, new Queue("custom-subscription-endpoint")), "did not create queue");
-//                 }
-//             }
-//         }
-//     }
-// }
+        //             Assert.Equal(100, subscriber.State.TotalAcceptedMessages());
+        //         }
+        //     }
+        // }
+
+        [Fact]
+        public void ShouldSubscribeWithConsumerWithCustomConfiguration()
+        {
+            using (var bus = Depot.Connect("localhost/integration"))
+            {
+                using (bus.Subscribe<CustomConfigurationConsumer>())
+                {
+                    for (var i = 0; i < 1; ++i)
+                    {
+                        bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
+                    }
+
+                    // WaitFor(() => true);
+
+                    Assert.True(admin.Exists(vhost, new Queue("custom-subscription-endpoint")));
+                }
+            }
+        }
+    }
+}

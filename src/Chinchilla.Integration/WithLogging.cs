@@ -1,10 +1,19 @@
 using System;
+using System.Threading;
 using Chinchilla.Api;
 using Chinchilla.Logging;
 using Xunit;
 
 namespace Chinchilla.Integration
 {
+    public class Feature
+    {
+        protected void WaitFor(Func<bool> condition) 
+        {
+            SpinWait.SpinUntil(() => condition(), TimeSpan.FromSeconds(5));
+        }
+    }
+
     [CollectionDefinition("Api collection")]
     public class ApiCollection : ICollectionFixture<ApiFixture>
     {
@@ -27,7 +36,8 @@ namespace Chinchilla.Integration
         public IRabbitAdmin Admin { get; }
 
         public void Dispose()
-        {  
+        { 
+            Admin.Delete(IntegrationVHost);
         }
     }
 }

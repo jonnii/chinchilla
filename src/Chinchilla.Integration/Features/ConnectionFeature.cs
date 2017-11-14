@@ -10,7 +10,7 @@ using ExchangeType = Chinchilla.Topologies.Model.ExchangeType;
 namespace Chinchilla.Integration.Features
 {
     [Collection("Api collection")]
-    public class ConnectionFeature
+    public class ConnectionFeature : Feature
     {
         private readonly IRabbitAdmin admin;
 
@@ -101,40 +101,38 @@ namespace Chinchilla.Integration.Features
             }
         }
 
-        // [Test]
-        // public void ShouldSurviveBeingDisconnected()
-        // {
-        //     using (var bus = Depot.Connect("localhost/integration"))
-        //     {
-        //         var numReceived = 0;
-        //         var handler = new Action<HelloWorldMessage>(hwm =>
-        //         {
-        //             Interlocked.Increment(ref numReceived);
+        [Fact]
+        public void ShouldSurviveBeingDisconnected()
+        {
+            using (var bus = Depot.Connect("localhost/integration"))
+            {
+                var numReceived = 0;
+                var handler = new Action<HelloWorldMessage>(hwm =>
+                {
+                    Interlocked.Increment(ref numReceived);
 
-        //             if (numReceived == 50)
-        //             {
-        //                 Console.WriteLine("Disconnecting with a vengeance");
-        //                 var connections = admin.Connections();
-        //                 admin.Delete(connections.First());
-        //             }
-        //         });
+                    if (numReceived == 50)
+                    {
+                        var connections = admin.Connections();
+                        admin.Delete(connections.First());
+                    }
+                });
 
-        //         var subscription = bus.Subscribe(handler);
+                var subscription = bus.Subscribe(handler);
 
-        //         using (subscription)
-        //         {
-        //             Console.WriteLine("Publishing 100 messages");
-        //             var publisher = bus.CreatePublisher<HelloWorldMessage>();
-        //             for (var i = 0; i < 100; ++i)
-        //             {
-        //                 publisher.Publish(new HelloWorldMessage { Message = "subscribe!" });
-        //             }
+                using (subscription)
+                {
+                    var publisher = bus.CreatePublisher<HelloWorldMessage>();
+                    for (var i = 0; i < 100; ++i)
+                    {
+                        publisher.Publish(new HelloWorldMessage { Message = "subscribe!" });
+                    }
 
-        //             WaitForDelivery();
-        //         }
+                    WaitFor(() => numReceived >= 100);
+                }
 
-        //         Assert.That(numReceived, Is.GreaterThanOrEqualTo(100));
-        //     }
-        // }
+                Assert.True(numReceived >= 100);
+            }
+        }
     }
 }
