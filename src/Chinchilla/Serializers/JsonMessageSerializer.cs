@@ -18,7 +18,8 @@ namespace Chinchilla.Serializers
 
         public JsonMessageSerializer(IMessageTypeFactory messageTypeFactory)
         {
-            settings = new JsonSerializerSettings{
+            settings = new JsonSerializerSettings
+            {
                 Converters = new [] 
                 { 
                     new StringEnumConverter()
