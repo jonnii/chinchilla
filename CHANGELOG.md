@@ -4,7 +4,7 @@
 
   * Bug fix for memory leak with ad-hoc publishing
   * Move to netstandard 1.6
-  * Chinchilla.Api now takes a dependency on Newtonsoft.Json
+  * Chinchilla and Chinchilla.Api now takes a dependency on Newtonsoft.Json
 
 # 0.3.12
 

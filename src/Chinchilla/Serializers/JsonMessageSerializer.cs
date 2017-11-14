@@ -19,16 +19,34 @@ namespace Chinchilla.Serializers
         public JsonMessageSerializer(IMessageTypeFactory messageTypeFactory)
         {
             settings = new JsonSerializerSettings{
-                Converters = new []{ new StringEnumConverter() },
-                ContractResolver = new MagicContractResolver(messageTypeFactory)
+                Converters = new [] 
+                { 
+                    new StringEnumConverter()
+                },
+                ContractResolver = new DefaultChinchillaContractResolver(messageTypeFactory)
             };
         }
 
-        public class MagicContractResolver : DefaultContractResolver
+        public string ContentType { get; } = "application/json";
+
+        public byte[] Serialize<T>(IMessage<T> message)
+        {
+            var serialized = JsonConvert.SerializeObject(message.Body, settings);
+            return Encoding.UTF8.GetBytes(serialized);
+        }
+
+        public IMessage<T> Deserialize<T>(byte[] message)
+        {
+            var decoded = Encoding.UTF8.GetString(message);
+            var deserialized = JsonConvert.DeserializeObject<T>(decoded, settings);
+            return Message.Create(deserialized);
+        }
+
+        public class DefaultChinchillaContractResolver : DefaultContractResolver
         {
             private readonly IMessageTypeFactory messageTypeFactory;
 
-            public MagicContractResolver(IMessageTypeFactory messageTypeFactory)
+            public DefaultChinchillaContractResolver(IMessageTypeFactory messageTypeFactory)
             {
                 this.messageTypeFactory = messageTypeFactory;
             }
@@ -46,21 +64,6 @@ namespace Chinchilla.Serializers
 
                 return contract;
             }
-        }
-
-        public string ContentType { get; } = "application/json";
-
-        public byte[] Serialize<T>(IMessage<T> message)
-        {
-            var serialized = JsonConvert.SerializeObject(message.Body, settings);
-            return Encoding.UTF8.GetBytes(serialized);
-        }
-
-        public IMessage<T> Deserialize<T>(byte[] message)
-        {
-            var decoded = Encoding.UTF8.GetString(message);
-            var deserialized = JsonConvert.DeserializeObject<T>(decoded, settings);
-            return Message.Create(deserialized);
         }
     }
 }
