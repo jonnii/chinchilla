@@ -1,5 +1,4 @@
 ﻿using Chinchilla.Serializers;
-using Chinchilla.Serializers.JsonNET;
 using Chinchilla.Serializers.MsgPack;
 using NUnit.Framework;
 
@@ -12,12 +11,6 @@ namespace Chinchilla.Integration.Serializers
         public void ValidateDefaultJsonSerializer()
         {
             TestSerializer<JsonMessageSerializer>();
-        }
-
-        [Test]
-        public void ValidateJsonNetSerializer()
-        {
-            TestSerializer<JsonNetMessageSerializer>();
         }
 
         [Test]
