@@ -1,14 +1,28 @@
+using System;
 using Chinchilla.Logging;
-using NUnit.Framework;
+using Xunit;
 
 namespace Chinchilla.Integration
 {
-    public class WithLogging
+    // public class WithLogging
+    // {
+    //     [SetUp]
+    //     public void Setup()
+    //     {
+    //         Logger.Factory = new ConsoleLoggerFactory();
+    //     }
+    // }
+
+    [CollectionDefinition("Api collection")]
+    public class ApiCollection : ICollectionFixture<ApiFixture>
     {
-        [SetUp]
-        public void Setup()
+    }
+
+    public class ApiFixture : IDisposable
+    {
+        public void Dispose()
         {
-            Logger.Factory = new ConsoleLoggerFactory();
+            
         }
     }
 }

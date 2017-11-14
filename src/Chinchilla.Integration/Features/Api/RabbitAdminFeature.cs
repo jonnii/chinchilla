@@ -1,21 +1,21 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Chinchilla.Api;
-using NUnit.Framework;
+using Xunit;
 
 namespace Chinchilla.Integration.Features.Api
 {
-    [TestFixture]
     public class RabbitAdminFeature
     {
-        [Test]
-        public void ShouldCreateVirtualHost()
+        [Fact]
+        public async Task ShouldCreateVirtualHost()
         {
             var api = new RabbitAdmin("http://localhost:15672/api");
 
-            api.Delete(new VirtualHost("test"));
+            await api.DeleteAsync(new VirtualHost("test"));
 
-            Assert.That(api.Create(new VirtualHost("test")));
-            Assert.That(api.VirtualHosts().Any(v => v.Name == "test"));
+            Assert.True(api.Create(new VirtualHost("test")));
+            Assert.True(api.VirtualHosts().Any(v => v.Name == "test"));
         }
     }
 }
