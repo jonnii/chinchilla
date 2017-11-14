@@ -27,23 +27,23 @@ namespace Chinchilla.Integration.Features
                 bus.Publish(new HelloWorldMessage());
             }
 
-            Assert.True(admin.Exchanges(vhost).Any(e => e.Name == "HelloWorldMessage"));
+            Assert.Contains("HelloWorldMessage", admin.Exchanges(vhost).Select(e => e.Name));
         }
 
-        // [Test]
-        // public void ShouldCreatePublisher()
-        // {
-        //     using (var bus = Depot.Connect("localhost/integration"))
-        //     {
-        //         using (var publisher = bus.CreatePublisher<HelloWorldMessage>())
-        //         {
-        //             publisher.Publish(new HelloWorldMessage());
-        //             Assert.That(publisher.NumPublishedMessages, Is.EqualTo(1));
-        //         }
-        //     }
+        [Fact]
+        public void ShouldCreatePublisher()
+        {
+            using (var bus = Depot.Connect("localhost/integration"))
+            {
+                using (var publisher = bus.CreatePublisher<HelloWorldMessage>())
+                {
+                    publisher.Publish(new HelloWorldMessage());
+                    Assert.Equal(1, publisher.NumPublishedMessages);
+                }
+            }
 
-        //     Assert.That(admin.Exchanges(IntegrationVHost).Any(e => e.Name == "HelloWorldMessage"));
-        // }
+            Assert.Contains("HelloWorldMessage", admin.Exchanges(vhost).Select(e => e.Name));
+        }
 
         // [Test]
         // public void ShouldCreatePublisherWithCustomPublishExchange()

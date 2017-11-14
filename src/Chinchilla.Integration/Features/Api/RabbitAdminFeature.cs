@@ -15,7 +15,7 @@ namespace Chinchilla.Integration.Features.Api
             await api.DeleteAsync(new VirtualHost("test"));
 
             Assert.True(api.Create(new VirtualHost("test")));
-            Assert.True(api.VirtualHosts().Any(v => v.Name == "test"));
+            Assert.Contains("test", api.VirtualHosts().Select(v => v.Name));
         }
     }
 }
