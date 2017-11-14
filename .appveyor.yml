@@ -18,7 +18,19 @@ install:
       [Environment]::SetEnvironmentVariable("RABBITMQ_HOME", "$path\rabbitmq_server-$version", "Machine")
       $env:RABBITMQ_HOME = "$path\rabbitmq_server-$version"
       [Environment]::SetEnvironmentVariable("RABBITMQ_RABBITMQCTL_PATH", "$path\rabbitmq_server-$version\sbin\rabbitmqctl.bat", "Machine")
+      
       $env:RABBITMQ_RABBITMQCTL_PATH = "$path\rabbitmq_server-$version\sbin\rabbitmqctl.bat"
+      $env:RABBITMQ_RABBITMQSERVER_PATH = "$path\rabbitmq_server-$version\sbin\rabbitmq-service.bat"
+
+      $uninstall = "cmd.exe /C $env:RABBITMQ_RABBITMQSERVER_PATH remove"
+      $install = "cmd.exe /C $env:RABBITMQ_RABBITMQSERVER_PATH install"
+      $start = "cmd.exe /C $env:RABBITMQ_RABBITMQSERVER_PATH start"
+      Invoke-Expression -Command:$uninstall
+      Start-Sleep 2
+      Invoke-Expression -Command:$install
+      Start-Sleep 2
+      Invoke-Expression -Command:$start
+      Start-Sleep 2
 
 before_build:
   - cmd: dotnet restore src\Chinchilla.sln
