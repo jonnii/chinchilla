@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Chinchilla.Serializers
 {
@@ -21,7 +22,11 @@ namespace Chinchilla.Serializers
 
         public byte[] Serialize<T>(IMessage<T> message)
         {
-            var serialized = JsonConvert.SerializeObject(message.Body);
+            var settings = new JsonSerializerSettings{
+                Converters = new []{new StringEnumConverter()}
+            };
+            
+            var serialized = JsonConvert.SerializeObject(message.Body, settings);
             return Encoding.UTF8.GetBytes(serialized);
         }
 
