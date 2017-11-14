@@ -8,9 +8,10 @@ image: Visual Studio 2017
 configuration: Release
 
 install:
-  - choco install -y rabbitmq
   - choco install gitversion.portable -pre -y
+  - choco install -y rabbitmq
   - ps: |
+      write-host "Discovering rabbitmq installation location"
       $regPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\RabbitMQ"
       if (Test-Path "HKLM:\SOFTWARE\Wow6432Node\") { $regPath = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\RabbitMQ" }
       $path = Split-Path -Parent (Get-ItemProperty $regPath "UninstallString").UninstallString
@@ -22,13 +23,24 @@ install:
       $env:RABBITMQ_RABBITMQCTL_PATH = "$path\rabbitmq_server-$version\sbin\rabbitmqctl.bat"
       $env:RABBITMQ_RABBITMQSERVER_PATH = "$path\rabbitmq_server-$version\sbin\rabbitmq-service.bat"
 
+      write-host $env:RABBITMQ_RABBITMQCTL_PATH
+      write-host $env:RABBITMQ_RABBITMQSERVER_PATH
+
+      Update-SessionEnvironment
+
       $uninstall = "cmd.exe /C $env:RABBITMQ_RABBITMQSERVER_PATH remove"
       $install = "cmd.exe /C $env:RABBITMQ_RABBITMQSERVER_PATH install"
       $start = "cmd.exe /C $env:RABBITMQ_RABBITMQSERVER_PATH start"
+
+      write-host "Removing rabbitmq"
       Invoke-Expression -Command:$uninstall
       Start-Sleep 2
+
+      write-host "Installing rabbitmq"
       Invoke-Expression -Command:$install
       Start-Sleep 2
+
+      write-host "Starting rabbitmq"
       Invoke-Expression -Command:$start
       Start-Sleep 2
 
