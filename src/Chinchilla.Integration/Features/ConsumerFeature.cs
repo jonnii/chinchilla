@@ -1,4 +1,5 @@
-﻿using Chinchilla.Api;
+﻿using System.Threading.Tasks;
+using Chinchilla.Api;
 using Chinchilla.Integration.Features.Consumers;
 using Chinchilla.Integration.Features.Messages;
 using Xunit;
@@ -57,7 +58,7 @@ namespace Chinchilla.Integration.Features
         // }
 
         [Fact]
-        public void ShouldSubscribeWithConsumerWithCustomConfiguration()
+        public async Task ShouldSubscribeWithConsumerWithCustomConfiguration()
         {
             using (var bus = Depot.Connect("localhost/integration"))
             {
@@ -70,7 +71,7 @@ namespace Chinchilla.Integration.Features
 
                     // WaitFor(() => true);
 
-                    Assert.True(admin.Exists(vhost, new Queue("custom-subscription-endpoint")));
+                    Assert.True(await admin.ExistsAsync(vhost, new Queue("custom-subscription-endpoint")));
                 }
             }
         }

@@ -59,7 +59,7 @@ namespace Chinchilla.Api
             return await DeserializeResponse<T>(response);
         }
 
-        public async Task<IEnumerable<T>> ExecuteList<T>(
+        public async Task<T[]> ExecuteList<T>(
             string resource,
             IEnumerable<KeyValuePair<string, string>> parameters = null,
             object body = null)
@@ -67,10 +67,10 @@ namespace Chinchilla.Api
             var request = CreateRequest(resource, parameters, HttpMethod.Get, body);
 
             var response = await client.SendAsync(request);
-            return await DeserializeResponse<List<T>>(response);
+            return await DeserializeResponse<T[]>(response);
         }
 
-        public async Task<IEnumerable<T>> ExecuteList<T>(
+        public async Task<T[]> ExecuteList<T>(
             HttpMethod method,
             string resource,
             IEnumerable<KeyValuePair<string, string>> parameters = null,
@@ -79,7 +79,7 @@ namespace Chinchilla.Api
             var request = CreateRequest(resource, parameters, method, body);
 
             var response = await client.SendAsync(request);
-            return await DeserializeResponse<List<T>>(response);
+            return await DeserializeResponse<T[]>(response);
         }
 
         public async Task<T> Execute<T>(

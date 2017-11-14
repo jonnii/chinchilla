@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading;
+using System.Threading.Tasks;
 using Chinchilla.Api;
 using Chinchilla.Integration.Features.Messages;
 using Chinchilla.Topologies.Model;
@@ -23,7 +25,7 @@ namespace Chinchilla.Integration.Features
         }
 
         [Fact]
-        public void ShouldVisitTopologyWithQueueBoundToExchange()
+        public async Task ShouldVisitTopologyWithQueueBoundToExchange()
         {
             var factory = new DefaultConnectionFactory();
             using (var connection = factory.Create(new Uri("amqp://localhost/integration")))
@@ -38,16 +40,16 @@ namespace Chinchilla.Integration.Features
 
                 topology.Visit(new TopologyBuilder(model));
 
-                var exchanges = admin.Exchanges(vhost);
+                var exchanges = await admin.ExchangesAsync(vhost);
                 Assert.Contains(e1.Name, exchanges.Select(e => e.Name));
 
-                var queues = admin.Queues(vhost);
+                var queues = await admin.QueuesAsync(vhost);
                 Assert.Contains(q1.Name, queues.Select(e => e.Name));
             }
         }
 
         [Fact]
-        public void ShouldVisitExclusiveQueue()
+        public async Task ShouldVisitExclusiveQueue()
         {
             var factory = new DefaultConnectionFactory();
             using (var connection = factory.Create(new Uri("amqp://localhost/integration")))
@@ -61,8 +63,8 @@ namespace Chinchilla.Integration.Features
 
                 Assert.True(q1.HasName);
 
-                var queues = admin.Queues(vhost);
-                Assert.Contains(q1.Name, queues.Select(e => e.Name));
+                var queues = await admin.QueuesAsync(vhost);
+                Assert.Contains(q1.Name, queues.Select(e => e.Name).ToArray());
             }
         }
 
@@ -107,14 +109,14 @@ namespace Chinchilla.Integration.Features
             using (var bus = Depot.Connect("localhost/integration"))
             {
                 var numReceived = 0;
-                var handler = new Action<HelloWorldMessage>(hwm =>
+                var handler = new Action<HelloWorldMessage>(async hwm =>
                 {
                     Interlocked.Increment(ref numReceived);
 
                     if (numReceived == 50)
                     {
-                        var connections = admin.Connections();
-                        admin.Delete(connections.First());
+                        var connections = await admin.ConnectionsAsync();
+                        await admin.DeleteAsync(connections.First());
                     }
                 });
 

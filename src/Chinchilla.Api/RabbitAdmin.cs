@@ -21,27 +21,27 @@ namespace Chinchilla.Api
             httpClient = new RabbitHttpClient(root.FormatWithReplacements(), username, password);
         }
 
-        public Task<IEnumerable<VirtualHost>> VirtualHostsAsync()
+        public Task<VirtualHost[]> VirtualHostsAsync()
         {
             return httpClient.ExecuteList<VirtualHost>("vhosts");
         }
 
-        public Task<IEnumerable<Connection>> ConnectionsAsync()
+        public Task<Connection[]> ConnectionsAsync()
         {
             return httpClient.ExecuteList<Connection>("connections");
         }
 
-        public Task<IEnumerable<Exchange>> ExchangesAsync(VirtualHost virtualHost)
+        public Task<Exchange[]> ExchangesAsync(VirtualHost virtualHost)
         {
             return httpClient.ExecuteList<Exchange>("exchanges/{vhost}", new Dictionary<string, string> { { "vhost", virtualHost.Name } });
         }
 
-        public Task<IEnumerable<Queue>> QueuesAsync(VirtualHost virtualHost)
+        public Task<Queue[]> QueuesAsync(VirtualHost virtualHost)
         {
             return httpClient.ExecuteList<Queue>("queues/{vhost}", new Dictionary<string, string> { { "vhost", virtualHost.Name } });
         }
 
-        public Task<IEnumerable<Permissions>> PermissionsAsync(VirtualHost virtualHost)
+        public Task<Permissions[]> PermissionsAsync(VirtualHost virtualHost)
         {
             return httpClient.ExecuteList<Permissions>("vhosts/{name}/permissions", new Dictionary<string, string> { { "name", virtualHost.Name } });
         }
@@ -161,7 +161,7 @@ namespace Chinchilla.Api
             return exchanges.Any(e => e.Name == exchange.Name);
         }
 
-        public Task<IEnumerable<Message>> MessagesAsync(VirtualHost virtualHost, Queue queue)
+        public Task<Message[]> MessagesAsync(VirtualHost virtualHost, Queue queue)
         {
             var options = new
             {

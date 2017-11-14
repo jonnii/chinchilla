@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Chinchilla.Api;
 using Chinchilla.Logging;
 using Xunit;
@@ -8,7 +9,7 @@ namespace Chinchilla.Integration
 {
     public class Feature
     {
-        protected void WaitFor(Func<bool> condition) 
+        protected void WaitFor(Func<bool> condition)
         {
             SpinWait.SpinUntil(() => condition(), TimeSpan.FromSeconds(5));
         }
@@ -28,16 +29,20 @@ namespace Chinchilla.Integration
             Logger.Factory = new ConsoleLoggerFactory();
 
             Admin = new RabbitAdmin("http://localhost:15672/api");
-            Admin.Delete(IntegrationVHost);
-            Admin.Create(IntegrationVHost);
-            Admin.Create(IntegrationVHost, new User("guest"), Permission.All);
+
+            Task.Run(async () =>
+            {
+                await Admin.DeleteAsync(IntegrationVHost);
+                await Admin.CreateAsync(IntegrationVHost);
+                await Admin.CreateAsync(IntegrationVHost, new User("guest"), Permission.All);
+            });
         }
 
         public IRabbitAdmin Admin { get; }
 
         public void Dispose()
-        { 
-            Admin.Delete(IntegrationVHost);
+        {
+            Task.Run(async () => await Admin.DeleteAsync(IntegrationVHost));
         }
     }
 }

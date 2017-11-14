@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using System.Threading;
+using System.Threading.Tasks;
 using Chinchilla.Api;
 using Chinchilla.Integration.Features.Messages;
 using Xunit;
@@ -20,18 +20,20 @@ namespace Chinchilla.Integration.Features
         }
 
         [Fact]
-        public void ShouldPublishMessageOnDefaultPublisher()
+        public async Task ShouldPublishMessageOnDefaultPublisher()
         {
             using (var bus = Depot.Connect("localhost/integration"))
             {
                 bus.Publish(new HelloWorldMessage());
             }
 
-            Assert.Contains("HelloWorldMessage", admin.Exchanges(vhost).Select(e => e.Name));
+            var exchanges = await admin.ExchangesAsync(vhost);
+
+            Assert.Contains("HelloWorldMessage", exchanges.Select(e => e.Name));
         }
 
         [Fact]
-        public void ShouldCreatePublisher()
+        public async Task ShouldCreatePublisher()
         {
             using (var bus = Depot.Connect("localhost/integration"))
             {
@@ -42,11 +44,13 @@ namespace Chinchilla.Integration.Features
                 }
             }
 
-            Assert.Contains("HelloWorldMessage", admin.Exchanges(vhost).Select(e => e.Name));
+            var exchanges = await admin.ExchangesAsync(vhost);
+
+            Assert.Contains("HelloWorldMessage", exchanges.Select(e => e.Name));
         }
 
         [Fact]
-        public void ShouldCreatePublisherWithCustomPublishExchange()
+        public async Task ShouldCreatePublisherWithCustomPublishExchange()
         {
             using (var bus = Depot.Connect("localhost/integration"))
             {
@@ -57,7 +61,9 @@ namespace Chinchilla.Integration.Features
                 }
             }
 
-            Assert.Contains("custom-exchange-name", admin.Exchanges(vhost).Select(e => e.Name));
+            var exchanges = await admin.ExchangesAsync(vhost);
+
+            Assert.Contains("custom-exchange-name", exchanges.Select(e => e.Name));
         }
 
         [Fact]
