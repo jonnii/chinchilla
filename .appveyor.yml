@@ -26,11 +26,9 @@ install:
       write-host $env:RABBITMQ_RABBITMQCTL_PATH
       write-host $env:RABBITMQ_RABBITMQSERVER_PATH
 
-      Update-SessionEnvironment
-
-      $uninstall = "cmd.exe /C $env:RABBITMQ_RABBITMQSERVER_PATH remove"
-      $install = "cmd.exe /C $env:RABBITMQ_RABBITMQSERVER_PATH install"
-      $start = "cmd.exe /C $env:RABBITMQ_RABBITMQSERVER_PATH start"
+      $uninstall = "cmd.exe /C '$env:RABBITMQ_RABBITMQSERVER_PATH' remove"
+      $install = "cmd.exe /C '$env:RABBITMQ_RABBITMQSERVER_PATH' install"
+      $start = "cmd.exe /C '$env:RABBITMQ_RABBITMQSERVER_PATH' start"
 
       write-host "Removing rabbitmq"
       Invoke-Expression -Command:$uninstall
