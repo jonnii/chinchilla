@@ -8,6 +8,7 @@ image: Visual Studio 2017
 configuration: Release
 
 install:
+  - choco install -y rabbitmq
   - choco install gitversion.portable -pre -y
   - cmd: dotnet restore src\Chinchilla.sln
   - ps: gitversion /l console /output buildserver
