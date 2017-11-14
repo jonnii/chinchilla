@@ -77,24 +77,24 @@ namespace Chinchilla.Integration.Features
             }
         }
 
-        // [Test]
-        // public void ShouldPublishWithCustomRouter()
-        // {
-        //     using (var bus = Depot.Connect("localhost/integration"))
-        //     {
-        //         var publisher = bus.CreatePublisher<HelloWorldMessage>(o => o.RouteWith<CustomRouter>());
+        [Fact]
+        public void ShouldPublishWithCustomRouter()
+        {
+            using (var bus = Depot.Connect("localhost/integration"))
+            {
+                var publisher = bus.CreatePublisher<HelloWorldMessage>(o => o.RouteWith<CustomRouter>());
 
-        //         using (publisher)
-        //         {
-        //             for (var i = 0; i < 100; ++i)
-        //             {
-        //                 publisher.Publish(new HelloWorldMessage());
-        //             }
+                using (publisher)
+                {
+                    for (var i = 0; i < 100; ++i)
+                    {
+                        publisher.Publish(new HelloWorldMessage());
+                    }
 
-        //             Assert.That(publisher.NumPublishedMessages, Is.EqualTo(100));
-        //         }
-        //     }
-        // }
+                    Assert.Equal(100, publisher.NumPublishedMessages);
+                }
+            }
+        }
 
         // [Test]
         // public void ShouldPublishFromMultipleThreads()
