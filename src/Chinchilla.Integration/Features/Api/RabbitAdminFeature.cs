@@ -12,12 +12,12 @@ namespace Chinchilla.Integration.Features.Api
         {
             var api = new RabbitAdmin("http://localhost:15672/api");
 
-            await api.DeleteAsync(new VirtualHost("test"));
+            await api.DeleteAsync(new VirtualHost("test")).ConfigureAwait(false);
 
-            var created = await api.CreateAsync(new VirtualHost("test"));
+            var created = await api.CreateAsync(new VirtualHost("test")).ConfigureAwait(false);
             Assert.True(created);
 
-            var hosts = await api.VirtualHostsAsync();
+            var hosts = await api.VirtualHostsAsync().ConfigureAwait(false);
             Assert.Contains("test", hosts.Select(v => v.Name));
         }
     }

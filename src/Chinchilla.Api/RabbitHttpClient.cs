@@ -55,8 +55,8 @@ namespace Chinchilla.Api
         {
             var request = CreateRequest(resource, parameters, HttpMethod.Get, body);
 
-            var response = await client.SendAsync(request);
-            return await DeserializeResponse<T>(response);
+            var response = await client.SendAsync(request).ConfigureAwait(false);
+            return await DeserializeResponse<T>(response).ConfigureAwait(false);
         }
 
         public async Task<T[]> ExecuteList<T>(
@@ -66,8 +66,8 @@ namespace Chinchilla.Api
         {
             var request = CreateRequest(resource, parameters, HttpMethod.Get, body);
 
-            var response = await client.SendAsync(request);
-            return await DeserializeResponse<T[]>(response);
+            var response = await client.SendAsync(request).ConfigureAwait(false);
+            return await DeserializeResponse<T[]>(response).ConfigureAwait(false);
         }
 
         public async Task<T[]> ExecuteList<T>(
@@ -78,8 +78,8 @@ namespace Chinchilla.Api
         {
             var request = CreateRequest(resource, parameters, method, body);
 
-            var response = await client.SendAsync(request);
-            return await DeserializeResponse<T[]>(response);
+            var response = await client.SendAsync(request).ConfigureAwait(false);
+            return await DeserializeResponse<T[]>(response).ConfigureAwait(false);
         }
 
         public async Task<T> Execute<T>(
@@ -90,13 +90,13 @@ namespace Chinchilla.Api
         {
             var request = CreateRequest(resource, parameters, method, body);
 
-            var response = await client.SendAsync(request);
-            return await DeserializeResponse<T>(response);
+            var response = await client.SendAsync(request).ConfigureAwait(false);
+            return await DeserializeResponse<T>(response).ConfigureAwait(false);
         }
 
         private async Task<T> DeserializeResponse<T>(HttpResponseMessage response)
         {
-            var content = await response.Content.ReadAsStreamAsync();
+            var content = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
 
             using (var streamReader = new StreamReader(content))
             {

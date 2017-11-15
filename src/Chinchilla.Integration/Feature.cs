@@ -21,16 +21,16 @@ namespace Chinchilla.Integration
 
             var host = VirtualHost;
 
-            await Admin.DeleteAsync(host);
-            await Admin.CreateAsync(host);
-            await Admin.CreateAsync(host, new User("guest"), Permission.All);
+            await Admin.DeleteAsync(host).ConfigureAwait(false);
+            await Admin.CreateAsync(host).ConfigureAwait(false);
+            await Admin.CreateAsync(host, new User("guest"), Permission.All).ConfigureAwait(false);
 
             return hostName;
         }
 
         protected async Task<IBus> CreateBus(DepotSettings settings)
         {
-            var vhost = await CreateVHost();
+            var vhost = await CreateVHost().ConfigureAwait(false);
             return Depot.Connect($"localhost/{vhost}", settings);
         }
 

@@ -7,24 +7,24 @@ namespace Chinchilla.Integration.Features
 {
     public class RequestResponseFeature : Feature
     {
-        //[Fact]
-        //public async Task ShouldCreateRequestResponseOnBus()
-        //{
-        //    using (var bus = await CreateBus())
-        //    {
-        //        bus.Subscribe(new CapitalizeMessageConsumer());
+        [Fact]
+        public async Task ShouldCreateRequestResponseOnBus()
+        {
+            using (var bus = await CreateBus())
+            {
+                bus.Subscribe(new CapitalizeMessageConsumer());
 
-        //        CapitalizedMessage capitalized = null;
-        //        bus.Request<CapitalizeMessage, CapitalizedMessage>(
-        //            new CapitalizeMessage("where am i?"),
-        //            response => { capitalized = response; });
+                CapitalizedMessage capitalized = null;
+                bus.Request<CapitalizeMessage, CapitalizedMessage>(
+                    new CapitalizeMessage("where am i?"),
+                    response => { capitalized = response; });
 
-        //        await WaitFor(() => capitalized != null);
+                await WaitFor(() => capitalized != null);
 
-        //        Assert.NotNull(capitalized);
-        //        Assert.Equal("WHERE AM I?", capitalized.Capitalized);
-        //    }
-        //}
+                Assert.NotNull(capitalized);
+                Assert.Equal("WHERE AM I?", capitalized.Capitalized);
+            }
+        }
 
         //[Fact]
         //public async Task ShouldSupportAsyncForBasicRequestResponse()

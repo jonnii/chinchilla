@@ -53,7 +53,7 @@ namespace Chinchilla.Api
                 new Dictionary<string, string>
                 {
                     {"name", virtualHost.Name}
-                });
+                }).ConfigureAwait(false);
 
             return response.StatusCode == HttpStatusCode.Created;
         }
@@ -72,7 +72,7 @@ namespace Chinchilla.Api
                     {"vhost", virtualHost.Name},
                     {"name", queue.Name}
                 },
-                options);
+                options).ConfigureAwait(false);
 
             return response.StatusCode == HttpStatusCode.NoContent;
         }
@@ -91,7 +91,7 @@ namespace Chinchilla.Api
                     {"vhost", virtualHost.Name},
                     {"name", exchange.Name}
                 },
-                options);
+                options).ConfigureAwait(false);
 
             return response.StatusCode == HttpStatusCode.NoContent;
         }
@@ -107,7 +107,7 @@ namespace Chinchilla.Api
                 HttpMethod.Post,
                 "bindings/{vhost}/e/{exchange}/q/{queue}",
                 new Dictionary<string, string> { { "vhost", virtualHost.Name }, { "exchange", exchange.Name }, { "queue", queue.Name } },
-                options);
+                options).ConfigureAwait(false);
 
             return response.StatusCode == HttpStatusCode.Created;
         }
@@ -119,7 +119,7 @@ namespace Chinchilla.Api
                 new Dictionary<string, string>
                 {
                     {"name", virtualHost.Name}
-                });
+                }).ConfigureAwait(false);
 
             return response.StatusCode == HttpStatusCode.NoContent;
         }
@@ -131,7 +131,7 @@ namespace Chinchilla.Api
                 new Dictionary<string, string>
                 {
                     {"name", connection.Name}
-                });
+                }).ConfigureAwait(false);
 
             return response.StatusCode == HttpStatusCode.NoContent;
         }
@@ -143,20 +143,20 @@ namespace Chinchilla.Api
                 "permissions/{vhost}/{user}",
                 new Dictionary<string, string> { { "vhost", virtualHost.Name }, { "user", user.Name } },
                 permission
-            );
+            ).ConfigureAwait(false);
 
             return response.StatusCode == HttpStatusCode.NoContent;
         }
 
         public async Task<bool> ExistsAsync(VirtualHost virtualHost, Queue queue)
         {
-            var queues = await QueuesAsync(virtualHost);
+            var queues = await QueuesAsync(virtualHost).ConfigureAwait(false);
             return queues.Any(q => q.Name == queue.Name);
         }
 
         public async Task<bool> ExistsAsync(VirtualHost virtualHost, Exchange exchange)
         {
-            var exchanges = await ExchangesAsync(virtualHost);
+            var exchanges = await ExchangesAsync(virtualHost).ConfigureAwait(false);
 
             return exchanges.Any(e => e.Name == exchange.Name);
         }
