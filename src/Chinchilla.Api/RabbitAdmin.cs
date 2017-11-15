@@ -21,27 +21,27 @@ namespace Chinchilla.Api
             httpClient = new RabbitHttpClient(root.FormatWithReplacements(), username, password);
         }
 
-        public Task<IEnumerable<VirtualHost>> VirtualHostsAsync()
+        public Task<VirtualHost[]> VirtualHostsAsync()
         {
             return httpClient.ExecuteList<VirtualHost>("vhosts");
         }
 
-        public Task<IEnumerable<Connection>> ConnectionsAsync()
+        public Task<Connection[]> ConnectionsAsync()
         {
             return httpClient.ExecuteList<Connection>("connections");
         }
 
-        public Task<IEnumerable<Exchange>> ExchangesAsync(VirtualHost virtualHost)
+        public Task<Exchange[]> ExchangesAsync(VirtualHost virtualHost)
         {
             return httpClient.ExecuteList<Exchange>("exchanges/{vhost}", new Dictionary<string, string> { { "vhost", virtualHost.Name } });
         }
 
-        public Task<IEnumerable<Queue>> QueuesAsync(VirtualHost virtualHost)
+        public Task<Queue[]> QueuesAsync(VirtualHost virtualHost)
         {
             return httpClient.ExecuteList<Queue>("queues/{vhost}", new Dictionary<string, string> { { "vhost", virtualHost.Name } });
         }
 
-        public Task<IEnumerable<Permissions>> PermissionsAsync(VirtualHost virtualHost)
+        public Task<Permissions[]> PermissionsAsync(VirtualHost virtualHost)
         {
             return httpClient.ExecuteList<Permissions>("vhosts/{name}/permissions", new Dictionary<string, string> { { "name", virtualHost.Name } });
         }
@@ -53,7 +53,7 @@ namespace Chinchilla.Api
                 new Dictionary<string, string>
                 {
                     {"name", virtualHost.Name}
-                });
+                }).ConfigureAwait(false);
 
             return response.StatusCode == HttpStatusCode.Created;
         }
@@ -72,7 +72,7 @@ namespace Chinchilla.Api
                     {"vhost", virtualHost.Name},
                     {"name", queue.Name}
                 },
-                options);
+                options).ConfigureAwait(false);
 
             return response.StatusCode == HttpStatusCode.NoContent;
         }
@@ -91,7 +91,7 @@ namespace Chinchilla.Api
                     {"vhost", virtualHost.Name},
                     {"name", exchange.Name}
                 },
-                options);
+                options).ConfigureAwait(false);
 
             return response.StatusCode == HttpStatusCode.NoContent;
         }
@@ -107,7 +107,7 @@ namespace Chinchilla.Api
                 HttpMethod.Post,
                 "bindings/{vhost}/e/{exchange}/q/{queue}",
                 new Dictionary<string, string> { { "vhost", virtualHost.Name }, { "exchange", exchange.Name }, { "queue", queue.Name } },
-                options);
+                options).ConfigureAwait(false);
 
             return response.StatusCode == HttpStatusCode.Created;
         }
@@ -119,7 +119,7 @@ namespace Chinchilla.Api
                 new Dictionary<string, string>
                 {
                     {"name", virtualHost.Name}
-                });
+                }).ConfigureAwait(false);
 
             return response.StatusCode == HttpStatusCode.NoContent;
         }
@@ -131,7 +131,7 @@ namespace Chinchilla.Api
                 new Dictionary<string, string>
                 {
                     {"name", connection.Name}
-                });
+                }).ConfigureAwait(false);
 
             return response.StatusCode == HttpStatusCode.NoContent;
         }
@@ -143,25 +143,25 @@ namespace Chinchilla.Api
                 "permissions/{vhost}/{user}",
                 new Dictionary<string, string> { { "vhost", virtualHost.Name }, { "user", user.Name } },
                 permission
-            );
+            ).ConfigureAwait(false);
 
             return response.StatusCode == HttpStatusCode.NoContent;
         }
 
         public async Task<bool> ExistsAsync(VirtualHost virtualHost, Queue queue)
         {
-            var queues = await QueuesAsync(virtualHost);
+            var queues = await QueuesAsync(virtualHost).ConfigureAwait(false);
             return queues.Any(q => q.Name == queue.Name);
         }
 
         public async Task<bool> ExistsAsync(VirtualHost virtualHost, Exchange exchange)
         {
-            var exchanges = await ExchangesAsync(virtualHost);
+            var exchanges = await ExchangesAsync(virtualHost).ConfigureAwait(false);
 
             return exchanges.Any(e => e.Name == exchange.Name);
         }
 
-        public Task<IEnumerable<Message>> MessagesAsync(VirtualHost virtualHost, Queue queue)
+        public Task<Message[]> MessagesAsync(VirtualHost virtualHost, Queue queue)
         {
             var options = new
             {
@@ -179,96 +179,6 @@ namespace Chinchilla.Api
                 new Dictionary<string, string> { { "vhost", virtualHost.Name }, { "queue", queue.Name } },
                 options
             );
-        }
-
-        public IEnumerable<VirtualHost> VirtualHosts()
-        {
-            return VirtualHostsAsync().Result;
-        }
-
-        public IEnumerable<Connection> Connections()
-        {
-            return ConnectionsAsync().Result;
-        }
-
-        public IEnumerable<Exchange> Exchanges(VirtualHost virtualHost)
-        {
-            return ExchangesAsync(virtualHost).Result;
-        }
-
-        public IEnumerable<Queue> Queues(VirtualHost virtualHost)
-        {
-            return QueuesAsync(virtualHost).Result;
-        }
-
-        public IEnumerable<Permissions> Permissions(VirtualHost virtualHost)
-        {
-            return PermissionsAsync(virtualHost).Result;
-        }
-
-        public bool Create(VirtualHost virtualHost)
-        {
-            return CreateAsync(virtualHost).Result;
-        }
-
-        public bool Create(VirtualHost virtualHost, Queue queue)
-        {
-            return CreateAsync(virtualHost, queue).Result;
-        }
-
-        public bool Create(VirtualHost virtualHost, Queue queue, QueueOptions options)
-        {
-            return CreateAsync(virtualHost, queue, options).Result;
-        }
-
-        public bool Create(VirtualHost virtualHost, Exchange exchange)
-        {
-            return CreateAsync(virtualHost, exchange).Result;
-        }
-
-        public bool Create(VirtualHost virtualHost, Exchange exchange, ExchangeOptions options)
-        {
-            return CreateAsync(virtualHost, exchange, options).Result;
-        }
-
-        public bool Create(VirtualHost virtualHost, User user, Permission permission)
-        {
-            return CreateAsync(virtualHost, user, permission).Result;
-        }
-
-        public bool Create(VirtualHost virtualHost, Exchange exchange, Queue queue)
-        {
-            return CreateAsync(virtualHost, exchange, queue).Result;
-        }
-
-        public bool Create(VirtualHost virtualHost, Exchange exchange, Queue queue, BindingOptions options)
-        {
-            return CreateAsync(virtualHost, exchange, queue, options).Result;
-        }
-
-        public bool Exists(VirtualHost virtualHost, Queue queue)
-        {
-            return ExistsAsync(virtualHost, queue).Result;
-        }
-
-        public bool Exists(VirtualHost virtualHost, Exchange exchange)
-        {
-            return ExistsAsync(virtualHost, exchange).Result;
-        }
-
-        public bool Delete(VirtualHost virtualHost)
-        {
-            return DeleteAsync(virtualHost).Result;
-        }
-
-        public bool Delete(Connection connection)
-        {
-            return DeleteAsync(connection).Result;
-        }
-
-        public IEnumerable<Message> Messages(VirtualHost virtualHost, Queue queue)
-        {
-            return MessagesAsync(virtualHost, queue).Result;
         }
     }
 }

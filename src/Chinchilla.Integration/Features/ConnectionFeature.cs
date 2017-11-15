@@ -1,21 +1,24 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Linq;
+using Chinchilla.Api;
 using Chinchilla.Integration.Features.Messages;
 using Chinchilla.Topologies.Model;
-using NUnit.Framework;
+using Xunit;
 using ExchangeType = Chinchilla.Topologies.Model.ExchangeType;
 
 namespace Chinchilla.Integration.Features
 {
-    [TestFixture]
-    public class ConnectionFeature : WithApi
+    public class ConnectionFeature : Feature
     {
-        [Test]
-        public void ShouldVisitTopologyWithQueueBoundToExchange()
+        [Fact]
+        public async Task ShouldVisitTopologyWithQueueBoundToExchange()
         {
+            var vhost = await CreateVHost();
             var factory = new DefaultConnectionFactory();
-            using (var connection = factory.Create(new Uri("amqp://localhost/integration")))
+
+            using (var connection = factory.Create(new Uri($"amqp://localhost/{vhost}")))
             {
                 var model = connection.CreateModel();
 
@@ -27,19 +30,21 @@ namespace Chinchilla.Integration.Features
 
                 topology.Visit(new TopologyBuilder(model));
 
-                var exchanges = admin.Exchanges(IntegrationVHost);
-                Assert.That(exchanges.Any(e => e.Name == e1.Name));
+                var exchanges = await Admin.ExchangesAsync(new VirtualHost(vhost));
+                Assert.Contains(e1.Name, exchanges.Select(e => e.Name));
 
-                var queues = admin.Queues(IntegrationVHost);
-                Assert.That(queues.Any(e => e.Name == q1.Name));
+                var queues = await Admin.QueuesAsync(new VirtualHost(vhost));
+                Assert.Contains(q1.Name, queues.Select(e => e.Name));
             }
         }
 
-        [Test]
-        public void ShouldVisitExclusiveQueue()
+        [Fact]
+        public async Task ShouldVisitExclusiveQueue()
         {
+            var vhost = await CreateVHost();
             var factory = new DefaultConnectionFactory();
-            using (var connection = factory.Create(new Uri("amqp://localhost/integration")))
+
+            using (var connection = factory.Create(new Uri($"amqp://localhost/{vhost}")))
             {
                 var model = connection.CreateModel();
 
@@ -48,18 +53,20 @@ namespace Chinchilla.Integration.Features
 
                 topology.Visit(new TopologyBuilder(model));
 
-                Assert.That(q1.HasName);
+                Assert.True(q1.HasName);
 
-                var queues = admin.Queues(IntegrationVHost);
-                Assert.That(queues.Any(e => e.Name == q1.Name));
+                var queues = await Admin.QueuesAsync(new VirtualHost(vhost));
+                Assert.Contains(q1.Name, queues.Select(e => e.Name).ToArray());
             }
         }
 
-        [Test]
-        public void ShouldVisitTopologyMultipleTimesWithoutExceptions()
+        [Fact]
+        public async Task ShouldVisitTopologyMultipleTimesWithoutExceptions()
         {
+            var vhost = await CreateVHost();
             var factory = new DefaultConnectionFactory();
-            using (var connection = factory.Create(new Uri("amqp://localhost/integration")))
+
+            using (var connection = factory.Create(new Uri($"amqp://localhost/{vhost}")))
             {
                 var model = connection.CreateModel();
 
@@ -73,11 +80,13 @@ namespace Chinchilla.Integration.Features
             }
         }
 
-        [Test]
-        public void ShouldVisitTopologyMultipleTimesExclusiveQueue()
+        [Fact]
+        public async Task ShouldVisitTopologyMultipleTimesExclusiveQueue()
         {
+            var vhost = await CreateVHost();
             var factory = new DefaultConnectionFactory();
-            using (var connection = factory.Create(new Uri("amqp://localhost/integration")))
+
+            using (var connection = factory.Create(new Uri($"amqp://localhost/{vhost}")))
             {
                 var model = connection.CreateModel();
 
@@ -90,10 +99,12 @@ namespace Chinchilla.Integration.Features
             }
         }
 
-        [Test]
-        public void ShouldSurviveBeingDisconnected()
+        [Fact]
+        public async Task ShouldSurviveBeingDisconnected()
         {
-            using (var bus = Depot.Connect("localhost/integration"))
+            var vhost = await CreateVHost();
+
+            using (var bus = Depot.Connect($"localhost/{vhost}"))
             {
                 var numReceived = 0;
                 var handler = new Action<HelloWorldMessage>(hwm =>
@@ -102,9 +113,8 @@ namespace Chinchilla.Integration.Features
 
                     if (numReceived == 50)
                     {
-                        Console.WriteLine("Disconnecting with a vengeance");
-                        var connections = admin.Connections();
-                        admin.Delete(connections.First());
+                        var connections = Admin.ConnectionsAsync().Result;
+                        Admin.DeleteAsync(connections.First()).Wait();
                     }
                 });
 
@@ -112,17 +122,16 @@ namespace Chinchilla.Integration.Features
 
                 using (subscription)
                 {
-                    Console.WriteLine("Publishing 100 messages");
                     var publisher = bus.CreatePublisher<HelloWorldMessage>();
                     for (var i = 0; i < 100; ++i)
                     {
                         publisher.Publish(new HelloWorldMessage { Message = "subscribe!" });
                     }
 
-                    WaitForDelivery();
+                    await WaitFor(() => numReceived >= 100);
                 }
 
-                Assert.That(numReceived, Is.GreaterThanOrEqualTo(100));
+                Assert.True(numReceived >= 100);
             }
         }
     }

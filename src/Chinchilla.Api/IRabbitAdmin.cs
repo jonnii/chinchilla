@@ -1,19 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Chinchilla.Api
 {
     public interface IRabbitAdmin
     {
-        Task<IEnumerable<VirtualHost>> VirtualHostsAsync();
+        Task<VirtualHost[]> VirtualHostsAsync();
 
-        Task<IEnumerable<Connection>> ConnectionsAsync();
+        Task<Connection[]> ConnectionsAsync();
 
-        Task<IEnumerable<Exchange>> ExchangesAsync(VirtualHost virtualHost);
+        Task<Exchange[]> ExchangesAsync(VirtualHost virtualHost);
 
-        Task<IEnumerable<Queue>> QueuesAsync(VirtualHost virtualHost);
+        Task<Queue[]> QueuesAsync(VirtualHost virtualHost);
 
-        Task<IEnumerable<Permissions>> PermissionsAsync(VirtualHost virtualHost);
+        Task<Permissions[]> PermissionsAsync(VirtualHost virtualHost);
 
         Task<bool> CreateAsync(VirtualHost virtualHost);
 
@@ -39,44 +38,6 @@ namespace Chinchilla.Api
 
         Task<bool> DeleteAsync(Connection connection);
 
-        Task<IEnumerable<Message>> MessagesAsync(VirtualHost virtualHost, Queue queue);
-
-
-
-        IEnumerable<VirtualHost> VirtualHosts();
-
-        IEnumerable<Connection> Connections();
-
-        IEnumerable<Exchange> Exchanges(VirtualHost virtualHost);
-
-        IEnumerable<Queue> Queues(VirtualHost virtualHost);
-
-        IEnumerable<Permissions> Permissions(VirtualHost virtualHost);
-
-        bool Create(VirtualHost virtualHost);
-
-        bool Create(VirtualHost virtualHost, Queue queue);
-
-        bool Create(VirtualHost virtualHost, Queue queue, QueueOptions options);
-
-        bool Create(VirtualHost virtualHost, Exchange exchange);
-
-        bool Create(VirtualHost virtualHost, Exchange exchange, ExchangeOptions options);
-
-        bool Create(VirtualHost virtualHost, User user, Permission permission);
-
-        bool Create(VirtualHost virtualHost, Exchange exchange, Queue queue);
-
-        bool Create(VirtualHost virtualHost, Exchange exchange, Queue queue, BindingOptions options);
-
-        bool Exists(VirtualHost virtualHost, Queue queue);
-
-        bool Exists(VirtualHost virtualHost, Exchange exchange);
-
-        bool Delete(VirtualHost virtualHost);
-
-        bool Delete(Connection connection);
-
-        IEnumerable<Message> Messages(VirtualHost virtualHost, Queue queue);
+        Task<Message[]> MessagesAsync(VirtualHost virtualHost, Queue queue);
     }
 }

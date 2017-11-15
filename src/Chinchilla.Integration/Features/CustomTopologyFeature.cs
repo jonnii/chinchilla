@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Chinchilla.Configuration;
 using Chinchilla.Integration.Features.Messages;
 using Chinchilla.Topologies;
 using Chinchilla.Topologies.Model;
-using NUnit.Framework;
+using Xunit;
 
 namespace Chinchilla.Integration.Features
 {
-    [TestFixture]
-    public class CustomTopologyFeature : WithApi
+    public class CustomTopologyFeature : Feature
     {
-        [Test]
-        public void ShouldSubscribeWithCustomTopology()
+        [Fact]
+        public async Task ShouldSubscribeWithCustomTopology()
         {
-            using (var bus = Depot.Connect("localhost/integration"))
+            using (var bus = await CreateBus())
             {
                 HelloWorldMessage lastReceived = null;
                 var numReceived = 0;
@@ -38,12 +38,12 @@ namespace Chinchilla.Integration.Features
                         }
                     }
 
-                    WaitForDelivery();
+                    await WaitFor(() => lastReceived != null);
                 }
 
-                Assert.That(lastReceived, Is.Not.Null);
-                Assert.That(lastReceived.Message, Is.EqualTo("even"));
-                Assert.That(numReceived, Is.EqualTo(50));
+                Assert.NotNull(lastReceived);
+                Assert.Equal("even", lastReceived.Message);
+                Assert.Equal(50, numReceived);
             }
         }
 
@@ -56,7 +56,7 @@ namespace Chinchilla.Integration.Features
                 var exchange = topology.DefineExchange(endpoint.MessageType, ExchangeType.Topic);
 
                 topology.SubscribeQueue = topology.DefineQueue(endpoint.MessageType);
-                topology.SubscribeQueue.BindTo(exchange, new[] { "messages.even" });
+                topology.SubscribeQueue.BindTo(exchange, "messages.even");
 
                 topology.PublishExchange = exchange;
 

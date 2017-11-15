@@ -176,7 +176,7 @@ namespace Chinchilla
             // as above.
 
             var source = new TaskCompletionSource<TResponse>();
-            Request<TRequest, TResponse>(message, source.SetResult);
+            Request<TRequest, TResponse>(message, t => Task.Run(() => source.SetResult(t)));
             return source.Task;
         }
 

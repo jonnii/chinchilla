@@ -1,19 +1,18 @@
 ﻿using Chinchilla.Serializers;
 using Chinchilla.Serializers.MsgPack;
-using NUnit.Framework;
+using Xunit;
 
 namespace Chinchilla.Integration.Serializers
 {
-    [TestFixture]
     public class MessageSerializerTests
     {
-        [Test]
+        [Fact]
         public void ValidateDefaultJsonSerializer()
         {
             TestSerializer<JsonMessageSerializer>();
         }
 
-        [Test]
+        [Fact]
         public void ValidateMessagePackSerializer()
         {
             TestSerializer<MessagePackMessageSerializer>();
@@ -30,13 +29,13 @@ namespace Chinchilla.Integration.Serializers
             var deserialized = serializer.Deserialize<ComplexMessage>(serialized);
             var actual = deserialized.Body;
 
-            Assert.That(actual.SimpleString, Is.EqualTo(expected.SimpleString));
-            Assert.That(actual.SimpleEnum, Is.EqualTo(expected.SimpleEnum));
-            Assert.That(actual.SimpleInteger, Is.EqualTo(expected.SimpleInteger));
-            Assert.That(actual.SimpleDate, Is.EqualTo(expected.SimpleDate));
+            Assert.Equal(expected.SimpleString, actual.SimpleString);
+            Assert.Equal(expected.SimpleEnum, actual.SimpleEnum);
+            Assert.Equal(expected.SimpleInteger, actual.SimpleInteger);
+            Assert.Equal(expected.SimpleDate, actual.SimpleDate);
 
-            Assert.That(actual.NullableEnum, Is.EqualTo(expected.NullableEnum));
-            Assert.That(actual.NullableEnumWithValue, Is.EqualTo(expected.NullableEnumWithValue));
+            Assert.Equal(expected.NullableEnum, actual.NullableEnum);
+            Assert.Equal(expected.NullableEnumWithValue, actual.NullableEnumWithValue);
         }
     }
 }

@@ -1,17 +1,17 @@
 ﻿using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Chinchilla.Integration.Features.Messages;
-using NUnit.Framework;
+using Xunit;
 
 namespace Chinchilla.Integration.Features
 {
-    [TestFixture]
-    public class PausableWorkersFeature : WithApi
+    public class PausableWorkersFeature : Feature
     {
-        [Test]
-        public void ShouldBeAbleToPauseWorker()
+        [Fact]
+        public async Task ShouldBeAbleToPauseWorker()
         {
-            using (var bus = Depot.Connect("localhost/integration"))
+            using (var bus = await CreateBus())
             {
                 var seen = 0;
 
@@ -26,19 +26,23 @@ namespace Chinchilla.Integration.Features
 
                 // publish a message to the queue
                 bus.Publish(new HelloWorldMessage());
-                WaitForDelivery();
+
+                await Task.Delay(100);
 
                 // we shouldn't have processed the message and the worker should be paused
-                Assert.That(seen, Is.EqualTo(0));
+                Assert.Equal(0, seen);
                 state = subscription.State;
-                Assert.That(state.Workers.First().Status, Is.EqualTo(WorkerStatus.Paused));
+                Assert.Equal(WorkerStatus.Paused, state.Workers.First().Status);
 
                 // resume the worker
                 subscription.Workers.Resume(worker.Name);
-                WaitForDelivery();
-                Assert.That(seen, Is.EqualTo(1));
+
+                await WaitFor(() => seen == 1);
+
+                Assert.Equal(1, seen);
+
                 state = subscription.State;
-                Assert.That(state.Workers.First().Status, Is.Not.EqualTo(WorkerStatus.Paused));
+                Assert.NotEqual(WorkerStatus.Paused, state.Workers.First().Status);
             }
         }
     }

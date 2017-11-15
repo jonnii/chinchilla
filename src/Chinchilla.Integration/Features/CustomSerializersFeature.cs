@@ -1,24 +1,24 @@
-﻿using Chinchilla.Integration.Features.Messages;
+﻿using System.Threading.Tasks;
+using Chinchilla.Integration.Features.Messages;
 using Chinchilla.Serializers.MsgPack;
-using NUnit.Framework;
+using Xunit;
 
 namespace Chinchilla.Integration.Features
 {
-    [TestFixture]
-    public class CustomSerializersFeature : WithApi
+    public class CustomSerializersFeature : Feature
     {
-        [Test]
-        public void ShouldHaveDefaultSerializer()
+        [Fact]
+        public async Task ShouldHaveDefaultSerializer()
         {
             var settings = new DepotSettings
             {
                 MessageSerializers =
-                {
-                    Default = new MessagePackMessageSerializer()
-                }
+                 {
+                     Default = new MessagePackMessageSerializer()
+                 }
             };
 
-            using (var bus = Depot.Connect("localhost/integration", settings))
+            using (var bus = await CreateBus(settings))
             {
                 HelloWorldMessage lastReceived = null;
 
@@ -29,20 +29,20 @@ namespace Chinchilla.Integration.Features
 
                 bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
 
-                WaitForDelivery();
+                await WaitFor(() => lastReceived != null);
 
-                Assert.That(lastReceived, Is.Not.Null);
-                Assert.That(lastReceived.Message, Is.EqualTo("subscribe!"));
+                Assert.NotNull(lastReceived);
+                Assert.Equal("subscribe!", lastReceived.Message);
             }
         }
 
-        [Test]
-        public void ShouldCustomizePublisherWithContentType()
+        [Fact]
+        public async Task ShouldCustomizePublisherWithContentType()
         {
             var settings = new DepotSettings();
             settings.MessageSerializers.Register(new MessagePackMessageSerializer());
 
-            using (var bus = Depot.Connect("localhost/integration", settings))
+            using (var bus = await CreateBus(settings))
             {
                 HelloWorldMessage lastReceived = null;
 
@@ -51,15 +51,15 @@ namespace Chinchilla.Integration.Features
                     lastReceived = hwm;
                 });
 
-                using (var publisher = bus.CreatePublisher<HelloWorldMessage>(
-                    p => p.SerializeWith("application/x-msgpack")))
+                using (var publisher = bus.CreatePublisher<HelloWorldMessage>(p => p.SerializeWith("application/x-msgpack")))
                 {
                     publisher.Publish(new HelloWorldMessage { Message = "subscribe!" });
-                    WaitForDelivery();
+
+                    await WaitFor(() => lastReceived != null);
                 }
 
-                Assert.That(lastReceived, Is.Not.Null);
-                Assert.That(lastReceived.Message, Is.EqualTo("subscribe!"));
+                Assert.NotNull(lastReceived);
+                Assert.Equal("subscribe!", lastReceived.Message);
             }
         }
     }

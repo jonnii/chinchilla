@@ -1,16 +1,16 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Chinchilla.Integration.Features.Messages;
-using NUnit.Framework;
+using Xunit;
 
 namespace Chinchilla.Integration.Features
 {
-    [TestFixture]
-    public class PublisherConfirmsFeature : WithApi
+    public class PublisherConfirmsFeature : Feature
     {
-        [Test]
-        public void ShouldCreatePublisherWithoutConfirms()
+        [Fact]
+        public async Task ShouldCreatePublisherWithoutConfirms()
         {
-            using (var bus = Depot.Connect("localhost/integration"))
+            using (var bus = await CreateBus())
             {
                 var publisher = bus.CreatePublisher<HelloWorldMessage>(p => p.Confirm(false));
 
@@ -20,14 +20,14 @@ namespace Chinchilla.Integration.Features
 
                 publisher.Dispose();
 
-                Assert.That(receipts.All(r => r.Status == PublishStatus.None));
+                Assert.True(receipts.All(r => r.Status == PublishStatus.None));
             }
         }
 
-        [Test]
-        public void ShouldWaitForAllMessagesToBeConfirmedWhenDisposing()
+        [Fact]
+        public async Task ShouldWaitForAllMessagesToBeConfirmedWhenDisposing()
         {
-            using (var bus = Depot.Connect("localhost/integration"))
+            using (var bus = await CreateBus())
             {
                 var publisher = bus.CreatePublisher<HelloWorldMessage>(p => p.Confirm(true));
 
@@ -37,7 +37,7 @@ namespace Chinchilla.Integration.Features
 
                 publisher.Dispose();
 
-                Assert.That(receipts.All(r => r.IsConfirmed));
+                Assert.True(receipts.All(r => r.IsConfirmed));
             }
         }
     }

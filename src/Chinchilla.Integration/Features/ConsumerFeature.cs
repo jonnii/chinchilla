@@ -1,17 +1,17 @@
-﻿using Chinchilla.Api;
+﻿using System.Threading.Tasks;
+using Chinchilla.Api;
 using Chinchilla.Integration.Features.Consumers;
 using Chinchilla.Integration.Features.Messages;
-using NUnit.Framework;
+using Xunit;
 
 namespace Chinchilla.Integration.Features
 {
-    [TestFixture]
-    public class ConsumerFeature : WithApi
+    public class ConsumerFeature : Feature
     {
-        [Test]
-        public void ShouldSubscribeWithConsumerInstance()
+        [Fact]
+        public async Task ShouldSubscribeWithConsumerInstance()
         {
-            using (var bus = Depot.Connect("localhost/integration"))
+            using (var bus = await CreateBus())
             {
                 using (var subscriber = bus.Subscribe(new HelloWorldMessageConsumer()))
                 {
@@ -20,17 +20,18 @@ namespace Chinchilla.Integration.Features
                         bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
                     }
 
-                    WaitForDelivery();
+                    var s = subscriber;
+                    await WaitFor(() => s.State.TotalAcceptedMessages() == 100);
 
-                    Assert.That(subscriber.State.TotalAcceptedMessages(), Is.EqualTo(100));
+                    Assert.Equal(100, subscriber.State.TotalAcceptedMessages());
                 }
             }
         }
 
-        [Test]
-        public void ShouldSubscribeWithConsumerType()
+        [Fact]
+        public async Task ShouldSubscribeWithConsumerType()
         {
-            using (var bus = Depot.Connect("localhost/integration"))
+            using (var bus = await CreateBus())
             {
                 using (var subscriber = bus.Subscribe<HelloWorldMessageConsumer>())
                 {
@@ -39,17 +40,18 @@ namespace Chinchilla.Integration.Features
                         bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
                     }
 
-                    WaitForDelivery();
+                    var s = subscriber;
+                    await WaitFor(() => s.State.TotalAcceptedMessages() > 100);
 
-                    Assert.That(subscriber.State.TotalAcceptedMessages(), Is.EqualTo(100));
+                    Assert.Equal(100, subscriber.State.TotalAcceptedMessages());
                 }
             }
         }
 
-        [Test]
-        public void ShouldSubscribeWithConsumerWithCustomConfiguration()
+        [Fact]
+        public async Task ShouldSubscribeWithConsumerWithCustomConfiguration()
         {
-            using (var bus = Depot.Connect("localhost/integration"))
+            using (var bus = await CreateBus())
             {
                 using (bus.Subscribe<CustomConfigurationConsumer>())
                 {
@@ -58,9 +60,9 @@ namespace Chinchilla.Integration.Features
                         bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
                     }
 
-                    WaitForDelivery();
+                    var exchangeExists = await Admin.ExistsAsync(VirtualHost, new Queue("custom-subscription-endpoint"));
 
-                    Assert.That(admin.Exists(IntegrationVHost, new Queue("custom-subscription-endpoint")), "did not create queue");
+                    Assert.True(exchangeExists);
                 }
             }
         }

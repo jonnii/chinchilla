@@ -55,22 +55,22 @@ namespace Chinchilla.Api
         {
             var request = CreateRequest(resource, parameters, HttpMethod.Get, body);
 
-            var response = await client.SendAsync(request);
-            return await DeserializeResponse<T>(response);
+            var response = await client.SendAsync(request).ConfigureAwait(false);
+            return await DeserializeResponse<T>(response).ConfigureAwait(false);
         }
 
-        public async Task<IEnumerable<T>> ExecuteList<T>(
+        public async Task<T[]> ExecuteList<T>(
             string resource,
             IEnumerable<KeyValuePair<string, string>> parameters = null,
             object body = null)
         {
             var request = CreateRequest(resource, parameters, HttpMethod.Get, body);
 
-            var response = await client.SendAsync(request);
-            return await DeserializeResponse<List<T>>(response);
+            var response = await client.SendAsync(request).ConfigureAwait(false);
+            return await DeserializeResponse<T[]>(response).ConfigureAwait(false);
         }
 
-        public async Task<IEnumerable<T>> ExecuteList<T>(
+        public async Task<T[]> ExecuteList<T>(
             HttpMethod method,
             string resource,
             IEnumerable<KeyValuePair<string, string>> parameters = null,
@@ -78,8 +78,8 @@ namespace Chinchilla.Api
         {
             var request = CreateRequest(resource, parameters, method, body);
 
-            var response = await client.SendAsync(request);
-            return await DeserializeResponse<List<T>>(response);
+            var response = await client.SendAsync(request).ConfigureAwait(false);
+            return await DeserializeResponse<T[]>(response).ConfigureAwait(false);
         }
 
         public async Task<T> Execute<T>(
@@ -90,13 +90,13 @@ namespace Chinchilla.Api
         {
             var request = CreateRequest(resource, parameters, method, body);
 
-            var response = await client.SendAsync(request);
-            return await DeserializeResponse<T>(response);
+            var response = await client.SendAsync(request).ConfigureAwait(false);
+            return await DeserializeResponse<T>(response).ConfigureAwait(false);
         }
 
         private async Task<T> DeserializeResponse<T>(HttpResponseMessage response)
         {
-            var content = await response.Content.ReadAsStreamAsync();
+            var content = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
 
             using (var streamReader = new StreamReader(content))
             {

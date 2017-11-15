@@ -1,58 +1,64 @@
 ﻿using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Chinchilla.Integration.Features.Messages;
-using NUnit.Framework;
+using Xunit;
 
 namespace Chinchilla.Integration.Features
 {
-    [TestFixture]
-    public class PublishFeature : WithApi
+    public class PublishFeature : Feature
     {
-        [Test]
-        public void ShouldPublishMessageOnDefaultPublisher()
+        [Fact]
+        public async Task ShouldPublishMessageOnDefaultPublisher()
         {
-            using (var bus = Depot.Connect("localhost/integration"))
+            using (var bus = await CreateBus())
             {
                 bus.Publish(new HelloWorldMessage());
             }
 
-            Assert.That(admin.Exchanges(IntegrationVHost).Any(e => e.Name == "HelloWorldMessage"));
+            var exchanges = await Admin.ExchangesAsync(VirtualHost);
+
+            Assert.Contains("HelloWorldMessage", exchanges.Select(e => e.Name));
         }
 
-        [Test]
-        public void ShouldCreatePublisher()
+        [Fact]
+        public async Task ShouldCreatePublisher()
         {
-            using (var bus = Depot.Connect("localhost/integration"))
+            using (var bus = await CreateBus())
             {
                 using (var publisher = bus.CreatePublisher<HelloWorldMessage>())
                 {
                     publisher.Publish(new HelloWorldMessage());
-                    Assert.That(publisher.NumPublishedMessages, Is.EqualTo(1));
+                    Assert.Equal(1, publisher.NumPublishedMessages);
                 }
             }
 
-            Assert.That(admin.Exchanges(IntegrationVHost).Any(e => e.Name == "HelloWorldMessage"));
+            var exchanges = await Admin.ExchangesAsync(VirtualHost);
+
+            Assert.Contains("HelloWorldMessage", exchanges.Select(e => e.Name));
         }
 
-        [Test]
-        public void ShouldCreatePublisherWithCustomPublishExchange()
+        [Fact]
+        public async Task ShouldCreatePublisherWithCustomPublishExchange()
         {
-            using (var bus = Depot.Connect("localhost/integration"))
+            using (var bus = await CreateBus())
             {
                 using (var publisher = bus.CreatePublisher<HelloWorldMessage>(o => o.PublishOn("custom-exchange-name")))
                 {
                     publisher.Publish(new HelloWorldMessage());
-                    Assert.That(publisher.NumPublishedMessages, Is.EqualTo(1));
+                    Assert.Equal(1, publisher.NumPublishedMessages);
                 }
             }
 
-            Assert.That(admin.Exchanges(IntegrationVHost).Any(e => e.Name == "custom-exchange-name"));
+            var exchanges = await Admin.ExchangesAsync(VirtualHost);
+
+            Assert.Contains("custom-exchange-name", exchanges.Select(e => e.Name));
         }
 
-        [Test]
-        public void ShouldPublishMultipleMessages()
+        [Fact]
+        public async Task ShouldPublishMultipleMessages()
         {
-            using (var bus = Depot.Connect("localhost/integration"))
+            using (var bus = await CreateBus())
             {
                 using (var publisher = bus.CreatePublisher<HelloWorldMessage>())
                 {
@@ -61,15 +67,15 @@ namespace Chinchilla.Integration.Features
                         publisher.Publish(new HelloWorldMessage());
                     }
 
-                    Assert.That(publisher.NumPublishedMessages, Is.EqualTo(100));
+                    Assert.Equal(100, publisher.NumPublishedMessages);
                 }
             }
         }
 
-        [Test]
-        public void ShouldPublishWithCustomRouter()
+        [Fact]
+        public async Task ShouldPublishWithCustomRouter()
         {
-            using (var bus = Depot.Connect("localhost/integration"))
+            using (var bus = await CreateBus())
             {
                 var publisher = bus.CreatePublisher<HelloWorldMessage>(o => o.RouteWith<CustomRouter>());
 
@@ -80,23 +86,25 @@ namespace Chinchilla.Integration.Features
                         publisher.Publish(new HelloWorldMessage());
                     }
 
-                    Assert.That(publisher.NumPublishedMessages, Is.EqualTo(100));
+                    Assert.Equal(100, publisher.NumPublishedMessages);
                 }
             }
         }
 
-        [Test]
-        public void ShouldPublishFromMultipleThreads()
+        [Fact]
+        public async Task ShouldPublishFromMultipleThreads()
         {
-            using (var bus = Depot.Connect("localhost/integration"))
+            using (var bus = await CreateBus())
             {
                 using (var publisher = bus.CreatePublisher<HelloWorldMessage>())
                 {
+                    var p = publisher;
+
                     var threads = Enumerable.Range(0, 10).Select(_ => new Thread(() =>
                     {
                         for (var i = 0; i < 100; ++i)
                         {
-                            publisher.Publish(new HelloWorldMessage());
+                            p.Publish(new HelloWorldMessage());
                         }
                     })).ToArray();
 
@@ -110,28 +118,28 @@ namespace Chinchilla.Integration.Features
                         thread.Join();
                     }
 
-                    WaitForDelivery();
+                    await WaitFor(() => p.NumPublishedMessages == 1000);
 
-                    Assert.That(publisher.NumPublishedMessages, Is.EqualTo(1000));
+                    Assert.Equal(1000, publisher.NumPublishedMessages);
                 }
             }
         }
 
-        [Test]
-        public void ShouldHaveCustomPublisherFaultStrategy()
-        {
-            using (var bus = Depot.Connect("localhost/integration"))
-            {
-                using (var publisher = bus.CreatePublisher<HelloWorldMessage>(
-                    o => o.Confirm(true).OnFailure<RetryOnFailures>()))
-                {
-                    // TODO: Find a way to make this nack, so we can test the fault strategy
-                    publisher.Publish(new HelloWorldMessage());
+        //[Fact]
+        //public async Task ShouldHaveCustomPublisherFaultStrategy()
+        //{
+        //    using (var bus = await CreateBus())
+        //    {
+        //        using (var publisher = bus.CreatePublisher<HelloWorldMessage>(
+        //            o => o.Confirm(true).OnFailure<RetryOnFailures>()))
+        //        {
+        //            // TODO: Find a way to make this nack, so we can test the fault strategy
+        //            publisher.Publish(new HelloWorldMessage());
 
-                    WaitForDelivery();
-                }
-            }
-        }
+        //            WaitForDelivery();
+        //        }
+        //    }
+        //}
 
         public class CustomRouter : DefaultRouter
         {

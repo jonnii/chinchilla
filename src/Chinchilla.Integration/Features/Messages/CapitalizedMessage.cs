@@ -12,11 +12,11 @@ namespace Chinchilla.Integration.Features.Messages
         public CapitalizedMessage(string result)
             : this()
         {
-            Result = result;
+            Capitalized = result;
         }
 
         public Guid CorrelationId { get; set; }
 
-        public string Result { get; set; }
+        public string Capitalized { get; set; }
     }
 }
