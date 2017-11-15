@@ -5,14 +5,14 @@ using Xunit;
 
 namespace Chinchilla.Integration.Features
 {
-    [Collection("Api collection")]
+    [Collection("Rabbit Collection")]
     public class PublisherConfirmsFeature
     {
         private readonly IRabbitAdmin admin;
 
         private readonly VirtualHost vhost;
 
-        public PublisherConfirmsFeature(ApiFixture fixture)
+        public PublisherConfirmsFeature(RabbitFixture fixture)
         {
             admin = fixture.Admin;
             vhost = fixture.IntegrationVHost;

@@ -11,14 +11,14 @@ using ExchangeType = Chinchilla.Topologies.Model.ExchangeType;
 
 namespace Chinchilla.Integration.Features
 {
-    [Collection("Api collection")]
+    [Collection("Rabbit Collection")]
     public class ConnectionFeature : Feature
     {
         private readonly IRabbitAdmin admin;
 
         private readonly VirtualHost vhost;
 
-        public ConnectionFeature(ApiFixture fixture)
+        public ConnectionFeature(RabbitFixture fixture)
         {
             admin = fixture.Admin;
             vhost = fixture.IntegrationVHost;

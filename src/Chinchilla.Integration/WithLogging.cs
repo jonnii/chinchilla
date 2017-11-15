@@ -1,30 +1,20 @@
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Chinchilla.Api;
 using Chinchilla.Logging;
 using Xunit;
 
 namespace Chinchilla.Integration
 {
-    public class Feature
-    {
-        protected void WaitFor(Func<bool> condition)
-        {
-            SpinWait.SpinUntil(() => condition(), TimeSpan.FromSeconds(5));
-        }
-    }
-
-    [CollectionDefinition("Api collection")]
-    public class ApiCollection : ICollectionFixture<ApiFixture>
+    [CollectionDefinition("Rabbit Collection")]
+    public class RabbitCollection : ICollectionFixture<RabbitFixture>
     {
     }
 
-    public class ApiFixture : IDisposable
+    public class RabbitFixture : IDisposable
     {
         public readonly VirtualHost IntegrationVHost = new VirtualHost("integration");
 
-        public ApiFixture()
+        public RabbitFixture()
         {
             Logger.Factory = new ConsoleLoggerFactory();
 

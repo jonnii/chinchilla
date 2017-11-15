@@ -6,14 +6,14 @@ using Xunit;
 
 namespace Chinchilla.Integration.Features
 {
-    [Collection("Api collection")]
+    [Collection("Rabbit Collection")]
     public class ConsumerFeature : Feature
     {
         private readonly IRabbitAdmin admin;
 
         private readonly VirtualHost vhost;
 
-        public ConsumerFeature(ApiFixture fixture)
+        public ConsumerFeature(RabbitFixture fixture)
         {
             admin = fixture.Admin;
             vhost = fixture.IntegrationVHost;
