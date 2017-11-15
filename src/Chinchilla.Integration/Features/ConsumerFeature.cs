@@ -21,31 +21,32 @@ namespace Chinchilla.Integration.Features
                     }
 
                     var s = subscriber;
-                    WaitFor(() => s.State.TotalAcceptedMessages() == 100);
+                    await WaitFor(() => s.State.TotalAcceptedMessages() == 100);
 
                     Assert.Equal(100, subscriber.State.TotalAcceptedMessages());
                 }
             }
         }
 
-        // [Fact]
-        // public void ShouldSubscribeWithConsumerType()
-        // {
-        //     using (var bus = Depot.Connect("localhost/integration"))
-        //     {
-        //         using (var subscriber = bus.Subscribe<HelloWorldMessageConsumer>())
-        //         {
-        //             for (var i = 0; i < 100; ++i)
-        //             {
-        //                 bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
-        //             }
+        [Fact]
+        public async Task ShouldSubscribeWithConsumerType()
+        {
+            using (var bus = await CreateBus())
+            {
+                using (var subscriber = bus.Subscribe<HelloWorldMessageConsumer>())
+                {
+                    for (var i = 0; i < 100; ++i)
+                    {
+                        bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
+                    }
 
-        //             WaitFor(() => subscriber.State.TotalAcceptedMessages() > 100);
+                    var s = subscriber;
+                    await WaitFor(() => s.State.TotalAcceptedMessages() > 100);
 
-        //             Assert.Equal(100, subscriber.State.TotalAcceptedMessages());
-        //         }
-        //     }
-        // }
+                    Assert.Equal(100, subscriber.State.TotalAcceptedMessages());
+                }
+            }
+        }
 
         [Fact]
         public async Task ShouldSubscribeWithConsumerWithCustomConfiguration()

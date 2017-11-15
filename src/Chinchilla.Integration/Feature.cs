@@ -40,9 +40,17 @@ namespace Chinchilla.Integration
             Admin.DeleteAsync(VirtualHost).Wait();
         }
 
-        protected void WaitFor(Func<bool> condition)
+        protected Task WaitFor(Func<bool> condition)
         {
-            SpinWait.SpinUntil(condition, TimeSpan.FromSeconds(5));
+            return Task.WhenAny(WaitForInner(condition), Task.Delay(TimeSpan.FromSeconds(5)));
+        }
+
+        private async Task WaitForInner(Func<bool> condition)
+        {
+            while (!condition())
+            {
+                await Task.Delay(10);
+            }
         }
     }
 }

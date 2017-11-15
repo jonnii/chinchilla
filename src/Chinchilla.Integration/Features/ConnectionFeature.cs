@@ -128,7 +128,7 @@ namespace Chinchilla.Integration.Features
                         publisher.Publish(new HelloWorldMessage { Message = "subscribe!" });
                     }
 
-                    WaitFor(() => numReceived >= 100);
+                    await WaitFor(() => numReceived >= 100);
                 }
 
                 Assert.True(numReceived >= 100);
