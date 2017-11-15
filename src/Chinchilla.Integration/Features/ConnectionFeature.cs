@@ -109,14 +109,14 @@ namespace Chinchilla.Integration.Features
             using (var bus = Depot.Connect("localhost/integration"))
             {
                 var numReceived = 0;
-                var handler = new Action<HelloWorldMessage>(async hwm =>
+                var handler = new Action<HelloWorldMessage>(hwm =>
                 {
                     Interlocked.Increment(ref numReceived);
 
                     if (numReceived == 50)
                     {
-                        var connections = await admin.ConnectionsAsync();
-                        await admin.DeleteAsync(connections.First());
+                        var connections = admin.ConnectionsAsync().Result;
+                        admin.DeleteAsync(connections.First()).Wait();
                     }
                 });
 
