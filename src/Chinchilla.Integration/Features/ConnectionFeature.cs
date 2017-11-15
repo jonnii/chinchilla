@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Linq;
-using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 using Chinchilla.Api;
 using Chinchilla.Integration.Features.Messages;
 using Chinchilla.Topologies.Model;
@@ -11,24 +10,15 @@ using ExchangeType = Chinchilla.Topologies.Model.ExchangeType;
 
 namespace Chinchilla.Integration.Features
 {
-    [Collection("Rabbit Collection")]
     public class ConnectionFeature : Feature
     {
-        private readonly IRabbitAdmin admin;
-
-        private readonly VirtualHost vhost;
-
-        public ConnectionFeature(RabbitFixture fixture)
-        {
-            admin = fixture.Admin;
-            vhost = fixture.IntegrationVHost;
-        }
-
         [Fact]
         public async Task ShouldVisitTopologyWithQueueBoundToExchange()
         {
+            var vhost = await CreateVHost();
             var factory = new DefaultConnectionFactory();
-            using (var connection = factory.Create(new Uri("amqp://localhost/integration")))
+
+            using (var connection = factory.Create(new Uri($"amqp://localhost/{vhost}")))
             {
                 var model = connection.CreateModel();
 
@@ -40,10 +30,10 @@ namespace Chinchilla.Integration.Features
 
                 topology.Visit(new TopologyBuilder(model));
 
-                var exchanges = await admin.ExchangesAsync(vhost);
+                var exchanges = await Admin.ExchangesAsync(new VirtualHost(vhost));
                 Assert.Contains(e1.Name, exchanges.Select(e => e.Name));
 
-                var queues = await admin.QueuesAsync(vhost);
+                var queues = await Admin.QueuesAsync(new VirtualHost(vhost));
                 Assert.Contains(q1.Name, queues.Select(e => e.Name));
             }
         }
@@ -51,8 +41,10 @@ namespace Chinchilla.Integration.Features
         [Fact]
         public async Task ShouldVisitExclusiveQueue()
         {
+            var vhost = await CreateVHost();
             var factory = new DefaultConnectionFactory();
-            using (var connection = factory.Create(new Uri("amqp://localhost/integration")))
+
+            using (var connection = factory.Create(new Uri($"amqp://localhost/{vhost}")))
             {
                 var model = connection.CreateModel();
 
@@ -63,16 +55,18 @@ namespace Chinchilla.Integration.Features
 
                 Assert.True(q1.HasName);
 
-                var queues = await admin.QueuesAsync(vhost);
+                var queues = await Admin.QueuesAsync(new VirtualHost(vhost));
                 Assert.Contains(q1.Name, queues.Select(e => e.Name).ToArray());
             }
         }
 
         [Fact]
-        public void ShouldVisitTopologyMultipleTimesWithoutExceptions()
+        public async Task ShouldVisitTopologyMultipleTimesWithoutExceptions()
         {
+            var vhost = await CreateVHost();
             var factory = new DefaultConnectionFactory();
-            using (var connection = factory.Create(new Uri("amqp://localhost/integration")))
+
+            using (var connection = factory.Create(new Uri($"amqp://localhost/{vhost}")))
             {
                 var model = connection.CreateModel();
 
@@ -87,10 +81,12 @@ namespace Chinchilla.Integration.Features
         }
 
         [Fact]
-        public void ShouldVisitTopologyMultipleTimesExclusiveQueue()
+        public async Task ShouldVisitTopologyMultipleTimesExclusiveQueue()
         {
+            var vhost = await CreateVHost();
             var factory = new DefaultConnectionFactory();
-            using (var connection = factory.Create(new Uri("amqp://localhost/integration")))
+
+            using (var connection = factory.Create(new Uri($"amqp://localhost/{vhost}")))
             {
                 var model = connection.CreateModel();
 
@@ -104,9 +100,11 @@ namespace Chinchilla.Integration.Features
         }
 
         [Fact]
-        public void ShouldSurviveBeingDisconnected()
+        public async Task ShouldSurviveBeingDisconnected()
         {
-            using (var bus = Depot.Connect("localhost/integration"))
+            var vhost = await CreateVHost();
+
+            using (var bus = Depot.Connect($"localhost/{vhost}"))
             {
                 var numReceived = 0;
                 var handler = new Action<HelloWorldMessage>(hwm =>
@@ -115,8 +113,8 @@ namespace Chinchilla.Integration.Features
 
                     if (numReceived == 50)
                     {
-                        var connections = admin.ConnectionsAsync().Result;
-                        admin.DeleteAsync(connections.First()).Wait();
+                        var connections = Admin.ConnectionsAsync().Result;
+                        Admin.DeleteAsync(connections.First()).Wait();
                     }
                 });
 
