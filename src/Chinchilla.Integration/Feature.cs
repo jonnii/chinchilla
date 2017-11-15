@@ -10,13 +10,17 @@ namespace Chinchilla.Integration
     {
         private IRabbitAdmin admin;
 
+        public IRabbitAdmin Admin => admin ?? (admin = new RabbitAdmin("http://localhost:15672/api"));
+
+        public VirtualHost VirtualHost => new VirtualHost(GetType().Name);
+
         protected async Task<string> CreateVHost()
         {
             Logger.Factory = new ConsoleLoggerFactory();
 
             var hostName = GetType().Name;
 
-            var host = new VirtualHost(GetType().Name);
+            var host = VirtualHost;
 
             await Admin.DeleteAsync(host);
             await Admin.CreateAsync(host);
@@ -25,12 +29,15 @@ namespace Chinchilla.Integration
             return hostName;
         }
 
-        public IRabbitAdmin Admin => admin ?? (admin = new RabbitAdmin("http://localhost:15672/api"));
+        protected async Task<IBus> CreateBus()
+        {
+            var vhost = await CreateVHost();
+            return Depot.Connect($"localhost/{vhost}");
+        }
 
         public void Dispose()
         {
-            var host = new VirtualHost(GetType().Name);
-            Admin.DeleteAsync(host).Wait();
+            Admin.DeleteAsync(VirtualHost).Wait();
         }
 
         protected void WaitFor(Func<bool> condition)

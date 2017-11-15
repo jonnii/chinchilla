@@ -6,37 +6,27 @@ using Xunit;
 
 namespace Chinchilla.Integration.Features
 {
-    [Collection("Rabbit Collection")]
     public class ConsumerFeature : Feature
     {
-        private readonly IRabbitAdmin admin;
-
-        private readonly VirtualHost vhost;
-
-        public ConsumerFeature(RabbitFixture fixture)
+        [Fact]
+        public async Task ShouldSubscribeWithConsumerInstance()
         {
-            admin = fixture.Admin;
-            vhost = fixture.IntegrationVHost;
+            using (var bus = await CreateBus())
+            {
+                using (var subscriber = bus.Subscribe(new HelloWorldMessageConsumer()))
+                {
+                    for (var i = 0; i < 100; ++i)
+                    {
+                        bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
+                    }
+
+                    var s = subscriber;
+                    WaitFor(() => s.State.TotalAcceptedMessages() == 100);
+
+                    Assert.Equal(100, subscriber.State.TotalAcceptedMessages());
+                }
+            }
         }
-
-        // [Fact]
-        // public void ShouldSubscribeWithConsumerInstance()
-        // {
-        //     using (var bus = Depot.Connect("localhost/integration"))
-        //     {
-        //         using (var subscriber = bus.Subscribe(new HelloWorldMessageConsumer()))
-        //         {
-        //             for (var i = 0; i < 100; ++i)
-        //             {
-        //                 bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
-        //             }
-
-        //             WaitFor(() => subscriber.State.TotalAcceptedMessages() == 100);
-
-        //             Assert.Equal(100, subscriber.State.TotalAcceptedMessages());
-        //         }
-        //     }
-        // }
 
         // [Fact]
         // public void ShouldSubscribeWithConsumerType()
@@ -60,7 +50,7 @@ namespace Chinchilla.Integration.Features
         [Fact]
         public async Task ShouldSubscribeWithConsumerWithCustomConfiguration()
         {
-            using (var bus = Depot.Connect("localhost/integration"))
+            using (var bus = await CreateBus())
             {
                 using (bus.Subscribe<CustomConfigurationConsumer>())
                 {
@@ -69,11 +59,9 @@ namespace Chinchilla.Integration.Features
                         bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
                     }
 
-                    await Task.Delay(1000);
+                    //await Task.Delay(1000);
 
-                    //WaitFor(() => true);
-
-                    var tt = await admin.ExistsAsync(vhost, new Queue("custom-subscription-endpoint"));
+                    var tt = await Admin.ExistsAsync(VirtualHost, new Queue("custom-subscription-endpoint"));
 
                     Assert.True(tt);
                 }
