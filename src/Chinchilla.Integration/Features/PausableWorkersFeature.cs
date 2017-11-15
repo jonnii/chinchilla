@@ -1,45 +1,49 @@
-﻿// using System.Linq;
-// using System.Threading;
-// using Chinchilla.Integration.Features.Messages;
-// using NUnit.Framework;
+﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Chinchilla.Integration.Features.Messages;
+using Xunit;
 
-// namespace Chinchilla.Integration.Features
-// {
-//     [TestFixture]
-//     public class PausableWorkersFeature : WithApi
-//     {
-//         [Test]
-//         public void ShouldBeAbleToPauseWorker()
-//         {
-//             using (var bus = Depot.Connect("localhost/integration"))
-//             {
-//                 var seen = 0;
+namespace Chinchilla.Integration.Features
+{
+    public class PausableWorkersFeature : Feature
+    {
+        [Fact]
+        public async Task ShouldBeAbleToPauseWorker()
+        {
+            using (var bus = await CreateBus())
+            {
+                var seen = 0;
 
-//                 var subscription = bus.Subscribe<HelloWorldMessage>(
-//                     m => Interlocked.Increment(ref seen),
-//                     c => c.DeliverUsing<WorkerPoolDeliveryStrategy>());
+                var subscription = bus.Subscribe<HelloWorldMessage>(
+                    m => Interlocked.Increment(ref seen),
+                    c => c.DeliverUsing<WorkerPoolDeliveryStrategy>());
 
-//                 // pause the worker
-//                 var state = subscription.State;
-//                 var worker = state.Workers.Single();
-//                 subscription.Workers.Pause(worker.Name);
+                // pause the worker
+                var state = subscription.State;
+                var worker = state.Workers.Single();
+                subscription.Workers.Pause(worker.Name);
 
-//                 // publish a message to the queue
-//                 bus.Publish(new HelloWorldMessage());
-//                 WaitForDelivery();
+                // publish a message to the queue
+                bus.Publish(new HelloWorldMessage());
 
-//                 // we shouldn't have processed the message and the worker should be paused
-//                 Assert.That(seen, Is.EqualTo(0));
-//                 state = subscription.State;
-//                 Assert.That(state.Workers.First().Status, Is.EqualTo(WorkerStatus.Paused));
+                await Task.Delay(100);
 
-//                 // resume the worker
-//                 subscription.Workers.Resume(worker.Name);
-//                 WaitForDelivery();
-//                 Assert.That(seen, Is.EqualTo(1));
-//                 state = subscription.State;
-//                 Assert.That(state.Workers.First().Status, Is.Not.EqualTo(WorkerStatus.Paused));
-//             }
-//         }
-//     }
-// }
+                // we shouldn't have processed the message and the worker should be paused
+                Assert.Equal(0, seen);
+                state = subscription.State;
+                Assert.Equal(WorkerStatus.Paused, state.Workers.First().Status);
+
+                // resume the worker
+                subscription.Workers.Resume(worker.Name);
+
+                await WaitFor(() => seen == 1);
+
+                Assert.Equal(1, seen);
+
+                state = subscription.State;
+                Assert.NotEqual(WorkerStatus.Paused, state.Workers.First().Status);
+            }
+        }
+    }
+}

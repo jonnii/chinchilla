@@ -1,97 +1,91 @@
-﻿// using Chinchilla.Integration.Features.Consumers;
-// using Chinchilla.Integration.Features.Messages;
-// using NUnit.Framework;
+﻿using System.Threading.Tasks;
+using Chinchilla.Integration.Features.Consumers;
+using Chinchilla.Integration.Features.Messages;
+using Xunit;
 
-// namespace Chinchilla.Integration.Features
-// {
-//     [TestFixture]
-//     public class RequestResponseFeature : WithApi
-//     {
-//         [Test]
-//         public void ShouldCreateRequestResponseOnBus()
-//         {
-//             using (var bus = Depot.Connect("localhost/integration"))
-//             {
-//                 bus.Subscribe(new CapitalizeMessageConsumer());
+namespace Chinchilla.Integration.Features
+{
+    public class RequestResponseFeature : Feature
+    {
+        //[Fact]
+        //public async Task ShouldCreateRequestResponseOnBus()
+        //{
+        //    using (var bus = await CreateBus())
+        //    {
+        //        bus.Subscribe(new CapitalizeMessageConsumer());
 
-//                 CapitalizedMessage capitalized = null;
-//                 bus.Request<CapitalizeMessage, CapitalizedMessage>(
-//                     new CapitalizeMessage("where am i?"),
-//                     response => { capitalized = response; });
+        //        CapitalizedMessage capitalized = null;
+        //        bus.Request<CapitalizeMessage, CapitalizedMessage>(
+        //            new CapitalizeMessage("where am i?"),
+        //            response => { capitalized = response; });
 
-//                 WaitForDelivery();
+        //        await WaitFor(() => capitalized != null);
 
-//                 Assert.That(capitalized, Is.Not.Null);
-//                 Assert.That(capitalized.Result, Is.EqualTo("WHERE AM I?"));
-//             }
-//         }
+        //        Assert.NotNull(capitalized);
+        //        Assert.Equal("WHERE AM I?", capitalized.Capitalized);
+        //    }
+        //}
 
-//         [Test]
-//         public void ShouldSupportAsyncForBasicRequestResponse()
-//         {
-//             using (var bus = Depot.Connect("localhost/integration"))
-//             {
-//                 bus.Subscribe(new CapitalizeMessageConsumer());
+        //[Fact]
+        //public async Task ShouldSupportAsyncForBasicRequestResponse()
+        //{
+        //    using (var bus = await CreateBus())
+        //    {
+        //        bus.Subscribe(new CapitalizeMessageConsumer());
 
-//                 var response = bus.RequestAsync<CapitalizeMessage, CapitalizedMessage>(
-//                     new CapitalizeMessage("where am i?"));
+        //        var response = await bus.RequestAsync<CapitalizeMessage, CapitalizedMessage>(
+        //            new CapitalizeMessage("where am i?"));
 
-//                 response.Wait();
+        //        await WaitFor(() => response != null);
 
-//                 var capitalized = response.Result;
+        //        Assert.NotNull(response);
+        //        Assert.Equal("WHERE AM I?", response.Capitalized);
+        //    }
+        //}
 
-//                 WaitForDelivery();
+        //[Fact]
+        //public async Task ShouldCreateRequestResponseWithRequester()
+        //{
+        //    using (var bus = await CreateBus())
+        //    {
+        //        using (var requester = bus.CreateRequester<CapitalizeMessage, CapitalizedMessage>())
+        //        {
+        //            bus.Subscribe(new CapitalizeMessageConsumer());
 
-//                 Assert.That(capitalized, Is.Not.Null);
-//                 Assert.That(capitalized.Result, Is.EqualTo("WHERE AM I?"));
-//             }
-//         }
+        //            CapitalizedMessage capitalized = null;
 
-//         [Test]
-//         public void ShouldCreateRequestResponseWithRequester()
-//         {
-//             using (var bus = Depot.Connect("localhost/integration"))
-//             {
-//                 using (var requester = bus.CreateRequester<CapitalizeMessage, CapitalizedMessage>())
-//                 {
-//                     bus.Subscribe(new CapitalizeMessageConsumer());
+        //            requester.Request(
+        //                new CapitalizeMessage("where am i?"),
+        //                response => { capitalized = response; });
 
-//                     CapitalizedMessage capitalized = null;
+        //            await WaitFor(() => capitalized != null);
 
-//                     requester.Request(
-//                         new CapitalizeMessage("where am i?"),
-//                         response => { capitalized = response; });
+        //            Assert.NotNull(capitalized);
+        //            Assert.Equal("WHERE AM I?", capitalized.Capitalized);
+        //        }
+        //    }
+        //}
 
-//                     WaitForDelivery();
+        //[Fact]
+        //public async Task ShouldSupportAsyncForRequesterRequestResponse()
+        //{
+        //    using (var bus = await CreateBus())
+        //    {
+        //        using (var requester = bus.CreateRequester<CapitalizeMessage, CapitalizedMessage>())
+        //        {
+        //            bus.Subscribe(new CapitalizeMessageConsumer());
 
-//                     Assert.That(capitalized, Is.Not.Null);
-//                     Assert.That(capitalized.Result, Is.EqualTo("WHERE AM I?"));
-//                 }
-//             }
-//         }
+        //            var response = await requester.RequestAsync(
+        //                new CapitalizeMessage("where am i?"));
 
-//         [Test]
-//         public void ShouldSupportAsyncForRequesterRequestResponse()
-//         {
-//             using (var bus = Depot.Connect("localhost/integration"))
-//             {
-//                 using (var requester = bus.CreateRequester<CapitalizeMessage, CapitalizedMessage>())
-//                 {
-//                     bus.Subscribe(new CapitalizeMessageConsumer());
+        //            var capitalized = response.Capitalized;
 
-//                     var response = requester.RequestAsync(
-//                         new CapitalizeMessage("where am i?"));
+        //            await WaitFor(() => capitalized != null);
 
-//                     response.Wait();
-
-//                     var capitalized = response.Result;
-
-//                     WaitForDelivery();
-
-//                     Assert.That(capitalized, Is.Not.Null);
-//                     Assert.That(capitalized.Result, Is.EqualTo("WHERE AM I?"));
-//                 }
-//             }
-//         }
-//     }
-// }
+        //            Assert.NotNull(capitalized);
+        //            Assert.Equal("WHERE AM I?", capitalized);
+        //        }
+        //    }
+        //}
+    }
+}

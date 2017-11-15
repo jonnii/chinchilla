@@ -60,11 +60,9 @@ namespace Chinchilla.Integration.Features
                         bus.Publish(new HelloWorldMessage { Message = "subscribe!" });
                     }
 
-                    //await Task.Delay(1000);
+                    var exchangeExists = await Admin.ExistsAsync(VirtualHost, new Queue("custom-subscription-endpoint"));
 
-                    var tt = await Admin.ExistsAsync(VirtualHost, new Queue("custom-subscription-endpoint"));
-
-                    Assert.True(tt);
+                    Assert.True(exchangeExists);
                 }
             }
         }

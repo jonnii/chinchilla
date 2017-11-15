@@ -1,27 +1,16 @@
 ﻿using System.Linq;
-using Chinchilla.Api;
+using System.Threading.Tasks;
 using Chinchilla.Integration.Features.Messages;
 using Xunit;
 
 namespace Chinchilla.Integration.Features
 {
-    [Collection("Rabbit Collection")]
-    public class PublisherConfirmsFeature
+    public class PublisherConfirmsFeature : Feature
     {
-        private readonly IRabbitAdmin admin;
-
-        private readonly VirtualHost vhost;
-
-        public PublisherConfirmsFeature(RabbitFixture fixture)
-        {
-            admin = fixture.Admin;
-            vhost = fixture.IntegrationVHost;
-        }
-
         [Fact]
-        public void ShouldCreatePublisherWithoutConfirms()
+        public async Task ShouldCreatePublisherWithoutConfirms()
         {
-            using (var bus = Depot.Connect("localhost/integration"))
+            using (var bus = await CreateBus())
             {
                 var publisher = bus.CreatePublisher<HelloWorldMessage>(p => p.Confirm(false));
 
@@ -36,9 +25,9 @@ namespace Chinchilla.Integration.Features
         }
 
         [Fact]
-        public void ShouldWaitForAllMessagesToBeConfirmedWhenDisposing()
+        public async Task ShouldWaitForAllMessagesToBeConfirmedWhenDisposing()
         {
-            using (var bus = Depot.Connect("localhost/integration"))
+            using (var bus = await CreateBus())
             {
                 var publisher = bus.CreatePublisher<HelloWorldMessage>(p => p.Confirm(true));
 

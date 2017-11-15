@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Chinchilla.Api;
 using Chinchilla.Logging;
@@ -29,9 +28,15 @@ namespace Chinchilla.Integration
             return hostName;
         }
 
-        protected async Task<IBus> CreateBus()
+        protected async Task<IBus> CreateBus(DepotSettings settings)
         {
             var vhost = await CreateVHost();
+            return Depot.Connect($"localhost/{vhost}", settings);
+        }
+
+        protected async Task<IBus> CreateBus()
+        {
+            var vhost = await CreateVHost().ConfigureAwait(false);
             return Depot.Connect($"localhost/{vhost}");
         }
 
@@ -49,7 +54,7 @@ namespace Chinchilla.Integration
         {
             while (!condition())
             {
-                await Task.Delay(10);
+                await Task.Delay(10).ConfigureAwait(false);
             }
         }
     }
