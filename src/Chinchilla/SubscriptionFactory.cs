@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-
 using Chinchilla.Configuration;
 using Chinchilla.Logging;
 using Chinchilla.Topologies.Model;
@@ -33,7 +32,7 @@ namespace Chinchilla
         public string GetMessageTypeName(Type type)
         {
             var typeName = type.Name;
-            
+
             if (!type.GetTypeInfo().IsInterface)
             {
                 return typeName;
